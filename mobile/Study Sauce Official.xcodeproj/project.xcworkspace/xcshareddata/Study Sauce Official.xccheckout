@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1521D402-88E2-4EF4-804E-BE698FD06DB0</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Study Sauce Official</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2A150DE5-FE14-4F48-8ABC-22C25CDD6FEF</key>
+		<string>https://bjcullinan.com/svn/StudySauce/mobile</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Study Sauce Official.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2A150DE5-FE14-4F48-8ABC-22C25CDD6FEF</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>2A150DE5-FE14-4F48-8ABC-22C25CDD6FEF</key>
+		<string>https://bjcullinan.com/svn/StudySauce</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://bjcullinan.com/svn/StudySauce/mobile/Study%20Sauce%20Official.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2A150DE5-FE14-4F48-8ABC-22C25CDD6FEF</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2A150DE5-FE14-4F48-8ABC-22C25CDD6FEF</string>
+			<key>IDESourceControlWCCName</key>
+			<string>mobile</string>
+		</dict>
+	</array>
+</dict>
+</plist>
