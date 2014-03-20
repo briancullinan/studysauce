@@ -1,0 +1,195 @@
+
+.landing-home .banner .highlighted-link a:last-child,
+.landing-home .header-wrapper a[href="/user"]
+{
+    color:#ffffff;
+    padding:8px 25px;
+    display:inline-block;
+    clear:both;
+    text-shadow: 1px 2px 3px rgba(0,0,0,.5);
+}
+
+.landing-home .header-wrapper
+{
+    background:url(images/SMU_blur.jpg) no-repeat fixed 50% -100px #00749f;
+}
+
+.landing-home .page-top
+{
+    background: url("images/noise_gray.png") repeat scroll 0 0 #ffffff;
+}
+
+.page-students2 .flexslider,
+.page-parents2 .flexslider,
+.front .flexslider
+{
+    box-shadow: none;
+    display: block;
+    padding-top: 20%;
+    text-align: center;
+    padding-bottom: 20%;
+    background: url(images/down_arrow.png) no-repeat 50% bottom transparent;
+}
+
+.landing-home .banner .slides .highlighted-link
+{
+    float: left;
+    margin: 120px 0 100px 100px;
+    text-align: center;
+}
+
+.landing-home .banner .slides .video-floater
+{
+    float:right;
+    width:560px;
+    max-width:100%;
+}
+
+.landing-home .banner .slides .video-floater iframe
+{
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+}
+
+.landing-home .banner .pane-content > .highlighted-link
+{
+    margin:0;
+    padding:40px 0 80px;
+    color:#ffffff;
+    text-shadow:1px 2px 3px rgba(0,0,0,.5);
+    text-align:right;
+    background:url(images/down_arrow.png) no-repeat 50% 50% transparent;
+    min-height: 50px;
+}
+
+.landing-home .banner .pane-content > .highlighted-link a:last-child {
+    color: #ffffff;
+    padding: 8px 25px;
+    clear: both;
+    display: none;
+}
+
+.page-parents2 .page-top,
+.page-parents .page-top
+{
+    box-shadow: none !important;
+}
+
+.page-parents2 .did-you-know,
+.page-parents .did-you-know
+{
+    box-shadow: 0 -10px 10px rgba(0,0,0,.5);
+    background: url("images/noise_white.png") repeat scroll 0 0 #ffffff;
+    padding:50px 0px;
+}
+
+.page-parents2 .did-you-know p.small,
+.page-parents2 .did-you-know h1,
+.page-parents .did-you-know p.small,
+.page-parents .did-you-know h1
+{
+    padding:0 0 0 190px;
+}
+
+.page-parents2 .did-you-know small,
+.page-parents .did-you-know small
+{
+    display:inline-block;
+    padding-top:15px;
+}
+
+@media all and (max-width: 980px)
+{
+
+    .landing-home .banner .slides .highlighted-link
+    {
+        margin-left:10px;
+        margin-top:80px;
+        margin-bottom:60px;
+    }
+
+    .landing-home .banner .slides .video-floater
+    {
+        width:400px;
+    }
+
+}
+
+@media all and (max-width: 759px)
+{
+    .page-students2 .flexslider, .page-parents2 .flexslider, .front .flexslider
+    {
+        padding-top:100px;
+        padding-bottom:60px;
+    }
+
+    .page-parents2 .did-you-know p.small,
+    .page-parents2 .did-you-know h1,
+    .page-parents .did-you-know p.small,
+    .page-parents .did-you-know h1
+    {
+        padding-left: 0;
+    }
+
+    .page-parents2 .did-you-know p.small,
+    .page-parents .did-you-know p.small
+    {
+        clear:both;
+    }
+
+    .landing-home .banner .slides .highlighted-link
+    {
+        float:none;
+        margin-top:50px;
+        margin-bottom:30px;
+    }
+
+    .landing-home .banner .slides .video-floater
+    {
+        margin:0 auto;
+        float:none;
+    }
+
+    .page-parents2 .did-you-know img,
+    .page-parents .did-you-know img
+    {
+        float:left;
+        margin:20px;
+    }
+}
+
+@media all and (max-width: 480px)
+{
+    .landing-home .header-wrapper,
+    .landing-home .page
+    {
+        background-size: cover;
+        background-attachment: scroll;
+        background-position: 50% 50% !important;
+    }
+
+    .page-parents2 .did-you-know h1,
+    .page-parents .did-you-know h1
+    {
+        clear:both;
+    }
+
+    .page-parents2 .did-you-know p:first-child,
+    .page-parents .did-you-know p:first-child
+    {
+        text-align: center;
+    }
+
+    .page-parents2 .did-you-know img,
+    .page-parents .did-you-know img
+    {
+        float:none !important;
+        margin:20px auto;
+    }
+}
+
+
+

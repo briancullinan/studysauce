@@ -1,0 +1,1305 @@
+
+.page-dashboard #incentives #parent-sponsored .grid_8.connected
+{
+    width:auto;
+    text-align: center;
+    display:block;
+}
+
+.page-dashboard #incentives #parent-sponsored h4,
+.page-dashboard #incentives .big-arrow
+{
+    clear:both;
+    padding-right:128px;
+    position:relative;
+}
+
+.page-dashboard #incentives .big-arrow p
+{
+    position:relative;
+}
+
+.page-dashboard #incentives #parent-sponsored .not-connected-only h4:after,
+.page-dashboard #incentives .big-arrow p:after
+{
+    display:block;
+    content: " ";
+    position:absolute;
+    height:128px;
+    width:128px;
+    background:url("images/menu_icons_128.png") no-repeat scroll rgba(0, 0, 0, 0);
+    background-position:0 -2176px;
+    top:50%;
+    margin-top:-64px;
+    right:-10px;
+}
+
+.two-column-guide span.incentives
+{
+    background: url(images/menu_icons_48.png) no-repeat top left;
+    background-position:0 -910px;
+}
+
+.page-dashboard #incentives .big-arrow p:after
+{
+    right:-138px;
+}
+
+.page-dashboard #incentives .transferred
+{
+    border:2px solid #007700;
+    border-radius: 5px;
+}
+
+.page-dashboard #incentives .field-name-field-type
+{
+    background:url("images/menu_icons_48.png") no-repeat scroll rgba(0, 0, 0, 0);
+    background-position:10px -576px;
+    height:24px;
+    padding: 12px 10px 12px 68px;
+    width:170px;
+    margin-top:0;
+}
+
+.page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-type
+{
+    margin-top:0;
+}
+
+.page-dashboard #incentives tr:nth-child(2) .field-name-field-type
+{
+    background-position:10px -624px;
+}
+
+.page-dashboard #incentives tr:nth-child(3) .field-name-field-type
+{
+    background-position:10px -672px;
+}
+
+.page-dashboard #incentives .vertical-tabs,
+.page-dashboard #incentives .grippie,
+#fancybox-content .grippie
+{
+    display:none !important;
+}
+
+.page-dashboard #incentives .mobile-only
+{
+    display:none;
+}
+
+/*
+.page-dashboard #incentives .field-name-field-type label,
+.page-dashboard #incentives .field-name-field-grade label
+{
+    margin:0;
+    padding:0;
+    border-width: 0px 0px 0px 0px;
+    line-height: 0px;
+    display:block;
+    font-size:1px;
+    height:0px;
+    opacity: 0.1;
+    transition:opacity 0.3s, height 0.3s, font-size 0.3s, line-height 0.3s, margin 0.3s, padding 0.3s, border-width 0.3s;
+}
+
+.page-dashboard #incentives .field-name-field-type .form-type-radio,
+.page-dashboard #incentives .field-name-field-grade .form-type-radio
+{
+    line-height:0;
+    font-size: 1px;
+}
+
+.page-dashboard #incentives .field-name-field-type,
+.page-dashboard #incentives .field-name-field-grade
+{
+    overflow:hidden;
+    transition:height 0.3s;
+}
+
+.page-dashboard #incentives .field-name-field-grade:hover label
+{
+    margin:5px;
+    padding:5px;
+    border-width: 1px 1px 3px 1px;
+    line-height: 26px;
+    font-size:18px;
+    height:26px;
+    opacity: 1.0;
+    transition:opacity 0.3s, height 0.3s, font-size 0.3s, line-height 0.3s, margin 0.3s, padding 0.3s, border-width 0.3s;
+}
+
+.page-dashboard #incentives .field-name-field-grade:hover
+{
+    height:200px;
+    transition:height 0.3s;
+}
+
+.page-dashboard #incentives .field-name-field-type:hover .form-type-radio,
+.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio
+{
+    display: block;
+}
+
+.page-dashboard #incentives .field-name-field-grade:hover .form-radios
+{
+    min-width: 100%;
+}
+*/
+
+.page-dashboard #incentives .field-name-field-type,
+.page-dashboard #incentives .field-name-field-hours,
+.page-dashboard #incentives .field-name-field-gpa,
+.page-dashboard #incentives .field-name-field-grade,
+.page-dashboard #incentives .field-name-field-reward,
+.page-dashboard #incentives .field-name-field-goals,
+.page-dashboard #incentives .field-name-field-goals > div,
+.page-dashboard #incentives .field-name-field-goals > div > div,
+.page-dashboard #incentives .field-name-field-goals .form-actions
+{
+    display:inline-block;
+    vertical-align: top;
+}
+
+.page-dashboard #incentives .field-name-field-goals .group-achievement .form-actions
+{
+    margin-top: 1em;
+    display: block;
+    clear:both;
+}
+
+.page-dashboard #incentives .field-name-field-goals,
+.page-dashboard #incentives .field-name-field-goals > div,
+.page-dashboard #incentives .field-name-field-goals > div > div
+{
+    display:block;
+}
+
+.page-dashboard #incentives .field-name-field-hours,
+.page-dashboard #incentives .field-name-field-gpa,
+.page-dashboard #incentives .field-name-field-grade,
+.page-dashboard #incentives .field-name-field-reward
+{
+    margin:0;
+    width:27%;
+}
+
+.page-dashboard #incentives .field-name-field-type,
+.page-dashboard #incentives .field-name-field-grade,
+.page-dashboard #incentives .field-name-field-hours,
+.page-dashboard #incentives .field-name-field-gpa,
+.page-dashboard #incentives .field-name-field-other,
+.page-dashboard #incentives .field-name-field-reward
+{
+    padding-top:12px;
+}
+
+.page-dashboard #incentives .field-name-field-hours label,
+.page-dashboard #incentives .field-name-field-grade label,
+.page-dashboard #incentives .field-name-field-gpa label,
+.page-dashboard #incentives .field-name-field-reward label,
+.page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-hours label,
+.page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-grade label,
+.page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-gpa label,
+.page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-reward label,
+.page-dashboard.parent .sponsored #parent-sponsored,
+.page-dashboard #incentives .field-name-field-read-only
+{
+    display:none;
+}
+
+.page-dashboard #non-sponsored tr:first-child .field-name-field-hours label,
+.page-dashboard #non-sponsored tr:first-child .field-name-field-grade label,
+.page-dashboard #non-sponsored tr:first-child .field-name-field-gpa label,
+.page-dashboard #non-sponsored tr:first-child .field-name-field-reward label,
+.page-dashboard.student .sponsored #parent-sponsored tr:first-child .field-name-field-hours label,
+.page-dashboard.student .sponsored #parent-sponsored tr:first-child .field-name-field-grade label,
+.page-dashboard.student .sponsored #parent-sponsored tr:first-child .field-name-field-gpa label,
+.page-dashboard.student .sponsored #parent-sponsored tr:first-child .field-name-field-reward label
+{
+    display:block;
+}
+
+.page-dashboard.student .sponsored #parent-sponsored tr:first-child .field-name-field-type,
+.page-dashboard #non-sponsored tr:first-child .field-name-field-type
+{
+    margin-top:20px;
+}
+
+.page-dashboard.student .sponsored #parent-sponsored tr:first-child .form-actions,
+.page-dashboard #non-sponsored tr:first-child .form-actions
+{
+    margin-top:34px;
+}
+
+.page-dashboard #incentives .field-name-field-other textarea,
+.page-dashboard #incentives .field-name-field-reward textarea
+{
+    height:60px;
+}
+
+.page-dashboard #incentives .field-name-field-gpa .form-text
+{
+    max-width:50px;
+}
+
+.page-dashboard #incentives .field-name-field-reward textarea
+{
+}
+
+.page-dashboard #incentives .form-checkboxes label,
+.page-dashboard #incentives .form-radios label
+{
+    background: #EEEEEE;
+    font-weight: bold;
+    border-style:solid;
+    border-color:#EEEEEE;
+    border-radius:5px;
+    cursor: pointer;
+}
+
+.page-dashboard #incentives  .field-name-field-grade .form-radios label:hover
+{
+    background: #DDDDDD;
+    border-bottom:3px solid #BBBBBB;
+}
+
+#checklist input,
+.page-dashboard #incentives input.form-checkbox,
+.page-dashboard #incentives input.form-radio
+{
+    visibility:hidden;
+}
+
+.page-dashboard #incentives .field-name-field-reward-codes,
+.page-dashboard #incentives .field-name-field-invite
+{
+    display:none;
+}
+
+
+.page-dashboard #incentives input.form-checkbox:checked + label,
+.page-dashboard #incentives input.form-radio:checked + label
+{
+    margin:5px;
+    padding:5px;
+    line-height: 26px;
+    height:26px;
+    opacity: 1.0 !important;
+    display:block;
+    font-size:18px;
+    transition:none;
+}
+
+.page-dashboard #incentives .field-name-field-goals strong
+{
+    font-size:18px;
+    font-weight:bold;
+    display:inline-block;
+    background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+}
+
+.page-dashboard #incentives .field-name-field-grade input.form-radio:checked + label
+{
+    background: #CCCCCC;
+    border-bottom:3px solid #AAAAAA;
+}
+
+.page-dashboard #incentives .field-name-field-grade .form-radios label:active
+{
+    margin-top:7px !important;
+    border-bottom-width:1px !important;
+    box-shadow: 1px 1px 2px 0 rgba(0,0,0,.5) inset;
+    transition:none;
+}
+
+.page-dashboard #incentives .field-name-field-grade .form-radios
+{
+    float:left;
+}
+
+.page-dashboard #incentives .form-item .form-radios,
+.page-dashboard #incentives .form-item .description
+{
+    display:inline;
+}
+
+.page-dashboard #incentives .form-item .description span:last-child
+{
+    display:none;
+}
+
+.page-dashboard #incentives tr.odd .form-item,
+.page-dashboard #incentives tr.even .form-item
+{
+    white-space: normal;
+}
+
+
+.page-dashboard #incentives table td,
+.page-dashboard #incentives table th
+{
+    padding:5px;
+}
+
+.page-dashboard #incentives .field-name-field-grade .form-type-radio
+{
+    width:15%;
+    min-width: 50px;
+}
+
+.page-dashboard #incentives .field-name-field-grade .form-type-radio label
+{
+    text-align: center;
+}
+
+.page-dashboard #incentives .field-name-field-grade .form-type-radio:first-child
+{
+    display:none;
+}
+
+.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(5),
+.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(6),
+.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(7),
+.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(8),
+.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(9),
+.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(10)
+{
+    position:relative;
+    left:0;
+    margin-top: 0;
+    transition:left 0.3s linear, margin-top 0.3s cubic-bezier(0.25,0.1,0.25,1);
+}
+
+.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(5)
+{
+    margin-top:-135px;
+    left:30%;
+    transition:left 0.3s linear, margin-top 0.3s cubic-bezier(0.25,0.1,0.25,1);
+}
+
+.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(6),
+.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(7)
+{
+    left:30%;
+    transition:left 0.3s linear;
+}
+
+.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(8)
+{
+    margin-top:-135px;
+    left:60%;
+    transition:left 0.3s linear, margin-top 0.3s cubic-bezier(0.25,0.1,0.25,1);
+}
+
+.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(9),
+.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(10)
+{
+    left:60%;
+    transition:left 0.3s linear;
+}
+
+.page-dashboard #incentives #invite-sent a
+{
+    display:block;
+    text-align: center;
+}
+
+.page-dashboard #incentives .step_1 .field-add-more-submit,
+.page-dashboard #incentives .student_step_1,
+.page-dashboard #incentives .student_step_2,
+.page-dashboard #incentives .student_step_3,
+.page-dashboard.student #incentives .parents_only.student_step_1,
+.page-dashboard.student #incentives .parents_only.student_step_2,
+.page-dashboard.student #incentives .parents_only.student_step_3,
+.page-dashboard.parent #incentives .students_only.student_step_1,
+.page-dashboard.parent #incentives .students_only.student_step_2,
+.page-dashboard.parent #incentives .students_only.student_step_3
+{
+    display:none;
+}
+
+.page-dashboard #incentives .step_1 .student_step_1,
+.page-dashboard #incentives .step_2 .student_step_2,
+.page-dashboard #incentives .step_3 .student_step_3,
+.page-dashboard.student #incentives .step_1 .students_only.student_step_1,
+.page-dashboard.student #incentives .step_2 .students_only.student_step_2,
+.page-dashboard.student #incentives .step_3 .students_only.student_step_3,
+.page-dashboard.parent #incentives .step_1 .parents_only.student_step_1,
+.page-dashboard.parent #incentives .step_2 .parents_only.student_step_2,
+.page-dashboard.parent #incentives .step_3 .parents_only.student_step_3
+{
+    display:block;
+    clear:both;
+}
+
+/*.page-dashboard.student #incentives .step_1 .field-name-field-reward,
+.page-dashboard.student #incentives .step_2 .field-name-field-reward*/
+.page-dashboard #incentives .step_2 .node-incentive-form .form-actions
+{
+    display:none;
+}
+
+.page-dashboard #incentives #parent-sponsored .grid_8
+{
+    width:600px;
+}
+
+.page-dashboard.parent #incentives .sponsored #non-sponsored .field-name-field-type,
+.page-dashboard.student #incentives .sponsored #parent-sponsored .field-name-field-type
+{
+    background-image:url(images/menu_icons_64.png);
+    background-position: 0 -1866px;
+}
+
+.page-dashboard.parent #incentives .sponsored #non-sponsored tr:nth-child(2) .field-name-field-type,
+.page-dashboard.student #incentives .sponsored #parent-sponsored tr:nth-child(2) .field-name-field-type
+{
+    background-position: 0 -1930px;
+}
+
+.page-dashboard.parent #incentives .sponsored #non-sponsored tr:nth-child(3) .field-name-field-type,
+.page-dashboard.student #incentives .sponsored #parent-sponsored tr:nth-child(3) .field-name-field-type
+{
+    background-position: 0 -1994px;
+}
+
+.page-dashboard #incentives #parent-sponsored p
+{
+    margin:0;
+    line-height: 1px;
+}
+
+.page-dashboard #incentives #parent-sponsored h4
+{
+    font-size:24px;
+    color:#FFFFFF;
+    text-shadow: -1px 0px 2px rgba(0, 0, 0, 0.5);
+    margin:40px 0 40px 40px;
+}
+
+.page-dashboard #incentives .node-incentive-form
+{
+    padding:10px;
+    clear:both;
+}
+
+/*
+.page-dashboard.student #incentives .step_1 .field-name-field-goals
+{
+    text-align: center;
+    margin:0 auto -60px;
+    width: 500px;
+}
+*/
+
+.page-dashboard #parent-sponsored .webform-client-form-250,
+.page-dashboard #parent-sponsored .webform-client-form-157
+{
+    float: right;
+    margin-top:-75px;
+    margin-bottom:-25px;
+}
+
+.page-dashboard.parent #incentives #non-sponsored .field-name-field-goals
+{
+    margin:0 auto;
+}
+
+.page-dashboard #incentives select
+{
+    margin:0px;
+}
+
+.page-dashboard #incentives #invite .form-actions,
+.page-dashboard #incentives .node-incentive-form .form-actions
+{
+    margin:1em 0 0 1em;
+    text-align: right;
+}
+
+.page-dashboard #incentives #invite .form-actions
+{
+    float:right;
+}
+
+.page-dashboard.student .sponsored #non-sponsored tr:first-child .form-actions
+{
+    margin:1em 0 0 1em;
+}
+
+.page-dashboard #incentives .goal-status
+{
+    text-align: center;
+    margin: 0;
+    min-width: 32%;
+    clear:right;
+    float:none;
+    display:inline-block;
+    white-space: nowrap;
+}
+
+.page-dashboard #incentives .goal-status strong
+{
+    font-size:72px;
+    display:block;
+    line-height: 80px;
+    color:#0099BE;
+}
+
+.page-dashboard #incentives .site-name
+{
+    font-size:24px;
+    padding:12px 0px 12px 80px;
+    display:inline-block;
+    background:url("images/menu_icons_128.png") no-repeat scroll rgba(0, 0, 0, 0);
+    background-position:0 -1286px;
+    background-size:80px auto;
+    line-height: 44px;
+    margin-bottom:10px;
+    white-space: nowrap;
+}
+
+.page-dashboard #incentives #student_step_1 .grid_6
+{
+    text-align: center;
+}
+
+.page-dashboard #incentives #student_step_1 h3
+{
+    font-size: 32px;
+    text-align: center;
+}
+
+.page-dashboard #incentives #student_step_1 h3 span,
+.page-dashboard #incentives #student_step_1 h3 img
+{
+}
+
+.page-dashboard #incentives #student_step_1 p
+{
+    text-align: justify;
+    margin:0;
+}
+
+.page-dashboard #student_step_2 .highlighted-link
+{
+    text-align: right;
+}
+
+.page-dashboard #student_step_2 .highlighted-link p
+{
+    text-align: justify;
+    margin-bottom:50px;
+}
+
+.page-dashboard.parent #incentives .node-incentive-form h3
+{
+    float:none;
+    max-width: none;
+    margin:15px 0 10px;
+}
+
+.page-dashboard #incentives #achievements .grid_6
+{
+    width:420px !important;
+}
+
+.page-dashboard #incentives #read-more-incentives
+{
+    display:none;
+}
+
+.plup-thumb-wrapper
+{
+    line-height: 0;
+}
+
+.group-achievement .field-name-field-reward-codes,
+.node-incentive-form .group-achievement
+{
+    display:none;
+}
+
+.group-achievement .field-name-field-message,
+.group-achievement .field-name-field-photo-evidence
+{
+    width:50%;
+    float:left;
+}
+
+.plup-filelist
+{
+    border-top:0;
+}
+
+.plup-list li
+{
+    padding:0;
+    margin:0;
+    border:0;
+    background:none;
+}
+
+.plup-bar
+{
+    padding:0;
+    height:auto;
+    background:none;
+}
+
+.group-achievement .plup-select
+{
+    position:absolute;
+    top:0;
+    height:100%;
+    width:100%;
+    left:0;
+    line-height: 0;
+    color:transparent;
+    font-size: 0;
+}
+
+body.file-drag .group-achievement .plup-filelist
+{
+    z-index: 2000;
+}
+
+.group-achievement .plup-remove-file,
+.group-achievement .plup-remove-item
+{
+    z-index: 100;
+}
+
+.group-achievement .drag-main
+{
+    position:absolute;
+    top:50%;
+    left:0;
+    width:100%;
+    padding:0;
+    margin-top:-10px;
+    color:#333333;
+    text-shadow: 0px 1px 4px rgba(255,255,255,1);
+}
+
+.group-achievement .drag-more,
+.group-achievement .plup-filelist-size,
+.group-achievement .plup-filelist-message,
+.group-achievement .plup-filelist-remove,
+.group-achievement .plup-select div
+{
+    display:none;
+}
+.group-achievement .plup-bar .plup-upload
+{
+    display:none !important;
+}
+
+.group-achievement .plupload,
+.group-achievement .plupload-container
+{
+    min-height:200px;
+}
+
+.group-achievement .plup-filelist-file
+{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.group-achievement .plup-filelist,
+.group-achievement .plupload.html5
+{
+    height: 100% !important;
+    width: 100% !important;
+    top:0 !important;
+    left:0 !important;
+    position:absolute !important;
+    background:none;
+    overflow: hidden;
+    max-height: none !important;
+}
+
+.group-achievement textarea
+{
+    height:170px;
+}
+
+/*
+.flip-clock-wrapper ul li a div .shadow
+{
+    display:none;
+}
+
+.flip-clock-wrapper ul.play li.flip-clock-before
+{
+    z-index:2;
+}
+
+.flip-clock-wrapper ul.play li.flip-clock-active
+{
+    z-index:3;
+}
+*/
+
+#achievements .grid_3
+{
+    width:210px;
+}
+
+#achievements .grid_6,
+#achievements .grid_3
+{
+    text-align: left;
+    height: 232px;
+    border: 3px solid transparent;
+    margin:-3px !important;
+    display:inline-block;
+}
+
+#achievements .grid_6.highlighted,
+#achievements .grid_3.highlighted
+{
+    border: 3px solid #FF9900;
+    border-radius:5px;
+}
+
+#achievements .grid_6 strong,
+#achievements .grid_3 strong
+{
+    display:block;
+    clear:both;
+}
+
+#achievements .grid_6 img,
+#achievements .grid_3 img
+{
+    float:left;
+    margin:5px;
+}
+
+#achievements .grid_6 img
+{
+}
+
+#achievements .grid_6 p,
+#achievements .grid_3 p
+{
+    min-height: 200px;
+    border:1px solid #BBBBBB;
+    border-radius: 5px;
+    float:left;
+    display:inline-block;
+    width:200px;
+    margin:4px;
+}
+
+.page-dashboard #incentives .form-actions a
+{
+    display:inline-block;
+}
+
+.page-dashboard #incentives .step_1 .read-only,
+.page-dashboard #incentives .step_2 .edit .read-only,
+.page-dashboard #incentives .step_3 .edit .read-only,
+.page-dashboard #incentives .step_2 .field-name-field-grade .form-item,
+.page-dashboard #incentives .step_3 .field-name-field-grade .form-item,
+.page-dashboard #incentives .step_2 .field-name-field-gpa .form-item,
+.page-dashboard #incentives .step_3 .field-name-field-gpa .form-item,
+.page-dashboard #incentives .step_2 .field-name-field-hours .form-item,
+.page-dashboard #incentives .step_3 .field-name-field-hours .form-item,
+.page-dashboard #incentives .step_2 .field-name-field-reward .form-item,
+.page-dashboard #incentives .step_3 .field-name-field-reward .form-item,
+.page-dashboard #incentives #parent-sponsored .form-actions .form-submit,
+.page-dashboard #incentives #non-sponsored .form-actions .form-submit
+{
+    display:none;
+}
+
+.page-dashboard #incentives .step_2 .edit .field-name-field-grade .form-item,
+.page-dashboard #incentives .step_3 .edit .field-name-field-grade .form-item,
+.page-dashboard #incentives .step_2 .edit .field-name-field-gpa .form-item,
+.page-dashboard #incentives .step_3 .edit .field-name-field-gpa .form-item,
+.page-dashboard #incentives .step_2 .edit .field-name-field-hours .form-item,
+.page-dashboard #incentives .step_3 .edit .field-name-field-hours .form-item,
+.page-dashboard #incentives .step_2 .edit .field-name-field-reward .form-item,
+.page-dashboard #incentives .step_3 .edit .field-name-field-reward .form-item,
+.page-dashboard #incentives .step_1 td .form-actions .form-submit,
+.page-dashboard #incentives #parent-sponsored .edit .form-actions .form-submit,
+.page-dashboard #incentives #non-sponsored .edit .form-actions .form-submit
+{
+    display:inline-block;
+}
+
+.page-dashboard #incentives .step_2 .read-only a,
+.page-dashboard #incentives .step_3 .read-only a
+{
+    display:inline-block;
+    height:24px;
+    width:24px;
+    background: url(images/edit.png) no-repeat 50% 50% transparent;
+    float:right;
+}
+
+.page-dashboard #parent-sponsored .with-arrow
+{
+    left:-15px;
+    padding-left:15px;
+    margin-top:10px;
+}
+
+.page-dashboard .webform-client-form-250,
+.page-dashboard .webform-client-form-157
+{
+    border-radius: 4px;
+    padding: 5px;
+    position: relative;
+}
+
+.page-dashboard #parent-sponsored.setup-invite
+{
+    display: block !important;
+    position: absolute;
+    right: 20px;
+    z-index: 20;
+}
+
+.page-dashboard #parent-sponsored.setup-invite h3,
+.page-dashboard #parent-sponsored.setup-invite .grid_8
+{
+    display:none;
+}
+
+.page-dashboard #parent-sponsored.setup-invite .grid_4
+{
+    clear:left;
+    width:auto;
+}
+
+.page-dashboard #parent-sponsored.setup-invite .webform-client-form-250,
+.page-dashboard #parent-sponsored.setup-invite .webform-client-form-157
+{
+    margin:0;
+}
+
+.page-dashboard #parent-sponsored .webform-client-form .form-text
+{
+    width:100%;
+}
+
+.page-dashboard #student_step_2 .grid_5
+{
+    position: absolute;
+    right: 20px;
+    z-index: 20;
+    margin:40px 10px;
+}
+
+.page-dashboard #webform-ajax-wrapper-250,
+.page-dashboard #webform-ajax-wrapper-157
+{
+    max-width: 600px;
+    font-size: 20px;
+}
+
+.page-dashboard #parent-sponsored .webform-client-form-250,
+.page-dashboard #parent-sponsored .webform-client-form-157
+{
+    margin:0;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px #000000;
+    background: url("images/noise.png") repeat scroll 0 0 #0D0D0D;
+    width:170px;
+}
+
+.page-dashboard #parent-sponsored .webform-component--student-first-name,
+.page-dashboard #parent-sponsored .webform-component--parent-first-name
+{
+    padding-right:1%;
+}
+
+.page-dashboard #parent-sponsored .grid_4,
+.page-dashboard #parent-sponsored #webform-ajax-wrapper-250 > h2,
+.page-dashboard #parent-sponsored #webform-ajax-wrapper-157 > h2,
+.page-dashboard #parent-sponsored #webform-ajax-wrapper-157 p
+{
+    display:none;
+}
+
+@media all and (min-width: 1250px)
+{
+    .page-dashboard #incentives .grid_6
+    {
+        width:380px;
+        margin:0 10px;
+        display:block !important;
+    }
+}
+
+@media all and (max-width:1250px)
+{
+    .page-dashboard #incentives .field-name-field-hours,
+    .page-dashboard #incentives .field-name-field-gpa,
+    .page-dashboard #incentives .field-name-field-grade,
+    .page-dashboard #incentives .field-name-field-reward
+    {
+        margin:0;
+        width:31%;
+    }
+
+    .page-dashboard.student .sponsored #parent-sponsored tr:first-child .form-actions,
+    .page-dashboard #incentives .field-name-field-goals tr .form-actions
+    {
+        display:block;
+        margin-top:1em;
+        margin-left: 0;
+    }
+
+    .page-dashboard #incentives #parent-sponsored .grid_8
+    {
+        width: 320px;
+    }
+
+    .page-dashboard #student_step_2 .highlighted-link
+    {
+        clear:both !important;
+        position: static !important;
+        width: auto !important;
+        margin:0 20px !important
+    }
+
+    .page-dashboard .panel-flexible .header-wrapper .highlighted-link
+    {
+        margin-left:70px;
+    }
+
+    .page-dashboard.parent #incentives #non-sponsored .field-name-field-goals
+    {
+        margin:0 auto;
+    }
+}
+
+@media all and (min-width: 980px) and (max-width: 1250px)
+{
+    .page-dashboard #incentives #parent-sponsored .not-connected-only h4,
+    .page-dashboard #incentives .big-arrow
+    {
+        padding-right:0;
+    }
+
+    .page-dashboard #incentives #parent-sponsored .not-connected-only h4:after,
+    .page-dashboard #incentives .big-arrow p:after
+    {
+        display:none;
+    }
+
+    .page-dashboard #incentives .grid_6
+    {
+        display:block !important;
+    }
+}
+
+@media all and (max-width: 980px)
+{
+
+    .page-dashboard #incentives .node-incentive-form
+    {
+        padding:0;
+    }
+
+    .page-dashboard #incentives table td
+    {
+        padding:40px 0 0 0;
+    }
+
+    .page-dashboard #incentives table tr:first-child td
+    {
+        padding:20px 0 0 0;
+    }
+
+    .page-dashboard #incentives .form-item .description span:first-child
+    {
+        display:none;
+    }
+
+    .page-dashboard #incentives .full-only
+    {
+        display:none;
+    }
+
+    .page-dashboard #incentives .mobile-only
+    {
+        display:block;
+        margin-top:0;
+        margin-bottom:12px;
+    }
+
+    .page-dashboard #incentives .form-item .description span:last-child
+    {
+        display:inline;
+    }
+
+    .page-dashboard #incentives #invite .form-actions,
+    .page-dashboard #incentives .node-incentive-form .form-actions
+    {
+        float:none;
+        text-align: center;
+        clear:both;
+        margin-top:1em;
+        margin-left: 0;
+    }
+
+    .page-dashboard.student .sponsored #non-sponsored tr:first-child .form-actions
+    {
+        margin-left: 0;
+        margin-top:12px;
+    }
+
+    .page-dashboard #incentives select
+    {
+        margin:0 5px;
+    }
+
+    .page-dashboard #incentives #read-more-incentives
+    {
+        display:block;
+        text-align: center;
+        margin-top:20px;
+    }
+
+    .page-dashboard #incentives #read-more-incentives h3
+    {
+        text-align: center;
+    }
+
+    .page-dashboard #incentives #student_step_1 .grid_6,
+    .page-dashboard #incentives #read-more-incentives .grid_6
+    {
+        display:none;
+    }
+
+    .page-dashboard #incentives #read-more-incentives .grid_6 h3,
+    .page-dashboard #incentives #read-more-incentives .grid_6 img
+    {
+        display:none;
+    }
+
+    .page-dashboard #incentives #read-more-incentives .grid_6 p
+    {
+        text-align: left;
+    }
+
+    .page-dashboard #incentives #parent-sponsored .grid_8
+    {
+        width: 200px;
+    }
+
+    .page-dashboard.student #incentives .step_1 .field-name-field-goals
+    {
+        width: auto;
+        margin-bottom:0;
+    }
+
+    .page-dashboard #incentives #parent-sponsored .grid_8
+    {
+        width: 200px;
+        display:inline-block;
+        float:left;
+    }
+
+    .page-dashboard #incentives #parent-sponsored .grid_4
+    {
+        margin: 0 auto;
+        text-align: center;
+        width: 200px;
+    }
+
+    .page-dashboard #incentives #parent-sponsored h4
+    {
+        margin:20px 0;
+    }
+
+    .page-dashboard #parent-sponsored .webform-client-form-250,
+    .page-dashboard #parent-sponsored .webform-client-form-157
+    {
+        margin:-20px 0;
+        text-align: left;
+    }
+
+    .page-dashboard #incentives #parent-sponsored h4,
+    .page-dashboard #incentives .big-arrow
+    {
+        padding-right:0;
+    }
+
+    .page-dashboard #incentives #parent-sponsored .not-connected-only h4:after,
+    .page-dashboard #incentives .big-arrow p:after
+    {
+        display:none;
+    }
+}
+
+@media all and (max-width: 980px)
+{
+    .page-dashboard #incentives #achievements .grid_6
+    {
+        width:auto;
+    }
+
+    .page-dashboard.parent #incentives .sponsored #non-sponsored .field-name-field-type,
+    .page-dashboard.student #incentives .sponsored #parent-sponsored .field-name-field-type
+    {
+        background-image:url(images/menu_icons_128.png);
+        background-position: 50% -3712px;
+    }
+
+    .page-dashboard.parent #incentives .sponsored #non-sponsored tr:nth-child(2) .field-name-field-type,
+    .page-dashboard.student #incentives .sponsored #parent-sponsored tr:nth-child(2) .field-name-field-type
+    {
+        background-position: 50% -3840px;
+    }
+
+    .page-dashboard.parent #incentives .sponsored #non-sponsored tr:nth-child(3) .field-name-field-type,
+    .page-dashboard.student #incentives .sponsored #parent-sponsored tr:nth-child(3) .field-name-field-type
+    {
+        background-position: 50% -3968px;
+    }
+
+    .page-dashboard #student_step_2 .highlighted-link
+    {
+        text-align: center !important;
+        clear:both !important;
+        position: static !important;
+        width: 400px !important;
+        margin:0 20px !important
+    }
+
+    .page-dashboard #incentives .field-name-field-type
+    {
+        background: url("images/menu_icons_64.png") no-repeat scroll transparent;
+        text-align: center;
+        padding:0 0 48px 0;
+        height:48px;
+        background-position:50% -736px;
+        width: auto;
+        display:block;
+    }
+
+    .page-dashboard #non-sponsored tr:first-child .field-name-field-type
+    {
+        margin-top:0;
+    }
+
+    .page-dashboard #incentives .field-name-field-type strong
+    {
+        font-size: 28px;
+        display: inline-block;
+        white-space: nowrap;
+        height: 32px;
+    }
+
+    .page-dashboard #incentives tr:nth-child(2) .field-name-field-type
+    {
+        background-position:50% -800px;
+    }
+
+    .page-dashboard #incentives tr:nth-child(3) .field-name-field-type
+    {
+        background-position:50% -864px;
+    }
+
+    .page-dashboard #student_step_2 .highlighted-link p
+    {
+        text-align: justify !important;
+    }
+
+    .page-dashboard #incentives #student_step_1 p
+    {
+        text-align: left !important;
+    }
+
+    .page-dashboard #student_step_2 .highlighted-link
+    {
+        text-align: center !important;
+        clear:both !important;
+    }
+
+    .page-dashboard #incentives #parent-sponsored .grid_8
+    {
+        width:300px !important;
+    }
+
+    .page-dashboard #incentives .field-name-field-goals strong
+    {
+        margin:0;
+        padding:0;
+    }
+
+    .page-dashboard #incentives .field-name-field-grade,
+    .page-dashboard #incentives .field-name-field-hours,
+    .page-dashboard #incentives .field-name-field-gpa,
+    .page-dashboard #incentives .field-name-field-other,
+    .page-dashboard #incentives .field-name-field-reward,
+    .page-dashboard #incentives .field-name-field-goals,
+    .page-dashboard #incentives .field-name-field-goals > div,
+    .page-dashboard #incentives .field-name-field-goals > div > div
+    {
+        display:block;
+        width:auto;
+        max-width: none;
+        clear:both;
+    }
+
+    .page-dashboard #incentives .field-name-field-grade label,
+    .page-dashboard #incentives .field-name-field-hours label,
+    .page-dashboard #incentives .field-name-field-gpa label,
+    .page-dashboard #incentives .field-name-field-other label,
+    .page-dashboard #incentives .field-name-field-reward label,
+    .page-dashboard #incentives .read-only label
+    {
+        display:inline-block !important;
+        min-width:65px;
+        text-align: right;
+    }
+
+    .page-dashboard #incentives .field-name-field-reward .form-type-textarea label
+    {
+        margin-right:-75px;
+        vertical-align: top;
+    }
+
+    .page-dashboard #incentives .field-name-field-reward .form-textarea-wrapper
+    {
+        margin-left:80px;
+        vertical-align: top;
+        display:inline-block;
+    }
+}
+
+@media all and (max-width: 480px)
+{
+    .page-dashboard #incentives #achievements .grid_6
+    {
+        clear:both;
+        width:auto !important;
+        height: auto !important;
+    }
+
+    .page-dashboard #incentives #parent-sponsored .grid_4
+    {
+        float:none !important;
+    }
+
+    .page-dashboard #incentives #parent-sponsored .grid_8
+    {
+        width:auto !important;
+    }
+
+    .page-dashboard #incentives .field-name-field-type
+    {
+        width:auto !important;
+    }
+}
+

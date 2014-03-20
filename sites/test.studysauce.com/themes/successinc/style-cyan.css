@@ -1,0 +1,80 @@
+a,
+h1, h2, h4, h5, h6,
+#sidebar .more-link a,
+.breadcrumb a, .breadcrumb .breadcrumb-separator,
+.team-member-title,
+.view-promoted-posts h2 a:hover,
+.view-showcases .views-field-title a:hover,
+.view-showcases .views-field-field-subtitle,
+.node-mt-showcase .field-name-field-subtitle,
+.team-member-email a,
+#comments ul.links li a,
+ul.menu li.expanded > a, ul.menu li a.active {
+    color: #0099be;
+}
+
+.poll .bar .foreground {
+    background: #0099be;
+}
+
+.block #twtr-widget-1 .twtr-tweet a {
+    color: #0099be !important;
+}
+
+ul.social-bookmarks li a:hover {
+    border: 2px solid #0099be;
+}
+
+.flex-control-nav li a.active {
+    background: #0099be;
+}
+
+.flex-control-nav li a:hover {
+    box-shadow: inset 0 0 4px 1px #0099be;
+}
+
+a:hover {
+    color: #02cee8;
+}
+
+.header-wrapper,
+.page-node-landing #header,
+#header-wrapper {
+    background: none repeat scroll 0 0 #0099BE;
+}
+
+.view-promoted-posts .more-link a, a.more, div.links ul li a, ul.links li a, input[type="submit"], input[type="reset"], input[type="button"] {
+    color: #ffffff;
+    background: #0099be;
+    border-bottom:3px solid #004477;
+}
+
+.view-promoted-posts .more-link a:hover, a.more:hover, div.links ul li a:hover, ul.links li a:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover {
+    background: #008eb7;
+}
+
+.view-promoted-posts .more-link a:active, a.more:active, div.links ul li a:active, ul.links li a:active, input[type="submit"]:active, input[type="reset"]:active, input[type="button"]:active {
+    box-shadow: inset 1px 1px 2px 0 #113355;
+    border-bottom-width:1px;
+    margin-top:2px;
+}
+
+ul.menu li.expanded {
+    background-image: url("images/cyan/menu-expanded.png");
+}
+
+ul.company-info li.home {
+    background: url('images/cyan/company-home.png') no-repeat left;
+}
+
+ul.company-info li.phone {
+    background: url('images/cyan/company-phone.png') no-repeat left;
+}
+
+ul.company-info li.email {
+    background: url('images/cyan/company-email.png') no-repeat left;
+}
+
+.team-member-email {
+    background: url("images/cyan/email.png") no-repeat scroll left center transparent;
+}

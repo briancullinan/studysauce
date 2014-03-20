@@ -1,0 +1,462 @@
+
+.page-dashboard .page #checkin p.classes
+{
+    text-align: center;
+}
+
+.page-dashboard .page #checkin .flight-checklist
+{
+    float: right;
+}
+
+.page-dashboard .page #checkin .clock
+{
+    margin-bottom:40px;
+    float: right;
+}
+
+.page-dashboard #sds-messages > div h2
+{
+    padding-left:128px;
+}
+
+.page-dashboard #sds-messages > div > div
+{
+    display:none;
+    padding-left:128px;
+}
+
+.page-dashboard #sds-messages > div > div.show
+{
+    display: block;
+}
+
+.page-dashboard #sds-messages > div > div.icon
+{
+    display:block;
+    height: 128px;
+    width:128px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: -64px;
+    padding-left: 0;
+    background:url(images/menu_icons_128.png) no-repeat 10px -2050px transparent;
+}
+
+.flip-clock-divider,
+.flip-clock-wrapper ul
+{
+    float:none;
+    display:inline-block;
+    max-width:15%;
+}
+
+.flip-clock-wrapper h3
+{
+    margin:15px 0 10px;
+    text-align: center;
+}
+
+.page-dashboard .page #checkin .classes a
+{
+    display:inline-block;
+    height:80px;
+    width:80px;
+    border-radius: 100%;
+    position:relative;
+    margin: 25px;
+    vertical-align: bottom;
+    background:url("images/classes_textured.png") no-repeat scroll 0 0 #EEEEEE;
+    padding:10px;
+    color:#666666;
+    /*    color:#FF0D00; */
+}
+
+.page-dashboard .page #checkin .classes #class1,
+.page-dashboard .page #checkin .classes a:nth-child(2)
+{
+    background-position: 0 -100px;
+    /*    color:#FF9900; */
+}
+
+.page-dashboard .page #checkin .classes #class2,
+.page-dashboard .page #checkin .classes a:nth-child(3)
+{
+    background-position: 0 -200px;
+    /*    color:#FFD700; */
+}
+
+.page-dashboard .page #checkin .classes #class3,
+.page-dashboard .page #checkin .classes a:nth-child(4)
+{
+    background-position: 0 -300px;
+    /*    color:#BAF300; */
+}
+
+.page-dashboard .page #checkin .classes #class4,
+.page-dashboard .page #checkin .classes a:nth-child(5)
+{
+    background-position: 0 -400px;
+    /*    color:#2DD700; */
+}
+
+.page-dashboard .page #checkin .classes #class5,
+.page-dashboard .page #checkin .classes a:nth-child(6)
+{
+    background-position: 0 -500px;
+    /*    color:#009999; */
+}
+
+.page-dashboard .page #checkin .classes #class6,
+.page-dashboard .page #checkin .classes a:nth-child(7)
+{
+    background-position: 0 -600px;
+    /*    color:#162EAE; */
+}
+
+.page-dashboard .page #checkin .classes #class7,
+.page-dashboard .page #checkin .classes a:nth-child(8)
+{
+    background-position: 0 -700px;
+    /*    color:#6A0AAB; */
+}
+
+.page-dashboard .page #checkin .classes #class8,
+.page-dashboard .page #checkin .classes a:nth-child(9)
+{
+    background-position: 0 -800px;
+    /*    color:#BE008A; */
+}
+
+/*
+.page-dashboard .page #checkin .classes a:before {
+    height: 80px;
+    width: 80px;
+    margin:-10px;
+    content: "";
+    border-radius: 100%;
+    box-shadow: inset 1px 2px 3px rgba(0, 0, 0, .5);
+    display:block;
+    position:absolute;
+}
+*/
+
+.page-dashboard .page #checkin .classes a span
+{
+    display:block;
+    width:80px;
+    height:80px;
+    border-radius: 100%;
+    margin-bottom:10px;
+}
+
+.page-dashboard .page #checkin .classes #class0.checked-in,
+.page-dashboard .page #checkin .classes a.checked-in
+{
+    background-position: -200px 0;
+}
+
+.page-dashboard .page #checkin .classes #class1.checked-in,
+.page-dashboard .page #checkin .classes a:nth-child(2).checked-in
+{
+    background-position: -200px -100px;
+}
+
+.page-dashboard .page #checkin .classes #class2.checked-in,
+.page-dashboard .page #checkin .classes a:nth-child(3).checked-in
+{
+    background-position: -200px -200px;
+}
+
+.page-dashboard .page #checkin .classes #class3.checked-in,
+.page-dashboard .page #checkin .classes a:nth-child(4).checked-in
+{
+    background-position: -200px -300px;
+}
+
+.page-dashboard .page #checkin .classes #class4.checked-in,
+.page-dashboard .page #checkin .classes a:nth-child(5).checked-in
+{
+    background-position: -200px -400px;
+}
+
+.page-dashboard .page #checkin .classes #class5.checked-in,
+.page-dashboard .page #checkin .classes a:nth-child(6).checked-in
+{
+    background-position: -200px -500px;
+}
+
+.page-dashboard .page #checkin .classes #class6.checked-in,
+.page-dashboard .page #checkin .classes a:nth-child(7).checked-in
+{
+    background-position: -200px -600px;
+}
+
+.page-dashboard .page #checkin .classes #class7.checked-in,
+.page-dashboard .page #checkin .classes a:nth-child(8).checked-in
+{
+    background-position: -200px -700px;
+}
+
+.page-dashboard .page #checkin .classes #class8.checked-in,
+.page-dashboard .page #checkin .classes a:nth-child(9).checked-in
+{
+    background-position: -200px -800px;
+}
+
+.page-dashboard .page #checkin .classes #class0:active,
+.page-dashboard .page #checkin .classes a:active
+{
+    background-position: -100px 0;
+}
+
+.page-dashboard .page #checkin .classes #class1:active,
+.page-dashboard .page #checkin .classes a:active:nth-child(2)
+{
+    background-position: -100px -100px;
+}
+
+.page-dashboard .page #checkin .classes #class2:active,
+.page-dashboard .page #checkin .classes a:active:nth-child(3)
+{
+    background-position: -100px -200px;
+}
+
+.page-dashboard .page #checkin .classes #class3:active,
+.page-dashboard .page #checkin .classes a:active:nth-child(4)
+{
+    background-position: -100px -300px;
+}
+
+.page-dashboard .page #checkin .classes #class4:active,
+.page-dashboard .page #checkin .classes a:active:nth-child(5)
+{
+    background-position: -100px -400px;
+}
+
+.page-dashboard .page #checkin .classes #class5:active,
+.page-dashboard .page #checkin .classes a:active:nth-child(6)
+{
+    background-position: -100px -500px;
+}
+
+.page-dashboard .page #checkin .classes #class6:active,
+.page-dashboard .page #checkin .classes a:active:nth-child(7)
+{
+    background-position: -100px -600px;
+}
+
+.page-dashboard .page #checkin .classes #class7:active,
+.page-dashboard .page #checkin .classes a:active:nth-child(8)
+{
+    background-position: -100px -700px;
+}
+
+.page-dashboard .page #checkin .classes #class8:active,
+.page-dashboard .page #checkin .classes a:active:nth-child(9)
+{
+    background-position: -100px -800px;
+}
+
+.page-dashboard .page #checkin .minplayer-default-display
+{
+    opacity:0;
+    position:absolute;
+}
+
+.page-dashboard .page #checkin .minplayer-default-display iframe
+{
+    opacity: .1;
+}
+
+.page-dashboard .page #checkin .minplayer-default-loader-wrapper
+{
+    background:none;
+}
+
+.page-dashboard .page #checkin .minplayer-default-play
+{
+    background:url(images/menu_icons_64.png) no-repeat 0 -2432px transparent;
+    height:64px;
+    width:64px;
+    border:0;
+}
+
+.page-dashboard .page #checkin .minplayer-default-pause
+{
+    background:url(images/menu_icons_64.png) no-repeat 0 -2368px transparent;
+    height:64px;
+    width:64px;
+    border:0;
+}
+
+.page-dashboard .page #checkin .minplayer-default-controls
+{
+    top:0;
+    height:100% !important;
+    overflow:visible !important;
+    margin:0 !important;
+    padding:0 !important;
+    width:100% !important;
+    opacity: 1 !important;
+    display:block !important;
+    background:none;
+    border:0;
+}
+
+.page-dashboard .page #checkin .minplayer-default-controls-left
+{
+    left:50%;
+    top:50%;
+    position:absolute;
+    height:64px;
+    width:64px;
+    bottom:auto;
+    margin-top:-32px;
+    border-right:0;
+    margin-left:-160px;
+}
+
+.page-dashboard .page #checkin .minplayer-default
+{
+    right:0px !important;
+}
+
+.page-dashboard .page #checkin .minplayer-default-display,
+.page-dashboard .page #checkin .minplayer-default,
+.page-dashboard .page #checkin .osmplayer-default
+{
+    background:none;
+    border:none;
+    box-shadow: none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow:none;
+}
+
+.page-dashboard .page #checkin .osmplayer-default
+{
+    margin:20px 0;
+}
+
+.page-dashboard .page #checkin .node-media .links.inline,
+.page-dashboard .page #checkin .node-media h2
+{
+    display:none;
+}
+
+.page-dashboard .page #checkin .minplayer-default-play-loader
+{
+    display: block !important;
+    background: none;
+}
+
+.page-dashboard .page #checkin .minplayer-default-big-play
+{
+    display:block !important;
+    height:256px;
+    width:170px;
+    margin-top:-128px;
+    margin-left:-85px;
+    background:url(images/mozart.png) no-repeat 0 0 transparent;
+    box-shadow: none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow:none;
+}
+
+.page-dashboard .page #checkin .osmplayer-default-playlist,
+.page-dashboard .page #checkin .minplayer-default-play .ui-icon,
+.page-dashboard .page #checkin .minplayer-default-pause .ui-icon,
+.page-dashboard .page #checkin .minplayer-default-logo,
+.page-dashboard .page #checkin .minplayer-default-big-play span,
+.page-dashboard .page #checkin .minplayer-default-controls-right,
+.page-dashboard .page #checkin .minplayer-default-controls-mid,
+.page-dashboard .page #checkin .minplayer-default-timer
+{
+    display:none;
+}
+
+.page-dashboard .page #checkin .minplayer-default-preview
+{
+    display:none !important;
+}
+
+@media all and (min-width: 1250px)
+{
+    .page-dashboard .page #checkin p.classes
+    {
+        min-height: 400px;
+    }
+}
+
+@media all and (min-width: 980px) and (max-width: 1250px)
+{
+
+    .page-dashboard .page #checkin p.classes
+    {
+        min-height:300px;
+    }
+}
+
+@media all and (max-width: 980px)
+{
+/*    .page-dashboard .pane-content .grid_6.flight-checklist
+    {
+        display:none;
+    }
+    */
+
+    .page-dashboard .page #checkin .osmplayer-default
+    {
+        margin:0;
+        height:168px !important;
+    }
+
+    .page-dashboard .page #checkin .minplayer-default-big-play
+    {
+        background:url(images/menu_icons_128.png) no-repeat 43px -4992px transparent;
+        height:128px;
+        width:150px;
+        margin-left:-75px;
+        margin-top:-64px;
+        padding-left:65px;
+    }
+
+    .page-dashboard .page #checkin .minplayer-default-controls-left
+    {
+        margin-left:-75px;
+    }
+
+    .page-dashboard .page #checkin .clock
+    {
+        float:left;
+        margin-bottom: 20px;
+    }
+
+    .page-dashboard .page #checkin .clock h3
+    {
+        display:none;
+    }
+
+}
+@media all and (max-width: 759px)
+{
+    .page-dashboard .page #checkin .clock
+    {
+        width:auto;
+        float:none;
+    }
+}
+
+@media all and (max-width: 480px)
+{
+    .page-dashboard .page #checkin p.classes
+    {
+        margin:0 -10px;
+    }
+
+    .page-dashboard .page #checkin .classes a
+    {
+        margin: 25px 5px;
+    }
+}

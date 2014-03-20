@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<result>
+    <uid>621</uid>
+    <name>as123df</name>
+    <pass>$S$DomTDaW5NDhI6Tl2cVHfP3TTriB2b1Rt8Hz9IvtzkFaEpGMP.N06</pass>
+    <mail>as123df@mailinator.com</mail>
+    <theme></theme>
+    <signature></signature>
+    <signature_format>plain_text</signature_format>
+    <created>1391807159</created>
+    <access>1391807350</access>
+    <login>1391807159</login>
+    <status>1</status>
+    <timezone>America/Phoenix</timezone>
+    <language></language>
+    <picture/>
+    <init>as123df@mailinator.com</init>
+    <data></data>
+    <uuid>6e331bc0-462b-4caf-88ca-8318c05fe224</uuid>
+    <roles is_array="true">
+        <item>authenticated user</item>
+    </roles>
+    <field_first_name>
+        <und is_array="true">
+            <item>
+                <value>asfd1234</value>
+                <format/>
+                <safe_value>asfd1234</safe_value>
+            </item>
+        </und>
+    </field_first_name>
+    <field_last_name>
+        <und is_array="true">
+            <item>
+                <value>asdf</value>
+                <format/>
+                <safe_value>asdf</safe_value>
+            </item>
+        </und>
+    </field_last_name>
+    <field_phone_number/>
+    <field_parent_student>
+        <und is_array="true">
+            <item>
+                <value>student</value>
+            </item>
+        </und>
+    </field_parent_student>
+    <field_invites>
+        <und is_array="true">
+            <item>
+                <value>16d47404-28ed-4985-b5e7-626db1560842</value>
+                <revision_id>7743</revision_id>
+            </item>
+        </und>
+    </field_invites>
+    <field_connections/>
+    <field_badges>
+        <und is_array="true">
+            <item>
+                <value>setup-pulse</value>
+            </item>
+            <item>
+                <value>beginner-checkin</value>
+            </item>
+            <item>
+                <value>beginner-mix</value>
+            </item>
+            <item>
+                <value>beginner-commuter</value>
+            </item>
+            <item>
+                <value>intermediate-cross</value>
+            </item>
+        </und>
+    </field_badges>
+    <field_messages>
+        <und is_array="true">
+            <item>
+                <value>multiple-locations</value>
+            </item>
+            <item>
+                <value>switching-topics</value>
+            </item>
+            <item>
+                <value>switching-topics</value>
+            </item>
+            <item>
+                <value>taking-breaks</value>
+            </item>
+            <item>
+                <value>no-cramming</value>
+            </item>
+            <item>
+                <value>no-cramming</value>
+            </item>
+            <item>
+                <value>no-cramming</value>
+            </item>
+            <item>
+                <value>repeat-location</value>
+            </item>
+            <item>
+                <value>repeat-location</value>
+            </item>
+            <item>
+                <value>multiple-topics</value>
+            </item>
+            <item>
+                <value>multiple-topics</value>
+            </item>
+            <item>
+                <value>too-short</value>
+            </item>
+            <item>
+                <value>too-short</value>
+            </item>
+            <item>
+                <value>no-highlighting</value>
+            </item>
+            <item>
+                <value>no-highlighting</value>
+            </item>
+            <item>
+                <value>no-music</value>
+            </item>
+            <item>
+                <value>no-music</value>
+            </item>
+            <item>
+                <value>no-music</value>
+            </item>
+        </und>
+    </field_messages>
+    <field_3_day_marketing>
+        <und is_array="true">
+            <item>
+                <value>1</value>
+            </item>
+        </und>
+    </field_3_day_marketing>
+    <field_3_day_invite>
+        <und is_array="true">
+            <item>
+                <value>0</value>
+            </item>
+        </und>
+    </field_3_day_invite>
+    <metatags/>
+    <rdf_mapping>
+        <rdftype is_array="true">
+            <item>sioc:UserAccount</item>
+        </rdftype>
+        <name>
+            <predicates is_array="true">
+                <item>foaf:name</item>
+            </predicates>
+        </name>
+        <homepage>
+            <predicates is_array="true">
+                <item>foaf:page</item>
+            </predicates>
+            <type>rel</type>
+        </homepage>
+    </rdf_mapping>
+</result>

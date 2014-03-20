@@ -1,0 +1,515 @@
+/*
+  960 Grid System ~ Core CSS.
+  Learn more ~ http://960.gs/
+
+  Licensed under GPL and MIT.
+*/
+
+/*
+  Forces backgrounds to span full width,
+  even if there is horizontal scrolling.
+  Increase this if your layout is wider.
+
+  Note: IE6 works fine without this fix.
+*/
+
+body {
+  min-width: 720px;
+}
+
+/* `Containers
+----------------------------------------------------------------------------------------------------*/
+
+.landing-home .pane-testimonials .pane-inner,
+.container_12 {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 720px;
+}
+
+/* `Grid >> Global
+----------------------------------------------------------------------------------------------------*/
+
+.grid_1,
+.grid_2,
+.grid_3,
+.grid_4,
+.grid_5,
+.grid_6,
+.grid_7,
+.grid_8,
+.grid_9,
+.grid_10,
+.grid_11,
+.grid_12 {
+  display: inline;
+  float: left;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.push_1, .pull_1,
+.push_2, .pull_2,
+.push_3, .pull_3,
+.push_4, .pull_4,
+.push_5, .pull_5,
+.push_6, .pull_6,
+.push_7, .pull_7,
+.push_8, .pull_8,
+.push_9, .pull_9,
+.push_10, .pull_10,
+.push_11, .pull_11 {
+  position: relative;
+}
+
+/* `Grid >> Children (Alpha ~ First, Omega ~ Last)
+----------------------------------------------------------------------------------------------------*/
+
+.alpha {
+  margin-left: 0;
+}
+
+.omega {
+  margin-right: 0;
+}
+
+/* `Grid >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 .grid_1 {
+  width: 40px;
+}
+
+.container_12 .grid_2 {
+  width: 100px;
+}
+
+.container_12 .grid_3 {
+  width: 160px;
+}
+
+.container_12 .grid_4 {
+  width: 220px;
+}
+
+.container_12 .grid_5 {
+  width: 280px;
+}
+
+.page-dashboard .header-wrapper .container_12 .grid_7,
+.page-dashboard .header-wrapper .container_12 .grid_5
+{
+    width: 340px;
+}
+
+.container_12 .grid_6 {
+  width: 340px;
+}
+
+.container_12 .grid_7 {
+  width: 400px;
+}
+
+.container_12 .grid_8 {
+  width: 460px;
+}
+
+.container_12 .grid_9 {
+  width: 520px;
+}
+
+.container_12 .grid_10 {
+  width: 580px;
+}
+
+.container_12 .grid_11 {
+  width: 640px;
+}
+
+.container_12 .grid_12 {
+  width: 700px;
+}
+
+/* `Prefix Extra Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 .prefix_1 {
+  padding-left: 60px;
+}
+
+.container_12 .prefix_2 {
+  padding-left: 120px;
+}
+
+.container_12 .prefix_3 {
+  padding-left: 180px;
+}
+
+.container_12 .prefix_4 {
+  padding-left: 240px;
+}
+
+.container_12 .prefix_5 {
+  padding-left: 300px;
+}
+
+.container_12 .prefix_6 {
+  padding-left: 360px;
+}
+
+.container_12 .prefix_7 {
+  padding-left: 420px;
+}
+
+.container_12 .prefix_8 {
+  padding-left: 480px;
+}
+
+.container_12 .prefix_9 {
+  padding-left: 540px;
+}
+
+.container_12 .prefix_10 {
+  padding-left: 600px;
+}
+
+.container_12 .prefix_11 {
+  padding-left: 660px;
+}
+
+/* `Suffix Extra Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 .suffix_1 {
+  padding-right: 60px;
+}
+
+.container_12 .suffix_2 {
+  padding-right: 120px;
+}
+
+.container_12 .suffix_3 {
+  padding-right: 180px;
+}
+
+.container_12 .suffix_4 {
+  padding-right: 240px;
+}
+
+.container_12 .suffix_5 {
+  padding-right: 300px;
+}
+
+.container_12 .suffix_6 {
+  padding-right: 360px;
+}
+
+.container_12 .suffix_7 {
+  padding-right: 420px;
+}
+
+.container_12 .suffix_8 {
+  padding-right: 480px;
+}
+
+.container_12 .suffix_9 {
+  padding-right: 540px;
+}
+
+.container_12 .suffix_10 {
+  padding-right: 600px;
+}
+
+.container_12 .suffix_11 {
+  padding-right: 660px;
+}
+
+/* `Push Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 .push_1 {
+  left: 60px;
+}
+
+.container_12 .push_2 {
+  left: 120px;
+}
+
+.container_12 .push_3 {
+  left: 180px;
+}
+
+.container_12 .push_4 {
+  left: 240px;
+}
+
+.container_12 .push_5 {
+  left: 300px;
+}
+
+.container_12 .push_6 {
+  left: 360px;
+}
+
+.container_12 .push_7 {
+  left: 420px;
+}
+
+.container_12 .push_8 {
+  left: 480px;
+}
+
+.container_12 .push_9 {
+  left: 540px;
+}
+
+.container_12 .push_10 {
+  left: 600px;
+}
+
+.container_12 .push_11 {
+  left: 660px;
+}
+
+/* `Pull Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 .pull_1 {
+  left: -60px;
+}
+
+.container_12 .pull_2 {
+  left: -120px;
+}
+
+.container_12 .pull_3 {
+  left: -180px;
+}
+
+.container_12 .pull_4 {
+  left: -240px;
+}
+
+.container_12 .pull_5 {
+  left: -300px;
+}
+
+.container_12 .pull_6 {
+  left: -360px;
+}
+
+.container_12 .pull_7 {
+  left: -420px;
+}
+
+.container_12 .pull_8 {
+  left: -480px;
+}
+
+.container_12 .pull_9 {
+  left: -540px;
+}
+
+.container_12 .pull_10 {
+  left: -600px;
+}
+
+.container_12 .pull_11 {
+  left: -660px;
+}
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+
+.clearfix:before,
+.clearfix:after,
+.container_12:before,
+.container_12:after {
+  content: '.';
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  width: 0;
+  height: 0;
+}
+
+.clearfix:after,
+.container_12:after {
+  clear: both;
+}
+
+/*
+  The following zoom:1 rule is specifically for IE6 + IE7.
+  Move to separate stylesheet if invalid CSS is a problem.
+*/
+
+.clearfix,
+.container_12 {
+  zoom: 1;
+}
+
+.node-schedule-form .field-name-field-classes table .form-submit
+{
+    width:auto !important;
+}
+
+.node-schedule-form .field-name-field-image
+{
+    display:none;
+}
+
+
+.landing-position
+{
+    padding-right: 70px !important;
+}
+
+div.landing-position,
+.page-node-landing .content div.grid_7
+{
+    padding-left:10px;
+}
+
+.page-node-89 .product-wrapper,
+.page-node-13 .product-wrapper
+{
+    width:700px;
+}
+
+.page-node-89 .product-wrapper > div,
+.page-node-13 .product-wrapper > div
+{
+    width: 220px;
+}
+
+.page-node-17.page-node-done .quiz-wrapper .grid_5.even,
+.page-node-17.page-node-done .quiz-wrapper .grid_5.right
+{
+    min-height:90px !important;
+}
+
+.page-node-17.page-node-done .quiz-wrapper:nth-child(3) .grid_5.even,
+.page-node-17.page-node-done .quiz-wrapper:nth-child(3) .grid_5.right
+{
+    min-height:200px !important;
+}
+
+.page-node-17.page-node-done .quiz-wrapper:nth-child(5) .grid_5.right
+{
+    margin-top:-1px !important;
+}
+
+.page-node-17.page-node-done .quiz-wrapper:nth-child(6) .grid_5.right
+{
+    margin-top:0 !important;
+}
+
+.page-node-17.page-node-done .quiz-wrapper:nth-child(5) .grid_5.even,
+.page-node-17.page-node-done .quiz-wrapper:nth-child(6) .grid_5.even
+{
+    min-height:140px !important;
+}
+
+.page-node-landing .tour-text
+{
+    margin:20px 40px !important;
+}
+
+.page-node-landing #page .price-is-right
+{
+    top:22% !important;
+}
+
+body.page-node-landing #user-register-form
+{
+    margin-right:30px;
+}
+
+.page-node-landing #banner .price-is-right
+{
+    right:-10px;
+}
+
+#three-step-process .grid_3
+{
+    height:305px !important;
+}
+
+#three-step-process .grid_3 h2
+{
+    padding-left:60px !important;
+}
+
+#three-step-process .grid_3 .panel-pane
+{
+    padding:30px 10px !important;
+}
+
+body.page-node-landing .content > .highlighted-link
+{
+    margin-right:7px;
+}
+
+.page-dashboard .did-you-know
+{
+    display:none;
+}
+
+body.page-home #scr .grid_6,
+.two-column-guide .grid_6
+{
+    width:300px !important;
+    margin:0 20px !important;
+}
+
+.page-dashboard .pane-content .grid_6
+{
+    width:400px !important;
+    margin-left:20px !important;
+    margin-right:20px !important;
+}
+
+.page-home #scr .grid_6 h3
+{
+    margin-top:50px !important;
+}
+
+.page .take-the-tour, #page .take-the-tour
+{
+    left:20% !important;
+}
+
+.page-dashboard .panel-flexible .header-wrapper .highlighted-link
+{
+    margin-left:0 !important;
+}
+
+.two-column-guide .grid_6 div.highlighted-link,
+.page-node-23 #page .grid_6 div.highlighted-link,
+.page-node-landing #page .grid_6 div.highlighted-link,
+.page-node-1 #page .grid_6 div.highlighted-link
+{
+    padding:0 !important;
+}
+
+.landing-home .footer,
+.landing-home .page,
+.landing-home .page-top
+{
+    padding:10px 0;
+}

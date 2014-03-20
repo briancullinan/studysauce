@@ -1,0 +1,571 @@
+
+.page-dashboard .awards
+{
+    text-align: center;
+}
+
+.page-dashboard #new-award > div
+{
+    padding:0 !important;
+    margin:5% auto !important;
+}
+
+.page-dashboard #new-award > div > div
+{
+    background:url(images/award_background.png) no-repeat 50% 0 transparent;
+    border-radius: 10px;
+    padding:20px;
+}
+
+.page-dashboard #new-award .badge
+{
+    background:url("images/awards_compressed.png") no-repeat scroll 0 -150px transparent;
+    display:block;
+    width:150px;
+    height:150px;
+    position:absolute;
+    left:50%;
+    top:150px;
+    margin-left: -75px;
+}
+
+.page-dashboard #new-award p:last-child
+{
+    margin-bottom: 0;
+}
+
+.page-dashboard #new-award .description
+{
+    margin-top: 300px;
+    display:inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.page-dashboard #new-award .description,
+.page-dashboard #new-award .description *
+{
+    text-align: center !important;
+}
+
+
+.page-dashboard .awards > a
+{
+    border:1px solid #cccccc;
+    display:inline-block;
+    height:150px;
+    width:150px;
+    position:relative;
+    margin: 30px 10px;
+    vertical-align: bottom;
+    color:#666666;
+    padding:10px;
+    background:url("images/noise_white.png") repeat scroll 0 0 #FFFFFF;
+    border-radius: 5px;
+}
+
+.page-dashboard .awards > div > h3
+{
+    margin-top:0;
+}
+
+.page-dashboard .awards > div > h4
+{
+    color:#555555;
+}
+
+.page-dashboard .awards > div > p
+{
+    margin-bottom:0;
+}
+
+.page-dashboard .awards > div > .full-only
+{
+    float:right;
+    padding:0px 20px;
+    margin-top:-15px;
+}
+
+.page-dashboard .awards .mobile-only
+{
+    display:none;
+}
+
+.page-dashboard .awards > a.selected
+{
+    color: transparent;
+}
+
+.page-dashboard .awards .description a
+{
+    color: #666666;
+    text-decoration: none;
+}
+
+.page-dashboard .awards .description a span
+{
+    color: #FF9900;
+}
+
+.page-dashboard .awards .description a:hover span
+{
+    text-decoration: underline;
+}
+
+.page-dashboard .awards > a:nth-of-type(5n+1),
+.page-dashboard .awards > a:first-of-type
+{
+    margin-left:0;
+    clear:left;
+}
+
+.page-dashboard .awards > a:nth-of-type(5n),
+.page-dashboard .awards > a:last-of-type
+{
+    margin-right:0;
+    clear:right;
+}
+
+.page-dashboard .awards > a > span
+{
+    background:url("images/awards_compressed.png") no-repeat scroll 0 0 #FFFFFF;
+    display:block;
+    width:150px;
+    height:150px;
+    border-radius: 100%;
+    margin-bottom:10px;
+}
+
+#new-award .badge.setup-pulse,
+.page-dashboard .awards > a.awarded[href="#setup-pulse"] span
+{
+    background-position:0 -150px;
+}
+
+#new-award .badge.setup-linked,
+.page-dashboard .awards > a.awarded[href="#setup-linked"] span
+{
+    background-position:0 -300px;
+}
+
+#new-award .badge.setup-hours,
+.page-dashboard .awards > a.awarded[href="#setup-hours"] span
+{
+    background-position:0 -450px;
+}
+
+#new-award .badge.setup-milestone,
+.page-dashboard .awards > a.awarded[href="#setup-milestone"] span
+{
+    background-position:0 -600px;
+}
+
+#new-award .badge.setup-outcome,
+.page-dashboard .awards > a.awarded[href="#setup-outcome"] span
+{
+    background-position:0 -750px;
+}
+
+#new-award .badge.beginner-checkin,
+.page-dashboard .awards > a.awarded[href="#beginner-checkin"] span
+{
+    background-position:0 -1200px;
+}
+
+#new-award .badge.beginner-checklist,
+.page-dashboard .awards > a.awarded[href="#beginner-checklist"] span
+{
+    background-position:0 -900px;
+}
+
+#new-award .badge.beginner-commuter,
+.page-dashboard .awards > a.awarded[href="#beginner-commuter"] span
+{
+    background-position:0 -1050px;
+}
+
+#new-award .badge.beginner-mix,
+.page-dashboard .awards > a.awarded[href="#beginner-mix"] span
+{
+    background-position:0 -1650px;
+}
+
+#new-award .badge.beginner-breaks,
+.page-dashboard .awards > a.awarded[href="#beginner-breaks"] span
+{
+    background-position:0 -1800px;
+}
+
+#new-award .badge.beginner-brain,
+.page-dashboard .awards > a.awarded[href="#beginner-brain"] span
+{
+    background-position:0 -1950px;
+}
+
+#new-award .badge.beginner-cram,
+.page-dashboard .awards > a.awarded[href="#beginner-cram"] span
+{
+    background-position:0 -2100px;
+}
+
+#new-award .badge.beginner-sponsored,
+.page-dashboard .awards > a.awarded[href="#beginner-sponsored"] span
+{
+    background-position:0 -2250px;
+}
+
+#new-award .badge.beginner-chicken,
+.page-dashboard .awards > a.awarded[href="#beginner-chicken"] span
+{
+    background-position:0 -2400px;
+}
+
+#new-award .badge.beginner-apples,
+.page-dashboard .awards > a.awarded[href="#beginner-apples"] span
+{
+    background-position:0 -2550px;
+}
+
+#new-award .badge.beginner-jackpot,
+.page-dashboard .awards > a.awarded[href="#beginner-jackpot"] span
+{
+    background-position:0 -2700px;
+}
+
+#new-award .badge.intermediate-flier,
+.page-dashboard .awards > a.awarded[href="#intermediate-flier"] span
+{
+    background-position:0 -1350px;
+}
+
+#new-award .badge.intermediate-cross,
+.page-dashboard .awards > a.awarded[href="#intermediate-cross"] span
+{
+    background-position:0 -2850px;
+}
+
+#new-award .badge.intermediate-breaker,
+.page-dashboard .awards > a.awarded[href="#intermediate-breaker"] span
+{
+    background-position:0 -3300px;
+}
+
+#new-award .badge.intermediate-cured,
+.page-dashboard .awards > a.awarded[href="#intermediate-cured"] span
+{
+    background-position:0 -3450px;
+}
+
+#new-award .badge.intermediate-disco,
+.page-dashboard .awards > a.awarded[href="#intermediate-disco"] span
+{
+    background-position:0 -3600px;
+}
+
+#new-award .badge.intermediate-high,
+.page-dashboard .awards > a.awarded[href="#intermediate-high"] span
+{
+    background-position:0 -3750px;
+}
+
+#new-award .badge.advanced-magellan,
+.page-dashboard .awards > a.awarded[href="#advanced-magellan"] span
+{
+    background-position:0 -1500px;
+}
+
+#new-award .badge.advanced-bo,
+.page-dashboard .awards > a.awarded[href="#advanced-bo"] span
+{
+    background-position:0 -3150px;
+}
+
+#new-award .badge.advanced-comber,
+.page-dashboard .awards > a.awarded[href="#advanced-comber"] span
+{
+    background-position:0 -3000px;
+}
+
+#new-award .badge.advanced-nocram,
+.page-dashboard .awards > a.awarded[href="#advanced-nocram"] span
+{
+    background-position:0 -3900px;
+}
+
+#new-award .badge.advanced-magneto,
+.page-dashboard .awards > a.awarded[href="#advanced-magneto"] span
+{
+    background-position:0 -4050px;
+}
+
+#new-award .badge.advanced-wall,
+.page-dashboard .awards > a.awarded[href="#advanced-wall"] span
+{
+    background-position:0 -4200px;
+}
+
+#new-award .badge.advanced-veni,
+.page-dashboard .awards > a.awarded[href="#advanced-veni"] span
+{
+    background-position:0 -4350px;
+}
+
+.page-dashboard .awards > div
+{
+    text-align: left;
+    clear:left;
+    width:100%;
+    background:url("images/noise_white.png") repeat scroll 0 0 #FFFFFF;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    position:relative;
+    border-radius: 5px;
+    float:left;
+    height:0px;
+    overflow:hidden;
+    display:block;
+}
+
+.page-dashboard .awards > div.selected
+{
+    padding:20px;
+    height:auto;
+    overflow: visible;
+    border:1px solid #cccccc;
+    display:inline-block;
+}
+
+
+.page-dashboard .awards > div > .awardArrow {
+    width: 52px;
+    height: 28px;
+    margin: 0 auto;
+    background: url(images/menu_icons_64.png) -6px -2190px no-repeat;
+    display: block;
+    content: ' ';
+    top: -28px;
+    left:0;
+    position: absolute;
+    z-index: 10;
+}
+
+@media all and (min-width: 980px) and (max-width: 1250px)
+{
+
+    .page-dashboard .awards > a:nth-of-type(5n),
+    .page-dashboard .awards > a:nth-of-type(5n+1),
+    .page-dashboard .awards > a
+    {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+}
+
+@media all and (max-width: 980px)
+{
+    .page-dashboard .awards
+    {
+        margin:0 -10px;
+    }
+
+    .page-dashboard .awards > a:first-child,
+    .page-dashboard .awards > a:nth-of-type(3n)
+    .page-dashboard .awards > a:nth-of-type(4n),
+    .page-dashboard .awards > a:nth-of-type(5n),
+    .page-dashboard .awards > a:nth-of-type(6n),
+    .page-dashboard .awards > a
+    {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .page-dashboard .awards > a
+    {
+        border:none;
+        height:50px;
+        width:50px;
+        background:transparent;
+        font-size:11px;
+        line-height: 14px;
+        padding:4px;
+        margin-top:10px;
+    }
+
+    .page-dashboard .awards .full-only
+    {
+        display:none;
+    }
+
+    .page-dashboard .awards .mobile-only
+    {
+        display:block;
+    }
+
+    .page-dashboard .awards > a > span
+    {
+        background:url("images/awards_compressed_small.png") no-repeat scroll 0 0 #FFFFFF;
+        height:50px;
+        width:50px;
+        background-position: 0 0;
+        margin-bottom: 0;
+    }
+
+    .page-dashboard .awards > div.selected
+    {
+        padding:10px;
+    }
+
+    .page-dashboard .awards > div > h3,
+    .page-dashboard .awards > div > h4,
+    .page-dashboard .awards > div > p
+    {
+        margin-bottom:0px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#setup-pulse"] span
+    {
+        background-position:0 -50px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#setup-linked"] span
+    {
+        background-position:0 -100px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#setup-hours"] span
+    {
+        background-position:0 -150px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#setup-milestone"] span
+    {
+        background-position:0 -200px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#setup-outcome"] span
+    {
+        background-position:0 -250px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-checkin"] span
+    {
+        background-position:0 -400px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-checklist"] span
+    {
+        background-position:0 -300px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-commuter"] span
+    {
+        background-position:0 -350px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-mix"] span
+    {
+        background-position:0 -550px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-breaks"] span
+    {
+        background-position:0 -600px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-brain"] span
+    {
+        background-position:0 -650px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-cram"] span
+    {
+        background-position:0 -700px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-sponsored"] span
+    {
+        background-position:0 -750px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-chicken"] span
+    {
+        background-position:0 -800px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-apples"] span
+    {
+        background-position:0 -850px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#beginner-jackpot"] span
+    {
+        background-position:0 -900px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#intermediate-flier"] span
+    {
+        background-position:0 -450px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#intermediate-cross"] span
+    {
+        background-position:0 -950px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#intermediate-breaker"] span
+    {
+        background-position:0 -1100px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#intermediate-cured"] span
+    {
+        background-position:0 -1150px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#intermediate-disco"] span
+    {
+        background-position:0 -1200px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#intermediate-high"] span
+    {
+        background-position:0 -1250px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#advanced-magellan"] span
+    {
+        background-position:0 -500px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#advanced-bo"] span
+    {
+        background-position:0 -1050px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#advanced-comber"] span
+    {
+        background-position:0 -1000px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#advanced-nocram"] span
+    {
+        background-position:0 -1300px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#advanced-magneto"] span
+    {
+        background-position:0 -1350px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#advanced-wall"] span
+    {
+        background-position:0 -1400px;
+    }
+
+    .page-dashboard .awards > a.awarded[href="#advanced-veni"] span
+    {
+        background-position:0 -1450px;
+    }
+}

@@ -1,0 +1,216 @@
+
+.admin-menu .tipsy
+{
+    margin-top: -30px;
+}
+
+.page-dashboard #metrics
+{
+    position:relative;
+}
+
+.page-dashboard #metrics.empty
+{
+    overflow:hidden;
+}
+
+.page-dashboard #metrics-empty img
+{
+    position:absolute;
+    top:0;
+    width: 100%;
+    height: auto;
+    left:0;
+    z-index: -2;
+}
+
+.page-dashboard #metrics #timeline
+{
+    display: inline-block;
+    width:475px;
+    max-width: 100%;
+}
+
+.page-dashboard #metrics #timeline .symbol rect
+{
+    shape-rendering: crispEdges;
+}
+
+.page-dashboard #metrics #pie-chart
+{
+    display: inline-block;
+    width:475px;
+    max-width: 100%;
+}
+
+.page-dashboard #metrics #pie-chart text,
+.page-dashboard #metrics #timeline text
+{
+    fill:#555555;
+}
+
+.page-dashboard #metrics #timeline .axis text,
+.page-dashboard #metrics #timeline .axis2 text
+{
+    transform: translate(15px,0px);
+    -ms-transform: translate(15px,0px); /* IE 9 */
+    -webkit-transform: translate(15px,0px); /* Safari and Chrome */
+    -o-transform: translate(15px,0px); /* Opera */
+    -moz-transform: translate(15px,0px); /* Firefox */
+}
+
+.page-dashboard #metrics #timeline .domain
+{
+    fill:#555555;
+}
+
+.page-dashboard #metrics .row
+{
+    vertical-align: top;
+}
+
+.page-dashboard #checkins-list
+{
+    margin: 10px auto 0 auto;
+    width: 100%;
+    max-width: 600px;
+}
+
+.page-dashboard #metrics .row .class-name
+{
+    display: inline-block;
+    width: 175px;
+    padding: 5px 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 22px;
+    vertical-align: top;
+}
+
+.page-dashboard #metrics .row .class-date
+{
+    white-space: nowrap;
+    display:inline-block;
+    width: 175px;
+    padding: 5px 0;
+    vertical-align: top;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.page-dashboard #metrics .row .class-time
+{
+    white-space: nowrap;
+    display:inline-block;
+    width: 175px;
+    padding: 5px 0;
+    vertical-align: top;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+}
+
+.page-dashboard #metrics .row .class-name span
+{
+    display: inline-block;
+    height: 22px;
+    width: 22px;
+    border: 3px solid #555555;
+    border-radius: 100%;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #555555;
+    line-height: 15px;
+    margin: -3px 10px 0 0;
+    vertical-align: top;
+}
+
+.page-dashboard #metrics .class0
+{
+    background-color:#FF1100;
+}
+
+.page-dashboard #metrics .class1
+{
+    background-color:#FF9900;
+}
+
+.page-dashboard #metrics .class2
+{
+    background-color:#FFDD00;
+}
+
+.page-dashboard #metrics .class3
+{
+    background-color:#BBEE00;
+}
+
+.page-dashboard #metrics .class4
+{
+    background-color:#33DD00;
+}
+
+.page-dashboard #metrics .class5
+{
+    background-color:#009999;
+}
+
+.page-dashboard #metrics .class6
+{
+    background-color:#1133AA;
+}
+
+.page-dashboard #metrics .class7
+{
+    background-color:#6611AA;
+}
+
+.page-dashboard #metrics .class8
+{
+    background-color:#BB0088;
+}
+
+.page-dashboard #metrics .row .mobile-only
+{
+    display:none;
+}
+
+@media all and (max-width:980px)
+{
+    .page-dashboard #metrics .row
+    {
+        font-size: 14px;
+    }
+
+    .page-dashboard #metrics .row .full-only
+    {
+        display:none;
+    }
+
+    .page-dashboard #metrics .row .mobile-only
+    {
+        display:inline;
+    }
+
+    .page-dashboard #metrics .row .class-name
+    {
+        width:33%;
+    }
+
+    .page-dashboard #metrics .row .class-date
+    {
+        width:33%;
+    }
+
+    .page-dashboard #metrics .row .class-time
+    {
+        width:30%;
+    }
+}
+
+
+
+

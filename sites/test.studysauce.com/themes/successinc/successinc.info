@@ -1,0 +1,48 @@
+name = SuccessInc
+description = The next generation responsive corporate Drupal theme by <a href="http://www.morethanthemes.com/" target="_blank">More Than (just) Themes</a>.
+version = 2.1.0
+core = 7.x
+
+stylesheets[all and (min-width: 980px)][] = css/960.css
+stylesheets[all and (min-width: 760px) and (max-width: 980px)][] = css/720.css
+stylesheets[all and (max-width: 759px)][] = css/mobile.css
+stylesheets[all][] = css/column-layouts.css
+stylesheets[all][] = js/flexslider/flexslider.css
+stylesheets[all][] = style.css
+
+scripts[] = js/flexslider/jquery.flexslider.js
+
+regions[header_top_left] = Header top left
+regions[header_top_right] = Header top right
+regions[header] = Header left
+regions[navigation] = Navigation
+regions[banner] = Banner
+regions[highlighted] = Highlighted
+regions[promoted] = Promoted area
+regions[content] = Content
+regions[sidebar_first] = First sidebar
+regions[footer_first] = Footer first
+regions[footer_second] = Footer second
+regions[footer_third] = Footer third
+regions[sub_footer_first] = Footer bottom first
+regions[sub_footer_second] = Footer bottom second
+regions[sub_footer_third] = Footer bottom third
+regions[help] = Help
+
+settings[breadcrumb_display]= 1
+settings[breadcrumb_separator]= '»'
+settings[protocol]= 'http'
+settings[scrolltop_display]= 1
+settings[color_scheme]= 'default'
+settings[headings_font_family]= 'hff-6'
+settings[paragraph_font_family]= 'pff-1'
+settings[sitename_font_family]= 'sff-6'
+settings[slogan_font_family]= 'slff-1'
+settings[slideshow_effect]='slide'
+settings[slideshow_effect_time]='10'
+settings[slideshow_effect_direction]='horizontal'
+settings[responsive_menu_state]= 1
+settings[responsive_menu_switchwidth]='760'
+settings[responsive_menu_topoptiontext]= 'Select a page'
+settings[responsive_menu_optgroups]= 1
+settings[responsive_menu_nested]= 1

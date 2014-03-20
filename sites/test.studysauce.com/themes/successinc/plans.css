@@ -1,0 +1,477 @@
+
+.page-dashboard #metrics .row
+{
+    vertical-align: top;
+}
+
+.page-dashboard #plan .fc-event
+{
+    border:none;
+    background-color: #eeeeee;
+}
+
+.page-dashboard #plan .class-event,
+.page-dashboard #plan .other-event
+{
+    border: 3px solid #555555;
+}
+
+.page-dashboard #plan .holiday-event,
+.page-dashboard #plan .free-event,
+.page-dashboard #plan .other-event
+{
+    color:#555555;
+}
+
+.page-dashboard #plan .field-name-field-time-preference label.option,
+.page-dashboard #plan .field-name-field-weekends label.option,
+.page-dashboard #plan .field-name-field-grades label.option {
+    background-color: #EEE;
+    padding: 0;
+    margin: 5px 10px 5px -20px;
+    display: inline-block;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    max-width: 135px;
+    vertical-align: middle;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    min-width: 30px;
+}
+
+.page-dashboard #plan .field-name-field-time-preference input.form-radio:checked + label,
+.page-dashboard #plan .field-name-field-weekends input.form-radio:checked + label,
+.page-dashboard #plan .field-name-field-grades input.form-radio:checked + label {
+    background: none repeat scroll 0 0 #CCCCCC;
+    opacity: 1 !important;
+    padding: 5px;
+    margin: 0 5px 0 -25px;
+    z-index: 2;
+}
+
+.page-dashboard #plan .field-name-field-time-preference .field-type-list-integer
+{
+    clear:both;
+}
+
+.page-dashboard #plan .field-name-field-time-preference .field-type-list-integer > label
+{
+    display:inline;
+}
+
+.page-dashboard #plan .highlighted-link
+{
+    clear: both;
+    margin-right: 0;
+    position: relative;
+    text-align: right;
+}
+
+.page-dashboard #study-preferences .form-radios
+{
+    float: right;
+    clear: both;
+    display:inline-block;
+}
+
+.page-dashboard #study-preferences fieldset
+{
+    clear: both;
+}
+
+.page-dashboard #plan .row .class-name
+{
+    display: inline-block;
+    width: 275px;
+    padding: 5px 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 22px;
+    vertical-align: top;
+}
+
+.page-dashboard #plan .row .class-date
+{
+    white-space: nowrap;
+    display:inline-block;
+    width: 175px;
+    padding: 5px 0;
+    vertical-align: top;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.page-dashboard #plan .row .class-time
+{
+    white-space: nowrap;
+    display:inline-block;
+    width: 175px;
+    padding: 5px 0;
+    vertical-align: top;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+}
+
+.page-dashboard #plan .row .class-name span
+{
+    display: inline-block;
+    height: 22px;
+    width: 22px;
+    border: 3px solid #555555;
+    border-radius: 100%;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #555555;
+    line-height: 15px;
+    margin: -3px 10px 0 0;
+    vertical-align: top;
+}
+
+.page-dashboard #plan .class0
+{
+    background-color:#FF1100;
+}
+
+.page-dashboard #plan .class1
+{
+    background-color:#FF9900;
+}
+
+.page-dashboard #plan .class2
+{
+    background-color:#FFDD00;
+}
+
+.page-dashboard #plan .class3
+{
+    background-color:#BBEE00;
+}
+
+.page-dashboard #plan .class4
+{
+    background-color:#33DD00;
+}
+
+.page-dashboard #plan .class5
+{
+    background-color:#009999;
+}
+
+.page-dashboard #plan .class6
+{
+    background-color:#1133AA;
+}
+
+.page-dashboard #plan .class7
+{
+    background-color:#6611AA;
+}
+
+.page-dashboard #plan .class8
+{
+    background-color:#BB0088;
+}
+
+.page-dashboard #plan .row .mobile-only
+{
+    display:none;
+}
+
+.page-dashboard #plan .ui-resizable-handle
+{
+    display:none !important;
+}
+
+.page-dashboard #plan .fc-agenda-slots tr.fc-minor th,
+.page-dashboard #plan .fc-agenda-slots tr.fc-minor td
+{
+    border-top-style: none;
+}
+
+.page-dashboard #plan .fc-event-vert .fc-event-bg
+{
+    display:none;
+}
+
+.page-dashboard #plan .mobile-only
+{
+    display:none;
+}
+
+.page-dashboard #plan .field-add-more-submit
+{
+    position: relative;
+    z-index: 0;
+    padding:10px 0;
+    text-shadow: 0 1px 2px rgba(255,255,255,.5);
+    background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+    border-bottom: 0;
+    color:#555555;
+    font-size:22px;
+    margin:0;
+}
+
+.page-dashboard #plan .field-add-more-submit:active
+{
+    /*margin-top: 2px;*/
+    box-shadow: none;
+}
+
+.page-dashboard #plan .field-add-more-submit span
+{
+    margin: 0 10px -8px 0;
+    background: url("images/menu_icons_48.png") no-repeat scroll 0 -1728px #FFFFFF;
+    line-height: 100%;
+    border-radius: 100%;
+    display:inline-block;
+    height: 48px;
+    width: 48px;
+    position: relative;
+    z-index: 1;
+    top:-8px;
+    color:transparent;
+    float:left;
+}
+
+.page-dashboard #plan .field-add-more-submit:active span
+{
+    border-bottom-width:1px;
+}
+
+.page-dashboard #plan .field-name-field-class-name input.form-text
+{
+    width:100%;
+}
+
+.page-dashboard #plan .field-name-field-class-name .form-checkboxes input
+{
+    opacity: 0;
+    visibility: hidden;
+    margin:0;
+}
+
+.page-dashboard #plan .field-name-field-class-name .form-checkboxes label
+{
+    margin: 3px 0 0 -12px;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    vertical-align: middle;
+    cursor: pointer;
+    text-align: center;
+    opacity: 1 !important;
+    padding: 5px;
+    transition: none 0s ease 0s;
+    width: auto;
+    min-width: 30px;
+    float: none;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.page-dashboard #plan .field-name-field-class-name .form-checkboxes input:checked + label
+{
+    background: none repeat scroll 0 0 #CCCCCC;
+    opacity: 1 !important;
+    padding: 5px;
+    transition: none 0s ease 0s;
+}
+
+/*
+.page-dashboard #plan .field-name-field-class-name
+{
+    width:25%;
+    display:inline-block;
+    float:left;
+}
+
+.page-dashboard #plan .field-name-field-day-of-the-week
+{
+    width:24%;
+    display:inline-block;
+    float:left;
+}
+
+.page-dashboard #plan .field-name-field-time
+{
+    width:50%;
+    display:inline-block;
+    float:left;
+    position:relative;
+}
+*/
+
+.page-dashboard #plan .form-submit,
+.page-dashboard #plan .field-name-field-time .description,
+.page-dashboard #plan .field-name-field-holidays .description
+{
+    display:none;
+}
+
+.page-dashboard #plan .field-name-field-time > div:nth-child(2) label,
+.page-dashboard #plan .field-name-field-time > div:last-child label,
+.page-dashboard #plan .end-date-wrapper label
+{
+    display:inline;
+}
+
+.page-dashboard #plan .field-name-field-time > div:first-child,
+.page-dashboard #plan .field-name-field-time > div:nth-child(2)
+{
+    width:30%;
+    display:inline-block;
+    float:left;
+}
+
+.page-dashboard #plan .field-name-field-time > div:nth-child(3),
+.page-dashboard #plan .field-name-field-time > div:last-child
+{
+    width:20%;
+    display:inline-block;
+    float:left;
+}
+
+.page-dashboard #plan .field-name-field-time .date-padding div input
+{
+    width:97%;
+}
+
+.page-dashboard #plan .field-name-field-time fieldset,
+.page-dashboard #plan .field-name-field-time div
+{
+    padding:0;
+    border:0;
+    margin:0;
+    float:none;
+    display:inline;
+}
+
+.page-dashboard #plan .field-name-field-time
+{
+    clear:both;
+}
+
+.page-dashboard #plan .field-name-field-day-of-the-week .form-checkboxes
+{
+    display:inline-block;
+    float:left;
+}
+
+.page-dashboard #plan .field-name-field-day-of-the-week .form-checkboxes .form-item
+{
+    display:inline-block;
+}
+
+.page-dashboard #plan .field-name-field-day-of-the-week .form-type-checkbox label
+{
+    width:auto;
+    min-width:30px;
+    float:none;
+    display:inline-block;
+}
+
+.page-dashboard #plan .field-name-field-day-of-the-week .form-checkboxes label
+{
+    display:inline-block;
+    overflow:hidden;
+}
+
+.page-dashboard #plan .field-name-field-day-of-the-week input
+{
+    float:none;
+}
+
+.page-dashboard #plan .field-name-field-time .start-date-wrapper > .form-item .form-item:first-child
+{
+    position:absolute;
+    left:40%;
+}
+
+.page-dashboard #plan .field-name-field-time .end-date-wrapper > .form-item .form-item:first-child
+{
+    position:absolute;
+    left:70%;
+    top:0;
+}
+
+.page-dashboard #plan .field-name-field-time .end-date-wrapper > .form-item .form-item:last-child
+{
+    position:absolute;
+    left:20%;
+    top:0;
+}
+
+.page-dashboard #plan .field-name-field-time .start-date-wrapper > .form-item .form-item:last-child
+{
+    position:absolute;
+    left:0;
+}
+
+@media all and (max-width:980px)
+{
+    .page-dashboard #plan .field-name-field-time > div:first-child,
+    .page-dashboard #plan .field-name-field-time > div:nth-child(2),
+    .page-dashboard #plan .field-name-field-time > div:nth-child(3),
+    .page-dashboard #plan .field-name-field-time > div:last-child
+    {
+        width:50%;
+    }
+
+    .page-dashboard #plan .field-name-field-time > div:nth-child(3)
+    {
+        clear:both;
+    }
+
+    .page-dashboard #plan .field-add-more-submit span
+    {
+        position:relative;
+        float:none;
+        top:-14px;
+        margin: 0 10px -10px 10px;
+    }
+
+    .page-dashboard #plan .full-only
+    {
+        display:none;
+    }
+
+    .page-dashboard #plan .mobile-only
+    {
+        display:block;
+    }
+
+    .page-dashboard #plan .row
+    {
+        font-size: 14px;
+    }
+
+    .page-dashboard #plan .row .full-only
+    {
+        display:none;
+    }
+
+    .page-dashboard #plan .row .mobile-only
+    {
+        display:inline;
+    }
+
+    .page-dashboard #plan .row .class-name
+    {
+        width:33%;
+    }
+
+    .page-dashboard #plan .row .class-date
+    {
+        width:33%;
+    }
+
+    .page-dashboard #plan .row .class-time
+    {
+        width:30%;
+    }
+}
