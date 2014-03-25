@@ -2,8 +2,16 @@ var calendar = null;
 
 jQuery(document).ready(function($) {
 
+    $.propHooks.checked = {
+        set: function(elem, value, name) {
+            var ret = (elem[ name ] = value);
+            $(elem).trigger("change");
+            return ret;
+        }
+    };
+
     var planFunc = function () {
-        var row = $('#plan .edit.row');
+        var row = $('#plan .row.edit');
         if($('#plan #schedule-class-name').val().trim() == '' ||
             $('#plan input[name*="schedule-dotw-"]:checked, #plan #schedule-monthly:checked, #plan #schedule-yearly:checked').length == 0 ||
             $('#plan #schedule-value-date').val().trim() == '' ||
@@ -66,7 +74,7 @@ jQuery(document).ready(function($) {
                     $('#plan #schedule-value-time').val('');
                     $('#plan #schedule-value2-date').val('');
                     $('#plan #schedule-value2-time').val('');
-                    $('#plan').removeClass('edit-only');
+                    $('#plan').removeClass('edit-class-only edit-other-only');
                     $(this).parents('.row').removeClass('.valid').addClass('.invalid');
                     window.planEvents = data.events;
                     calendar.fullCalendar('refetchEvents');
@@ -116,15 +124,19 @@ jQuery(document).ready(function($) {
     var y = date.getFullYear();
 
     calendar = $('#calendar').fullCalendar({
+        titleFormat: 'MMMM',
         editable: true,
         draggable: true,
         allDaySlot: false,
         aspectRatio: 1.9,
         timeslotsPerHour: 1,
+        eventRender: function (event, element) {
+            element.find('.fc-event-title').html(event.title);
+        },
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'prev,next today'
+            right: null
         },
         defaultView: 'agendaWeek',
         selectable: false,

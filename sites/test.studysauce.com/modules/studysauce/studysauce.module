@@ -37,6 +37,12 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['node/save/key_dates'] = array(
+        'page callback' => 'studysauce_save_dates',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     return $items;
 }
 
@@ -568,6 +574,7 @@ function studysauce_init()
 {
     module_load_include('inc', 'studysauce', 'studysauce.forms');
     module_load_include('inc', 'studysauce', 'plans');
+    module_load_include('inc', 'studysauce', 'dates');
     global $user;
     if(isset($_GET['invite_parent']))
     {
@@ -1002,39 +1009,6 @@ function studysauce_mail_alter(&$message){
 
         $message['send'] = FALSE;
         $message['to'] = 'junk@studysauce.com';
-    }
-}
-
-function studysauce_date_popup_process_alter(&$element, &$form_state, $context)
-{
-    if($element['#parents'][0] == 'field_reminders')
-    {
-        $element['date']['#title'] = 'Due date';
-        if(!empty($element['#default_value']))
-        {
-            $time = strtotime($element['#default_value']);
-            if($time < (floor(time() / 86400) - 1) * 86400)
-                $element['date']['#type'] = 'hidden';
-        }
-        $element['date']['#attributes']['placeholder'] = 'Enter date';
-        $element['date']['#attributes']['onchange'] = 'jQuery(this).parents(\'.row\').addClass(\'edit\').datesFunc();';
-    }
-    if($element['#parents'][0] == 'field_classes')
-    {
-        if($element['#parents'][6] == 'value2')
-        {
-            $element['date']['#attributes']['placeholder'] = 'End';
-            $element['time']['#attributes']['placeholder'] = 'End';
-            $element['time']['#attributes']['onchange'] = 'var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" && myDate.attr("placeholder") != "End") myDate.val(myDate.attr("placeholder"));';
-            $element['date']['#attributes']['onchange'] = 'var that = jQuery(this).val(); jQuery(".field-name-field-time .end-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });';
-        }
-        else
-        {
-            $element['date']['#attributes']['placeholder'] = 'Start';
-            $element['time']['#attributes']['placeholder'] = 'Start';
-            $element['time']['#attributes']['onchange'] = 'var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" && myDate.attr("placeholder") != "Start") myDate.val(myDate.attr("placeholder"));';
-            $element['date']['#attributes']['onchange'] = 'var that = jQuery(this).val(); jQuery(".field-name-field-time .start-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });';
-        }
     }
 }
 
@@ -1761,60 +1735,6 @@ function _studysauce_get_schedule_classes($mail = null)
     return $classes;
 }
 
-function _studysauce_get_dates_form()
-{
-    global $user;
-    $form_id = 'key_dates_node_form';
-    $query = new EntityFieldQuery();
-    $entities = $query->entityCondition('entity_type', 'node')
-        ->propertyCondition('type', 'key_dates')
-        ->propertyCondition('title', $user->mail)
-        ->propertyCondition('status', 1)
-        ->range(0,1)
-        ->execute();
-
-    $rebuild = false;
-    if (!empty($entities['node']))
-    {
-        $nodes = array_keys($entities['node']);
-        $nid = array_shift($nodes);
-        $node = node_load($nid);
-        $form_state = array();
-        $form_state['build_info']['args'][] = $node;
-    }
-    else
-    {
-        $type = 'key_dates';
-        $form_state = array();
-        $form_state['build_info']['args'][] = (object) array(
-            'uid' => $user->uid,
-            'name' => (isset($user->name) ? $user->name : ''),
-            'type' => $type,
-            'language' => LANGUAGE_NONE
-        );
-    }
-
-    form_load_include($form_state, 'inc', 'node', 'node.pages');
-    $form = drupal_build_form($form_id, $form_state);
-
-    $classes = _studysauce_get_schedule_classes();
-    if(!isset($form_state['field']['field_class_names'][LANGUAGE_NONE]['items_count']) ||
-        $form_state['field']['field_class_names'][LANGUAGE_NONE]['items_count'] < 6)
-    {
-        $form_state['field']['field_class_names'][LANGUAGE_NONE]['items_count'] = max(6, count($classes));
-        $rebuild = true;
-    }
-
-    if(isset($rebuild))
-    {
-        drupal_static_reset('drupal_html_id');
-
-        $form = drupal_rebuild_form($form_state['build_info']['form_id'], $form_state, $form);
-    }
-
-    return $form;
-}
-
 function _studysauce_get_incentives_form()
 {
     global $user;
@@ -1909,39 +1829,6 @@ function _studysauce_submit_incentives_ajax_add_items($form, &$form_state)
     $commands[] = ajax_command_invoke('.field-name-field-goals tr', 'goalsFunc');
     $commands[] = ajax_command_invoke('.messages', 'remove');
     $commands[] = ajax_command_prepend('#incentives .pane-content', theme('status_messages'));
-    return array('#type' => 'ajax', '#commands' => $commands);
-}
-
-function _studysauce_submit_dates_ajax_add_items($form, &$form_state)
-{
-    $form['changed']['#value'] = $form['changed']['#default_value'];
-    $form_state['values']['changed'] = $form['changed']['#default_value'];
-
-    $last = $form['field_reminders']['und']['#max_delta'];
-    $form['field_reminders']['und'][$last]['is_new'] = array('#type' => 'markup', '#markup' => '');
-
-    $content = drupal_render($form['field_reminders']);
-    $commands = array(
-        array('command' => 'insert', 'method' => null, 'selector' => '#dates .field-name-field-reminders', 'data' => $content, 'settings' => null),
-    );
-    $commands[] = ajax_command_invoke('.field-name-field-reminders .row', 'datesFunc');
-    $commands[] = ajax_command_invoke('.messages', 'remove');
-    $commands[] = ajax_command_prepend('#dates .pane-content', theme('status_messages'));
-    return array('#type' => 'ajax', '#commands' => $commands);
-}
-
-
-function _studysauce_submit_dates_ajax_remove_items($form, &$form_state)
-{
-    $form['changed']['#value'] = $form['changed']['#default_value'];
-    $form_state['values']['changed'] = $form['changed']['#default_value'];
-
-    $content = drupal_render($form['field_reminders']);
-    $commands = array(
-        array('command' => 'insert', 'method' => null, 'selector' => '#dates .field-name-field-reminders', 'data' => $content, 'settings' => null),
-    );
-    $commands[] = ajax_command_invoke('.messages', 'remove');
-    $commands[] = ajax_command_prepend('#dates .pane-content', theme('status_messages'));
     return array('#type' => 'ajax', '#commands' => $commands);
 }
 
@@ -2780,98 +2667,6 @@ function studysauce_get_sds_messages()
     return $newSDS;
 }
 
-/**
- * Custom Form Validation.
- * Removes all form validation errors caused by a 'foo][bar' form element.
- */
-function _studysauce_dates_validate($form, &$form_state) {
-    $errors = form_get_errors();
-    if ($errors) {
-        // Clear errors.
-        form_clear_error();
-        // Clear error messages.
-        $error_messages = drupal_get_messages('error');
-        // Initialize an array where removed error messages are stored.
-        $removed_messages = array();
-
-
-// Remove all errors originated by the 'foo][bar' element.
-        $reminderStart = 'field_reminders][und][';
-        $reminderEnd = '][field_class_name][und][0][value';
-        foreach ($errors as $name => $error_message)
-        {
-            if (substr($name, 0, strlen($reminderStart)) == $reminderStart &&
-                substr($name, -strlen($reminderEnd)) == $reminderEnd)
-            {
-                $removed_messages[] = $error_message;
-                unset($errors[$name]);
-            }
-        }
-
-
-// Reinstate remaining errors.
-        foreach ($errors as $name => $error) {
-            form_set_error($name, $error);
-            // form_set_error() calls drupal_set_message(), so we have to filter out
-            // these from the error messages as well.
-            $removed_messages[] = $error;
-        }
-
-
-// Reinstate remaining error messages (which, at this point, are messages that
-        // were originated outside of the validation process).
-        foreach (array_diff($error_messages['error'], $removed_messages) as $message) {
-            drupal_set_message($message, 'error');
-        }
-    }
-}
-
-function _studysauce_submit_dates_ajax($form, &$form_state)
-{
-    $_POST = array();
-    $form = _studysauce_get_dates_form();
-    $form['changed']['#value'] = $form['changed']['#default_value'];
-    $form_state['values']['changed'] = $form['changed']['#default_value'];
-
-    $errors = form_get_errors();
-    if(count($errors) == 0)
-    {
-        $any = false;
-        $i = 0;
-        do
-        {
-            if(!empty($form['field_class_names']['und'][$i]['value']))
-                $any = true;
-        } while (isset($form['field_class_names']['und'][++$i]));
-
-        $content = drupal_render($form);
-
-        $commands = array();
-        $commands[] = array('command' => 'insert', 'method' => null, 'selector' => '#dates .node-key_dates-form', 'data' => $content, 'settings' => null);
-
-        if(!$any)
-        {
-            $commands[] = ajax_command_invoke('#dates,#checkin', 'addClass', array('empty edit-schedule'));
-        }
-        else
-        {
-            $commands[] = ajax_command_invoke('#dates,#checkin', 'removeClass', array('empty edit-schedule'));
-        }
-    }
-    else
-    {
-        $content = drupal_render($form);
-        $commands = array(
-            array('command' => 'insert', 'method' => null, 'selector' => '#dates .node-key_dates-form', 'data' => $content, 'settings' => null),
-        );
-    }
-    $commands[] = ajax_command_invoke('.field-name-field-reminders .row', 'datesFunc');
-    $commands[] = ajax_command_invoke('.messages', 'remove');
-    $commands[] = ajax_command_prepend('#dates .pane-content', theme('status_messages'));
-
-    return array('#type' => 'ajax', '#commands' => $commands);
-}
-
 function _studysauce_submit_schedule_ajax($form, &$form_state)
 {
     global $user;
@@ -2954,9 +2749,6 @@ EOL;
             array('command' => 'insert', 'method' => null, 'selector' => '#schedule > form', 'data' => $content, 'settings' => null),
         );
     }
-
-    $dates = _studysauce_get_dates_form();
-    $commands[] = array('command' => 'insert', 'method' => null, 'selector' => '#dates .node-key_dates-form', 'data' => drupal_render($dates), 'settings' => null);
 
     $commands[] = ajax_command_invoke('#dates', 'returnScroll');
     $commands[] = ajax_command_invoke('.messages', 'remove');

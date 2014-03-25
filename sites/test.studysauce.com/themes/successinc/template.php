@@ -43,87 +43,6 @@ function successinc_preprocess_block(&$variables) {
 
 }
 
-function successinc_field_multiple_value_form($variables) {
-    $element = $variables['element'];
-    if(($element['#field_name'] == 'field_classes' || $element['#field_name'] == 'field_class_names' || $element['#field_name'] == 'field_reminders') && arg(1) != 'add')
-    {
-        $items = array();
-        foreach (element_children($element) as $key) {
-            if ($key === 'add_more') {
-                $add_more_button = &$element[$key];
-            }
-            else {
-                $items[] = &$element[$key];
-            }
-        }
-
-        if($element['#field_name'] == 'field_class_names')
-            $output = '<h3><span>Enter your class information below and start checking in to learn the most effective study methods.</span></h3><div class="form-item">';
-        else
-            $output = '<div class="form-item">';
-        if($element['#field_name'] == 'field_reminders')
-        {
-            end($items);
-            $last = key($items);
-            uasort($items, '_studysauce_reminders_date_sort');
-            element_set_attributes($add_more_button, array('id', 'name', 'value'));
-            $unused = drupal_render($add_more_button);
-            $output .= '<div class="clearfix"><button' . drupal_attributes($add_more_button['#attributes']) . '>' . $add_more_button['#markup'] . '</button></div>';
-        }
-        else
-            uasort($items, '_field_sort_items_value_helper');
-
-        $title = '';
-        $count = 0;
-        foreach($items as $key => $item)
-        {
-            unset($item['_weight']);
-            if($element['#field_name'] == 'field_reminders')
-            {
-                if(isset($item['field_due_date']['und'][0]['#default_value']['value']))
-                {
-                    if(!empty($item['field_due_date']['und'][0]['#default_value']['value']))
-                    {
-                        $time = strtotime($item['field_due_date']['und'][0]['#default_value']['value']);
-
-                        if(!isset($item['is_new']) && !isset($item['is_hidden']) && $title != date('j F', $time))
-                        {
-                            $title = date('j F', $time);
-                            $output .= '<div class="head">' . $title . '</div>';
-                        }
-                    }
-                }
-                $rowClass = 'row row_' . $key . ($count == 0 ? ' first' : '');
-                if(isset($item['is_new']))
-                {
-                    unset($item['is_new']);
-                    $rowClass .= ' edit';
-                }
-                elseif(isset($item['is_hidden']))
-                {
-                    $rowClass .= ' is_hidden';
-                }
-                if(isset($last) && $last == $key)
-                    $rowClass .= ' last';
-
-                $output .= '<div class="' . $rowClass . '">' . drupal_render($item) . '</div>';
-            }
-            else
-                $output .= '<div class="row">' . drupal_render($item) . '</div>';
-
-            $count++;
-        }
-        $output .= $element['#description'] ? '<div class="description">' . $element['#description'] . '</div>' : '';
-        $output .= '<p style="clear:both;margin-bottom:0px;line-height:1px;">&nbsp;</p>';
-        if($element['#field_name'] == 'field_classes' || $element['#field_name'] == 'field_class_names')
-            $output .= '<div class="clearfix">' . drupal_render($add_more_button) . '</div>';
-        $output .= '</div>';
-        return $output;
-    }
-    else
-        return theme_field_multiple_value_form($variables);
-}
-
 function _studysauce_reminders_date_sort($a, $b)
 {
     $a_weight = (is_array($a) && isset($a['field_due_date']['und'][0]['#default_value']['value'])
@@ -445,6 +364,11 @@ global $user;
 
 if(drupal_is_front_page() && $user->uid != 0)
 {
+//    drupal_add_css(drupal_get_path('module', 'date') .'/date_api/date.css');
+//    drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/date_popup.js');
+    drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/jquery.timeentry.pack.js');
+    drupal_add_library('system', 'ui.datepicker');
+
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/skrollr.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/flipclock/libs/prefixfree.min.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/jquery.scrollintoview.js');
@@ -454,6 +378,7 @@ if(drupal_is_front_page() && $user->uid != 0)
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/metrics.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/fullcalendar/fullcalendar.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/plans.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
 
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/js/fullcalendar/fullcalendar.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/css/flipclock.css');

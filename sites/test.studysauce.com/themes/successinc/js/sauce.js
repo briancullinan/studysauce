@@ -8,7 +8,8 @@ var TIMER_SECONDS = 3600,
     selectedAward = null,
     lastRow = -1,
     locationTimeout,
-    lastScheduleEdit = null;
+    lastScheduleEdit = null,
+    isClosing = false;;
 
 
 (function($) {
@@ -90,7 +91,14 @@ var TIMER_SECONDS = 3600,
         jQuery('body').on('click', 'a[href="#edit-schedule"]', function (evt) {
             evt.preventDefault();
             lastScheduleEdit = jQuery(this).parents('.panel-pane').attr('id');
-            jQuery('#dates').addClass('edit-schedule').scrollintoview();
+            if(jQuery('#dates #schedule').length > 0)
+                jQuery('#dates').addClass('edit-schedule').scrollintoview();
+            else
+            {
+                jQuery('#plan').removeClass('edit-other-only').addClass('edit-class-only').scrollintoview();
+                jQuery('#plan #schedule-type').val('c');
+                jQuery('#plan #schedule-weekly').prop('checked', true);
+            }
         });
 
         jQuery('body').on('click', 'a[href="#study-quiz"]', function (evt) {
@@ -245,18 +253,6 @@ var TIMER_SECONDS = 3600,
                 .parents('.panel-pane').scrollintoview();
         });
 
-        jQuery('#dates').on('click', '.row .field-name-field-assignment .read-only', function () {
-            jQuery(this).parents('.row').toggleClass('selected');
-        });
-
-        jQuery('#dates').on('change', '.field-name-field-class-name select, .field-name-field-reminder input', function () {
-            jQuery(this).parents('.row').datesFunc();
-        });
-
-        jQuery('#dates').on('keyup', '.field-name-field-assignment input', function () {
-            jQuery(this).parents('.row').datesFunc();
-        });
-
         jQuery('#awards .awards > a.not-awarded').first().trigger('click');
     }
 
@@ -285,6 +281,12 @@ var TIMER_SECONDS = 3600,
                 jQuery('.new-award-only').removeClass('new-award-only');
             });
         }
+
+        var DrupalError = Drupal.ajax.prototype.error;
+        Drupal.ajax.prototype.error = function (response, uri) {
+            if(!isClosing)
+                return DrupalError(response, uri);
+        };
 
         if(typeof window.initialAward != 'undefined')
         {
@@ -348,6 +350,7 @@ var TIMER_SECONDS = 3600,
         jQuery(window).unload(function () {
             jQuery('#checkin .classes a.checked-in').trigger('click');
             jQuery('#checkin').scrollintoview();
+            isClosing = true;
         });
 
     });
@@ -534,49 +537,6 @@ jQuery(document).ready(function($) {
     };
     $.fn.refreshUploaders();
 
-    $.fn.datesFunc = function () {
-        var hit = false;
-        jQuery(this).each(function () {
-            var that = jQuery(this),
-                error = false;
-            if(that.find('select').val() == '_none')
-                error = true;
-            if(that.find('.field-name-field-assignment input').val().trim() == '')
-                error = true;
-            if(that.find('.field-name-field-reminder input:checked').length == 0)
-                error = true;
-            if(that.find('.field-name-field-due-date input').val().trim() == '')
-                error = true;
-            if(error)
-            {
-                that.removeClass('valid').addClass('invalid');
-                that.parents('form').removeClass('valid').addClass('invalid');
-            }
-            else
-            {
-                that.removeClass('invalid').addClass('valid');
-                that.parents('form').removeClass('invalid').addClass('valid');
-            }
-            if((that.is('.row_' + lastRow) || that.is('.edit')) && jQuery(window).width() <= 759 &&
-                !hit)
-            {
-                hit = true; // make sure we only scroll to the first editable or clicked row
-                that.scrollintoview({padding: {top:120,bottom:200,left:0,right:0}})
-            }
-        });
-
-        // don't need to limit submit because it goes back to edit mode if invalid
-        /*jQuery('#dates input[value="Save"]').each(function () {
-            var that = jQuery(this),
-                id = that.attr('id');
-            that.unbind(Drupal.ajax[id].event);
-            that.bind(Drupal.ajax[id].event, function (event) {
-                if(!that.parents('form').is('.invalid'))
-                    return Drupal.ajax[id].eventResponse(this, event);
-            });
-        });*/
-    };
-
     $.fn.goalsFunc = function () {
         jQuery(this).each(function () {
             var that = jQuery(this),
@@ -632,7 +592,5 @@ jQuery(document).ready(function($) {
     };
 
     jQuery('.field-name-field-goals tr').goalsFunc();
-    jQuery('.field-name-field-reminders .row').datesFunc();
-
 
 });

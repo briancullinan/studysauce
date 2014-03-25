@@ -8,14 +8,14 @@
     clear:both;
 }
 
-.page-dashboard #dates .field-name-field-reminders .row
+.page-dashboard #dates .row
 {
     position: relative;
     vertical-align: top;
     clear:both;
 }
 
-.page-dashboard #dates .field-name-field-reminders .row.is_hidden
+.page-dashboard #dates .row.is_hidden
 {
     display:none !important;
 }
@@ -23,6 +23,40 @@
 .page-dashboard #dates .node-key_dates-form
 {
     min-height: 450px;
+}
+
+.page-dashboard #dates #new-dates-row
+{
+    display:none;
+}
+
+.page-dashboard #dates.edit-date-only .row.edit,
+.page-dashboard #dates.edit-date-only #new-dates-row.edit
+{
+    display:block;
+}
+
+.page-dashboard #dates.edit-date-only .pane-content:before
+{
+    height: 100%;
+    width: 100%;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255,255,255,.75);
+    z-index: 10;
+}
+
+.page-dashboard #dates.edit-date-only .row.edit
+{
+    z-index:11;
+    background: url("/sites/test.studysauce.com/themes/successinc/images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+    box-shadow: 0 0 20px rgba(0,0,0,.75);
+    border-radius: 10px;
+    margin:-10px;
+    padding:10px;
 }
 
 .page-dashboard #dates .field-name-field-class-name
@@ -79,7 +113,7 @@
     z-index:2;
 }
 
-.page-dashboard .field-name-field-reminders a[href="#edit-reminder"]
+.page-dashboard a[href="#edit-reminder"]
 {
     display:inline-block;
     height:24px;
@@ -87,7 +121,7 @@
     background: url(images/edit.png) no-repeat 50% 50% transparent;
 }
 
-.page-dashboard .field-name-field-reminders a[href="#remove-reminder"]
+.page-dashboard a[href="#remove-reminder"]
 {
     display:inline-block;
     height:24px;
@@ -98,11 +132,12 @@
 .page-dashboard #dates .field-name-field-class-name .form-type-select,
 .page-dashboard #dates .field-name-field-assignment .form-type-textfield,
 .page-dashboard #dates .field-name-field-percent .form-type-textfield,
-.page-dashboard #dates .field-name-field-due-date fieldset,
+.page-dashboard #dates .field-name-field-due-date .form-type-date-popup,
 .page-dashboard #dates .row .highlighted-link,
 .page-dashboard #dates .field-name-field-reminder .form-type-checkboxes,
 .page-dashboard #dates .field-name-field-reminder-sent,
-.page-dashboard #dates .field-name-field-completed .form-type-checkbox
+.page-dashboard #dates .field-name-field-completed .form-type-checkbox,
+.page-dashboard #dates .fancy-close
 
 {
     display:none;
@@ -130,7 +165,7 @@
     padding-left:0;
 }
 
-.page-dashboard #dates .field-name-field-reminders label:not(.option)
+.page-dashboard #dates label:not(.option)
 {
     display:none;
 }
@@ -140,7 +175,7 @@
     margin-top:0;
 }
 
-.page-dashboard #dates .field-name-field-reminders .row.first:nth-child(2) label:not(.option)
+.page-dashboard #dates .row.edit label:not(.option)
 {
     display:block;
 }
@@ -150,13 +185,20 @@
     padding-left:10px;
 }
 
-.page-dashboard #dates .field-name-field-reminders .row.first:nth-child(3) label:not(.option)
+.page-dashboard #dates .row.first label:not(.option)
 {
     margin-top:-22px;
     position:relative;
     top:-40px;
     display:block;
 }
+
+/*
+.page-dashboard #dates.edit-date-only .row.first label:not(.option)
+{
+    display:none;
+}
+*/
 
 .page-dashboard #dates .field-name-field-class-name .form-type-select
 {
@@ -183,9 +225,10 @@
     width:320px;
 }
 
+.page-dashboard #dates .field-name-field-due-date .form-type-date-popup,
 .page-dashboard #dates .field-name-field-due-date fieldset
 {
-    width:100px;
+    width:120px;
 }
 
 .page-dashboard #dates .field-name-field-reminder .form-type-checkboxes
@@ -214,10 +257,11 @@
 .page-dashboard #dates .edit .field-name-field-class-name .form-type-select,
 .page-dashboard #dates .edit .field-name-field-assignment .form-type-textfield,
 .page-dashboard #dates .edit .field-name-field-percent .form-type-textfield,
-.page-dashboard #dates .edit .field-name-field-due-date fieldset,
+.page-dashboard #dates .edit .field-name-field-due-date .form-type-date-popup,
 .page-dashboard #dates .row.edit .highlighted-link,
 .page-dashboard #dates .edit .field-name-field-reminder .form-type-checkboxes,
-.page-dashboard #dates .edit .field-name-field-reminder .form-checkboxes
+.page-dashboard #dates .edit .field-name-field-reminder .form-checkboxes,
+.page-dashboard #dates .edit .fancy-close
 {
     display:block;
 }
@@ -227,7 +271,7 @@
     display:none;
 }
 
-.page-dashboard #dates .field-name-field-reminders input[type="submit"]
+.page-dashboard #dates input[type="submit"]
 {
     display:none;
 }
@@ -241,8 +285,6 @@
     border-radius: 100%;
     text-align: center;
     font-size: 14px;
-    font-weight: 700;
-    color: #555555;
     line-height: 15px;
     margin:-3px 10px 0 0;
     vertical-align: top;
@@ -309,12 +351,12 @@
     float:none;
 }
 
-.page-dashboard .field-name-field-reminders table td
+.page-dashboard #dates table td
 {
     padding:5px;
 }
 
-.page-dashboard .field-name-field-reminders .field-add-more-submit
+.page-dashboard #dates .field-add-more-submit
 {
     position: relative;
     z-index: 0;
@@ -327,13 +369,13 @@
     margin:0;
 }
 
-.page-dashboard .field-name-field-reminders .field-add-more-submit:active
+.page-dashboard #dates .field-add-more-submit:active
 {
     /*margin-top: 2px;*/
     box-shadow: none;
 }
 
-.page-dashboard .field-name-field-reminders .field-add-more-submit span
+.page-dashboard #dates .field-add-more-submit span
 {
     margin: 0 10px -8px 0;
     background: url("images/menu_icons_48.png") no-repeat scroll 0 -1728px #FFFFFF;
@@ -349,7 +391,7 @@
     float:left;
 }
 
-.page-dashboard .field-name-field-reminders .field-add-more-submit:active span
+.page-dashboard #dates .field-add-more-submit:active span
 {
     border-bottom-width:1px;
 }
@@ -408,14 +450,14 @@
     background-position: -54px -2741px;
 }
 
-.page-dashboard .field-name-field-reminders .clearfix:first-child
+.page-dashboard #dates .clearfix:first-child
 {
     text-align: left;
     padding-top:15px;
     padding-bottom:15px;
 }
 
-.page-dashboard .field-name-field-reminders .invalid .more
+.page-dashboard #dates .invalid .more
 {
     background-color: #aaaaaa;
     border-color: #888888;
@@ -446,7 +488,6 @@
 
 .page-dashboard #dates .highlighted-link
 {
-    float:right;
     text-align: right;
 }
 
@@ -512,12 +553,12 @@
         margin-top: 0;
     }
 
-    .page-dashboard .field-name-field-reminders .clearfix:first-child
+    .page-dashboard .clearfix:first-child
     {
         text-align: center;
     }
 
-    .page-dashboard .field-name-field-reminders .field-add-more-submit span
+    .page-dashboard .field-add-more-submit span
     {
         position:relative;
         float:none;
@@ -525,12 +566,12 @@
         margin: 0 10px -10px 10px;
     }
 
-    .page-dashboard #dates .field-name-field-reminders .read-only label
+    .page-dashboard #dates .read-only label
     {
         display:none !important;
     }
 
-    .page-dashboard #dates .field-name-field-reminders label:not(.option)
+    .page-dashboard #dates label:not(.option)
     {
         display:block;
     }
@@ -578,7 +619,7 @@
         margin-top: 0;
     }
 
-    .page-dashboard #dates .field-name-field-reminders .row.first:nth-child(3) label:not(.option)
+    .page-dashboard #dates .row.first label:not(.option)
     {
         position: static;
         margin-top:0;
@@ -635,12 +676,12 @@
         width: auto;
     }
 
-    .page-dashboard .field-name-field-reminders table td
+    .page-dashboard table td
     {
         padding:40px 0 0 0;
     }
 
-    .page-dashboard .field-name-field-reminders table tr:first-child td
+    .page-dashboard table tr:first-child td
     {
         padding:20px 0 0 0;
     }

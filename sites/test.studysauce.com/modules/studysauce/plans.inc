@@ -67,9 +67,7 @@ function studysauce_save_calendar()
             $entity->setHostEntity('node', $node);
             $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $_POST['className'];
         }
-        $entity->field_day_of_the_week[LANGUAGE_NONE] = array();
-        foreach(explode(',', $_POST['dotw']) as $i => $d)
-            $entity->field_day_of_the_week[LANGUAGE_NONE][]['value'] = $d;
+        $entity->field_day_of_the_week[LANGUAGE_NONE] = array_map(function ($x) { return array('value' => $x); }, explode(',', $_POST['dotw']));
         $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $_POST['type'];
         $entity->field_time[LANGUAGE_NONE][0] = array(
             'value' => gmdate('Y-m-d H:i:s', strtotime($_POST['start'])),
@@ -166,6 +164,7 @@ function studysauce_get_events($lastOrderTime)
                     foreach ($entity->field_day_of_the_week['und'] as $j => $dotw)
                     {
                         $d = 0;
+                        $skip = false;
                         switch ($dotw['value'])
                         {
                             case 'M':
@@ -188,7 +187,11 @@ function studysauce_get_events($lastOrderTime)
                             case 'Su':
                                 $d = 86400 * 6;
                                 break;
+                            default:
+                                $skip = true;
                         }
+                        if($skip)
+                            continue;
 
                         $startDay = strtotime(date("Y-m-d", $classStart));
                         $t = strtotime(date("Y-m-d", strtotime('this week', $w))) + $d;
@@ -220,7 +223,7 @@ function studysauce_get_events($lastOrderTime)
                         if ($t > $startWeek + 2419200)
                             continue;
 
-                        $pTitle = '(P) ' . $entity->field_class_name['und'][0]['value'] . ' (' . date('n/d', $t) . ')';
+                        $pTitle = '(P) ' . $entity->field_class_name['und'][0]['value'] . ' <small>' . date('n/d', $t) . '</small>';
                         if(!in_array($pTitle, $saved))
                         {
                             // add prework
@@ -244,14 +247,14 @@ function studysauce_get_events($lastOrderTime)
                         }
 
                         // add spaced repetition 7 days, 14 days, 28 days
-                        $srTitle = '(SR) ' . $entity->field_class_name['und'][0]['value'] . ' (' .
-                            date('n/d', $t + 3600 * 5) .
-                            ($t + 3600 * 5 - 86400 * 7 >= $startDay ? (',' . date('n/d', $t + 3600 * 5 - 86400 * 7)) : '') .
-                            ($t + 3600 * 5 - 86400 * 14 >= $startDay ? (',' . date('n/d', $t + 3600 * 5 - 86400 * 14)) : '') .
-                            ($t + 3600 * 5 - 86400 * 28 >= $startDay ? (',' . date('n/d', $t + 3600 * 5 - 86400 * 28)) : '') . ')';
+                        $srTitle = '(SR) ' . $entity->field_class_name['und'][0]['value'] . ' <small>' .
+                            date('n/d', $t) .
+                            ($t - 86400 * 7 >= $startDay ? (', ' . date('n/d', $t - 86400 * 7)) : '') .
+                            ($t - 86400 * 14 >= $startDay ? (', ' . date('n/d', $t - 86400 * 14)) : '') .
+                            ($t - 86400 * 28 >= $startDay ? (', ' . date('n/d', $t - 86400 * 28)) : '') . '</small>';
                         if(!in_array($srTitle, $saved))
                         {
-                            $spT = strtotime(date('Y/m/d', $t) . ' ' . date('H:i:s', $classStart)) + 3600 * 5;
+                            $spT = strtotime(date('Y/m/d', $t) . ' ' . date('H:i:s', $classStart)) + 3600 * 2;
                             $studyLength += 3600; // study hours automatically taken up by this week
                             $events[] = array(
                                 'title' => $srTitle,
@@ -334,7 +337,7 @@ function studysauce_get_events($lastOrderTime)
                 $freeHours = floor(($totalLength * 2.6 - $studyLength) / 3600);
                 for($j = 0; $j < $freeHours; $j++)
                 {
-                    $fTitle = '(F) Free study (' . date('n/d', $startWeek) . '-' . ($j + 1) . ')';
+                    $fTitle = '(F) Free study <small>' . date('n/d', strtotime(date("Y-m-d", strtotime('this week', $w)))) . '-' . ($j + 1) . '</small>';
                     if(in_array($fTitle, $saved))
                         continue;
                     $freeT = $w + 120 / $freeHours * $j * 3600 + 3600 * 5;
@@ -411,7 +414,7 @@ function studysauce_get_events($lastOrderTime)
         }, $events);
         array_multisort($keys, SORT_ASC, SORT_NUMERIC, $events);
 
-        return array($events, $node, array_values($classes));
+        return array($events, $node, $classes, $entities);
     }
 
     return array(array(), null, array());

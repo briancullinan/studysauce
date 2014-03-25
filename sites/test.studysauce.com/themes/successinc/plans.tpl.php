@@ -1,16 +1,19 @@
 <?php
 // check if user has purchased a plan
-global $user;
-$orders = _studysauce_orders_by_uid($user->uid);
-$conn = studysauce_get_connections();
-foreach ($conn as $i => $c)
-    $orders = array_merge($orders, _studysauce_orders_by_uid($c->uid));
+global $user, $orders;
+if(!isset($orders))
+{
+    $orders = _studysauce_orders_by_uid($user->uid);
+    $conn = studysauce_get_connections();
+    foreach ($conn as $i => $c)
+        $orders = array_merge($orders, _studysauce_orders_by_uid($c->uid));
+}
 
 if (count($orders)):
 
     // get event schedule
     $o = end($orders);
-    list($events, $node, $classes) = studysauce_get_events($o->created);
+    list($events, $node, $classes, $entities) = studysauce_get_events($o->created);
 
     if(!isset($node->field_university['und'][0]['value']) || empty($node->field_university['und'][0]['value']))
     {
@@ -114,14 +117,14 @@ if (count($orders)):
 
 <?php } ?>
 
-    <button class="field-add-more-submit ajax-processed" name="field_reminders_add_more" value="Add new" onclick="jQuery('#plan').toggleClass('edit-only'); jQuery('#schedule-class-name-label').show(); jQuery('#schedule-event-title-label, .field-name-field-day-of-the-week .form-checkboxes.form-type-checkbox *').hide(); jQuery('#plan .field-name-field-day-of-the-week .form-checkboxes .form-type-checkbox').show(); jQuery('#schedule-all-day, label[for=&quot;schedule-all-day&quot;]').css('visibility', 'hidden'); jQuery('#plan #schedule-type').val('c'); jQuery('#plan #schedule-weekly').prop('checked', true); return false;">
+    <button class="field-add-more-submit ajax-processed" name="field_reminders_add_more" value="Add new" onclick="jQuery('#plan').addClass('edit-class-only'); jQuery('#plan #schedule-type').val('c'); jQuery('#plan #schedule-weekly').prop('checked', true); return false;">
         Add <span>&nbsp;</span> class
     </button>
-    <button class="field-add-more-submit ajax-processed" name="field_reminders_add_more" value="Add new" onclick="jQuery('#plan').toggleClass('edit-only'); jQuery('#schedule-class-name-label').hide(); jQuery('#schedule-event-title-label, .field-name-field-day-of-the-week .form-checkboxes.form-type-checkbox *').show(); jQuery('#schedule-all-day, label[for=&quot;schedule-all-day&quot;]').css('visibility', 'visible'); jQuery('#plan #schedule-type').val('o'); return false;">
+    <button class="field-add-more-submit ajax-processed" name="field_reminders_add_more" value="Add new" onclick="jQuery('#plan').addClass('edit-other-only'); jQuery('#plan #schedule-type').val('o'); return false;">
         Add <span>&nbsp;</span> other event
     </button>
     <div id="class-dialog">
-        <div class="edit row">
+        <div class="row edit">
             <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
                 <div class="form-item form-type-textfield">
                     <label for="schedule-class-name" id="schedule-event-title-label">Event title</label>
@@ -133,21 +136,50 @@ if (count($orders)):
                            type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
                     <div class="form-checkboxes form-type-checkbox">
                         <?php
-                        foreach($classes as $i => $c)
+                        foreach($classes as $eid => $c)
                         {
-                            $skip = false;
-                            reset($events);
-                            while (list($key, $val) = each($events))
-                                if($val['title'] == $c)
-                                {
-                                    $skip = true;
-                                    break;
-                                }
-                            if($skip)
-                                continue;
-                            ?><input type="radio" name="schedule-class-option" id="schedule-class<?php print $i; ?>" value="<?php print $c; ?>"
-                                onchange="jQuery('#plan .field-name-field-class-name input.form-text').val(jQuery(this).val());"/>
-                              <label for="schedule-class<?php print $i; ?>" class="class<?php print $i; ?>"><?php print $c; ?></label><?php
+                            $classI = array_search($eid, array_keys($classes));
+                            $js = <<<EOJS
+jQuery('#plan .field-name-field-class-name input.form-text').val(jQuery(this).val());
+jQuery('#plan .field-name-field-day-of-the-week input.form-checkbox').prop('checked', false);
+EOJS;
+                            if(isset($entities[$eid]->field_time['und'][0]['value']) &&
+                                isset($entities[$eid]->field_time['und'][0]['value2']))
+                            {
+                                $startDate = date('Y/m/d H:i:s', strtotime($entities[$eid]->field_time['und'][0]['value'])) . ' UTC';
+                                $endDate = date('Y/m/d H:i:s', strtotime($entities[$eid]->field_time['und'][0]['value2'])) . ' UTC';
+                                $js .= <<<EOJS
+var startDate = new Date('$startDate');
+var endDate = new Date('$endDate');
+jQuery('#plan .field-name-field-time #schedule-value-date').datepicker('setDate', startDate);
+jQuery('#plan .field-name-field-time #schedule-value2-date').datepicker('setDate', endDate);
+jQuery('#plan .field-name-field-time #schedule-value-time').val((startDate.getHours() > 12 ? (('0' + (startDate.getHours()-12)).slice(-2) + ':' + ('0' + startDate.getMinutes()).slice(-2) + 'pm') : (('0' + startDate.getHours()).slice(-2) + ':' + ('0' + startDate.getMinutes()).slice(-2) + 'am')));
+jQuery('#plan .field-name-field-time #schedule-value2-time').val((endDate.getHours() > 12 ? (('0' + (endDate.getHours()-12)).slice(-2) + ':' + ('0' + endDate.getMinutes()).slice(-2) + 'pm') : (('0' + endDate.getHours()).slice(-2) + ':' + ('0' + endDate.getMinutes()).slice(-2) + 'am')));
+EOJS;
+
+                            }
+                            else
+                            {
+                                $js .= <<<EOJS
+jQuery('#plan .field-name-field-time #schedule-value-date').datepicker('setDate', null);
+jQuery('#plan .field-name-field-time #schedule-value2-date').datepicker('setDate', null);
+jQuery('#plan .field-name-field-time #schedule-value-time').val('');
+jQuery('#plan .field-name-field-time #schedule-value2-time').val('');
+EOJS;
+                            }
+
+                            if(isset($entities[$eid]->field_day_of_the_week['und'][0]['value']))
+                            {
+                                $daysOfTheWeek = array_map(function ($x) { return $x['value']; }, $entities[$eid]->field_day_of_the_week['und']);
+                                foreach ($daysOfTheWeek as $j => $dotw)
+                                    $js .= <<<EOJS
+    jQuery('#plan .field-name-field-day-of-the-week input[value=&quot;$dotw&quot;]').prop('checked', true);
+EOJS;
+                            }
+
+                            ?><input type="radio" name="schedule-class-option" id="schedule-class<?php print $classI; ?>" value="<?php print $c; ?>"
+                                onchange="<?php print $js; ?>"/>
+                              <label for="schedule-class<?php print $classI; ?>" class="class<?php print $classI; ?>"><?php print $c; ?></label><?php
                         }
                         ?>
                     </div>
@@ -252,7 +284,7 @@ if (count($orders)):
             <p style="margin-bottom:0;clear:both;position:static;top:auto;" class="highlighted-link">
                 <a href="#save-class" class="more">Save</a>
             </p>
-            <a href="#" onclick="jQuery('#schedule form')[0].reset(); jQuery('#plan').removeClass('edit-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
+            <a href="#" onclick="jQuery('#plan').removeClass('edit-class-only edit-other-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
         </div>
     </div>
     <div class="mobile-only">

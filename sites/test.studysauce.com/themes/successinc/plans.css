@@ -23,6 +23,11 @@
     color:#555555;
 }
 
+.page-dashboard #plan .free-event .fc-event-title small
+{
+    display:none;
+}
+
 .page-dashboard #plan .field-name-field-time-preference label.option,
 .page-dashboard #plan .field-name-field-weekends label.option,
 .page-dashboard #plan .field-name-field-grades label.option {
@@ -281,6 +286,26 @@
     padding: 5px;
     transition: none 0s ease 0s;
 }
+
+.page-dashboard #plan.edit-class-only .field-name-field-day-of-the-week .form-checkboxes.form-type-checkbox *,
+.page-dashboard #plan.edit-other-only .field-name-field-class-name .form-checkboxes.form-type-checkbox,
+.page-dashboard #plan.edit-class-only #schedule-event-title-label,
+.page-dashboard #plan.edit-other-only #schedule-class-name-label
+{
+    display:none;
+}
+
+.page-dashboard #plan.edit-class-only #schedule-all-day,
+.page-dashboard #plan.edit-class-only label[for="schedule-all-day"]
+{
+    visibility: hidden;
+}
+
+.page-dashboard #plan .fc-event-vert .fc-event-time
+{
+    display:none;
+}
+
 
 /*
 .page-dashboard #plan .field-name-field-class-name
