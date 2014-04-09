@@ -184,31 +184,31 @@ if (!empty($entities['node'])) {
                                 <div class="form-item form-type-checkbox">
                                     <input type="checkbox" id="dates-reminder-1209600-<?php print $i; ?>"
                                            name="dates-reminder-1209600" value="1209600"
-                                           class="form-checkbox" <?php print in_array(1209600, $reminders) ? 'checked' : ''; ?>>
+                                           class="form-checkbox" <?php print in_array(1209600, $reminders) ? 'checked="checked"' : ''; ?>>
                                     <label class="option" for="dates-reminder-1209600-<?php print $i; ?>">2 wk </label>
                                 </div>
                                 <div class="form-item form-type-checkbox">
                                     <input type="checkbox" id="dates-reminder-604800-<?php print $i; ?>"
                                            name="dates-reminder-604800" value="604800"
-                                           class="form-checkbox" <?php print in_array(604800, $reminders) ? 'checked' : ''; ?>>
+                                           class="form-checkbox" <?php print in_array(604800, $reminders) ? 'checked="checked"' : ''; ?>>
                                     <label class="option" for="dates-reminder-604800-<?php print $i; ?>">1 wk </label>
                                 </div>
                                 <div class="form-item form-type-checkbox">
                                     <input type="checkbox" id="dates-reminder-345600-<?php print $i; ?>"
                                            name="dates-reminder-345600" value="345600"
-                                           class="form-checkbox" <?php print in_array(345600, $reminders) ? 'checked' : ''; ?>>
+                                           class="form-checkbox" <?php print in_array(345600, $reminders) ? 'checked="checked"' : ''; ?>>
                                     <label class="option" for="dates-reminder-345600-<?php print $i; ?>">4 days </label>
                                 </div>
                                 <div class="form-item form-type-checkbox">
                                     <input type="checkbox" id="dates-reminder-172800-<?php print $i; ?>"
                                            name="dates-reminder-172800" value="172800"
-                                           class="form-checkbox" <?php print in_array(172800, $reminders) ? 'checked' : ''; ?>>
+                                           class="form-checkbox" <?php print in_array(172800, $reminders) ? 'checked="checked"' : ''; ?>>
                                     <label class="option" for="dates-reminder-172800-<?php print $i; ?>">2 days </label>
                                 </div>
                                 <div class="form-item form-type-checkbox">
                                     <input type="checkbox" id="dates-reminder-86400-<?php print $i; ?>"
                                            name="dates-reminder-86400" value="86400"
-                                           class="form-checkbox" <?php print in_array(86400, $reminders) ? 'checked' : ''; ?>>
+                                           class="form-checkbox" <?php print in_array(86400, $reminders) ? 'checked="checked"' : ''; ?>>
                                     <label class="option" for="dates-reminder-86400-<?php print $i; ?>">1 day </label>
                                 </div>
                             </div>
@@ -253,6 +253,11 @@ if (!empty($entities['node'])) {
     }
 }
 
+?>
+<div id="empty-dates">
+    <a href="#edit-schedule"><h2>Click here to set up your class schedule and get started.</h2><small>Then set important dates on the Reminders tab.</small></a>
+</div>
+<?php
 
 if (count($classes) == 0) :
     ?>

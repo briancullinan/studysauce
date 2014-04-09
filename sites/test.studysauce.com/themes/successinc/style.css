@@ -537,18 +537,34 @@ img {
 .page-dashboard .page #privacy,
 .page-dashboard .page #refund,
 .page-dashboard #main-menu li.terms-only,
-.page-dashboard #user-profile
+.page-dashboard #user-profile,
+.page-dashboard .page #awards,
+.page-dashboard .page #home,
+.page-dashboard .page #checkin,
+.page-dashboard .page #incentives,
+.page-dashboard .page #tips,
+.page-dashboard .page #plan,
+.page-dashboard .page #metrics,
+.page-dashboard .page #dates,
+.page-dashboard.awards-only #home,
+.page-dashboard.awards-only #checkin,
+.page-dashboard.awards-only #incentives,
+.page-dashboard.awards-only #tips,
+.page-dashboard.awards-only #plan,
+.page-dashboard.awards-only #metrics,
+.page-dashboard.awards-only #dates,
+.page-dashboard #awards
 {
     display:none;
 }
 
+.page-dashboard.awards-only #awards,
 .page-dashboard #checkin.checklist-only #checklist,
 .page-dashboard #dates.edit-schedule #schedule,
 .page-dashboard #metrics.empty #metrics-empty,
 .page-dashboard #checkin.mozart-only #mozart-effect,
 .page-dashboard #checkin.empty #empty-schedule,
-.page-dashboard #plan.edit-class-only #class-dialog,
-.page-dashboard #plan.edit-other-only #class-dialog,
+.page-dashboard #dates.empty #empty-dates,
 .page-dashboard #tips.study-quiz-only #study-quiz,
 .page-dashboard #incentives.invite-only #invite,
 .page-dashboard #incentives.invite-sent-only #invite-sent,
@@ -561,7 +577,7 @@ img {
 .page-dashboard.privacy-only .page #privacy,
 .page-dashboard.refund-only .page #refund,
 .page-dashboard.user-profile-only #user-profile,
-.page-dashboard #incentives .achievement-only .group-achievement,
+.page-dashboard #incentives.achievement-only .group-achievement,
 .page-dashboard #checkin.timer-expire-only #timer-expire,
 .page-dashboard #dates.class-names-only .field-name-field-class-names
 {
@@ -2228,10 +2244,10 @@ ul.company-info li.last {
 .page-dashboard #welcome > div,
 .page-dashboard #checklist > div,
 .page-dashboard #study-quiz > div,
-.page-dashboard #class-dialog > div,
 .page-dashboard #schedule form,
 .page-dashboard #mozart-effect > div,
 .page-dashboard #empty-schedule > a,
+.page-dashboard #empty-dates > a,
 .page-dashboard #study-preferences > div,
 .page-dashboard #metrics-empty > a,
 .page-dashboard #timer-expire > div,
@@ -2253,6 +2269,7 @@ ul.company-info li.last {
 }
 
 .page-dashboard #metrics-empty > a,
+.page-dashboard #empty-dates > a,
 .page-dashboard #empty-schedule > a
 {
     display:block;
@@ -2260,6 +2277,7 @@ ul.company-info li.last {
 }
 
 .page-dashboard #metrics-empty h2,
+.page-dashboard #empty-dates h2,
 .page-dashboard #empty-schedule h2
 {
     text-align: center;
@@ -5643,7 +5661,8 @@ tbody
 }
 
 .page-dashboard.student .parents_only,
-.page-dashboard.parent .students_only
+.page-dashboard.parent .students_only,
+.page-dashboard.parent .header-wrapper a[href="#awards"].students_only
 {
     display:none;
 }
@@ -5654,219 +5673,11 @@ tbody
     clear:both;
 }
 
-.page-user .field-name-field-parent-student
-{
-    display:none;
-}
-
 .page-dashboard #dates .field-name-field-class-names .highlighted-link,
 .page-dashboard #checkin .highlighted-link,
 .page-dashboard #user-profile .form-actions
 {
     text-align:right;
-}
-
-.page-dashboard #dates .field-name-field-class-names .clearfix:last-child input,
-.page-dashboard #schedule .field-name-field-classes .clearfix:last-child
-{
-    float:left;
-}
-
-#node_schedule_form_group_periods
-{
-    clear:both;
-}
-
-.field-name-field-weekends,
-.field-name-field-grades
-{
-    width: 295px;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.field-name-field-weekends .form-type-radio,
-.field-name-field-grades .form-type-radio
-{
-    display:inline-block;
-}
-
-#node_schedule_form_group_periods .form-type-radios > label
-{
-    display:inline-block;
-    width:150px;
-}
-
-#node_schedule_form_group_periods .form-item .form-radios
-{
-    display:inline;
-    float:none;
-    clear:none;
-}
-
-.field-name-field-day-of-the-week .form-type-checkbox label,
-#node_schedule_form_group_periods .form-type-radio label
-{
-    background-color:#EEEEEE;
-    padding:5px;
-    margin:3px 0 0 -12px;
-    border-radius: 5px 5px 5px 5px;
-    font-weight: bold;
-    vertical-align: middle;
-    cursor: pointer;
-    width:30px;
-    text-align: center;
-    float:left;
-}
-
-.field-name-field-day-of-the-week .form-item
-{
-    white-space:normal !important;
-}
-
-.field-name-field-day-of-the-week .form-type-checkbox input.form-checkbox:checked + label,
-#node_schedule_form_group_periods .form-type-radio input.form-radio:checked + label
-{
-    background: none repeat scroll 0 0 #CCCCCC;
-    opacity: 1 !important;
-    padding: 5px;
-    transition: none 0s ease 0s;
-}
-
-.field-name-field-weekends .form-type-radio label,
-.field-name-field-grades .form-type-radio label
-{
-    background-color:#EEEEEE;
-    padding:5px;
-    margin:3px 20px 2px -15px;
-    display:inline-block;
-    border-radius: 5px 5px 5px 5px;
-    font-weight: bold;
-    width:150px;
-    vertical-align: middle;
-    cursor: pointer;
-    text-align: center;
-    position: relative;
-    transition:padding .25s, margin .25s;
-    z-index: 1;
-}
-
-.field-name-field-weekends .form-type-radio label:before,
-.field-name-field-grades .form-type-radio label:before
-{
-    content:" ";
-    position: absolute;
-    top:0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    margin: -8px;
-    border: 3px solid #999999;
-    padding:5px;
-    border-radius: 8px;
-    transition:padding .25s, margin .25s, opacity .25s;
-    z-index: -1;
-    opacity: 0;
-}
-
-.field-name-field-weekends .form-type-radio input.form-radio:checked + label,
-.field-name-field-grades .form-type-radio input.form-radio:checked + label
-{
-    background: none repeat scroll 0 0 #CCCCCC;
-    display: inline-block;
-    opacity: 1 !important;
-    padding: 10px;
-    margin:-2px 15px -3px -20px;
-    transition:padding .25s, margin .25s;
-}
-
-.field-name-field-weekends .form-type-radio input.form-radio:checked + label:before,
-.field-name-field-grades .form-type-radio input.form-radio:checked + label:before
-{
-    margin: -3px;
-    padding:0px;
-    opacity: 1;
-    transition:padding .25s, margin .25s, opacity .25s;
-}
-
-.field-name-field-weekends input,
-.field-name-field-grades input
-{
-    visibility:hidden;
-    margin:0;
-}
-
-.field-name-field-day-of-the-week input,
-#node_schedule_form_group_periods input
-{
-    visibility:hidden;
-    margin:0;
-    float:left;
-}
-
-.field-name-field-parent-student .form-type-radio
-{
-    display:inline-block;
-}
-
-.field-name-field-parent-student .form-type-radio:first-child
-{
-    display:none;
-}
-
-.field-name-field-parent-student .form-type-radio input
-{
-    margin:0;
-}
-
-.field-name-field-parent-student .form-type-radio label
-{
-    margin:5px;
-    border-radius: 5px;
-    cursor:pointer;
-    background: none repeat scroll 0 0 #0099BE;
-    border-bottom: 3px solid #004477;
-    color: #FFFFFF;
-    border-image: none;
-    display: inline-block;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 150%;
-    padding: 8px 25px;
-    margin-left:-25px;
-    margin-right:10px;
-}
-
-.field-name-field-parent-student .form-type-radio label:hover
-{
-    background-color:#008EB7;
-}
-
-.field-name-field-parent-student .form-type-radio label:focus,
-.field-name-field-parent-student .form-type-radio label:active
-{
-    box-shadow: 1px 1px 2px 0 #113355 inset;
-    background-color:#0099BE;
-    margin-top:7px;
-    border-bottom-width:1px;
-}
-
-
-.field-name-field-parent-student .form-type-radio input.form-radio:checked + label
-{
-    padding:10px 25px;
-    background: none repeat scroll 0 0 #FF9900;
-    border-bottom: 3px solid #993300;
-    color: #1D1D1D;
-    font-size:18px;
-    font-weight:800;
-}
-
-.field-name-field-parent-student .form-radios
-{
-    text-align: center;
-    white-space: nowrap;
 }
 
 .page-dashboard #home #connections,
@@ -5876,6 +5687,7 @@ tbody
 .page-dashboard #checkin #checklist,
 .page-dashboard #schedule,
 .page-dashboard #empty-schedule,
+.page-dashboard #empty-dates,
 .page-dashboard #mozart-effect,
 .page-dashboard #metrics-empty,
 .page-dashboard #checkin #timer-expire,
@@ -5884,7 +5696,7 @@ tbody
 .page-dashboard #incentives #invite,
 .page-dashboard #incentives #invite-sent,
 .page-dashboard #tips #study-quiz,
-.page-dashboard #class-dialog,
+.page-dashboard .group-achievement,
 .page-dashboard #dates .field-name-field-class-names
 {
     display:none;
@@ -5893,10 +5705,10 @@ tbody
 .page-dashboard.parent #metrics .parents_only:before,
 .page-dashboard.parent #checkin .parents_only:before,
 .page-dashboard #study-quiz:before,
-.page-dashboard #class-dialog:before,
 .page-dashboard #schedule:before,
 .page-dashboard #metrics-empty:before,
 .page-dashboard #empty-schedule:before,
+.page-dashboard #empty-dates:before,
 .page-dashboard #study-preferences:before,
 .page-dashboard #mozart-effect:before,
 .page-dashboard #checklist:before,
@@ -5954,6 +5766,7 @@ tbody
 .page-dashboard.parent #checkin .parents_only,
 .page-dashboard #schedule,
 .page-dashboard #empty-schedule,
+.page-dashboard #empty-dates,
 .page-dashboard #study-preferences,
 .page-dashboard #mozart-effect,
 .page-dashboard #metrics-empty,
@@ -5961,7 +5774,6 @@ tbody
 .page-dashboard #welcome,
 .page-dashboard #new-award,
 .page-dashboard #study-quiz,
-.page-dashboard #class-dialog,
 .page-dashboard #sds-messages,
 .page-dashboard #invite,
 .page-dashboard #invite-sent,

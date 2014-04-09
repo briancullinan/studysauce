@@ -1,0 +1,65 @@
+
+.page-user .field-name-field-parent-student
+{
+    display:none;
+}
+
+.field-name-field-parent-student .form-type-radio
+{
+    display:inline-block;
+}
+
+.field-name-field-parent-student .form-type-radio input
+{
+    margin:0;
+}
+
+.field-name-field-parent-student .form-type-radio label
+{
+    margin:5px;
+    border-radius: 5px;
+    cursor:pointer;
+    background: none repeat scroll 0 0 #0099BE;
+    border-bottom: 3px solid #004477;
+    color: #FFFFFF;
+    border-image: none;
+    display: inline-block;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 150%;
+    padding: 8px 25px;
+    margin-left:-25px;
+    margin-right:10px;
+}
+
+.field-name-field-parent-student .form-type-radio label:hover
+{
+    background-color:#008EB7;
+}
+
+.field-name-field-parent-student .form-type-radio label:focus,
+.field-name-field-parent-student .form-type-radio label:active
+{
+    box-shadow: 1px 1px 2px 0 #113355 inset;
+    background-color:#0099BE;
+    margin-top:7px;
+    border-bottom-width:1px;
+}
+
+
+.field-name-field-parent-student .form-type-radio input.form-radio:checked + label
+{
+    padding:10px 25px;
+    background: none repeat scroll 0 0 #FF9900;
+    border-bottom: 3px solid #993300;
+    color: #1D1D1D;
+    font-size:18px;
+    font-weight:800;
+}
+
+.field-name-field-parent-student .form-radios
+{
+    text-align: center;
+    white-space: nowrap;
+}

@@ -1,77 +1,13 @@
-var TIMER_SECONDS = 3600,
-    seconds = TIMER_SECONDS,
-    clock = null,
-    className = '',
-    checkedIn = false,
-    footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
-    footerOnly = footerLinks.join('-only ') + '-only' + ' user-profile-only',
+var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
+    footerOnly = footerLinks.join('-only ') + '-only' + ' user-profile-only awards-only',
     selectedAward = null,
-    lastRow = -1,
     locationTimeout,
-    lastScheduleEdit = null,
-    isClosing = false;;
+    isClosing = false;
 
 
 (function($) {
-    var hours = 0,
-        minutes = 0;
-    function setClock() {
-        var tmpHours = '' + Math.floor(seconds / 60 / 60);
-        var tmpMinutes = '' + Math.floor(seconds / 60 % 60);
-        if(tmpHours == hours && tmpMinutes == minutes)
-            return;
-        hours = tmpHours;
-        minutes = tmpMinutes;
-        if(hours.length == 1)
-        {
-            jQuery('#checkin .clock ul').first().find('li')
-                .removeClass('flip-clock-before')
-                .removeClass('flip-clock-active');
 
-            jQuery('#checkin .clock ul').eq(1).find('li')
-                .removeClass('flip-clock-before')
-                .removeClass('flip-clock-active')
-                .eq(parseInt(hours)).addClass('flip-clock-active');
-        }
-        else
-        {
-            jQuery('#checkin .clock ul').first().find('li')
-                .removeClass('flip-clock-before')
-                .removeClass('flip-clock-active')
-                .eq(parseInt(hours.substring(0, 1))).addClass('flip-clock-active');
-
-            jQuery('#checkin .clock ul').eq(1).find('li')
-                .removeClass('flip-clock-before')
-                .removeClass('flip-clock-active')
-                .eq(parseInt(hours.substring(1))).addClass('flip-clock-active');
-        }
-
-        if(minutes.length == 1)
-        {
-            jQuery('#checkin .clock ul').eq(2).find('li')
-                .removeClass('flip-clock-before')
-                .removeClass('flip-clock-active');
-
-            jQuery('#checkin .clock ul').eq(3).find('li')
-                .removeClass('flip-clock-before')
-                .removeClass('flip-clock-active')
-                .eq(parseInt(minutes)).addClass('flip-clock-active');
-        }
-        else
-        {
-            jQuery('#checkin .clock ul').eq(2).find('li')
-                .removeClass('flip-clock-before')
-                .removeClass('flip-clock-active')
-                .eq(parseInt(minutes.substring(0, 1))).addClass('flip-clock-active');
-
-            jQuery('#checkin .clock ul').eq(3).find('li')
-                .removeClass('flip-clock-before')
-                .removeClass('flip-clock-active')
-                .eq(parseInt(minutes.substring(1))).addClass('flip-clock-active');
-        }
-    }
-
-    function bubbleResize(evt) {
+    function bubbleResize() {
         var that = $(this);
         var bubble = that.nextUntil('a');
         var thisArrow = bubble.find('.awardArrow');
@@ -85,25 +21,22 @@ var TIMER_SECONDS = 3600,
     {
         jQuery('body').on('click', 'a[href="#invite"]', function (evt) {
             evt.preventDefault();
+            jQuery('body').removeClass(footerOnly);
+            window.location.hash = '#incentives';
             jQuery('#incentives').addClass('invite-only').scrollintoview();
-        });
-
-        jQuery('body').on('click', 'a[href="#edit-schedule"]', function (evt) {
-            evt.preventDefault();
-            lastScheduleEdit = jQuery(this).parents('.panel-pane').attr('id');
-            if(jQuery('#dates #schedule').length > 0)
-                jQuery('#dates').addClass('edit-schedule').scrollintoview();
-            else
-            {
-                jQuery('#plan').removeClass('edit-other-only').addClass('edit-class-only').scrollintoview();
-                jQuery('#plan #schedule-type').val('c');
-                jQuery('#plan #schedule-weekly').prop('checked', true);
-            }
         });
 
         jQuery('body').on('click', 'a[href="#study-quiz"]', function (evt) {
             evt.preventDefault();
             jQuery('#tips').addClass('study-quiz-only').scrollintoview();
+        });
+
+        jQuery('body').on('click', 'a[href="#awards"]', function (evt) {
+            evt.preventDefault();
+            jQuery('body').removeClass(footerOnly).addClass('awards-only');
+            window.location.hash = '#awards';
+            jQuery(window).trigger('scroll');
+            bubbleResize.call(jQuery('#awards .awards > a.selected'));
         });
 
         jQuery('#study-quiz').on('click', 'a[href="#retry"]', function (evt) {
@@ -113,92 +46,6 @@ var TIMER_SECONDS = 3600,
                 jQuery('#tips').scrollintoview();
                 //Drupal.ajax['edit-webform-ajax-submit-17'] = new Drupal.ajax('edit-webform-ajax-submit-17', jQuery('#study-quiz input#edit-webform-ajax-submit-17'), {"callback":"webform_ajax_callback","wrapper":"webform-ajax-wrapper-17","progress":{"message":"","type":"throbber"},"event":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Submit"}});
             });
-        });
-
-        // perform ajax call when clicked
-        jQuery('#checkin').on('click', '.classes a', function (evt) {
-            evt.preventDefault();
-            var that = jQuery(this);
-            jQuery('#checklist .no-checkboxes').hide();
-            jQuery('#checklist .checkboxes').show();
-            jQuery('#checklist .checkboxes input').removeAttr('checked');
-            if(seconds > 59 && seconds <= TIMER_SECONDS &&
-               clock != null)
-            {
-                clearInterval(clock);
-                clock = null;
-                seconds = TIMER_SECONDS;
-                setClock();
-                // show expire message
-                jQuery('#checkin').addClass('timer-expire-only').scrollintoview();
-            }
-            if(that.is('.checked-in'))
-            {
-                window.checkedIn = true;
-                window.className = that.text().substring(1);
-                Drupal.ajax['classes'].eventResponse(this, evt);
-            }
-            else if(jQuery('#sds-messages .show').length > 0)
-            {
-                jQuery('#checkin').find('a[href="#study"]').data('className', that.text().substring(1));
-                jQuery('#checkin').addClass('sds-message-only').scrollintoview();
-            }
-            else
-            {
-                jQuery('#checkin').find('a[href="#study"]').data('className', that.text().substring(1));
-                jQuery('#checkin').addClass('checklist-only').scrollintoview();
-            }
-        });
-
-        jQuery('#checkin').on('click', 'a[href="#break"]', function (evt) {
-            evt.preventDefault();
-            jQuery('#checkin .classes a.checked-in').trigger('click');
-            jQuery('#metrics').scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
-        });
-
-        jQuery('#checkin').on('click', '#timer-expire a[href="#awards"]', function (evt) {
-            jQuery('#checkin .classes a.checked-in').trigger('click');
-            jQuery('#checkin').removeClass('timer-expire-only').scrollintoview();
-        });
-
-        jQuery('#checkin').on('mousedown', 'a[href="#study"]', function (evt) {
-            var that = jQuery(this),
-                position = null,
-                callback = function (pos) {
-                    clearTimeout(locationTimeout);
-                    position = pos;
-                    window.checkedIn = false;
-                    window.className = that.data('className');
-                    Drupal.ajax['classes'].eventResponse(this, evt);
-                };
-            jQuery('.minplayer-default-play').trigger('click');
-            evt.preventDefault();
-            if(typeof Drupal.ajax['classes'] == 'undefined')
-                Drupal.ajax['classes'] = new Drupal.ajax(that.attr('href'), that, {
-                        url: '/checkin/',
-                        event: 'submit',
-                        submit: { },
-                        progress: {
-                            type: 'throbber',
-                            message: ''
-                        },
-                        beforeSend: function (xhr, options) {
-                            var checked = [],
-                                lat = position != null && typeof position.coords != 'undefined' ? position.coords.latitude : '',
-                                lng = position != null && typeof position.coords != 'undefined' ? position.coords.longitude : '';
-                            jQuery('#checklist input:checked').each(function () { checked[checked.length] = jQuery(this).attr('name'); });
-                            options.data = 'checkedIn=' + window.checkedIn + '&date=' + encodeURIComponent(new Date().getTime()/1000) +
-                                           '&className=' + encodeURIComponent(window.className) + '&checklist=' + checked.join(',') + '&location=' + lat + ',' + lng;
-
-                        }
-                    });
-            //if(typeof navigator.geolocation != 'undefined')
-            //{
-            //    locationTimeout = setTimeout(callback, 2000);
-            //    navigator.geolocation.getCurrentPosition(callback, callback, {maximumAge: 3600000, timeout:1000});
-            //}
-            //else
-                callback();
         });
 
         jQuery('#main-menu').on('click', 'a', function () {
@@ -244,7 +91,7 @@ var TIMER_SECONDS = 3600,
                 description = that.nextUntil('a').filter('.after-only').addClass('selected');
             else
                 description = that.nextUntil('a').filter('.before-only').addClass('selected');
-            bubbleResize.call(that, evt);
+            bubbleResize.call(that);
         });
 
         jQuery('body').on('click', '#new-award a.fancy-close', function (evt) {
@@ -273,20 +120,24 @@ var TIMER_SECONDS = 3600,
                 .detach().appendTo($(panel).addClass('new-award-only'))
                 // set the icon on the award
                 .find('.badge').attr('class', 'badge').addClass(award);
-            $(panel).parent().scrollintoview();
+            if(panel != '')
+                $(panel).parent().scrollintoview();
             $('#new-award').find('a[href="#awards"]')
                 .unbind('click')
                 .bind('click', function (evt) {
                                       awardObj.trigger('click').scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
                 jQuery('.new-award-only').removeClass('new-award-only');
             });
-        }
-
-        var DrupalError = Drupal.ajax.prototype.error;
-        Drupal.ajax.prototype.error = function (response, uri) {
-            if(!isClosing)
-                return DrupalError(response, uri);
         };
+
+        if(typeof Drupal.ajax != 'undefined')
+        {
+            var DrupalError = Drupal.ajax.prototype.error;
+            Drupal.ajax.prototype.error = function (response, uri) {
+                if(!isClosing)
+                    return DrupalError(response, uri);
+            };
+        }
 
         if(typeof window.initialAward != 'undefined')
         {
@@ -295,6 +146,7 @@ var TIMER_SECONDS = 3600,
     }
 
     jQuery(document).ready(function($) {
+
         $.error = console.log;
 
         setBindings();
@@ -303,55 +155,9 @@ var TIMER_SECONDS = 3600,
         // move arrow when window resizes
         $(window).on('resize', function (evt) {
             jQuery('#awards .awards > a.selected').each(function () {
-                bubbleResize.call(this, evt);
+                bubbleResize.call(this);
             });
         }).trigger('resize');
-
-        setClock();
-        jQuery('#checkin .clock').find('a').click(function (evt) { evt.preventDefault(); });
-        $.fn.startClock = function () {
-            if(clock != null)
-            {
-                clearInterval(clock);
-                clock = null;
-            }
-            seconds = TIMER_SECONDS;
-            setClock();
-            jQuery('.minplayer-default-play').trigger('click');
-            clock = setInterval(function () {
-                seconds--;
-                setClock();
-                if(seconds == 59)
-                {
-                    if(clock != null)
-                    {
-                        clearInterval(clock);
-                        clock = null;
-                    }
-                    seconds = TIMER_SECONDS;
-                    setClock();
-                    // show expire message
-                    jQuery('.minplayer-default-pause').trigger('click');
-                    jQuery('#checkin').addClass('timer-expire-only').scrollintoview();
-                }
-            }, 1000);
-        };
-        $.fn.stopClock = function () {
-            if(clock != null)
-            {
-                clearInterval(clock);
-                clock = null;
-            }
-            jQuery('.minplayer-default-pause').trigger('click');
-            seconds = TIMER_SECONDS;
-            setClock();
-        };
-
-        jQuery(window).unload(function () {
-            jQuery('#checkin .classes a.checked-in').trigger('click');
-            jQuery('#checkin').scrollintoview();
-            isClosing = true;
-        });
 
     });
 
@@ -376,7 +182,7 @@ jQuery(document).ready(function($) {
         if(jQuery('.field-name-field-parent-student .form-type-radio:gt(0) input:checked, .field-name-field-parent-student input[type="hidden"]').length == 0)
         {
             jQuery('#user_profile input.form-radio, .parent-student-selection input.form-radio').change(function () {
-                jQuery('#user_profile #submit-profile, .parent-student-selection #submit-profile').trigger('mousedown').trigger('click');
+
             });
             window.location.hash = '#home';
             jQuery('#home').scrollintoview();
@@ -415,9 +221,10 @@ jQuery(document).ready(function($) {
         if(jQuery('.field-name-field-parent-student .form-type-radio:gt(0) input[value="student"]:checked').length > 0 ||
            jQuery('.field-name-field-parent-student input[type="hidden"]').val() == 'student')
         {
-            welcome.appendTo(jQuery('#awards > div'))
-            window.location.hash = '#awards';
-            jQuery('#awards').scrollintoview();
+            // as a student it shows up on plan tab when they first purchase
+            //welcome.appendTo(jQuery('#plan > div'))
+            window.location.hash = '#plan';
+            jQuery('#plan').scrollintoview();
         }
         else
         {
@@ -513,84 +320,5 @@ jQuery(document).ready(function($) {
             jQuery(window).trigger('scroll');
         }
     });
-
-    $.fn.returnScroll = function () {
-        if(lastScheduleEdit)
-        {
-            jQuery('#' + lastScheduleEdit).scrollintoview();
-        }
-    };
-
-    $.fn.refreshUploaders = function () {
-        if(typeof plupload == 'undefined')
-            return;
-        // TODO: check if uploader has already been bound using actual IDs from the uploader
-        for(var k in plupload.uploaders)
-        {
-            plupload.uploaders[k].bind('FilesAdded', function (up) {
-                up.start();
-                jQuery('#' + up.settings.browse_button).parents('.plupload-container').addClass('uploaded');
-            });
-            plupload.uploaders[k].bind('FileUploaded', function (up) {
-            });
-        }
-    };
-    $.fn.refreshUploaders();
-
-    $.fn.goalsFunc = function () {
-        jQuery(this).each(function () {
-            var that = jQuery(this),
-                setVisible = function () {
-                    if(that.find('.field-name-field-type input:checked').length == 0)
-                        return;
-                    that.find('.field-name-field-hours, .field-name-field-gpa, .field-name-field-other, .field-name-field-grade').hide();
-                    if(that.find('.field-name-field-type input[value="behavior"]:checked').length > 0)
-                        that.find('.field-name-field-hours').show();
-                    else if(that.find('.field-name-field-type input[value="milestone"]:checked').length > 0)
-                        that.find('.field-name-field-grade').show();
-                    else if(that.find('.field-name-field-type input[value="outcome"]:checked').length > 0)
-                        that.find('.field-name-field-gpa').show();
-                    else if(that.find('.field-name-field-type input[value="_none"]:checked').length > 0)
-                        that.find('.field-name-field-other').show();
-                },
-                setValid = function () {
-                    var form = that.parents('form'),
-                        valid = true;
-                    form.find('select:visible').each(function () {
-                        if(jQuery(this).val() == '_none')
-                            valid = false;
-                    });
-                    if(!valid)
-                        form.removeClass('valid').addClass('invalid');
-                    else
-                        form.removeClass('invalid').addClass('valid');
-                };
-            that.find('.field-name-field-type input').change(setVisible);
-            setVisible();
-
-            that.find('select').change(setValid);
-            setValid();
-
-            that.find('.field-name-field-read-only input').each(function () {
-                if(jQuery(this).val() == '0')
-                    jQuery(this).parents('tr').addClass('edit');
-            });
-
-        });
-        jQuery('.node-incentive-form input.form-submit').each(function () {
-            var that = jQuery(this),
-                id = that.attr('id');
-            if(typeof Drupal.ajax[id] != 'undefined')
-            {
-                that.unbind(Drupal.ajax[id].event);
-                that.bind(Drupal.ajax[id].event, function (event) {
-                    if(!that.parents('form').is('.invalid'))
-                        return Drupal.ajax[id].eventResponse(this, event);
-                });
-            }
-        });
-    };
-
-    jQuery('.field-name-field-goals tr').goalsFunc();
 
 });

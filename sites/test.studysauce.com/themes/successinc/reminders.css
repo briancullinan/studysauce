@@ -49,16 +49,6 @@
     z-index: 10;
 }
 
-.page-dashboard #dates.edit-date-only .row.edit
-{
-    z-index:11;
-    background: url("/sites/test.studysauce.com/themes/successinc/images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
-    box-shadow: 0 0 20px rgba(0,0,0,.75);
-    border-radius: 10px;
-    margin:-10px;
-    padding:10px;
-}
-
 .page-dashboard #dates .field-name-field-class-name
 .page-dashboard #dates .field-name-field-assignment,
 .page-dashboard #dates .field-name-field-due-date,
@@ -180,11 +170,6 @@
     display:block;
 }
 
-.page-dashboard #dates .field-name-field-reminder label:not(.option)
-{
-    padding-left:10px;
-}
-
 .page-dashboard #dates .row.first label:not(.option)
 {
     margin-top:-22px;
@@ -192,13 +177,6 @@
     top:-40px;
     display:block;
 }
-
-/*
-.page-dashboard #dates.edit-date-only .row.first label:not(.option)
-{
-    display:none;
-}
-*/
 
 .page-dashboard #dates .field-name-field-class-name .form-type-select
 {
@@ -228,7 +206,7 @@
 .page-dashboard #dates .field-name-field-due-date .form-type-date-popup,
 .page-dashboard #dates .field-name-field-due-date fieldset
 {
-    width:120px;
+    width:110px;
 }
 
 .page-dashboard #dates .field-name-field-reminder .form-type-checkboxes
@@ -239,11 +217,6 @@
 .page-dashboard #dates .field-name-field-percent .form-type-textfield
 {
     width:85px;
-}
-
-.page-dashboard #dates .field-name-field-percent input
-{
-    width: 50px;
 }
 
 .page-dashboard #dates .edit .field-name-field-class-name .read-only,
@@ -408,6 +381,7 @@
     z-index: -1;
 }
 
+.page-dashboard .field-name-field-day-of-the-week .read-only span,
 .page-dashboard .field-name-field-reminder .read-only span,
 .page-dashboard .field-name-field-reminder label.option
 {
@@ -429,6 +403,7 @@
     float:left;
 }
 
+.page-dashboard .field-name-field-day-of-the-week .read-only span:before,
 .page-dashboard .field-name-field-reminder .read-only span:before,
 .page-dashboard .field-name-field-reminder label.option:before
 {
@@ -444,6 +419,7 @@
     margin-left:-12px;
 }
 
+.page-dashboard .field-name-field-day-of-the-week .read-only span.checked:before,
 .page-dashboard .field-name-field-reminder .read-only span.checked:before,
 .page-dashboard .field-name-field-reminder input:checked + label.option:before
 {
@@ -496,18 +472,24 @@
 
     .page-dashboard .field-name-field-reminder .read-only span
     {
-        width:46px
+        width:40px
     }
 
     .page-dashboard .field-name-field-reminder .form-type-checkbox,
     .page-dashboard .field-name-field-reminder label.option
     {
-        width: 44px;
+        width: 40px;
+    }
+
+    .page-dashboard #dates .field-name-field-due-date .form-type-date-popup,
+    .page-dashboard #dates .field-name-field-due-date fieldset
+    {
+        width:100px;
     }
 
     .page-dashboard #dates .field-name-field-reminder .form-type-checkboxes
     {
-        width: 220px;
+        width: 200px;
     }
 
     .page-dashboard #dates .field-name-field-reminder .read-only
@@ -517,7 +499,7 @@
 
     .page-dashboard #dates .field-name-field-assignment .read-only
     {
-        width: 200px;
+        width: 180px;
     }
 
     .page-dashboard #dates .field-name-field-assignment .form-type-textfield
@@ -542,6 +524,11 @@
 
 @media all and (max-width:980px)
 {
+    .page-dashboard #dates .edit .field-name-field-reminder .form-checkboxes .form-type-checkbox:first-child
+    {
+        margin-left: -10px;
+    }
+
     .page-dashboard #dates .field-name-field-reminder .read-only
     {
         margin:0 auto;
@@ -553,12 +540,7 @@
         margin-top: 0;
     }
 
-    .page-dashboard .clearfix:first-child
-    {
-        text-align: center;
-    }
-
-    .page-dashboard .field-add-more-submit span
+    .page-dashboard #dates .field-add-more-submit span
     {
         position:relative;
         float:none;
@@ -626,6 +608,11 @@
         top: 0;
     }
 
+    .page-dashboard .clearfix:first-child
+    {
+        text-align: center;
+    }
+
     .page-dashboard #dates .highlighted-link
     {
         float:none;
@@ -634,15 +621,22 @@
 
     .page-dashboard #dates .field-name-field-class-name,
     .page-dashboard #dates .field-name-field-assignment,
-    .page-dashboard #dates .field-name-field-due-date,
-    .page-dashboard #dates .field-name-field-reminder,
-    .page-dashboard #dates .field-name-field-percent,
     .page-dashboard #dates .field-name-field-completed
     {
         display:block;
         vertical-align: top;
         width: auto;
         clear:both;
+        padding:0;
+    }
+
+    .page-dashboard #dates .field-name-field-due-date,
+    .page-dashboard #dates .field-name-field-reminder,
+    .page-dashboard #dates .field-name-field-percent
+    {
+        display:inline-block;
+        vertical-align: top;
+        width: auto;
         padding:0;
     }
 
@@ -667,23 +661,10 @@
         display:none;
     }
 
-    .page-dashboard #dates .field-name-field-percent .form-type-textfield,
-    .page-dashboard #dates .field-name-field-reminder .form-type-checkboxes,
     .page-dashboard #dates .field-name-field-assignment .form-type-textfield,
-    .page-dashboard #dates .field-name-field-class-name .form-type-select,
-    .page-dashboard #dates .field-name-field-due-date fieldset
+    .page-dashboard #dates .field-name-field-class-name .form-type-select
     {
         width: auto;
-    }
-
-    .page-dashboard table td
-    {
-        padding:40px 0 0 0;
-    }
-
-    .page-dashboard table tr:first-child td
-    {
-        padding:20px 0 0 0;
     }
 
 }

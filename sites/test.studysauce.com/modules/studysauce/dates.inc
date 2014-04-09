@@ -24,11 +24,13 @@ function studysauce_save_dates()
         $node = new stdClass();
         $node->title = isset($user->mail) ? $user->mail : '';
         $node->type = "key_dates";
-        node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
         $node->language = LANGUAGE_NONE; // Or e.g. 'en' if locale is enabled
         $node->uid = $user->uid;
         $node->status = 1; //(1 or 0): published or not
         $node->revision = 1;
+        node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
+        $node = node_submit($node); // Prepare node for saving
+        node_save($node);
     }
 
     if(isset($_POST['className']) && isset($_POST['assignment']) && isset($_POST['reminders']) &&
@@ -77,7 +79,7 @@ function studysauce_save_dates()
     $node = node_submit($node); // Prepare node for saving
     node_save($node);
 
-    print json_encode(array('reminders' => '<div>' . theme('studysauce-key-dates') . '</div>'));
+    print json_encode(array('reminders' => '<div>' . theme('studysauce-reminders') . '</div>'));
     drupal_exit();
 }
 

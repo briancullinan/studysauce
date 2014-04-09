@@ -19,7 +19,7 @@ list($times, $rows, $total, $hours) = _studysauce_get_metrics();
     </div>
     <script type="text/javascript">
         window.initialHistory = <?php print json_encode($times); ?>;
-        window.classNames = <?php print json_encode($classes); ?>;
+        window.classNames = <?php print json_encode(array_values($classes)); ?>;
     </script>
     <div id="checkins-list">
     <div class="heading row">

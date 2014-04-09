@@ -19,15 +19,6 @@ $awards = studysauce_get_awards();
         <a href="#" class="fancy-close">&nbsp;</a>
     </div>
 </div>
-<h2>Getting started is easy</h2>
-<div id="home">
-    <ol>
-        <li><h4><span>1</span> Key dates</h4><span>Enter your important deadlines and we will send you reminders to stay on track.</span></li>
-        <li><h4><span>2</span> Check in</h4><span>Check in when you study and we will guide you through the best study techniques.</span></li>
-        <li><h4><span>3</span> Set goals</h4><span>Set up study goals and rewards.  Parents are often happy to sponsor them.</span></li>
-    </ol>
-</div>
-<hr />
 <h2>Your Study Badges <small>(click on badges for detail)</small></h2>
 <div class="awards">
     <a href="#setup-pulse" id="setup-pulse" class="<?php print $awards['setup-pulse'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Pulse Detected</a>

@@ -14,7 +14,7 @@ function studysauce_form_incentive_node_form_alter(&$form, &$form_state)
 {
     global $user, $parentIncentive;
     if(!isset($parentIncentive))
-        $parentIncentive = studysauce_get_parent_incentive();
+        $parentIncentive = studysauce_get_shared_goals();
 
     if(isset($parentIncentive) && $parentIncentive !== false)
     {
@@ -34,7 +34,10 @@ function studysauce_form_incentive_node_form_alter(&$form, &$form_state)
     // this applies to a student claiming a parent incentive and setting up their own incentives
     $form['title']['#type'] = 'hidden';
     hide($form['actions']['delete']);
-    $form['actions']['submit']['#id'] = drupal_html_id('submit-incentive');
+    if(isset($form_state['build_info']['args'][1]) && $form_state['build_info']['args'][1] == 'parent-sponsored')
+        $form['actions']['submit']['#id'] = drupal_html_id('submit-parent-incentive');
+    else
+        $form['actions']['submit']['#id'] = drupal_html_id('submit-incentive');
     $form['actions']['submit']['#name'] = $form['actions']['submit']['#id'];
     if(arg(2) != 'edit')
         $form['actions']['submit']['#ajax'] = array(
@@ -238,7 +241,7 @@ EOC;
             if($user->field_parent_student['und'][0]['value'] == 'parent')
                 $form['field_goals']['und'][$i]['field_reward']['#suffix'] = '<div class="form-actions highlighted-link"><a class="more form-submit" href="#save" onclick="jQuery(this).parents(\'tr\').find(\'.field-name-field-read-only input\').val(1); jQuery(this).parents(\'form\').find(\'.form-actions .form-submit\').trigger(\'mousedown\'); if(jQuery(window).outerWidth(true) <= 963) { jQuery(this).parents(\'td\').find(\'.field-name-field-type\').scrollintoview({padding: {top:120,bottom:200,left:0,right:0}}); } return false;">Sponsor this</a>';
             else
-                $form['field_goals']['und'][$i]['field_reward']['#suffix'] = '<div class="form-actions highlighted-link"><a class="more form-submit" href="#save" onclick="jQuery(this).parents(\'tr\').find(\'.field-name-field-read-only input\').val(1); jQuery(this).parents(\'form\').find(\'.form-actions .form-submit\').trigger(\'mousedown\'); if(jQuery(window).outerWidth(true) <= 963) { jQuery(this).parents(\'td\').find(\'.field-name-field-type\').scrollintoview({padding: {top:120,bottom:200,left:0,right:0}}); } return false;">Save</a>';
+                $form['field_goals']['und'][$i]['field_reward']['#suffix'] = '<div class="form-actions highlighted-link"><a class="more form-submit" href="#save-incentive">Save</a>';
 
             if($setup == 3 && isset($invites[0]->mail) &&
                 $user->field_parent_student['und'][0]['value'] == 'student')
@@ -248,11 +251,6 @@ EOC;
 
             $i++;
         } while(isset($form['field_goals']['und'][$i]));
-
-        if($user->field_parent_student['und'][0]['value'] == 'parent')
-            $checkinLink = '<p style="clear:left;text-align: center;margin-top:20px;"><a href="#checkin" class="read-only">Your student will be guided by our study detection software every time they check in to study.</a></p>';
-        else
-            $checkinLink = '<p style="clear:left;text-align: center;margin-top:20px;"><a href="#checkin" class="read-only">Use the check-in tab to start reaching your goal.</a></p>';
 
         if($setup == 3 && !isset($conn[0]->mail))
             if($user->field_parent_student['und'][0]['value'] == 'parent')

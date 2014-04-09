@@ -10,6 +10,68 @@
     background-color: #eeeeee;
 }
 
+.page-dashboard #plan .fc-event-title h4
+{
+    margin:0;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.page-dashboard #plan .fc-agenda-axis
+{
+    line-height: 13px;
+}
+
+.page-dashboard #plan .fc-agenda-slots td div
+{
+    height:10px;
+    line-height: 10px;
+}
+
+.page-dashboard .row
+{
+    clear: both;
+    display: block;
+}
+
+.page-dashboard #dates .row.edit,
+.page-dashboard #plan .row.edit
+{
+    z-index: 11;
+    background: url("/sites/test.studysauce.com/themes/successinc/images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+    box-shadow: 0 0 5px rgba(0,0,0,.75);
+    border-radius: 5px;
+    margin: -10px -10px 10px -10px;
+    padding: 10px;
+    position: relative;
+}
+
+.page-dashboard #plan #add-class-dialog
+{
+    display:none;
+}
+
+.page-dashboard #plan.edit-class-only #add-class-dialog,
+.page-dashboard #plan.edit-other-only #add-class-dialog
+{
+    display:block;
+}
+
+.page-dashboard #plan.edit-class-only .pane-content:before,
+.page-dashboard #plan.edit-other-only .pane-content:before
+{
+    height: 100%;
+    width: 100%;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255,255,255,.75);
+    z-index: 10;
+}
+
 .page-dashboard #plan .class-event,
 .page-dashboard #plan .other-event
 {
@@ -23,9 +85,35 @@
     color:#555555;
 }
 
+.page-dashboard #plan .drag-event
+{
+    background-color:#EEEEEE;
+}
+
 .page-dashboard #plan .free-event .fc-event-title small
 {
     display:none;
+}
+
+#study-preferences h1
+{
+    font-size: 72px;
+    color: #FF9900;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.page-dashboard #plan .field-name-field-university,
+.page-dashboard #plan .field-name-field-grades,
+.page-dashboard #plan .field-name-field-weekends,
+.page-dashboard #plan .field-name-field-time-preference,
+.page-dashboard #plan .field-name-field-6-am-11-am,
+.page-dashboard #plan .field-name-field-11-am-4-pm,
+.page-dashboard #plan .field-name-field-4-pm-9-pm,
+.page-dashboard #plan .field-name-field-9-pm-2-am
+{
+    margin-bottom: 10px;
 }
 
 .page-dashboard #plan .field-name-field-time-preference label.option,
@@ -56,6 +144,21 @@
     z-index: 2;
 }
 
+.page-dashboard a[href="#edit-class"] {
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    background: url(images/edit.png) no-repeat 50% 50% transparent;
+}
+
+.page-dashboard a[href="#remove-class"]
+{
+    display:inline-block;
+    height:24px;
+    width:24px;
+    background: url(images/trash.png) no-repeat 50% 50% transparent;
+}
+
 .page-dashboard #plan .field-name-field-time-preference .field-type-list-integer
 {
     clear:both;
@@ -72,6 +175,7 @@
     margin-right: 0;
     position: relative;
     text-align: right;
+    display:inline-block;
 }
 
 .page-dashboard #study-preferences .form-radios
@@ -122,6 +226,7 @@
     text-align: right;
 }
 
+.page-dashboard #plan .row .field-name-field-class-name .read-only span,
 .page-dashboard #plan .row .class-name span
 {
     display: inline-block;
@@ -136,6 +241,51 @@
     line-height: 15px;
     margin: -3px 10px 0 0;
     vertical-align: top;
+}
+
+.page-dashboard .field-name-field-day-of-the-week .read-only span
+{
+    width:40px;
+}
+
+.page-dashboard #plan .row .read-only label,
+.page-dashboard #plan .row.edit .field-name-field-class-name .read-only,
+.page-dashboard #plan .row.edit .field-name-field-day-of-the-week .read-only,
+.page-dashboard #plan .row.edit .field-name-field-time .read-only,
+.page-dashboard #plan .row .field-name-field-class-name .form-type-textfield,
+.page-dashboard #plan .row .field-name-field-day-of-the-week .form-type-checkboxes,
+.page-dashboard #plan .row .field-name-field-time .form-type-textfield,
+.page-dashboard #plan .row .highlighted-link a[href="#save-class"],
+.page-dashboard #plan .row.edit .highlighted-link .read-only,
+.page-dashboard #plan .row .fancy-close
+{
+    display:none;
+}
+
+.page-dashboard #plan .row.edit .highlighted-link a[href="#save-class"]
+{
+    display: inline-block;
+}
+
+.page-dashboard #plan .row:first-child .read-only label,
+.page-dashboard #plan .row.edit .field-name-field-class-name .form-type-textfield,
+.page-dashboard #plan .row.edit .field-name-field-day-of-the-week .form-type-checkboxes,
+.page-dashboard #plan .row.edit .field-name-field-time .form-type-textfield,
+.page-dashboard #plan .row.edit .highlighted-link,
+.page-dashboard #plan .row.edit .fancy-close
+{
+    display:block;
+}
+
+.page-dashboard #plan .row .field-name-field-class-name .read-only
+{
+    padding: 5px 0;
+}
+
+.page-dashboard #plan .fc-event-title small
+{
+    clear:both;
+    display:block;
 }
 
 .page-dashboard #plan .class0
@@ -219,7 +369,13 @@
     border-bottom: 0;
     color:#555555;
     font-size:22px;
-    margin:0;
+    margin:0 20px 0 20px;
+    float: right;
+}
+
+.page-dashboard #plan .field-add-more-submit:first-child
+{
+
 }
 
 .page-dashboard #plan .field-add-more-submit:active
@@ -252,6 +408,11 @@
 .page-dashboard #plan .field-name-field-class-name input.form-text
 {
     width:100%;
+}
+
+.page-dashboard #plan .field-name-field-class-name
+{
+    text-align:left;
 }
 
 .page-dashboard #plan .field-name-field-class-name .form-checkboxes input
@@ -338,25 +499,9 @@
     display:none;
 }
 
-.page-dashboard #plan .field-name-field-time > div:nth-child(2) label,
-.page-dashboard #plan .field-name-field-time > div:last-child label,
-.page-dashboard #plan .end-date-wrapper label
+.page-dashboard #plan .field-name-field-time > div.form-type-textfield
 {
-    display:inline;
-}
-
-.page-dashboard #plan .field-name-field-time > div:first-child,
-.page-dashboard #plan .field-name-field-time > div:nth-child(2)
-{
-    width:30%;
-    display:inline-block;
-    float:left;
-}
-
-.page-dashboard #plan .field-name-field-time > div:nth-child(3),
-.page-dashboard #plan .field-name-field-time > div:last-child
-{
-    width:20%;
+    width:25%;
     display:inline-block;
     float:left;
 }
@@ -366,19 +511,46 @@
     width:97%;
 }
 
-.page-dashboard #plan .field-name-field-time fieldset,
-.page-dashboard #plan .field-name-field-time div
-{
-    padding:0;
-    border:0;
-    margin:0;
-    float:none;
-    display:inline;
+.page-dashboard #plan .buy-links {
+    clear: both;
+    margin-bottom: -100px;
+    margin-right: 0;
+    position: relative;
+    text-align: right;
+    top: -80px;
+    float: right;
 }
 
 .page-dashboard #plan .field-name-field-time
 {
-    clear:both;
+    display: inline-block;
+    width: 315px;
+    vertical-align: top;
+}
+
+.page-dashboard #plan .edit .field-name-field-time
+{
+    width: 435px;
+}
+
+.page-dashboard #plan .field-name-field-class-name
+{
+    width:200px;
+    display:inline-block;
+    vertical-align: top;
+}
+
+.page-dashboard #plan .field-name-field-day-of-the-week
+{
+    width:380px;
+    display:inline-block;
+    vertical-align: top;
+    text-align: left;
+}
+
+.page-dashboard #plan .edit .field-name-field-day-of-the-week
+{
+    width:280px;
 }
 
 .page-dashboard #plan .field-name-field-day-of-the-week .form-checkboxes
@@ -392,12 +564,160 @@
     display:inline-block;
 }
 
+.field-name-field-weekends,
+.field-name-field-grades
+{
+    width: 295px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.field-name-field-weekends .form-type-radio,
+.field-name-field-grades .form-type-radio
+{
+    display:inline-block;
+}
+
+#node_schedule_form_group_periods .form-type-radios > label
+{
+    display:inline-block;
+    width:150px;
+}
+
+#node_schedule_form_group_periods .form-item .form-radios
+{
+    display:inline;
+    float:none;
+    clear:none;
+}
+
+.field-name-field-day-of-the-week .form-type-checkbox label,
+#node_schedule_form_group_periods .form-type-radio label
+{
+    background-color:#EEEEEE;
+    padding:5px;
+    margin:3px 0 0 -12px;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    vertical-align: middle;
+    cursor: pointer;
+    width:30px;
+    text-align: center;
+    float:left;
+}
+
+.field-name-field-day-of-the-week .form-item
+{
+    white-space:normal !important;
+}
+
+.page-dashboard #plan .field-name-field-time input[type="checkbox"]:checked + label,
+.field-name-field-day-of-the-week .form-type-checkbox input.form-checkbox:checked + label,
+#node_schedule_form_group_periods .form-type-radio input.form-radio:checked + label
+{
+    background: none repeat scroll 0 0 #CCCCCC;
+    opacity: 1 !important;
+    padding: 5px;
+    transition: none 0s ease 0s;
+}
+
+.field-name-field-weekends .form-type-radio label,
+.field-name-field-grades .form-type-radio label
+{
+    background-color:#EEEEEE;
+    padding:5px;
+    margin:3px 20px 2px -15px;
+    display:inline-block;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    width:150px;
+    vertical-align: middle;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    transition:padding .25s, margin .25s;
+    z-index: 1;
+}
+
+.field-name-field-weekends .form-type-radio label:before,
+.field-name-field-grades .form-type-radio label:before
+{
+    content:" ";
+    position: absolute;
+    top:0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    margin: -8px;
+    border: 3px solid #999999;
+    padding:5px;
+    border-radius: 8px;
+    transition:padding .25s, margin .25s, opacity .25s;
+    z-index: -1;
+    opacity: 0;
+}
+
+.field-name-field-weekends .form-type-radio input.form-radio:checked + label,
+.field-name-field-grades .form-type-radio input.form-radio:checked + label
+{
+    background: none repeat scroll 0 0 #CCCCCC;
+    display: inline-block;
+    opacity: 1 !important;
+    padding: 10px;
+    margin:-2px 15px -3px -20px;
+    transition:padding .25s, margin .25s;
+}
+
+.field-name-field-weekends .form-type-radio input.form-radio:checked + label:before,
+.field-name-field-grades .form-type-radio input.form-radio:checked + label:before
+{
+    margin: -3px;
+    padding:0px;
+    opacity: 1;
+    transition:padding .25s, margin .25s, opacity .25s;
+}
+
+.field-name-field-weekends input,
+.field-name-field-grades input
+{
+    visibility:hidden;
+    margin:0;
+}
+
+.field-name-field-day-of-the-week input,
+#node_schedule_form_group_periods input
+{
+    visibility:hidden;
+    margin:0;
+    float:left;
+}
+
+.page-dashboard #plan .field-name-field-time input[type="checkbox"] + label,
 .page-dashboard #plan .field-name-field-day-of-the-week .form-type-checkbox label
 {
+    margin: 3px 0 0 -12px;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    vertical-align: middle;
+    cursor: pointer;
     width:auto;
+    text-align: center;
     min-width:30px;
     float:none;
     display:inline-block;
+}
+
+.page-dashboard #plan .field-name-field-time input[type="checkbox"] + label
+{
+    margin-top:-10px;
+}
+
+.page-dashboard #plan .field-name-field-time input[type="checkbox"],
+.page-dashboard #plan .field-name-field-day-of-the-week input
+{
+    visibility: hidden;
+    margin: 0;
+    float: left;
 }
 
 .page-dashboard #plan .field-name-field-day-of-the-week .form-checkboxes label
@@ -439,6 +759,20 @@
 
 @media all and (max-width:980px)
 {
+    .page-dashboard #plan .field-add-more-submit
+    {
+        clear:both;
+        margin-bottom:0;
+    }
+
+    .page-dashboard #plan .field-name-field-class-name,
+    .page-dashboard #plan .field-name-field-day-of-the-week,
+    .page-dashboard #plan .field-name-field-time
+    {
+        width:auto;
+        display:block;
+    }
+
     .page-dashboard #plan .field-name-field-time > div:first-child,
     .page-dashboard #plan .field-name-field-time > div:nth-child(2),
     .page-dashboard #plan .field-name-field-time > div:nth-child(3),
@@ -468,11 +802,15 @@
     .page-dashboard #plan .mobile-only
     {
         display:block;
+        clear:both;
     }
 
     .page-dashboard #plan .row
     {
         font-size: 14px;
+        clear: both;
+        display: block;
+        text-align: left;
     }
 
     .page-dashboard #plan .row .full-only

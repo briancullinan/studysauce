@@ -119,7 +119,7 @@
     </div>
 </div>
 <div id="empty-schedule">
-    <a href="#edit-schedule"><h2>Start by entering your classes on the Key dates tab.</h2><small>Then checkin whenever you study using the Check in tab</small></a>
+    <a href="#edit-schedule"><h2>Click here to set up your class schedule and get started.</h2><small>Then checkin whenever you study using the Check in tab.</small></a>
 </div>
 <?php
 global $classes;
@@ -507,14 +507,9 @@ if(empty($classes)):
             </div>
         </a></li>
 </ul>
-<?php
-print views_embed_view('music_player', 'block_1');
-//$node = node_load(574);
-//$build = node_view($node);
-//print drupal_render($build);
-/* <a class="support" onclick="jQuery('#checklist .no-checkboxes').show(); jQuery('#checklist .checkboxes').hide(); jQuery('#checkin').addClass('checklist-only').scrollintoview(); return false;" href="#">
-    <img width="200" height="200" alt="rocket" src="/[custom:theme-path]/images/rocket.png" /><br>Study flight checklist</a> */
-?>
+
+<?php print views_embed_view('music_player', 'block_1'); ?>
+
 <h4 style="text-align:center;"><a href="#" onclick="jQuery('#checkin').addClass('mozart-only').scrollintoview(); return false;" style="color:#0099be;">The Mozart Effect&reg;</a></h4>
 </div>
 <div id="mozart-effect">
@@ -532,20 +527,22 @@ print views_embed_view('music_player', 'block_1');
 </div>
 <p class="grid_6 classes <?php print empty($classes) ? 'empty' : 'not-empty'; ?>"><?php
     if(!empty($classes)):
-        foreach($classes as $j => $class)
+        $classI = 0;
+        foreach($classes as $eid => $class)
         {
-            print '<a id="class' . $j . '" href="#class' . $j . '"><span>&nbsp;</span>' . $class . '</a>';
+            print '<a id="class' . $eid . '" href="#class' . $classI . '" class="class' . $classI . '"><span>&nbsp;</span>' . $class . '</a>';
+            $classI++;
         }
     else: ?>
-        <a href="#class0" id="class0"><span>&nbsp;</span>Hist 135</a>
-        <a href="#class1" id="class1"><span>&nbsp;</span>Chem 151</a>
-        <a href="#class2" id="class2"><span>&nbsp;</span>Math 125</a>
-        <a href="#class3" id="class3"><span>&nbsp;</span>Phys 101</a>
-        <a href="#class4" id="class4"><span>&nbsp;</span>Phys Lab</a>
-        <a href="#class5" id="class5"><span>&nbsp;</span>Econ 101</a>
-        <a href="#class6" id="class6"><span>&nbsp;</span>Soc 200</a>
-        <a href="#class7" id="class7"><span>&nbsp;</span>Law 345</a>
-        <a href="#class8" id="class8"><span>&nbsp;</span>Hist 136</a>
+        <a href="#class0" class="class0"><span>&nbsp;</span>Hist 135</a>
+        <a href="#class1" class="class1"><span>&nbsp;</span>Chem 151</a>
+        <a href="#class2" class="class2"><span>&nbsp;</span>Math 125</a>
+        <a href="#class3" class="class3"><span>&nbsp;</span>Phys 101</a>
+        <a href="#class4" class="class4"><span>&nbsp;</span>Phys Lab</a>
+        <a href="#class5" class="class5"><span>&nbsp;</span>Econ 101</a>
+        <a href="#class6" class="class6"><span>&nbsp;</span>Soc 200</a>
+        <a href="#class7" class="class7"><span>&nbsp;</span>Law 345</a>
+        <a href="#class8" class="class8"><span>&nbsp;</span>Hist 136</a>
     <? endif; ?>
 </p>
 <p style="clear: both;margin:30px 0 0 0;"><a href="#edit-schedule"><span>Edit schedule</span></a></p>

@@ -22,12 +22,14 @@ function studysauce_save_calendar()
     {
         $node = new stdClass();
         $node->title = isset($user->mail) ? $user->mail : '';
-        $node->type = "schedule";
-        node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
+        $node->type = 'schedule';
         $node->language = LANGUAGE_NONE; // Or e.g. 'en' if locale is enabled
         $node->uid = $user->uid;
         $node->status = 1; //(1 or 0): published or not
         $node->revision = 1;
+        node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
+        $node = node_submit($node); // Prepare node for saving
+        node_save($node);
     }
 
     if(isset($_POST['university']))
@@ -45,28 +47,40 @@ function studysauce_save_calendar()
     if(isset($_POST['9-pm-2-am']))
         $node->field_9_pm_2_am['und'][0]['value'] = $_POST['9-pm-2-am'];
 
+    // get the orders to use with event method below
+    $orders = _studysauce_orders_by_uid($user->uid);
+    $conn = studysauce_get_connections();
+    foreach ($conn as $i => $c)
+        $orders = array_merge($orders, _studysauce_orders_by_uid($c->uid));
+    $o = end($orders);
+
+
     if(isset($_POST['className']) && isset($_POST['type']) && isset($_POST['dotw']) &&
         isset($_POST['start']) && isset($_POST['end']))
     {
+        list($events, $node, $classes, $entities) = studysauce_get_events($o ? $o->created : null);
+
         // check if class entity already exists by name
-        if(isset($node->field_classes['und'][0]['value']))
-            foreach($node->field_classes['und'] as $i => $c)
+        $saved = array();
+        // TODO: make this rely on entity id instead?
+        foreach($entities as $i => $entity)
+        {
+            if(isset($entity->field_class_name[LANGUAGE_NONE][0]['value']))
             {
-                $entity = entity_load('field_collection_item', array($c['value']));
-                $entity = $entity[$c['value']];
+                $saved[$entity->item_id] = $entity->field_class_name[LANGUAGE_NONE][0]['value'];
                 if($entity->field_class_name[LANGUAGE_NONE][0]['value'] == $_POST['className'])
-                {
-                    $entity->revision = 1;
-                    break;
-                }
-                unset($entity);
+                    $thisEid = $entity->item_id;
             }
-        if(!isset($entity))
+        }
+        if(!isset($thisEid))
         {
             $entity = entity_create('field_collection_item', array('field_name' => 'field_classes'));
             $entity->setHostEntity('node', $node);
             $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $_POST['className'];
         }
+        else
+            $entity = $entities[$thisEid];
+        $entity->revision = 1;
         $entity->field_day_of_the_week[LANGUAGE_NONE] = array_map(function ($x) { return array('value' => $x); }, explode(',', $_POST['dotw']));
         $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $_POST['type'];
         $entity->field_time[LANGUAGE_NONE][0] = array(
@@ -74,21 +88,82 @@ function studysauce_save_calendar()
             'value2' => gmdate('Y-m-d H:i:s', strtotime($_POST['end']))
         );
         $entity->save();
+
+        // modify later events of the same type
+        if(isset($_POST['className']) && isset($_POST['type']) &&
+            ($_POST['type'] == 'p' || $_POST['type'] == 'sr' || $_POST['type'] == 'f'))
+        {
+            $i = array_search(preg_replace('/^\(P\)\s*|^\(SR\)\s*|^\(F\)\s*|\s*\([0-9\/,\s-]+\)$|\s*<small>[0-9\/,\s-]+<\/small>$/i', '', $entity->field_class_name['und'][0]['value']), array_values($classes));
+            foreach($events as $e => $evt)
+            {
+                // if the event is after the one that was moved
+                if(strtotime($evt['start']) > $_POST['end'] &&
+                // if the type of event is the same
+                    strpos($evt['className'], 'class' . $i) !== false)
+                    // TODO: check if we are crossing over any event of the same class
+                    if($_POST['type'] == 'p' && substr($evt['title'], 0, 3) == '(P)' ||
+                        $_POST['type'] == 'sr' && substr($evt['title'], 0, 4) == '(SR)' ||
+                        $_POST['type'] == 'f' && substr($evt['title'], 0, 3) == '(F)')
+                    {
+                        if(($eid = array_search($evt['title'], $saved)) !== false)
+                        {
+                        //    $entities[$eid]->revision = 1;
+                        //    $entities[$eid]->field_event_type[LANGUAGE_NONE][0]['value'] = $_POST['type'];
+                        //    $entities[$eid]->field_time[LANGUAGE_NONE][0] = array(
+                        //        'value' => gmdate('Y-m-d H:i:s', strtotime($_POST['start'])),
+                        //        'value2' => gmdate('Y-m-d H:i:s', strtotime($_POST['end']))
+                        //    );
+                        }
+                        else
+                        {
+                        //    $entity = entity_create('field_collection_item', array('field_name' => 'field_classes'));
+                        //    $entity->setHostEntity('node', $node);
+                        //    $entity->revision = 1;
+                        //    $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $evt['title'];
+                        //    $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $_POST['type'];
+                        //    $entity->field_time[LANGUAGE_NONE][0] = array(
+                        //        'value' => gmdate('Y-m-d H:i:s', strtotime($_POST['start'])),
+                        //        'value2' => gmdate('Y-m-d H:i:s', strtotime($_POST['end']))
+                        //    );
+                        }
+                    }
+            }
+        }
+    }
+
+    if(isset($_POST['remove']))
+    {
+        foreach($node->field_classes['und'] as $i => $c)
+        {
+            if($c['value'] == $_POST['remove'])
+            {
+                entity_delete('field_collection_item', array($c['value']));
+            }
+        }
     }
 
     $node = node_submit($node); // Prepare node for saving
     node_save($node);
 
-    $orders = _studysauce_orders_by_uid($user->uid);
-    $conn = studysauce_get_connections();
-    foreach ($conn as $i => $c)
-        $orders = array_merge($orders, _studysauce_orders_by_uid($c->uid));
-
     // get event schedule
-    $o = end($orders);
-    list($events, $node) = studysauce_get_events($o->created);
+    list($events, $node, $classes, $entities) = studysauce_get_events($o ? $o->created : null);
 
-    print json_encode(array('events' => $events));
+    $newSDS = studysauce_get_sds_messages();
+    $lastSDS = end($newSDS);
+    $awards = studysauce_get_awards();
+    list($times, $rows, $total, $hours) = _studysauce_get_metrics();
+
+    print json_encode(array(
+        'events' => $events,
+        'classes' => $classes,
+        'schedule' => '<div>' . theme('studysauce-plans') . '</div>',
+        'lastSDS' => $lastSDS,
+        'awards' => $awards,
+        'rows' => $rows,
+        'times' => $times,
+        'total' => $total,
+        'hours' => $hours,
+    ));
     drupal_exit();
 }
 
@@ -115,11 +190,14 @@ function studysauce_get_events($lastOrderTime)
         $entities = array();
         $startTerm = 0;
         $endTerm = 0;
-        if (isset($node->field_classes[LANGUAGE_NONE][0])) {
-            foreach ($node->field_classes[LANGUAGE_NONE] as $i => $class) {
+        if (isset($node->field_classes[LANGUAGE_NONE][0]))
+        {
+            foreach ($node->field_classes[LANGUAGE_NONE] as $i => $class)
+            {
                 $eid = $class['value'];
                 $entity = entity_load('field_collection_item', array($eid));
-                if (!empty($entity)) {
+                if (!empty($entity))
+                {
                     if (isset($entity[$eid]->field_class_name['und'][0]['value']) && !empty($entity[$eid]->field_class_name['und'][0]['value'])) {
 
                         // list classes the same way the checkin and key dates tab does
@@ -148,7 +226,7 @@ function studysauce_get_events($lastOrderTime)
 
 
         $startTerm = strtotime(date("Y-m-d", strtotime('this week', $startTerm)));
-        $endTerm = strtotime(date("Y-m-d", strtotime('this week', $endTerm)));
+        $endTerm = strtotime(date("Y-m-d", strtotime('this week', $endTerm))) + 604800;
         $startWeek = strtotime(date("Y-m-d", strtotime('this week', time()))) - 86400;
         for ($w = $startTerm; $w < $endTerm; $w += 604800)
         {
@@ -195,6 +273,8 @@ function studysauce_get_events($lastOrderTime)
 
                         $startDay = strtotime(date("Y-m-d", $classStart));
                         $t = strtotime(date("Y-m-d", strtotime('this week', $w))) + $d;
+                        if($t < $classStart || $t > $classEnd)
+                            continue;
 
                         // calculate hours spent in class and remaining free time
                         $length = strtotime(date('1/1/1970 H:i:s', $classEnd)) - strtotime(date('1/1/1970 H:i:s', $classStart));
@@ -205,7 +285,7 @@ function studysauce_get_events($lastOrderTime)
                         $classT = strtotime(date('Y/m/d', $t) . ' ' . date('H:i:s', $classStart));
                         $events[] = array(
                             'editable' => false,
-                            'title' => $entity->field_class_name['und'][0]['value'],
+                            'title' => '<h4>CLASS</h4>' . $entity->field_class_name['und'][0]['value'],
                             'start' => date('Y/m/d H:i:s', $classT) . ' UTC',
                             'end' => date('Y/m/d H:i:s', $classT + $length) . ' UTC',
                             'className' => 'class-event class' . $i,
@@ -314,7 +394,7 @@ function studysauce_get_events($lastOrderTime)
                     if($classStart >= $w && $classStart <= $w + 604800)
                     {
                         $studyLength += 3600; // add to study length if the user has moved their study event
-                        $i = array_search(preg_replace('/^\(P\)\s*|^\(SR\)\s*|^\(F\)\s*|\s*\([0-9\/,\s-]+\)$/i', '', $entity->field_class_name['und'][0]['value']), array_values($classes));
+                        $i = array_search(preg_replace('/^\(P\)\s*|^\(SR\)\s*|^\(F\)\s*|\s*\([0-9\/,\s-]+\)$|\s*<small>[0-9\/,\s-]+<\/small>$/i', '', $entity->field_class_name['und'][0]['value']), array_values($classes));
                         $events[] = array(
                             'title' => $entity->field_class_name['und'][0]['value'],
                             'start' => date('Y/m/d H:i:s', $classStart) . ' UTC',
@@ -376,48 +456,56 @@ function studysauce_get_events($lastOrderTime)
                                         ');
             }
 
-        $keys = array_map(function ($x) {
-            return strtotime($x['start']);
-        }, $events);
-        array_multisort($keys, SORT_ASC, SORT_NUMERIC, $events);
+        $safety = 10;
+        while(--$safety > 0)
+        {
 
-        // move overlapping study times
-        $i = 0;
-        while ($i < count($events)) {
-            if(in_array($events[$i]['title'], $saved))
-            {
-                $i++;
-                continue;
+            $keys = array_map(function ($x) {
+                return strtotime($x['start']);
+            }, $events);
+            array_multisort($keys, SORT_ASC, SORT_NUMERIC, $events);
+
+            // move overlapping study times
+            $i = 0;
+            $anyMoved = false;
+            while ($i < count($events)) {
+                if(in_array($events[$i]['title'], $saved))
+                {
+                    $i++;
+                    continue;
+                }
+
+                if ($i > 0 && strtotime($events[$i]['start']) <= strtotime($events[$i - 1]['end']) &&
+                    (substr($events[$i]['title'], 0, 3) == '(P)' || substr($events[$i]['title'], 0, 4) == '(SR)' ||
+                        substr($events[$i]['title'], 0, 3) == '(F)')
+                ) {
+                    $diff = strtotime($events[$i - 1]['end']) - strtotime($events[$i]['start']) + 1200;
+                    $events[$i]['start'] = date('c', strtotime($events[$i]['start']) + $diff);
+                    $events[$i]['end'] = date('c', strtotime($events[$i]['end']) + $diff);
+                    $anyMoved = true;
+                } elseif ($i < count($events) - 1 && strtotime($events[$i]['end']) >= strtotime($events[$i + 1]['start']) &&
+                    (substr($events[$i]['title'], 0, 3) == '(P)' || substr($events[$i]['title'], 0, 4) == '(SR)' ||
+                        substr($events[$i]['title'], 0, 3) == '(F)')
+                ) {
+                    $diff = strtotime($events[$i + 1]['end']) - strtotime($events[$i]['start']) + 1200;
+                    $events[$i]['start'] = date('c', strtotime($events[$i]['start']) + $diff);
+                    $events[$i]['end'] = date('c', strtotime($events[$i]['end']) + $diff);
+                    $i++;
+                    $anyMoved = true;
+                } else
+                    $i++;
             }
 
-            if ($i > 0 && strtotime($events[$i]['start']) <= strtotime($events[$i - 1]['end']) &&
-                (substr($events[$i]['title'], 0, 3) == '(P)' || substr($events[$i]['title'], 0, 4) == '(SR)' ||
-                    substr($events[$i]['title'], 0, 3) == '(F)')
-            ) {
-                $diff = strtotime($events[$i - 1]['end']) - strtotime($events[$i]['start']) + 1200;
-                $events[$i]['start'] = date('c', strtotime($events[$i]['start']) + $diff);
-                $events[$i]['end'] = date('c', strtotime($events[$i]['end']) + $diff);
-            } elseif ($i < count($events) - 1 && strtotime($events[$i]['end']) >= strtotime($events[$i + 1]['start']) &&
-                (substr($events[$i]['title'], 0, 3) == '(P)' || substr($events[$i]['title'], 0, 4) == '(SR)' ||
-                    substr($events[$i]['title'], 0, 3) == '(F)')
-            ) {
-                $diff = strtotime($events[$i + 1]['end']) - strtotime($events[$i]['start']) + 1200;
-                $events[$i]['start'] = date('c', strtotime($events[$i]['start']) + $diff);
-                $events[$i]['end'] = date('c', strtotime($events[$i]['end']) + $diff);
-                $i++;
-            } else
-                $i++;
+            if(!$anyMoved)
+                break;
         }
-
-        $keys = array_map(function ($x) {
-            return strtotime($x['start']);
-        }, $events);
-        array_multisort($keys, SORT_ASC, SORT_NUMERIC, $events);
 
         return array($events, $node, $classes, $entities);
     }
 
-    return array(array(), null, array());
+
+
+    return array(array(), null, array(), array());
 }
 
 

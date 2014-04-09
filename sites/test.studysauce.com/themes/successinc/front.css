@@ -25,10 +25,10 @@
 {
     box-shadow: none;
     display: block;
-    padding-top: 20%;
+    padding-top: 120px;
+    padding-bottom: 120px;
     text-align: center;
-    padding-bottom: 20%;
-    background: url(images/down_arrow.png) no-repeat 50% bottom transparent;
+    background: url(images/down_arrow_solid.png) no-repeat 50% bottom transparent;
 }
 
 .landing-home .banner .slides .highlighted-link

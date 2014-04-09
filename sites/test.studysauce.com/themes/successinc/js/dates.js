@@ -50,13 +50,27 @@ jQuery(document).ready(function($) {
                            percent: row.find('.field-name-field-percent input').val()
                        },
                        success: function (data) {
+                           // clear input form
+                           if(row.is('#new-dates-row'))
+                           {
+                               row.find('.field-name-field-class-name select').val('_none');
+                               row.find('.field-name-field-assignment input').val('');
+                               row.find('input[name*="dates-reminder-"]').prop('checked', false);
+                               row.find('.field-name-field-due-date input').val('');
+                               row.find('.field-name-field-percent input').val(0);
+                           }
+
+                           // update key dates list
                            jQuery('#dates button + .row ~ .row, #dates button + .row ~ .head').remove();
                            jQuery(data.reminders).find('button + .row ~ .row, button + .row ~ .head')
                                .insertBefore(jQuery('#dates .pane-content p').last());
+
+                           // update tabs
                            jQuery('#dates').removeClass('edit-date-only');
                            row.removeClass('edit').datesFunc();
+                           jQuery('#dates .field-add-more-submit').show();
                            if(jQuery(window).width() <= 759)
-                               row.scrollintoview({padding: {top:120,bottom:200,left:0,right:0}})
+                               row.scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
                        }
                    });
         }
@@ -67,22 +81,6 @@ jQuery(document).ready(function($) {
         jQuery(this).parents('.row').addClass('edit').scrollintoview().datesFunc();
         jQuery('#dates').addClass('edit-date-only');
     });
-
-    $('#dates .field-name-field-due-date input')
-        .datepicker({
-                    minDate: 0,
-                    autoPopUp:'focus',
-                    changeMonth: true,
-                    changeYear: true,
-                    closeAtTop: false,
-                    dateFormat: 'mm/dd/yy',
-                    defaultDate:'0y',
-                    firstDay:0,
-                    fromTo:false,
-                    speed:'immediate',
-                    yearRange: '-3:+3'
-                });
-
 
     $.fn.datesFunc = function () {
         jQuery(this).each(function () {
@@ -106,6 +104,20 @@ jQuery(document).ready(function($) {
                 that.removeClass('invalid').addClass('valid');
                 that.parents('form').removeClass('invalid').addClass('valid');
             }
+
+            that.find('.field-name-field-due-date input').datepicker({
+                                                                         minDate: 0,
+                                                                         autoPopUp:'focus',
+                                                                         changeMonth: true,
+                                                                         changeYear: true,
+                                                                         closeAtTop: false,
+                                                                         dateFormat: 'mm/dd/yy',
+                                                                         defaultDate:'0y',
+                                                                         firstDay:0,
+                                                                         fromTo:false,
+                                                                         speed:'immediate',
+                                                                         yearRange: '-3:+3'
+                                                                     });
         });
 
         // don't need to limit submit because it goes back to edit mode if invalid
@@ -120,6 +132,6 @@ jQuery(document).ready(function($) {
          });*/
     };
 
-    jQuery('.field-name-field-reminders .row').datesFunc();
+    jQuery('#dates .row').datesFunc();
 });
 
