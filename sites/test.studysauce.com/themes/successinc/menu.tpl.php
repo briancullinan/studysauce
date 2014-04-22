@@ -1,16 +1,34 @@
 <ul>
-    <li class="highlighted-link"><a href="/buy"><span>&nbsp;</span>Buy a plan</a></li>
     <li><a href="#home"><span>&nbsp;</span>Home</a></li>
-    <li class="students_only"><a href="#dates"><span>&nbsp;</span>Reminders</a></li>
-    <li class="students_only"><a href="#checkin"><span>&nbsp;</span>Check in</a></li>
-    <li><a href="#incentives"><span>&nbsp;</span>Incentives</a></li>
-    <li class="full-only"><a href="#plan"><span>&nbsp;</span>Study plan</a></li>
-    <li class="mobile-only"><a href="#plan"><span>&nbsp;</span>Plan</a></li>
-    <!--<li class="full-only"><a href="#metrics"><span>&nbsp;</span>Study metrics</a></li>
-    <li class="mobile-only"><a href="#metrics"><span>&nbsp;</span>Metrics</a></li>-->
-    <li class="full-only"><a href="#tips"><span>&nbsp;</span>Study tips</a></li>
-    <li class="mobile-only"><a href="#tips"><span>&nbsp;</span>Tips</a></li>
-    <li class="highlighted-link"><a href="/user/logout"><span>&nbsp;</span>Logout</a></li>
-    <li class="terms-only"><a href="#terms"><span>&nbsp;</span>Terms of Service</a></li>
-    <li class="terms-only"><a href="#back"><span>&nbsp;</span>Back</a></li>
+    <li><a href="#time"><span>&nbsp;</span>Time</a>
+        <ul>
+            <li><a href="#deadlines">Deadlines</a></li>
+            <li><a href="#plan">Study plan <sup class="premium">Premium</sup></a></li>
+            <li><a href="#metrics">Study metrics</a></li>
+            <li><a href="#tips">Tips: Time Management</a></li>
+        </ul>
+    </li>
+    <li><a href="#environment"><span>&nbsp;</span>Environment</a>
+        <ul>
+            <li><a href="#checkin">Check in</a></li>
+            <li><a href="#badges">Badges</a></li>
+            <li><a href="#tips">Tips: Environment</a></li>
+        </ul>
+    </li>
+    <li><a href="#strategies"><span>&nbsp;</span>Strategy</a>
+        <ul>
+            <li><a href="#profile">Personal study profile <sup class="premium">Premium</sup></a></li>
+            <li><a href="#goals">Goals</a></li>
+            <li><a href="#partner">Accountability partner</a></li>
+            <li><a href="#invite">Study partners</a></li>
+            <li><a href="#tips">Tips: Strategies</a></li>
+        </ul>
+    </li>
+    <li><a href="#premium"><span>&nbsp;</span>Premium</a></li>
+    <li><a href="#settings"><span>&nbsp;</span>Settings</a>
+        <ul>
+            <li><a href="#schedule">Class schedule</a></li>
+            <li><a href="#account">Account information</a></li>
+        </ul>
+    </li>
 </ul>

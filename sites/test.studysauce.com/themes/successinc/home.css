@@ -1,0 +1,204 @@
+
+html,
+.page-dashboard
+{
+    background: #0099BE url(images/grunge.png) repeat fixed 0 0 !important;
+    position:relative;
+}
+
+.page-dashboard #home h2
+{
+    font-size:32px;
+    margin-bottom:40px;
+}
+
+.page-dashboard #home ol
+{
+    font-size: 20px;
+    list-style-type: none;
+    padding:0;
+    margin:0;
+}
+
+.page-dashboard #home input[type="checkbox"]:checked,
+.page-dashboard #home input[type="checkbox"]:checked + label,
+.page-dashboard #home input[type="checkbox"]:checked + label a
+{
+    text-decoration:line-through;
+    color: #33AA00;
+}
+
+.page-dashboard #home input[type="checkbox"] + label a
+{
+    color:#555555;
+}
+
+.page-dashboard #home input[type="checkbox"] + label a:hover
+{
+    color: #02cee8;
+}
+
+.page-dashboard #home input[type="checkbox"]
+{
+    position: relative;
+    z-index:1;
+    margin-left:-20px;
+    visibility: hidden;
+}
+
+.page-dashboard #getting-started p
+{
+    margin-left:30px;
+}
+
+.page-dashboard #home ol label,
+.page-dashboard #home #getting-started label
+{
+    display:inline;
+    margin-left: -30px;
+    padding-left: 30px;
+    background: url('images/menu_icons_128.png') no-repeat -54px -2851px transparent;
+    line-height: 26px;
+    font-size:20px;
+    font-weight: normal;
+}
+
+.page-dashboard #home #getting-started label
+{
+    font-size:28px;
+    line-height: 38px;
+    background-position: -54px -2846px;
+}
+
+.page-dashboard #home #getting-started input[type="checkbox"]:checked + label
+{
+    background-position: -54px -2734px;
+}
+
+.page-dashboard #home input[type="checkbox"]:checked + label
+{
+    background-position: -54px -2737px;
+}
+
+.page-dashboard #home li h4
+{
+    font-size: 22px;
+    margin-top: 0;
+    clear: both;
+    background-color: #FF9900;
+    padding: 5px;
+    color:#ffffff;
+    text-align: center;
+}
+
+.page-dashboard #home li:nth-child(2) h4
+{
+    background-color: #0099BE;
+}
+
+.page-dashboard #home li:nth-child(3) h4
+{
+    background-color: #555555;
+}
+
+.page-dashboard.student #home li
+{
+    display:inline-block;
+    width:32%;
+    vertical-align: top;
+    border:3px solid #FF9900;
+    border-radius: 5px;
+    min-height: 480px;
+}
+
+.page-dashboard.student #home img
+{
+    margin-left:10%;
+    box-sizing: border-box;
+    width: 30%;
+    display: inline-block;
+}
+
+#getting-started
+{
+    display: inline-block;
+    width: 40%;
+    padding:40px;
+    margin-right:10%;
+    text-align: left;
+}
+
+#getting-started h3
+{
+    border-bottom:1px solid #555;
+    font-size:30px;
+}
+
+.page-dashboard.student #home li:nth-child(2)
+{
+    border:3px solid #0099BE;
+}
+
+.page-dashboard.student #home li:nth-child(3)
+{
+    border:3px solid #555555;
+}
+
+.page-dashboard #home li h4 span
+{
+    display: inline-block;
+    float: left;
+    font-size: 78px;
+    font-style: italic;
+    line-height: 85px;
+    width: 60px;
+    margin-top:-10px;
+}
+
+.page-dashboard #home li > p
+{
+    font-size: 20px;
+    clear:right;
+    text-align: left;
+    margin: 10px;
+}
+
+.page-dashboard #home li > p:last-child
+{
+    margin-left: 40px;
+    margin-right: 10px;
+}
+
+.page-dashboard #home li > h3
+{
+    margin: 10px;
+}
+
+.page-dashboard #parent_home,
+.page-dashboard #student_home
+{
+    display:none;
+}
+
+.page-dashboard.parent #parent_home,
+.page-dashboard.student #student_home
+{
+    display:block;
+}
+
+@media all and (max-width: 1250px)
+{
+    #getting-started
+    {
+        width:auto;
+        margin-right: 0;
+        padding:0;
+    }
+
+    .page-dashboard.student #home img
+    {
+        width:auto;
+        margin-left: 0;
+    }
+
+}

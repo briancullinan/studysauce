@@ -1,15 +1,15 @@
 
-.page-dashboard .page #checkin p.classes
+.page-dashboard #checkin p.classes
 {
     text-align: center;
 }
 
-.page-dashboard .page #checkin .flight-checklist
+.page-dashboard #checkin .flight-checklist
 {
     float: right;
 }
 
-.page-dashboard .page #checkin .clock
+.page-dashboard #checkin .clock
 {
     margin-bottom:40px;
     float: right;
@@ -58,7 +58,8 @@
     text-align: center;
 }
 
-.page-dashboard .page #checkin .classes a
+.page-dashboard #plan .mini-checkin > a,
+.page-dashboard #checkin .classes a
 {
     display:inline-block;
     height:80px;
@@ -70,67 +71,76 @@
     background:url("images/classes_textured.png") no-repeat scroll 0 0 #EEEEEE;
     padding:10px;
     color:#666666;
+    text-align: center;
     /*    color:#FF0D00; */
 }
 
-.page-dashboard .page #checkin .classes .class1,
-.page-dashboard .page #checkin .classes a:nth-child(2)
+.page-dashboard #plan .mini-checkin .class1,
+.page-dashboard #checkin .classes .class1,
+.page-dashboard #checkin .classes a:nth-child(2)
 {
     background-position: 0 -100px;
     /*    color:#FF9900; */
 }
 
-.page-dashboard .page #checkin .classes .class2,
-.page-dashboard .page #checkin .classes a:nth-child(3)
+.page-dashboard #plan .mini-checkin .class2,
+.page-dashboard #checkin .classes .class2,
+.page-dashboard #checkin .classes a:nth-child(3)
 {
     background-position: 0 -200px;
     /*    color:#FFD700; */
 }
 
-.page-dashboard .page #checkin .classes .class3,
-.page-dashboard .page #checkin .classes a:nth-child(4)
+.page-dashboard #plan .mini-checkin .class3,
+.page-dashboard #checkin .classes .class3,
+.page-dashboard #checkin .classes a:nth-child(4)
 {
     background-position: 0 -300px;
     /*    color:#BAF300; */
 }
 
-.page-dashboard .page #checkin .classes .class4,
-.page-dashboard .page #checkin .classes a:nth-child(5)
+.page-dashboard #plan .mini-checkin .class4,
+.page-dashboard #checkin .classes .class4,
+.page-dashboard #checkin .classes a:nth-child(5)
 {
     background-position: 0 -400px;
     /*    color:#2DD700; */
 }
 
-.page-dashboard .page #checkin .classes .class5,
-.page-dashboard .page #checkin .classes a:nth-child(6)
+.page-dashboard #plan .mini-checkin .class5,
+.page-dashboard #checkin .classes .class5,
+.page-dashboard #checkin .classes a:nth-child(6)
 {
     background-position: 0 -500px;
     /*    color:#009999; */
 }
 
-.page-dashboard .page #checkin .classes .class6,
-.page-dashboard .page #checkin .classes a:nth-child(7)
+.page-dashboard #plan .mini-checkin .class6,
+.page-dashboard #checkin .classes .class6,
+.page-dashboard #checkin .classes a:nth-child(7)
 {
     background-position: 0 -600px;
     /*    color:#162EAE; */
 }
 
-.page-dashboard .page #checkin .classes .class7,
-.page-dashboard .page #checkin .classes a:nth-child(8)
+.page-dashboard #plan .mini-checkin .class7,
+.page-dashboard #checkin .classes .class7,
+.page-dashboard #checkin .classes a:nth-child(8)
 {
     background-position: 0 -700px;
     /*    color:#6A0AAB; */
 }
 
-.page-dashboard .page #checkin .classes .class8,
-.page-dashboard .page #checkin .classes a:nth-child(9)
+.page-dashboard #plan .mini-checkin .class8,
+.page-dashboard #checkin .classes .class8,
+.page-dashboard #checkin .classes a:nth-child(9)
 {
     background-position: 0 -800px;
     /*    color:#BE008A; */
 }
 
 /*
-.page-dashboard .page #checkin .classes a:before {
+.page-dashboard #checkin .classes a:before {
     height: 80px;
     width: 80px;
     margin:-10px;
@@ -142,7 +152,8 @@
 }
 */
 
-.page-dashboard .page #checkin .classes a span
+.page-dashboard #plan .mini-checkin > a span,
+.page-dashboard #checkin .classes a span
 {
     display:block;
     width:80px;
@@ -151,132 +162,150 @@
     margin-bottom:10px;
 }
 
-.page-dashboard .page #checkin .classes .class0.checked-in,
-.page-dashboard .page #checkin .classes a.checked-in
+.page-dashboard #plan .mini-checkin .class0.checked-in,
+.page-dashboard #checkin .classes .class0.checked-in,
+.page-dashboard #checkin .classes a.checked-in
 {
     background-position: -200px 0;
 }
 
-.page-dashboard .page #checkin .classes .class1.checked-in,
-.page-dashboard .page #checkin .classes a:nth-child(2).checked-in
+.page-dashboard #plan .mini-checkin .class1.checked-in,
+.page-dashboard #checkin .classes .class1.checked-in,
+.page-dashboard #checkin .classes a:nth-child(2).checked-in
 {
     background-position: -200px -100px;
 }
 
-.page-dashboard .page #checkin .classes .class2.checked-in,
-.page-dashboard .page #checkin .classes a:nth-child(3).checked-in
+.page-dashboard #plan .mini-checkin .class2.checked-in,
+.page-dashboard #checkin .classes .class2.checked-in,
+.page-dashboard #checkin .classes a:nth-child(3).checked-in
 {
     background-position: -200px -200px;
 }
 
-.page-dashboard .page #checkin .classes .class3.checked-in,
-.page-dashboard .page #checkin .classes a:nth-child(4).checked-in
+.page-dashboard #plan .mini-checkin .class3.checked-in,
+.page-dashboard #checkin .classes .class3.checked-in,
+.page-dashboard #checkin .classes a:nth-child(4).checked-in
 {
     background-position: -200px -300px;
 }
 
-.page-dashboard .page #checkin .classes .class4.checked-in,
-.page-dashboard .page #checkin .classes a:nth-child(5).checked-in
+.page-dashboard #plan .mini-checkin .class4.checked-in,
+.page-dashboard #checkin .classes .class4.checked-in,
+.page-dashboard #checkin .classes a:nth-child(5).checked-in
 {
     background-position: -200px -400px;
 }
 
-.page-dashboard .page #checkin .classes .class5.checked-in,
-.page-dashboard .page #checkin .classes a:nth-child(6).checked-in
+.page-dashboard #plan .mini-checkin .class5.checked-in,
+.page-dashboard #checkin .classes .class5.checked-in,
+.page-dashboard #checkin .classes a:nth-child(6).checked-in
 {
     background-position: -200px -500px;
 }
 
-.page-dashboard .page #checkin .classes .class6.checked-in,
-.page-dashboard .page #checkin .classes a:nth-child(7).checked-in
+.page-dashboard #plan .mini-checkin .class6.checked-in,
+.page-dashboard #checkin .classes .class6.checked-in,
+.page-dashboard #checkin .classes a:nth-child(7).checked-in
 {
     background-position: -200px -600px;
 }
 
-.page-dashboard .page #checkin .classes .class7.checked-in,
-.page-dashboard .page #checkin .classes a:nth-child(8).checked-in
+.page-dashboard #plan .mini-checkin .class7.checked-in,
+.page-dashboard #checkin .classes .class7.checked-in,
+.page-dashboard #checkin .classes a:nth-child(8).checked-in
 {
     background-position: -200px -700px;
 }
 
-.page-dashboard .page #checkin .classes .class8.checked-in,
-.page-dashboard .page #checkin .classes a:nth-child(9).checked-in
+.page-dashboard #plan .mini-checkin .class8.checked-in,
+.page-dashboard #checkin .classes .class8.checked-in,
+.page-dashboard #checkin .classes a:nth-child(9).checked-in
 {
     background-position: -200px -800px;
 }
 
 
-.page-dashboard .page #checkin .classes .class0:active,
-.page-dashboard .page #checkin .classes a:active
+.page-dashboard #plan .mini-checkin .class0:active,
+.page-dashboard #checkin .classes .class0:active,
+.page-dashboard #checkin .classes a:active
 {
     background-position: -100px 0;
 }
 
-.page-dashboard .page #checkin .classes .class1:active,
-.page-dashboard .page #checkin .classes a:active:nth-child(2)
+.page-dashboard #plan .mini-checkin .class1:active,
+.page-dashboard #checkin .classes .class1:active,
+.page-dashboard #checkin .classes a:active:nth-child(2)
 {
     background-position: -100px -100px;
 }
 
-.page-dashboard .page #checkin .classes .class2:active,
-.page-dashboard .page #checkin .classes a:active:nth-child(3)
+.page-dashboard #plan .mini-checkin .class2:active,
+.page-dashboard #checkin .classes .class2:active,
+.page-dashboard #checkin .classes a:active:nth-child(3)
 {
     background-position: -100px -200px;
 }
 
-.page-dashboard .page #checkin .classes .class3:active,
-.page-dashboard .page #checkin .classes a:active:nth-child(4)
+.page-dashboard #plan .mini-checkin .class3:active,
+.page-dashboard #checkin .classes .class3:active,
+.page-dashboard #checkin .classes a:active:nth-child(4)
 {
     background-position: -100px -300px;
 }
 
-.page-dashboard .page #checkin .classes .class4:active,
-.page-dashboard .page #checkin .classes a:active:nth-child(5)
+.page-dashboard #plan .mini-checkin .class4:active,
+.page-dashboard #checkin .classes .class4:active,
+.page-dashboard #checkin .classes a:active:nth-child(5)
 {
     background-position: -100px -400px;
 }
 
-.page-dashboard .page #checkin .classes .class5:active,
-.page-dashboard .page #checkin .classes a:active:nth-child(6)
+.page-dashboard #plan .mini-checkin .class5:active,
+.page-dashboard #checkin .classes .class5:active,
+.page-dashboard #checkin .classes a:active:nth-child(6)
 {
     background-position: -100px -500px;
 }
 
-.page-dashboard .page #checkin .classes .class6:active,
-.page-dashboard .page #checkin .classes a:active:nth-child(7)
+.page-dashboard #plan .mini-checkin .class6:active,
+.page-dashboard #checkin .classes .class6:active,
+.page-dashboard #checkin .classes a:active:nth-child(7)
 {
     background-position: -100px -600px;
 }
 
-.page-dashboard .page #checkin .classes .class7:active,
-.page-dashboard .page #checkin .classes a:active:nth-child(8)
+.page-dashboard #plan .mini-checkin .class7:active,
+.page-dashboard #checkin .classes .class7:active,
+.page-dashboard #checkin .classes a:active:nth-child(8)
 {
     background-position: -100px -700px;
 }
 
-.page-dashboard .page #checkin .classes .class8:active,
-.page-dashboard .page #checkin .classes a:active:nth-child(9)
+.page-dashboard #plan .mini-checkin .class8:active,
+.page-dashboard #checkin .classes .class8:active,
+.page-dashboard #checkin .classes a:active:nth-child(9)
 {
     background-position: -100px -800px;
 }
 
-.page-dashboard .page #checkin .minplayer-default-display
+.page-dashboard #checkin .minplayer-default-display
 {
     opacity:0;
     position:absolute;
 }
 
-.page-dashboard .page #checkin .minplayer-default-display iframe
+.page-dashboard #checkin .minplayer-default-display iframe
 {
     opacity: .1;
 }
 
-.page-dashboard .page #checkin .minplayer-default-loader-wrapper
+.page-dashboard #checkin .minplayer-default-loader-wrapper
 {
     background:none;
 }
 
-.page-dashboard .page #checkin .minplayer-default-play
+.page-dashboard #checkin .minplayer-default-play
 {
     background:url(images/menu_icons_64.png) no-repeat 0 -2432px transparent;
     height:64px;
@@ -284,7 +313,7 @@
     border:0;
 }
 
-.page-dashboard .page #checkin .minplayer-default-pause
+.page-dashboard #checkin .minplayer-default-pause
 {
     background:url(images/menu_icons_64.png) no-repeat 0 -2368px transparent;
     height:64px;
@@ -292,7 +321,7 @@
     border:0;
 }
 
-.page-dashboard .page #checkin .minplayer-default-controls
+.page-dashboard #checkin .minplayer-default-controls
 {
     top:0;
     height:100% !important;
@@ -306,7 +335,7 @@
     border:0;
 }
 
-.page-dashboard .page #checkin .minplayer-default-controls-left
+.page-dashboard #checkin .minplayer-default-controls-left
 {
     left:50%;
     top:50%;
@@ -319,14 +348,14 @@
     margin-left:-160px;
 }
 
-.page-dashboard .page #checkin .minplayer-default
+.page-dashboard #checkin .minplayer-default
 {
     right:0px !important;
 }
 
-.page-dashboard .page #checkin .minplayer-default-display,
-.page-dashboard .page #checkin .minplayer-default,
-.page-dashboard .page #checkin .osmplayer-default
+.page-dashboard #checkin .minplayer-default-display,
+.page-dashboard #checkin .minplayer-default,
+.page-dashboard #checkin .osmplayer-default
 {
     background:none;
     border:none;
@@ -335,24 +364,24 @@
     -webkit-box-shadow:none;
 }
 
-.page-dashboard .page #checkin .osmplayer-default
+.page-dashboard #checkin .osmplayer-default
 {
     margin:20px 0;
 }
 
-.page-dashboard .page #checkin .node-media .links.inline,
-.page-dashboard .page #checkin .node-media h2
+.page-dashboard #checkin .node-media .links.inline,
+.page-dashboard #checkin .node-media h2
 {
     display:none;
 }
 
-.page-dashboard .page #checkin .minplayer-default-play-loader
+.page-dashboard #checkin .minplayer-default-play-loader
 {
     display: block !important;
     background: none;
 }
 
-.page-dashboard .page #checkin .minplayer-default-big-play
+.page-dashboard #checkin .minplayer-default-big-play
 {
     display:block !important;
     height:256px;
@@ -365,26 +394,26 @@
     -webkit-box-shadow:none;
 }
 
-.page-dashboard .page #checkin .osmplayer-default-playlist,
-.page-dashboard .page #checkin .minplayer-default-play .ui-icon,
-.page-dashboard .page #checkin .minplayer-default-pause .ui-icon,
-.page-dashboard .page #checkin .minplayer-default-logo,
-.page-dashboard .page #checkin .minplayer-default-big-play span,
-.page-dashboard .page #checkin .minplayer-default-controls-right,
-.page-dashboard .page #checkin .minplayer-default-controls-mid,
-.page-dashboard .page #checkin .minplayer-default-timer
+.page-dashboard #checkin .osmplayer-default-playlist,
+.page-dashboard #checkin .minplayer-default-play .ui-icon,
+.page-dashboard #checkin .minplayer-default-pause .ui-icon,
+.page-dashboard #checkin .minplayer-default-logo,
+.page-dashboard #checkin .minplayer-default-big-play span,
+.page-dashboard #checkin .minplayer-default-controls-right,
+.page-dashboard #checkin .minplayer-default-controls-mid,
+.page-dashboard #checkin .minplayer-default-timer
 {
     display:none;
 }
 
-.page-dashboard .page #checkin .minplayer-default-preview
+.page-dashboard #checkin .minplayer-default-preview
 {
     display:none !important;
 }
 
 @media all and (min-width: 1250px)
 {
-    .page-dashboard .page #checkin p.classes
+    .page-dashboard #checkin p.classes
     {
         min-height: 400px;
     }
@@ -393,7 +422,7 @@
 @media all and (min-width: 980px) and (max-width: 1250px)
 {
 
-    .page-dashboard .page #checkin p.classes
+    .page-dashboard #checkin p.classes
     {
         min-height:300px;
     }
@@ -407,13 +436,13 @@
     }
     */
 
-    .page-dashboard .page #checkin .osmplayer-default
+    .page-dashboard #checkin .osmplayer-default
     {
         margin:0;
         height:168px !important;
     }
 
-    .page-dashboard .page #checkin .minplayer-default-big-play
+    .page-dashboard #checkin .minplayer-default-big-play
     {
         background:url(images/menu_icons_128.png) no-repeat 43px -4992px transparent;
         height:128px;
@@ -423,18 +452,18 @@
         padding-left:65px;
     }
 
-    .page-dashboard .page #checkin .minplayer-default-controls-left
+    .page-dashboard #checkin .minplayer-default-controls-left
     {
         margin-left:-75px;
     }
 
-    .page-dashboard .page #checkin .clock
+    .page-dashboard #checkin .clock
     {
         float:left;
         margin-bottom: 20px;
     }
 
-    .page-dashboard .page #checkin .clock h3
+    .page-dashboard #checkin .clock h3
     {
         display:none;
     }
@@ -442,7 +471,7 @@
 }
 @media all and (max-width: 759px)
 {
-    .page-dashboard .page #checkin .clock
+    .page-dashboard #checkin .clock
     {
         width:auto;
         float:none;
@@ -451,12 +480,12 @@
 
 @media all and (max-width: 480px)
 {
-    .page-dashboard .page #checkin p.classes
+    .page-dashboard #checkin p.classes
     {
         margin:0 -10px;
     }
 
-    .page-dashboard .page #checkin .classes a
+    .page-dashboard #checkin .classes a
     {
         margin: 25px 5px;
     }

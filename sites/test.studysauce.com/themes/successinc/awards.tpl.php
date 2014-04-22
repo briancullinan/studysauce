@@ -1,11 +1,9 @@
 <?php
-global $user, $newAwards;
-if(!isset($newAwards))
-    $newAwards = array();
+global $user;
 $user = user_load($user->uid);
 if($user->field_parent_student['und'][0]['value'] == 'parent')
     return;
-$awards = studysauce_get_awards();
+list($awards, $lastAward) = studysauce_get_awards();
 ?>
 <div id="new-award">
     <div>
@@ -13,7 +11,7 @@ $awards = studysauce_get_awards();
             <span class="badge">&nbsp;</span>
             <div class="description">
                 <h3>You have been awarded the <strong>{badge_name}</strong> badge.</h3>
-                <p><a href="#awards">Read about your accomplishment <span>here</span>.</a></p>
+                <p><a href="#badges">Read about your accomplishment <span>here</span>.</a></p>
             </div>
         </div>
         <a href="#" class="fancy-close">&nbsp;</a>
@@ -26,7 +24,7 @@ $awards = studysauce_get_awards();
         <span class="awardArrow">&nbsp;</span>
         <h3>Pulse Detected</h3>
         <p>Our Study Detection Software will automatically guide you to become a great studier.
-        <a href="#edit-schedule">Enter your class information <span>here</span> to unlock this badge.</a></p>
+        <a href="#schedule">Enter your class information <span>here</span> to unlock this badge.</a></p>
     </div>
     <div class="description after-only">
         <span class="awardArrow">&nbsp;</span>
@@ -40,7 +38,7 @@ $awards = studysauce_get_awards();
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Study Hours</h3>
-        <p>This is your most important goal.  It will not only allow you to start using our Study Detection Software to learn the best study methods, but it will also help you change your ingrained study behavior.  <a href="#incentives" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#incentives .field-name-field-goals tr:nth-child(1) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study hours goal <span>here</span> to unlock.</a></p>
+        <p>This is your most important goal.  It will not only allow you to start using our Study Detection Software to learn the best study methods, but it will also help you change your ingrained study behavior.  <a href="#goals" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#goals .field-name-field-goals tr:nth-child(1) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study hours goal <span>here</span> to unlock.</a></p>
     </div>
     <div class="description after-only">
         <span class="awardArrow">&nbsp;</span>
@@ -48,13 +46,13 @@ $awards = studysauce_get_awards();
         <h3>Study Hours</h3>
         <p>Good work.  Use the check-in tab every time you study to reach your weekly goal.  Our software will guide you alone the way.</p>
         <h4>Badge description</h4>
-        <p>This is your most important goal.  It will not only allow you to start using our Study Detection Software to learn the best study methods, but it will also help you change your ingrained study behavior.  <a href="#incentives" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#incentives .field-name-field-goals tr:nth-child(1) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study hours goal <span>here</span> to unlock.</a></p>
+        <p>This is your most important goal.  It will not only allow you to start using our Study Detection Software to learn the best study methods, but it will also help you change your ingrained study behavior.  <a href="#goals" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#goals .field-name-field-goals tr:nth-child(1) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study hours goal <span>here</span> to unlock.</a></p>
     </div>
     <a href="#setup-milestone" id="setup-milestone" class="<?php print $awards['setup-milestone'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Study Milestone</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Study Milestone</h3>
-        <p>Milestones will help you feel good about your progress as the term goes on.  <a href="#incentives" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#incentives .field-name-field-goals tr:nth-child(2) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study milestones goal <span>here</span> to unlock.</a></p>
+        <p>Milestones will help you feel good about your progress as the term goes on.  <a href="#goals" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#goals .field-name-field-goals tr:nth-child(2) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study milestones goal <span>here</span> to unlock.</a></p>
     </div>
     <div class="description after-only">
         <span class="awardArrow">&nbsp;</span>
@@ -62,13 +60,13 @@ $awards = studysauce_get_awards();
         <h3>Study Milestone</h3>
         <p>Great job.  Once you get your goal grade on an exam or paper, record the achievement.  You can also claim a reward (if sponsored) or send a brag to your parents to let them know how hard you are working.</p>
         <h4>Badge description</h4>
-        <p>Milestones will help you feel good about your progress as the term goes on.  <a href="#incentives" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#incentives .field-name-field-goals tr:nth-child(2) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study milestones goal <span>here</span> to unlock.</a></p>
+        <p>Milestones will help you feel good about your progress as the term goes on.  <a href="#goals" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#goals .field-name-field-goals tr:nth-child(2) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study milestones goal <span>here</span> to unlock.</a></p>
     </div>
     <a href="#setup-outcome" id="setup-outcome" class="<?php print $awards['setup-outcome'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Study Outcome</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Study Outcome</h3>
-        <p><a href="#incentives" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#incentives .field-name-field-goals tr:nth-child(3) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study outcome goal <span>here</span> to unlock.</a></p>
+        <p><a href="#goals" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#goals .field-name-field-goals tr:nth-child(3) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study outcome goal <span>here</span> to unlock.</a></p>
     </div>
     <div class="description after-only">
         <span class="awardArrow">&nbsp;</span>
@@ -76,7 +74,7 @@ $awards = studysauce_get_awards();
         <h3>Study Outcome</h3>
         <p>Well done.  Remember, it is great to have GPA goals, but don't get overwhelmed by them.  Changing your underlying study behavior is paramount, the GPA success will come... we promise.</p>
         <h4>Badge description</h4>
-        <p><a href="#incentives" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#incentives .field-name-field-goals tr:nth-child(3) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study outcome goal <span>here</span> to unlock.</a></p>
+        <p><a href="#goals" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#goals .field-name-field-goals tr:nth-child(3) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study outcome goal <span>here</span> to unlock.</a></p>
     </div>
     <a href="#setup-linked" id="setup-linked" class="<?php print $awards['setup-linked'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Linked</a>
     <div class="description before-only">
@@ -222,7 +220,7 @@ $awards = studysauce_get_awards();
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Them Apples</h3>
-        <p><a href="#incentives">Claim or brag about your study milestone <span>here</span>.</a>  We recommend uploading a selfie holding your exam or paper.  If you are linked, your parent/sponsor will get a copy and will love it.  Either way, you can record your achievement for posterity.</p>
+        <p><a href="#goals">Claim or brag about your study milestone <span>here</span>.</a>  We recommend uploading a selfie holding your exam or paper.  If you are linked, your parent/sponsor will get a copy and will love it.  Either way, you can record your achievement for posterity.</p>
     </div>
     <div class="description after-only">
         <span class="awardArrow">&nbsp;</span>
@@ -230,7 +228,7 @@ $awards = studysauce_get_awards();
         <h3>Them Apples</h3>
         <p>How do you like 'them apples?  Well done, your hard work is paying off.</p>
         <h4>Badge description</h4>
-        <p><a href="#incentives">Claim or brag about your study milestone <span>here</span>.</a>  We recommend uploading a selfie holding your exam or paper.  If you are linked, your parent/sponsor will get a copy and will love it.  Either way, you can record your achievement for posterity.</p>
+        <p><a href="#goals">Claim or brag about your study milestone <span>here</span>.</a>  We recommend uploading a selfie holding your exam or paper.  If you are linked, your parent/sponsor will get a copy and will love it.  Either way, you can record your achievement for posterity.</p>
     </div>
     <a href="#beginner-jackpot" id="beginner-jackpot" class="<?php print $awards['beginner-jackpot'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Jackpot</a>
     <div class="description before-only">
@@ -418,7 +416,7 @@ $awards = studysauce_get_awards();
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Veni, Vidi, Vici</h3>
-        <p><a href="#incentives">Claim or brag about your study outcome goal <span>here</span>.</a>  We recommend a photo to commemorate the achievement.  If you are linked, your parent/sponsor will get a copy and will love it.</p>
+        <p><a href="#goals">Claim or brag about your study outcome goal <span>here</span>.</a>  We recommend a photo to commemorate the achievement.  If you are linked, your parent/sponsor will get a copy and will love it.</p>
     </div>
     <div class="description after-only">
         <span class="awardArrow">&nbsp;</span>
@@ -426,13 +424,13 @@ $awards = studysauce_get_awards();
         <h3>Veni, Vidi, Vici</h3>
         <p>Congratulations!  Your hard work has paid off.  Hopefully, by now you have transformed your study behaviors and are utilizing the best known study methods.</p>
         <h4>Badge description</h4>
-        <p><a href="#incentives">Claim or brag about your study outcome goal <span>here</span>.</a>  We recommend a photo to commemorate the achievement.  If you are linked, your parent/sponsor will get a copy and will love it.</p>
+        <p><a href="#goals">Claim or brag about your study outcome goal <span>here</span>.</a>  We recommend a photo to commemorate the achievement.  If you are linked, your parent/sponsor will get a copy and will love it.</p>
     </div>
 </div>
 <?php
-if(arg(1) != 'ajax' && count($newAwards) > 0 && arg(0) != 'checkin')
+if(arg(1) != 'ajax' && $lastAward != null && arg(0) != 'checkin')
 {
-    $last = end($newAwards);
+
     ?>
 <script type="text/javascript">
     window.initialAward = '<?php print $last; ?>';

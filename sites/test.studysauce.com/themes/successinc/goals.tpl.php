@@ -1,5 +1,5 @@
 <?php
-global $studyConnections;
+$studyConnections = studysauce_get_connections();
 ?>
 <div id="fb-root"></div>
 <script>
@@ -12,9 +12,6 @@ global $studyConnections;
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 </script>
-<div id="incentives-saved">
-    <h2>The incentives have been saved.</h2>
-</div>
 <?php global $user;
 $setup = studysauce_is_incentives_setup();
 ?>
@@ -28,7 +25,7 @@ $setup = studysauce_is_incentives_setup();
 
     <div class="grid_6 big-arrow">
         <h3>The Science</h3>
-        <img src="/[custom:theme-path]/images/science.png"/>
+        <img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/science.png"/>
 
         <p>According to the Incentive Theory of motivation, using rewards increases the likelihood of repeating
             the given activity. By incorporating this powerful psychological principle into study behavior,
@@ -46,75 +43,6 @@ $setup = studysauce_is_incentives_setup();
     </div>
 </div>
 
-<div id="invite">
-    <?php
-    if (empty($studyConnections)) {
-        ?>
-        <div class="students_only not-connected">
-            <?php
-            $node = node_load(157);
-            webform_node_view($node, 'full');
-            print theme_webform_view($node->content); ?>
-            <h3 class="parents_only">Recommend to your friends</h3>
-
-            <h3 class="students_only">Recommend to your classmates</h3>
-
-            <p style="margin-bottom:0;" class="like-us"><a target="_blank"
-                                                           href="https://www.facebook.com/sharer/sharer.php?u=https://www.studysauce.com">
-                    &nbsp;</a>
-                <a href="https://plus.google.com/share?url=https://www.studysauce.com">&nbsp;</a>
-                <a href="https://twitter.com/intent/tweet?source=webclient&text=Check+out+www.StudySauce.com+for+your+online+study+assistant.">
-                    &nbsp;</a></p>
-            <a href="#" onclick="jQuery('#incentives').removeClass('invite-only').scrollintoview(); return false;"
-               class="fancy-close">&nbsp;</a>
-        </div>
-        <div class="parents_only not-connected">
-            <?php
-            $node = node_load(250);
-            webform_node_view($node, 'full');
-            print theme_webform_view($node->content); ?>
-            <h3 class="parents_only">Recommend to your friends</h3>
-
-            <h3 class="students_only">Recommend to your classmates</h3>
-
-            <p style="margin-bottom:0;" class="like-us"><a target="_blank"
-                                                           href="https://www.facebook.com/sharer/sharer.php?u=https://www.studysauce.com">
-                    &nbsp;</a>
-                <a href="https://plus.google.com/share?url=https://www.studysauce.com">&nbsp;</a>
-                <a href="https://twitter.com/intent/tweet?source=webclient&text=Check+out+www.StudySauce.com+for+your+online+study+assistant.">
-                    &nbsp;</a></p>
-            <a href="#" onclick="jQuery('#incentives').removeClass('invite-only').scrollintoview(); return false;"
-               class="fancy-close">&nbsp;</a>
-        </div>
-    <?php } else { ?>
-        <div>
-            <h2>Your account is connected to:</h2>
-            <?php
-            global $studyConnections;
-            foreach ($studyConnections as $i => $conn) {
-                if (isset($conn->field_first_name['und'][0]['value']) && isset($conn->field_last_name['und'][0]['value']))
-                    $displayName = $conn->field_first_name['und'][0]['value'] . ' ' . $conn->field_last_name['und'][0]['value'];
-                else
-                    $displayName = $conn->mail;
-
-                print '<span class="' . (isset($conn->uid) ? 'connected' : 'not-connected') . '">' . $displayName . ' (' . $conn->mail . ')</span>';
-            }
-            ?>
-            <h3 class="parents_only" style="margin-right:0;">Recommend to your friends</h3>
-            <h3 class="students_only" style="margin-right:0;">Recommend to your classmates</h3>
-
-            <p style="margin-bottom:0;margin-right:0;" class="like-us"><a target="_blank"
-                                                                          href="https://www.facebook.com/sharer/sharer.php?u=https://www.studysauce.com">
-                    &nbsp;</a>
-                <a href="https://plus.google.com/share?url=https://www.studysauce.com">&nbsp;</a>
-                <a href="https://twitter.com/intent/tweet?source=webclient&text=Check+out+www.StudySauce.com+for+your+online+study+assistant.">
-                    &nbsp;</a></p>
-            <a href="#" onclick="jQuery('#incentives').removeClass('invite-only').scrollintoview(); return false;"
-               class="fancy-close">&nbsp;</a>
-        </div>
-    <?php } ?>
-</div>
-
 <?php /*
 
 
@@ -126,16 +54,18 @@ $setup = studysauce_is_incentives_setup();
     } ?>
 </div>
 
+ */ ?>
+
 <div id="goals-brag" class="required-fields group-achievement field-group-div">
     <div><h3>Send your sponsors a photo of yourself and remind them your are studying hard</h3>
 
         <div class="field-type-image field-name-field-photo-evidence field-widget-image-plupload form-wrapper">
             <div class="form-item form-type-plupload-file">
-                <div class="plupload">
+                <div class="plupload" id="goals-plupload">
                     <div class="plup-list-wrapper">
                         <ul class="plup-list clearfix ui-sortable"></ul>
                     </div>
-                    <div class="plup-filelist">
+                    <div class="plup-filelist" id="goal-plupload-filelist">
                         <table>
                             <tbody>
                             <tr class="plup-drag-info">
@@ -151,9 +81,9 @@ $setup = studysauce_is_incentives_setup();
                         </table>
                     </div>
                     <div class="plup-bar clearfix">
-                        <a class="plup-select" style="z-index: 0;">Add</a>
-                        <a class="plup-upload" style="display: none;">Upload</a>
-
+                        <input type="hidden" id="goal-upload-path" value="<?php print url('node/plup/goals', array('query' => array('plupload_token' => drupal_get_token('plupload-handle-uploads')))); ?>" />
+                        <a href="#goal-select" class="plup-select" id="goals-plupload-select">Add</a>
+                        <a hre="#goal-upload" class="plup-upload" id="goals-plupload-upload">Upload</a>
                         <div class="plup-progress"></div>
                     </div>
                     <div class="plupload html5"
@@ -177,19 +107,13 @@ $setup = studysauce_is_incentives_setup();
             <a href="#brag-done" class="more">Send</a>
         </div>
         <p style="clear:both;margin-bottom:0;line-height:0px;">&nbsp;</p>
-        <a href="#" onclick="jQuery('#incentives').removeClass('achievement-only').scrollintoview(); return false;"
+        <a href="#" onclick="jQuery('#goals').removeClass('achievement-only').scrollintoview(); return false;"
            class="fancy-close">&nbsp;</a></div>
 </div>
 
- */ ?>
-
 <div id="non-sponsored">
     <?php list($b, $m, $o) = _studysauce_unsponsored_goals(); ?>
-    <div class="form-actions highlighted-link mobile-only">
-        <a class="more read-only parents_only" href="#invite">Invite your student</a>
-        <a class="more read-only students_only" href="#invite">Get sponsored</a>
-    </div>
-    <div class="row draggable odd <?php print (!isset($b->field_hours['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
+    <div class="row draggable odd <?php print (isset($b->item_id) ? ('gid' . $b->item_id) : ''); ?> <?php print (!isset($b->field_hours['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
         <div class="field-name-field-type"><strong>Study Hours</strong></div>
         <div class="field-type-list-integer field-name-field-hours field-widget-options-select form-wrapper">
             <div class="read-only"><label>Goal: </label>
@@ -244,18 +168,16 @@ $setup = studysauce_is_incentives_setup();
                 </div>
             </div>
         </div>
-        <div class="form-actions highlighted-link"><a class="more form-submit" href="#save-incentive">Save</a><a
-                class="brag more read-only" href="#claim"
-                onclick="jQuery('#incentives').addClass('achievement-only'); jQuery('#incentives').scrollintoview(); return false;">Brag</a>
-        </div>
         <input type="hidden" name="goal-read-only"
                value="<?php print (isset($b->field_read_only['und'][0]['value']) ? $b->field_read_only['und'][0]['value'] : 0); ?>"/>
-        <a href="#"
-           onclick="jQuery(this).parents('.row').removeClass('edit'); jQuery('#incentives').removeClass('edit-goal').scrollintoview(); return false;"
-           class="fancy-close">&nbsp;</a>
+        <a href="#cancel-incentive" class="more">Cancel</a>
+        <div class="highlighted-link">
+            <a href="#save-incentive" class="more">Save</a>
+            <a class="brag more read-only" href="#claim">Brag</a>
+        </div>
     </div>
     <?php if(isset($b->field_hours['und'][0]['value'])) : ?>
-    <div class="row draggable even <?php print (!isset($m->field_grade['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
+    <div class="row draggable even <?php print (isset($m->item_id) ? ('gid' . $m->item_id) : ''); ?> <?php print (!isset($m->field_grade['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
         <div class="field-name-field-type"><strong>Study Milestone</strong></div>
         <div class="field-type-list-text field-name-field-grade field-widget-options-select form-wrapper">
             <div class="read-only">
@@ -315,21 +237,18 @@ $setup = studysauce_is_incentives_setup();
                 </div>
             </div>
         </div>
-        <div class="form-actions highlighted-link">
-            <a class="more form-submit" href="#save-incentive">Save</a>
-            <a class="brag more read-only" href="#claim"
-               onclick="jQuery('#incentives').addClass('achievement-only'); jQuery('#incentives').scrollintoview(); return false;">Brag</a>
-        </div>
         <input type="hidden" name="goal-read-only"
                value="<?php print (isset($m->field_read_only['und'][0]['value']) ? $m->field_read_only['und'][0]['value'] : 0); ?>"/>
-        <a href="#"
-           onclick="jQuery(this).parents('.row').removeClass('edit'); jQuery('#incentives').removeClass('edit-goal').scrollintoview(); return false;"
-           class="fancy-close">&nbsp;</a>
+        <a href="#cancel-incentive" class="more">Cancel</a>
+        <div class="highlighted-link">
+            <a href="#save-incentive" class="more">Save</a>
+            <a class="brag more read-only" href="#claim">Brag</a>
+        </div>
     </div>
     <?php
     endif;
     if(isset($m->field_grade['und'][0]['value'])) : ?>
-    <div class="row draggable odd <?php print (!isset($o->field_gpa['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
+    <div class="row draggable odd <?php print (isset($o->item_id) ? ('gid' . $o->item_id) : ''); ?> <?php print (!isset($o->field_gpa['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
         <div class="field-name-field-type"><strong>Study Outcome</strong></div>
         <div class="field-type-list-float field-name-field-gpa field-widget-options-select form-wrapper">
             <div class="read-only"><label>Goal: </label>
@@ -413,21 +332,15 @@ $setup = studysauce_is_incentives_setup();
                 </div>
             </div>
         </div>
-        <div class="form-actions highlighted-link"><a class="more form-submit" href="#save-incentive">Save</a><a
-                class="brag more read-only" href="#claim"
-                onclick="jQuery('#incentives').addClass('achievement-only'); jQuery('#incentives').scrollintoview(); return false;">Brag</a>
-        </div>
         <input type="hidden" name="goal-read-only"
                value="<?php print (isset($o->field_read_only['und'][0]['value']) ? $o->field_read_only['und'][0]['value'] : 0); ?>"/>
-        <a href="#"
-           onclick="jQuery(this).parents('.row').removeClass('edit'); jQuery('#incentives').removeClass('edit-goal').scrollintoview(); return false;"
-           class="fancy-close">&nbsp;</a>
+        <a href="#cancel-incentive" class="more">Cancel</a>
+        <div class="highlighted-link">
+            <a href="#save-incentive" class="more">Save</a>
+            <a class="brag more read-only" href="#claim">Brag</a>
+        </div>
     </div>
     <?php endif; ?>
-    <div class="form-actions highlighted-link full-only">
-        <a class="more read-only parents_only" href="#invite">Invite your student</a>
-        <a class="more read-only students_only" href="#invite">Get sponsored</a>
-    </div>
     <p style="clear:both;margin:0;text-align: center;margin-top:20px;">
         <a href="#checkin" class="read-only students_only">Use the check-in tab to start reaching your goal.</a>
         <a href="#checkin" class="read-only parents_only">Your student will be guided by our study detection software every time they check in to study.</a>
@@ -440,11 +353,11 @@ $setup = studysauce_is_incentives_setup();
     ?>
 </div>
 <div id="read-more-incentives">
-    <img src="/[custom:theme-path]/images/science.png"/>
+    <img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/science.png"/>
 
     <h3>The Science of Setting Goals</h3>
     <a href="#read-more"
-       onclick="jQuery('.page-dashboard #incentives #read-more-incentives .grid_6').toggle(); return false;">read
+       onclick="jQuery('.page-dashboard #goals #read-more-incentives .grid_6').toggle(); return false;">read
         more</a>
 </div>
 <p style="clear:both; margin:0;line-height:0;">&nbsp;</p>

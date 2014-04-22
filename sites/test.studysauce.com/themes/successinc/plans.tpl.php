@@ -1,6 +1,6 @@
 <?php
 // check if user has purchased a plan
-global $user, $orders;
+global $user;
 if(!isset($orders))
 {
     $orders = _studysauce_orders_by_uid($user->uid);
@@ -14,398 +14,507 @@ list($events, $node, $classes, $entities) = studysauce_get_events($o ? $o->creat
 
 if (count($orders) && isset($user->field_parent_student['und'][0]['value']) && $user->field_parent_student['und'][0]['value'] == 'student'):
 
-    if(!isset($node->field_university['und'][0]['value']) || empty($node->field_university['und'][0]['value']))
-    {
-        // display study preferences dialog
-        ?>
-        <div id="study-preferences">
-            <div>
-                <h1>Thank you</h1>
-                <h3>Before we build your study plan, we need to know a few things about you.</h3>
-                <div class="field-type-text field-name-field-university field-widget-text-textfield form-wrapper">
-                    <label for="schedule-university">School name</label>
-                    <input class="text-full form-text required" type="text" id="schedule-university" name="schedule-university" size="60" maxlength="255">
-                </div>
-                <div class="field-type-list-text field-name-field-grades field-widget-options-buttons form-wrapper">
-                    <label>What kind of grades do you want?</label>
-                    <input type="radio" id="schedule-grades-as-only" name="field_grades" value="as_only" class="form-radio">
-                    <label class="option" for="schedule-grades-as-only">Nothing but As </label>
-                    <input type="radio" id="schedule-grades-has-life" name="field_grades" value="has_life" class="form-radio">
-                    <label class="option" for="schedule-grades-has-life">I want to do well, but don't want to live in the library </label>
-                </div>
-                <div class="field-type-list-text field-name-field-weekends field-widget-options-buttons form-wrapper">
-                    <label>How do your manage your weekends?</label>
-                    <input type="radio" id="schedule-weekends-hit-hard" name="field_weekends" value="hit_hard" class="form-radio">
-                    <label class="option" for="schedule-weekends-hit-hard">Hit hard, keep weeks open </label>
-                    <input type="radio" id="schedule-weekends-light-work" name="field_weekends" value="light_work" class="form-radio">
-                    <label class="option" for="schedule-weekends-light-work">Light work, focus during the week </label>
-                </div>
-                <div class="field-name-field-time-preference">
-                    <label>On a scale of 0-5 (5 being the best), rate how mentally sharp you feel during the following time periods:</label>
-                    <div class="field-type-list-integer field-name-field-6-am-11-am field-widget-options-buttons form-wrapper">
-                        <label>6 AM - 11 AM</label>
-                        <div class="form-radios">
-                            <input type="radio" id="schedule-6-am-11-am-0" name="field_6_am_11_am" value="0" class="form-radio">
-                            <label class="option" for="schedule-6-am-11-am-0">0 </label>
-                            <input type="radio" id="schedule-6-am-11-am-1" name="field_6_am_11_am" value="1" class="form-radio">
-                            <label class="option" for="schedule-6-am-11-am-1">1 </label>
-                            <input type="radio" id="schedule-6-am-11-am-2" name="field_6_am_11_am" value="2" class="form-radio">
-                            <label class="option" for="schedule-6-am-11-am-2">2 </label>
-                            <input type="radio" id="schedule-6-am-11-am-3" name="field_6_am_11_am" value="3" class="form-radio">
-                            <label class="option" for="schedule-6-am-11-am-3">3 </label>
-                            <input type="radio" id="schedule-6-am-11-am-4" name="field_6_am_11_am" value="4" class="form-radio">
-                            <label class="option" for="schedule-6-am-11-am-4">4 </label>
-                            <input type="radio" id="schedule-6-am-11-am-5" name="field_6_am_11_am" value="5" class="form-radio">
-                            <label class="option" for="schedule-6-am-11-am-5">5 </label>
-                        </div>
-                    </div>
-                    <div class="field-type-list-integer field-name-field-11-am-4-pm field-widget-options-buttons form-wrapper">
-                        <label for="schedule-11-am-4-pm">11 AM - 4 PM</label>
-                        <div class="form-radios">
-                            <input type="radio" id="schedule-11-am-4-pm-0" name="field_11_am_4_pm" value="0" class="form-radio">
-                            <label class="option" for="schedule-11-am-4-pm-0">0 </label>
-                            <input type="radio" id="schedule-11-am-4-pm-1" name="field_11_am_4_pm" value="1" class="form-radio">
-                            <label class="option" for="schedule-11-am-4-pm-1">1 </label>
-                            <input type="radio" id="schedule-11-am-4-pm-2" name="field_11_am_4_pm" value="2" class="form-radio">
-                            <label class="option" for="schedule-11-am-4-pm-2">2 </label>
-                            <input type="radio" id="schedule-11-am-4-pm-3" name="field_11_am_4_pm" value="3" class="form-radio">
-                            <label class="option" for="schedule-11-am-4-pm-3">3 </label>
-                            <input type="radio" id="schedule-11-am-4-pm-4" name="field_11_am_4_pm" value="4" class="form-radio">
-                            <label class="option" for="schedule-11-am-4-pm-4">4 </label>
-                            <input type="radio" id="schedule-11-am-4-pm-5" name="field_11_am_4_pm" value="5" class="form-radio">
-                            <label class="option" for="schedule-11-am-4-pm-5">5 </label>
-                        </div>
-                    </div>
-                    <div class="field-type-list-integer field-name-field-4-pm-9-pm field-widget-options-buttons form-wrapper">
-                        <label for="schedule-4-pm-9-pm">4 PM - 9 PM</label>
-                        <div class="form-radios">
-                            <input type="radio" id="schedule-4-pm-9-pm-0" name="field_4_pm_9_pm" value="0" class="form-radio">
-                            <label class="option" for="schedule-4-pm-9-pm-0">0 </label>
-                            <input type="radio" id="schedule-4-pm-9-pm-1" name="field_4_pm_9_pm" value="1" class="form-radio">
-                            <label class="option" for="schedule-4-pm-9-pm-1">1 </label>
-                            <input type="radio" id="schedule-4-pm-9-pm-2" name="field_4_pm_9_pm" value="2" class="form-radio">
-                            <label class="option" for="schedule-4-pm-9-pm-2">2 </label>
-                            <input type="radio" id="schedule-4-pm-9-pm-3" name="field_4_pm_9_pm" value="3" class="form-radio">
-                            <label class="option" for="schedule-4-pm-9-pm-3">3 </label>
-                            <input type="radio" id="schedule-4-pm-9-pm-4" name="field_4_pm_9_pm" value="4" class="form-radio">
-                            <label class="option" for="schedule-4-pm-9-pm-4">4 </label>
-                            <input type="radio" id="schedule-4-pm-9-pm-5" name="field_4_pm_9_pm" value="5" class="form-radio">
-                            <label class="option" for="schedule-4-pm-9-pm-5">5 </label>
-                        </div>
-                    </div>
-                    <div class="field-type-list-integer field-name-field-9-pm-2-am field-widget-options-buttons form-wrapper">
-                        <label for="schedule-9-pm-2-am">9 PM - 2 AM</label>
-                        <div class="form-radios">
-                            <input type="radio" id="schedule-9-pm-2-am-0" name="field_9_pm_2_am" value="0" class="form-radio">
-                            <label class="option" for="schedule-9-pm-2-am-0">0 </label>
-                            <input type="radio" id="schedule-9-pm-2-am-1" name="field_9_pm_2_am" value="1" class="form-radio">
-                            <label class="option" for="schedule-9-pm-2-am-1">1 </label>
-                            <input type="radio" id="schedule-9-pm-2-am-2" name="field_9_pm_2_am" value="2" class="form-radio">
-                            <label class="option" for="schedule-9-pm-2-am-2">2 </label>
-                            <input type="radio" id="schedule-9-pm-2-am-3" name="field_9_pm_2_am" value="3" class="form-radio">
-                            <label class="option" for="schedule-9-pm-2-am-3">3 </label>
-                            <input type="radio" id="schedule-9-pm-2-am-4" name="field_9_pm_2_am" value="4" class="form-radio">
-                            <label class="option" for="schedule-9-pm-2-am-4">4 </label>
-                            <input type="radio" id="schedule-9-pm-2-am-5" name="field_9_pm_2_am" value="5" class="form-radio">
-                            <label class="option" for="schedule-9-pm-2-am-5">5 </label>
-                        </div>
-                    </div>
-                </div>
-                <p style="clear:both; margin-bottom:0;" class="highlighted-link"><a href="#save-schedule" class="more">Save</a></p>
-            </div>
-        </div>
-
-<?php } ?>
+    // on mobile only show event between this week, hide everything else unless the user clicks View historic
+    $startWeek = strtotime(date("Y-m-d", strtotime('this week', time()))) - 86400;
+    $endWeek = $startWeek + 604800 - 86400;
+    //$dotwStr = date('l', strtotime($event['start']));
+    ?>
 
     <h2><?php print (isset($user->field_first_name['und'][0]['value']) ? ('Personalized study plan for ' . $user->field_first_name['und'][0]['value']) : 'Your personalized study plan'); ?></h2>
-
-    <button class="field-add-more-submit ajax-processed" name="field_reminders_add_more" value="Add new" onclick="jQuery('#plan #add-class-dialog').addClass('edit'); jQuery('#plan').removeClass('edit-class-only edit-other-only').addClass('edit-other-only'); jQuery('#plan #schedule-type').val('o'); jQuery('#plan .field-add-more-submit').hide(); return false;">
-        Add <span>&nbsp;</span> other event
-    </button>
-    <button class="field-add-more-submit ajax-processed" name="field_reminders_add_more" value="Add new" onclick="jQuery('#plan #add-class-dialog').addClass('edit'); jQuery('#plan').removeClass('edit-class-only edit-other-only').addClass('edit-class-only'); jQuery('#plan #schedule-type').val('c'); jQuery('#plan .field-add-more-submit').hide(); jQuery('#plan #schedule-weekly').prop('checked', true); return false;">
-        Add <span>&nbsp;</span> class
-    </button>
-
-    <div id="add-class-dialog" class="row invalid">
-        <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
-            <div class="form-item form-type-textfield">
-                <label for="schedule-class-name" id="schedule-event-title-label">Event title</label>
-                <label for="schedule-class-name" id="schedule-class-name-label">Class name</label>
-                <input name="schedule-class-name"
-                       class="text-full form-text jquery_placeholder-processed"
-                       id="schedule-class-name"
-                       onkeyup='var startDate = jQuery(this).parents(".field-type-text").parent().find(".start-date-wrapper .form-type-textfield:first-child input"); if(startDate.val() == "" &amp;&amp; startDate.attr("placeholder") != "Start") startDate.val(startDate.attr("placeholder"));var endDate = jQuery(this).parents(".field-type-text").parent().find(".end-date-wrapper .form-type-textfield:first-child input"); if(endDate.val() == "" &amp;&amp; endDate.attr("placeholder") != "End") endDate.val(endDate.attr("placeholder"));'
-                       type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
-            </div>
-        </div>
-        <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
-            <div class="form-item form-type-checkboxes">
-                <label>Reoccurring</label>
-                <div class="form-checkboxes form-type-checkbox">
-                    <input type="radio" name="schedule-reoccurring" id="schedule-daily" value="daily" class="form-checkbox" />
-                    <label for="schedule-daily">Daily</label>
-                    <input type="radio" name="schedule-reoccurring" id="schedule-weekly" value="weekly" class="form-checkbox" checked="checked" />
-                    <label for="schedule-weekly">Weekly</label>
-                    <input type="radio" name="schedule-reoccurring" id="schedule-monthly" value="monthly" class="form-checkbox" />
-                    <label for="schedule-monthly">Monthly</label>
-                    <input type="radio" name="schedule-reoccurring" id="schedule-yearly" value="yearly" class="form-checkbox" />
-                    <label for="schedule-yearly">Yearly</label>
-                </div>
-                <div class="form-checkboxes">
-                    <div class="form-item form-type-checkbox">
-                        <input name="schedule-dotw-M" class="form-checkbox"
-                               id="schedule-dotw-M" type="checkbox" value="M"> <label
-                            class="option" for="schedule-dotw-M">M </label>
-
-                    </div>
-                    <div class="form-item form-type-checkbox">
-                        <input name="schedule-dotw-Tu" class="form-checkbox"
-                               id="schedule-dotw-Tu" type="checkbox" value="Tu"> <label
-                            class="option" for="schedule-dotw-Tu">Tu </label>
-
-                    </div>
-                    <div class="form-item form-type-checkbox">
-                        <input name="schedule-dotw-W" class="form-checkbox"
-                               id="schedule-dotw-W" type="checkbox" value="W"> <label
-                            class="option" for="schedule-dotw-W">W </label>
-
-                    </div>
-                    <div class="form-item form-type-checkbox">
-                        <input name="schedule-dotw-Th" class="form-checkbox"
-                               id="schedule-dotw-Th" type="checkbox" value="Th"> <label
-                            class="option" for="schedule-dotw-Th">Th </label>
-
-                    </div>
-                    <div class="form-item form-type-checkbox">
-                        <input name="schedule-dotw-F" class="form-checkbox"
-                               id="schedule-dotw-F" type="checkbox" value="F"> <label
-                            class="option" for="schedule-dotw-F">F </label>
-
-                    </div>
-                    <div class="form-item form-type-checkbox">
-                        <input name="schedule-dotw-Sa" class="form-checkbox"
-                               id="schedule-dotw-Sa" type="checkbox" value="Sa"> <label
-                            class="option" for="schedule-dotw-Sa">Sa </label>
-
-                    </div>
-                    <div class="form-item form-type-checkbox">
-                        <input name="schedule-dotw-Su" class="form-checkbox"
-                               id="schedule-dotw-Su" type="checkbox" value="Su"> <label
-                            class="option" for="schedule-dotw-Su">Su </label>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
-            <div class="form-item form-type-textfield">
-                <label for="schedule-value-time">Time</label>
-                <input name="schedule-value-time"
-                       class="date-clear form-text jquery_placeholder-processed"
-                       id="schedule-value-time"
-                       onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "Start") myDate.val(myDate.attr("placeholder"));'
-                       type="text" size="15" maxlength="10" placeholder="Start" value="">
-            </div>
-            <div class="form-item form-type-textfield">
-                <input type="checkbox" name="schedule-all-day" id="schedule-all-day" /><label for="schedule-all-day">All day event</label>
-                <input name="schedule-value2-time"
-                       class="date-clear form-text jquery_placeholder-processed"
-                       id="schedule-value2-time"
-                       onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "End") myDate.val(myDate.attr("placeholder"));'
-                       type="text" size="15" maxlength="10" placeholder="End" value="">
-            </div>
-            <div class="form-item form-type-textfield">
-                <label
-                    for="schedule-value-date">Date</label>
-                <input name="schedule-value-date"
-                       class="date-clear form-text jquery_placeholder-processed"
-                       id="schedule-value-date"
-                       onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .start-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
-                       type="text" size="20" maxlength="30" placeholder="First class" value="">
-            </div>
-            <div class="form-item form-type-textfield">
-                &nbsp;
-                <input name="schedule-value2-date"
-                       class="date-clear form-text jquery_placeholder-processed"
-                       id="schedule-value2-date"
-                       onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .end-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
-                       type="text" size="20" maxlength="30" placeholder="Last class" value="">
-            </div>
-        </div>
-        <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" id="schedule-type" />
-        <input class="form-submit ajax-processed" type="submit" value="Remove">
-        <p style="margin-bottom:0;clear:both;position:static;top:auto;" class="highlighted-link">
-            <a href="#save-class" class="more">Save</a>
-        </p>
-        <a href="#" onclick="jQuery('#plan #add-class-dialog').removeClass('edit'); jQuery('#plan').removeClass('edit-class-only edit-other-only').scrollintoview();  jQuery('#plan .field-add-more-submit').show(); return false;" class="fancy-close">&nbsp;</a>
-    </div>
-
-    <div class="mobile-only">
-        <?php
-        $startWeek = strtotime(date("Y-m-d", strtotime('this week', time()))) - 86400;
-        $endWeek = $startWeek + 604800 - 86400;
-        $dotwStr = '';
-        if (count($events)) {
-            // TODO: list classes on plan
-            foreach ($events as $i => $event) {
-                if (strtotime($event['start']) >= $startWeek && strtotime($event['start']) <= $endWeek) {
-                    if (date('l', strtotime($event['start'])) != $dotwStr)
-                        print '<h3>' . date('l', strtotime($event['start'])) . '</h3>';
-                    $dotwStr = date('l', strtotime($event['start']));
-                    print $event['rendered'];
-                }
-            }
-
-            // TODO: you haven't entered any classes message
-        }
-        ?>
-    </div>
     <div id="calendar" class="full-only"></div>
     <script type="text/javascript"> window.planEvents = <?php print json_encode($events); ?>; </script>
-    <h2>Class schedule</h2>
-
-    <div class="schedule">
-        <?php
-        foreach($classes as $eid => $c)
-        {
-            $classI = array_search($eid, array_keys($classes));
-            $classConfig[$eid]['className'] = 'class' . $classI;
-            if(isset($entities[$eid]->field_time['und'][0]['value']))
-                $startDate = strtotime(date('Y/m/d H:i:s', strtotime($entities[$eid]->field_time['und'][0]['value'])) . ' UTC');
-            if(isset($entities[$eid]->field_time['und'][0]['value2']))
-                $endDate = strtotime(date('Y/m/d H:i:s', strtotime($entities[$eid]->field_time['und'][0]['value2'])) . ' UTC');
-
-            if(isset($entities[$eid]->field_day_of_the_week['und'][0]['value']))
-                $daysOfTheWeek = array_map(function ($x) { return $x['value']; }, $entities[$eid]->field_day_of_the_week['und']);
-
-            ?>
-            <div  class="row" id="eid-<?php print $eid; ?>">
-                <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
-                    <div class="read-only">
-                        <label>&nbsp;</label>
-                        <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?></div>
-                    <div class="form-item form-type-textfield">
-                        <label for="schedule-class-name">Class name</label>
-                        <input name="schedule-class-name" value="<?php print $c; ?>"
-                               class="text-full form-text jquery_placeholder-processed"
-                               onkeyup='var startDate = jQuery(this).parents(".field-type-text").parent().find(".start-date-wrapper .form-type-textfield:first-child input"); if(startDate.val() == "" &amp;&amp; startDate.attr("placeholder") != "Start") startDate.val(startDate.attr("placeholder"));var endDate = jQuery(this).parents(".field-type-text").parent().find(".end-date-wrapper .form-type-textfield:first-child input"); if(endDate.val() == "" &amp;&amp; endDate.attr("placeholder") != "End") endDate.val(endDate.attr("placeholder"));'
-                               type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
-                    </div>
-                </div>
-                <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
-                    <div class="read-only"><label>Day of the week</label>
-                        <span class="<?php print in_array('M', $daysOfTheWeek) ? 'checked' : 'unchecked'; ?>">M</span>
-                        <span class="<?php print in_array('Tu', $daysOfTheWeek) ? 'checked' : 'unchecked'; ?>">Tu</span>
-                        <span class="<?php print in_array('W', $daysOfTheWeek) ? 'checked' : 'unchecked'; ?>">W</span>
-                        <span class="<?php print in_array('Th', $daysOfTheWeek) ? 'checked' : 'unchecked'; ?>">Th</span>
-                        <span class="<?php print in_array('F', $daysOfTheWeek) ? 'checked' : 'unchecked'; ?>">F</span>
-                        <span class="<?php print in_array('Sa', $daysOfTheWeek) ? 'checked' : 'unchecked'; ?>">Sa</span>
-                        <span class="<?php print in_array('Su', $daysOfTheWeek) ? 'checked' : 'unchecked'; ?>">Su</span></div>
-                    <div class="form-item form-type-checkboxes">
-                        <label>Day of the week</label>
-                        <div class="form-checkboxes">
-                            <div class="form-item form-type-checkbox">
-                                <input name="schedule-dotw-M" class="form-checkbox"
-                                       id="schedule-dotw-M-<?php print $eid; ?>" type="checkbox"
-                                       value="M" <?php print in_array('M', $daysOfTheWeek) ? 'checked="checked"' : ''; ?>> <label
-                                    class="option" for="schedule-dotw-M-<?php print $eid; ?>">M </label>
-
-                            </div>
-                            <div class="form-item form-type-checkbox">
-                                <input name="schedule-dotw-Tu" class="form-checkbox"
-                                       id="schedule-dotw-Tu-<?php print $eid; ?>" type="checkbox"
-                                       value="Tu" <?php print in_array('Tu', $daysOfTheWeek) ? 'checked="checked"' : ''; ?>> <label
-                                    class="option" for="schedule-dotw-Tu-<?php print $eid; ?>">Tu </label>
-
-                            </div>
-                            <div class="form-item form-type-checkbox">
-                                <input name="schedule-dotw-W" class="form-checkbox"
-                                       id="schedule-dotw-W-<?php print $eid; ?>" type="checkbox"
-                                       value="W" <?php print in_array('W', $daysOfTheWeek) ? 'checked="checked"' : ''; ?>> <label
-                                    class="option" for="schedule-dotw-W-<?php print $eid; ?>">W </label>
-
-                            </div>
-                            <div class="form-item form-type-checkbox">
-                                <input name="schedule-dotw-Th" class="form-checkbox"
-                                       id="schedule-dotw-Th-<?php print $eid; ?>" type="checkbox"
-                                       value="Th" <?php print in_array('Th', $daysOfTheWeek) ? 'checked="checked"' : ''; ?>> <label
-                                    class="option" for="schedule-dotw-Th-<?php print $eid; ?>">Th </label>
-
-                            </div>
-                            <div class="form-item form-type-checkbox">
-                                <input name="schedule-dotw-F" class="form-checkbox"
-                                       id="schedule-dotw-F-<?php print $eid; ?>" type="checkbox"
-                                       value="F" <?php print in_array('F', $daysOfTheWeek) ? 'checked="checked"' : ''; ?>> <label
-                                    class="option" for="schedule-dotw-F-<?php print $eid; ?>">F </label>
-
-                            </div>
-                            <div class="form-item form-type-checkbox">
-                                <input name="schedule-dotw-Sa" class="form-checkbox"
-                                       id="schedule-dotw-Sa-<?php print $eid; ?>" type="checkbox"
-                                       value="Sa" <?php print in_array('Sa', $daysOfTheWeek) ? 'checked="checked"' : ''; ?>> <label
-                                    class="option" for="schedule-dotw-Sa-<?php print $eid; ?>">Sa </label>
-
-                            </div>
-                            <div class="form-item form-type-checkbox">
-                                <input name="schedule-dotw-Su" class="form-checkbox"
-                                       id="schedule-dotw-Su-<?php print $eid; ?>" type="checkbox"
-                                       value="Su" <?php print in_array('Su', $daysOfTheWeek) ? 'checked="checked"' : ''; ?>> <label
-                                    class="option" for="schedule-dotw-Su-<?php print $eid; ?>">Su </label>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
-                    <div class="form-item form-type-textfield">
-                        <label for="schedule-value-time">Time</label>
-                        <input name="schedule-value-time"
-                               class="date-clear form-text jquery_placeholder-processed"
-                               value="<?php print date('h:ia', $startDate); ?>"
-                               onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "Start") myDate.val(myDate.attr("placeholder"));'
-                               type="text" size="15" maxlength="10" placeholder="Start" value="">
-                    </div>
-                    <div class="form-item form-type-textfield">
-                        <label>&nbsp;</label>
-                        <input name="schedule-value2-time"
-                               class="date-clear form-text jquery_placeholder-processed"
-                               value="<?php print date('h:ia', $endDate); ?>"
-                               onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "End") myDate.val(myDate.attr("placeholder"));'
-                               type="text" size="15" maxlength="10" placeholder="End" value="">
-                    </div>
-                    <div class="form-item form-type-textfield">
-                        <label
-                            for="schedule-value-date">Date</label>
-                        <input name="schedule-value-date"
-                               class="date-clear form-text jquery_placeholder-processed"
-                               value="<?php print date('m/d/Y', $startDate); ?>"
-                               onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .start-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
-                               type="text" size="20" maxlength="30" placeholder="First class" value="">
-                    </div>
-                    <div class="form-item form-type-textfield">
-                        &nbsp;
-                        <input name="schedule-value2-date"
-                               class="date-clear form-text jquery_placeholder-processed"
-                               value="<?php print date('m/d/Y', $endDate); ?>"
-                               onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .end-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
-                               type="text" size="20" maxlength="30" placeholder="Last class" value="">
-                    </div>
-                    <div class="read-only"><label>Time</label><?php print date('h:i A', $startDate) . ' - ' . date('h:i A', $endDate); ?></div>
-                </div>
-                <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="c" />
-                <input class="form-submit ajax-processed" type="submit" value="Remove">
-                <div style="margin-bottom:0;clear:both;position:static;top:auto;" class="highlighted-link">
-                    <div class="read-only"><label>&nbsp;</label><a href="#edit-class">&nbsp;</a>
-                        <a href="#remove-class">&nbsp;</a></div>
-                    <a href="#save-class" class="more">Save</a>
-                </div>
-                <a href="#" onclick="jQuery(this).parents('.row').removeClass('edit'); jQuery('#plan').removeClass('edit-class-only edit-other-only').scrollintoview();  jQuery('#plan .field-add-more-submit').show(); return false;" class="fancy-close">&nbsp;</a>
-            </div>
-        <?php
-        }
-        ?>
+    <div class="sort-by">
+        <label>Sort by: </label>
+        <input type="radio" id="schedule-by-date" name="schedule-by" checked="checked"><label for="schedule-by-date">Date</label>&nbsp;
+        <input type="radio" id="schedule-by-class" name="schedule-by"><label for="schedule-by-class">Class</label>
+        <input type="checkbox" id="schedule-historic"><label for="schedule-historic">View historical</label>
     </div>
+    <?php
+    $first = true;
+    $headStr = '';
+    $classes[''] = 'Nonacademic';
+    foreach ($events as $eid => $event)
+    {
+        // TODO: should we allow notes for class events?
+        if(strpos($event['className'], 'class-event') !== false ||
+            strpos($event['className'], 'holiday-event') !== false)
+            continue;
 
+        $time = strtotime($event['start']);
+        if($headStr != date('j F', $time))
+        {
+            $headStr = date('j F', $time);
+            ?><div class="head <?php print ($time < strtotime(date('Y/m/d')) - 86400 ? 'hide' : ''); ?>"><?php print $headStr; ?></div><?
+        }
+        $classI = '';
+        $cid = '';
+        if(preg_match('/class([0-9]+)(\s|$)/i', $event['className'], $matches))
+        {
+            $classI = $matches[1];
+            $cid = array_keys($classes)[$classI];
+        }
+        $title = (strpos($event['className'], 'deadline-event') !== false ? 'Deadline' : '') . preg_replace(
+            array('/^\(P\)\s*/', '/^\(SR\)\s*/', '/' . preg_quote($classes[$cid]) . '\s*/', '/<\/?small>/'),
+            array('Pre-work: ', 'Spaced repetition: ', '', ''),
+            $event['title']);
+        ?>
+        <div class="row <?php
+        print ($first && !($first = false) ? 'first' : ''); ?> <?php
+        print (strpos($event['className'], 'deadline-event') !== false ? 'deadline' : ''); ?> <?php
+        print ($time < strtotime(date('Y/m/d')) - 86400 ? 'hide' : ''); ?> <?php
+        print (strtotime($event['start']) >= $startWeek && strtotime($event['start']) <= $endWeek ? 'mobile' : ''); ?>" id="eid-<?php print $eid; ?>">
+            <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+                <div class="read-only"><span class="class<?php print $classI; ?>">&nbsp;</span><?php print htmlspecialchars($classes[$cid], ENT_QUOTES); ?></div>
+            </div>
+            <div class="field-type-text field-name-field-assignment field-widget-text-textfield form-wrapper">
+                <div class="read-only"><?php print htmlspecialchars($title, ENT_QUOTES); ?></div>
+            </div>
+            <div class="field-type-number-integer field-name-field-percent field-widget-number form-wrapper">
+                <div class="read-only"><?php if(isset($event['percent'])): print $event['percent']; ?>% of grade<?php else: ?>&nbsp;<?php endif; ?></div>
+            </div>
+            <div class="field-type-list-boolean field-name-field-completed field-widget-options-onoff form-wrapper">
+                <div class="read-only"><input type="checkbox" id="schedule-completed-<?php print $eid; ?>" />
+                    <label for="schedule-completed-<?php print $eid; ?>">&nbsp;</label></div>
+            </div>
+        <?php if($classI !== ''): ?>
+            <div class="mini-checkin">
+                <a href="#class<?php print $classI; ?>" class="class<?php print $classI; ?> eid<?php print $cid; ?>"><span>&nbsp;</span><?php print htmlspecialchars($classes[$cid], ENT_QUOTES); ?></a>
+                <div class="flip-counter clock flip-clock-wrapper">
+                    <ul class="flip">
+                        <li data-digit="0"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">0</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">0</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="1"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">1</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">1</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="2"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">2</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">2</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="3"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">3</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">3</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="4"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">4</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">4</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="5"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">5</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">5</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="6"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">6</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">6</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="7"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">7</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">7</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="8"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">8</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">8</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="9"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">9</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">9</div>
+                                </div>
+                            </a></li>
+                    </ul>
+                    <ul class="flip">
+                        <li data-digit="0"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">0</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">0</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="1"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">1</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">1</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="2"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">2</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">2</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="3"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">3</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">3</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="4"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">4</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">4</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="5"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">5</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">5</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="6"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">6</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">6</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="7"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">7</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">7</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="8"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">8</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">8</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="9"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">9</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">9</div>
+                                </div>
+                            </a></li>
+                    </ul>
+                    <span class="flip-clock-divider minutes"><span class="flip-clock-dot top"></span><span class="flip-clock-dot bottom"></span></span>
+                    <ul class="flip">
+                        <li data-digit="0"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">0</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">0</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="1"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">1</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">1</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="2"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">2</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">2</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="3"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">3</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">3</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="4"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">4</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">4</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="5"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">5</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">5</div>
+                                </div>
+                            </a></li>
+                    </ul>
+                    <ul class="flip">
+                        <li data-digit="0"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">0</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">0</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="1"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">1</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">1</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="2"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">2</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">2</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="3"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">3</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">3</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="4"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">4</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">4</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="5"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">5</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">5</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="6"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">6</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">6</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="7"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">7</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">7</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="8"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">8</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">8</div>
+                                </div>
+                            </a></li>
+                        <li data-digit="9"><a href="#">
+                                <div class="up">
+                                    <div class="shadow"></div>
+                                    <div class="inn">9</div>
+                                </div>
+                                <div class="down">
+                                    <div class="shadow"></div>
+                                    <div class="inn">9</div>
+                                </div>
+                            </a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="field-select-strategy">
+                <div>
+                    <label for="strategy-select">Strategy:</label>
+                    <select name="strategy-select" id="strategy-select">
+                        <option value="teach" selected="selected">- Change strategy -</option>
+                        <option value="teach">Teach</option>
+                        <option value="spaced">Spaced repetition</option>
+                        <option value="active">Active reading</option>
+                    </select>
+                </div>
+            </div>
+            <div class="strategy-teach">
+                <h3>Teach - Upload a 1 min video explaining your assignment</h3>
+                <div class="strategy-upload"><a href="#strategy-upload"><img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/empty-play.png" /><span>Upload video</span></a></div>
+                <div class="strategy-notes">
+                    <label for="strategy-title">Title:</label>
+                    <input type="text" id="strategy-title" name="strategy-title" />
+                    <label for="strategy-notes">Notes:</label>
+                    <textarea type="text" id="strategy-notes" name="strategy-notes"></textarea>
+                </div>
+            </div>
+            <div class="strategy-active">
+                <h3>Active reading - Follow the guide below to better retain what you are reading.</h3>
+                <h4>Before reading:</h4>
+                <label for="strategy-topic">Take no more than 2 minutes to skim the reading. What is the topic?</label>
+                <textarea name="strategy-topic" id="strategy-topic"></textarea>
+                <label for="strategy-why">Why am I being asked to read this at this point in the class?</label>
+                <textarea name="strategy-why" id="strategy-why"></textarea>
+                <h4>During reading:</h4>
+                <label for="strategy-questions">What questions do I have as I am reading?</label>
+                <textarea name="strategy-questions" id="strategy-questions"></textarea>
+                <h4>After reading:</h4>
+                <label for="strategy-">Please summarize the reading in a few paragraphs (less than 1 page).  What are the 1 or 2 most important ideas from the reading?</label>
+                <textarea name="strategy-" id="strategy-"></textarea>
+                <label for="strategy-">What possible exam questions will result from this reading?</label>
+                <textarea name="strategy-" id="strategy-"></textarea>
+            </div>
+            <div class="strategy-spaced">
+                <h3>Spaced repetition - Commit information to your long term memory by revisiting past work.</h3>
+                <h4>Instructions - We highly recommend flashcards.  Online flashcard maker Quizlet is our favorite.  Read more about spaced repetition here.</h4>
+                <div class="strategy-review">
+                    <label>Review material from:</label>
+                    <input type="checkbox" name="strategy-from-1" id="strategy-from-1-<?php print $eid; ?>"><label for="strategy-from-1-<?php print $eid; ?>">4/26</label><br />
+                    <input type="checkbox" name="strategy-from-2" id="strategy-from-2-<?php print $eid; ?>"><label for="strategy-from-2-<?php print $eid; ?>">4/19</label><br />
+                    <input type="checkbox" name="strategy-from-3" id="strategy-from-3-<?php print $eid; ?>"><label for="strategy-from-3-<?php print $eid; ?>">4/12</label><br />
+                    <input type="checkbox" name="strategy-from-4" id="strategy-from-4-<?php print $eid; ?>"><label for="strategy-from-4-<?php print $eid; ?>">3/26</label>
+                </div>
+                <div class="strategy-spaced-notes">
+                    <label for="strategy-notes">Write down any notes below:</label>
+                    <textarea type="text" id="strategy-notes" name="strategy-notes"></textarea>
+                </div>
+            </div>
+        <?php endif;
+        if($classI === ''): ?>
+            <div class="strategy-other-notes">
+                <h3>Notes:</h3>
+                <label for="strategy-other-notes">Feel free to record any notes associated with this non-academic deadline.</label>
+                <textarea name="strategy-other-notes" id="strategy-other-notes"></textarea>
+            </div>
+        <?php endif; ?>
+        </div>
+    <?php
+    }
+    ?>
     <p style="clear: both; margin-bottom:0; line-height:1px;">&nbsp;</p>
 
 <?php else: ?>
@@ -423,11 +532,11 @@ if (count($orders) && isset($user->field_parent_student['und'][0]['value']) && $
             <img width="664" height="472" style="width: 100%; height: auto;"
                  src="/[custom:files-path]/Product%2520Bigger_1.png">
         </a>
-        <a class="lightbox" href="/[custom:theme-path]/tour/1-Title.png" rel="tour"></a>
-        <a class="lightbox" href="/[custom:theme-path]/tour/2-Tips.png" rel="tour"></a>
-        <a class="lightbox" href="/[custom:theme-path]/tour/3-Science2.png" rel="tour"></a>
-        <a class="lightbox" href="/[custom:theme-path]/tour/4-Science.png" rel="tour"></a>
-        <a class="lightbox" href="/[custom:theme-path]/tour/5-Schedule.png" rel="tour"></a>
+        <a class="lightbox" href="/<?php print drupal_get_path('theme', 'successinc'); ?>/tour/1-Title.png" rel="tour"></a>
+        <a class="lightbox" href="/<?php print drupal_get_path('theme', 'successinc'); ?>/tour/2-Tips.png" rel="tour"></a>
+        <a class="lightbox" href="/<?php print drupal_get_path('theme', 'successinc'); ?>/tour/3-Science2.png" rel="tour"></a>
+        <a class="lightbox" href="/<?php print drupal_get_path('theme', 'successinc'); ?>/tour/4-Science.png" rel="tour"></a>
+        <a class="lightbox" href="/<?php print drupal_get_path('theme', 'successinc'); ?>/tour/5-Schedule.png" rel="tour"></a>
     </p>
     <p><a class="support" onclick="jQuery('.lightbox').first().trigger('click'); return false;" href="#">Chances are no
             one

@@ -10,6 +10,7 @@ function _studysauce_get_short_class_name($className)
     return $classPart;
 }
 
+/*
 function studysauce_form_incentive_node_form_alter(&$form, &$form_state)
 {
     global $user, $parentIncentive;
@@ -137,7 +138,7 @@ EOC;
                 $form['field_goals']['und'][$i]['field_type']['#markup'] .= '<div class="field-name-field-hours"><label>Goal: </label> ' . $form['field_goals']['und'][$i]['field_hours'][LANGUAGE_NONE]['#default_value'][0] . ' <div class="description">' . $form['field_goals']['und'][$i]['field_hours'][LANGUAGE_NONE]['#description'] . '</div></div>';
                 // TODO: change this when we want to support more than 3 goals
                 if($setup == 3 && $user->field_parent_student['und'][0]['value'] == 'parent')
-                    $sponsor = '<a class="sponsor more" href="#sponsor' . $i . '" onclick="var container_id=jQuery(\'#incentives .field-name-field-type input[value=&quot;behavior&quot;]:checked\').parents(\'td\').addClass(\'transferred\').find(\'select:visible\').val(&quot;' . $form['field_goals']['und'][$i]['field_hours'][LANGUAGE_NONE]['#default_value'][0] . '&quot;); return false;">Sponsor this</a>';
+                    $sponsor = '<a class="sponsor more" href="#sponsor' . $i . '" onclick="var container_id=jQuery(\'#goals .field-name-field-type input[value=&quot;behavior&quot;]:checked\').parents(\'td\').addClass(\'transferred\').find(\'select:visible\').val(&quot;' . $form['field_goals']['und'][$i]['field_hours'][LANGUAGE_NONE]['#default_value'][0] . '&quot;); return false;">Sponsor this</a>';
             }
             elseif($form['field_goals']['und'][$i]['field_type'][LANGUAGE_NONE]['#default_value'] == 'milestone' &&
                 !empty($form['field_goals']['und'][$i]['field_grade'][LANGUAGE_NONE]['#default_value']))
@@ -146,7 +147,7 @@ EOC;
                 $form['field_goals']['und'][$i]['field_type']['#markup'] .= '<div class="field-name-field-grade"><label>Goal: </label> ' . $form['field_goals']['und'][$i]['field_grade'][LANGUAGE_NONE]['#default_value'][0] . ' <div class="description">' . $form['field_goals']['und'][$i]['field_grade'][LANGUAGE_NONE]['#description'] . '</div></div>';
                 // TODO: change this when we want to support more than 3 goals
                 if($setup == 3 && $user->field_parent_student['und'][0]['value'] == 'parent')
-                    $sponsor = '<a class="sponsor more" href="#sponsor' . $i . '" onclick="var container_id=jQuery(\'#incentives .field-name-field-type input[value=&quot;milestone&quot;]:checked\').parents(\'td\').addClass(\'transferred\').find(\'select:visible\').val(&quot;' . $form['field_goals']['und'][$i]['field_grade'][LANGUAGE_NONE]['#default_value'][0] . '&quot;); return false;">Sponsor this</a>';
+                    $sponsor = '<a class="sponsor more" href="#sponsor' . $i . '" onclick="var container_id=jQuery(\'#goals .field-name-field-type input[value=&quot;milestone&quot;]:checked\').parents(\'td\').addClass(\'transferred\').find(\'select:visible\').val(&quot;' . $form['field_goals']['und'][$i]['field_grade'][LANGUAGE_NONE]['#default_value'][0] . '&quot;); return false;">Sponsor this</a>';
             }
             elseif($form['field_goals']['und'][$i]['field_type'][LANGUAGE_NONE]['#default_value'] == 'outcome' &&
                 !empty($form['field_goals']['und'][$i]['field_gpa'][LANGUAGE_NONE]['#default_value']))
@@ -155,13 +156,13 @@ EOC;
                 $form['field_goals']['und'][$i]['field_type']['#markup'] .= '<div class="field-name-field-gpa"><label>Goal: </label> ' . number_format((float)$form['field_goals']['und'][$i]['field_gpa'][LANGUAGE_NONE]['#default_value'][0], 2, '.', '') . ' <div class="description">' . $form['field_goals']['und'][$i]['field_gpa'][LANGUAGE_NONE]['#description'] . '</div></div>';
                 // TODO: change this when we want to support more than 3 goals
                 if($setup == 3 && $user->field_parent_student['und'][0]['value'] == 'parent')
-                    $sponsor = '<a class="sponsor more" href="#sponsor' . $i . '" onclick="var container_id=jQuery(\'#incentives .field-name-field-type input[value=&quot;outcome&quot;]:checked\').parents(\'td\').addClass(\'transferred\').find(\'select:visible\').val(&quot;' . $form['field_goals']['und'][$i]['field_gpa'][LANGUAGE_NONE]['#default_value'][0] . '&quot;); return false;">Sponsor this</a>';
+                    $sponsor = '<a class="sponsor more" href="#sponsor' . $i . '" onclick="var container_id=jQuery(\'#goals .field-name-field-type input[value=&quot;outcome&quot;]:checked\').parents(\'td\').addClass(\'transferred\').find(\'select:visible\').val(&quot;' . $form['field_goals']['und'][$i]['field_gpa'][LANGUAGE_NONE]['#default_value'][0] . '&quot;); return false;">Sponsor this</a>';
             }
             $form['field_goals']['und'][$i]['field_type']['#markup'] .= '<div class="field-name-field-reward"><label>Reward: </label> ' . (empty($form['field_goals']['und'][$i]['field_reward'][LANGUAGE_NONE][0]['value']['#default_value']) ? 'No reward set.' : $form['field_goals']['und'][$i]['field_reward'][LANGUAGE_NONE][0]['value']['#default_value']) . '</div>';
 
             if($setup == 3 && $user->field_parent_student['und'][0]['value'] == 'student')
             {
-                $form['field_goals']['und'][$i]['field_type']['#markup'] .= '<div class="form-actions highlighted-link"><a class="claim more" href="#claim' . $i . '" onclick="jQuery(this).parents(\'tr\').addClass(\'achievement-only\'); jQuery(\'#incentives\').scrollintoview(); return false;">Claim</a></div>';
+                $form['field_goals']['und'][$i]['field_type']['#markup'] .= '<div class="form-actions highlighted-link"><a class="claim more" href="#claim' . $i . '" onclick="jQuery(this).parents(\'tr\').addClass(\'achievement-only\'); jQuery(\'#goals\').scrollintoview(); return false;">Claim</a></div>';
             }
             else
             {
@@ -245,7 +246,7 @@ EOC;
 
             if($setup == 3 && isset($invites[0]->mail) &&
                 $user->field_parent_student['und'][0]['value'] == 'student')
-                $form['field_goals']['und'][$i]['field_reward']['#suffix'] .= '<a class="brag more read-only" href="#claim" onclick="jQuery(this).parents(\'tr\').addClass(\'achievement-only\'); jQuery(\'#incentives\').scrollintoview(); return false;">Brag</a></div>';
+                $form['field_goals']['und'][$i]['field_reward']['#suffix'] .= '<a class="brag more read-only" href="#claim" onclick="jQuery(this).parents(\'tr\').addClass(\'achievement-only\'); jQuery(\'#goals\').scrollintoview(); return false;">Brag</a></div>';
             else
                 $form['field_goals']['und'][$i]['field_reward']['#suffix'] .= '</div>';
 
@@ -287,4 +288,6 @@ EOC;
     hide($form['field_goals']['und']['add_more']); // = '+ Add another goal';
     $form['field_goals']['und']['add_more']['#ajax']['callback'] = '_studysauce_submit_incentives_ajax_add_items';
 }
+
+*/
 

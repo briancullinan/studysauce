@@ -47,18 +47,10 @@ function studysauce_save_calendar()
     if(isset($_POST['9-pm-2-am']))
         $node->field_9_pm_2_am['und'][0]['value'] = $_POST['9-pm-2-am'];
 
-    // get the orders to use with event method below
-    $orders = _studysauce_orders_by_uid($user->uid);
-    $conn = studysauce_get_connections();
-    foreach ($conn as $i => $c)
-        $orders = array_merge($orders, _studysauce_orders_by_uid($c->uid));
-    $o = end($orders);
-
-
     if(isset($_POST['className']) && isset($_POST['type']) && isset($_POST['dotw']) &&
         isset($_POST['start']) && isset($_POST['end']))
     {
-        list($events, $node, $classes, $entities) = studysauce_get_events($o ? $o->created : null);
+        list($events, $node, $classes, $entities) = studysauce_get_events();
 
         // check if class entity already exists by name
         $saved = array();
@@ -150,13 +142,14 @@ function studysauce_save_calendar()
 
     $newSDS = studysauce_get_sds_messages();
     $lastSDS = end($newSDS);
-    $awards = studysauce_get_awards();
+    list($awards) = studysauce_get_awards();
     list($times, $rows, $total, $hours) = _studysauce_get_metrics();
 
     print json_encode(array(
         'events' => $events,
         'classes' => $classes,
-        'schedule' => '<div>' . theme('studysauce-plans') . '</div>',
+        'schedule' => '<div>' . theme('studysauce-schedule') . '</div>',
+        'plan' => '<div>' . theme('studysauce-plans') . '</div>',
         'lastSDS' => $lastSDS,
         'awards' => $awards,
         'rows' => $rows,
@@ -167,9 +160,23 @@ function studysauce_save_calendar()
     drupal_exit();
 }
 
-function studysauce_get_events($lastOrderTime)
+function studysauce_get_events($lastOrderTime = null)
 {
     global $user;
+
+    if(!isset($lastOrderTime) || empty($lastOrderTime))
+    {
+        if(!isset($orders))
+        {
+            $orders = _studysauce_orders_by_uid($user->uid);
+            $conn = studysauce_get_connections();
+            foreach ($conn as $i => $c)
+                $orders = array_merge($orders, _studysauce_orders_by_uid($c->uid));
+        }
+        $o = end($orders);
+        if(isset($o) && isset($o->created))
+            $lastOrderTime = $o->created;
+    }
 
     // get the schedule with university filled in
     $query = new EntityFieldQuery();
@@ -394,7 +401,9 @@ function studysauce_get_events($lastOrderTime)
                     if($classStart >= $w && $classStart <= $w + 604800)
                     {
                         $studyLength += 3600; // add to study length if the user has moved their study event
-                        $i = array_search(preg_replace('/^\(P\)\s*|^\(SR\)\s*|^\(F\)\s*|\s*\([0-9\/,\s-]+\)$|\s*<small>[0-9\/,\s-]+<\/small>$/i', '', $entity->field_class_name['und'][0]['value']), array_values($classes));
+                        $i = array_search(
+                            // extract class name from title by replacing everything else
+                            preg_replace('/^\(P\)\s*|^\(SR\)\s*|^\(F\)\s*|\s*\([0-9\/,\s-]+\)$|\s*<small>[0-9\/,\s-]+<\/small>$/i', '', $entity->field_class_name['und'][0]['value']), array_values($classes));
                         $events[] = array(
                             'title' => $entity->field_class_name['und'][0]['value'],
                             'start' => date('Y/m/d H:i:s', $classStart) . ' UTC',
@@ -411,6 +420,7 @@ function studysauce_get_events($lastOrderTime)
                 }
             }
 
+            /*
             // add free study events based on preference
             if($w < $startWeek + 2419200)
             {
@@ -435,6 +445,7 @@ function studysauce_get_events($lastOrderTime)
                                         ');
                 }
             }
+            */
 
         }
 
@@ -447,7 +458,7 @@ function studysauce_get_events($lastOrderTime)
                     'start' => date('Y/m/d H:i:s', $hT) . ' UTC',
                     'end' => date('Y/m/d H:i:s', $hT + 86400) . ' UTC',
                     'className' => 'holiday-event',
-                    'allDay' => false,
+                    'allDay' => true,
                     'rendered' => '
                                         <div class="row">
                                             <div class="class-name"><span class="holiday-event">&nbsp;</span>Holiday</div>
@@ -455,6 +466,52 @@ function studysauce_get_events($lastOrderTime)
                                         </div>
                                         ');
             }
+
+        $query = new EntityFieldQuery();
+        $dates = $query->entityCondition('entity_type', 'node')
+            ->propertyCondition('type', 'key_dates')
+            ->propertyCondition('title', $user->mail)
+            ->propertyCondition('status', 1)
+            ->range(0, 1)
+            ->execute();
+
+        if (!empty($dates['node'])) {
+            $nodes = array_keys($dates['node']);
+            $nid = array_shift($nodes);
+            $node = node_load($nid);
+
+            if (isset($node->field_reminders[LANGUAGE_NONE][0]['value']))
+            {
+                $reminders = array();
+                foreach($node->field_reminders[LANGUAGE_NONE] as $eid => $reminder)
+                {
+                    $eid = $reminder['value'];
+                    $entity = entity_load('field_collection_item', array($eid));
+                    if (!empty($entity))
+                        $reminders[$eid] = $entity[$eid];
+                }
+                uasort($reminders, function ($a, $b) { return strtotime($a->field_due_date['und'][0]['value']) - strtotime($b->field_due_date['und'][0]['value']); });
+                foreach ($reminders as $eid => $reminder)
+                {
+                    $classI = array_search($reminder->field_class_name['und'][0]['value'], array_values($classes));
+                    $dT = strtotime($reminder->field_due_date['und'][0]['value']);
+                    $events[] = array(
+                        'percent' => $reminder->field_percent['und'][0]['value'],
+                        'title' => $reminder->field_class_name['und'][0]['value'] . ': ' . $reminder->field_assignment['und'][0]['value'],
+                        'start' => date('Y/m/d H:i:s', $dT) . ' UTC',
+                        'end' => date('Y/m/d H:i:s', $dT + 86400) . ' UTC',
+                        'className' => 'class' . $classI . ' deadline-event',
+                        'allDay' => true,
+                        'rendered' => '
+                                        <div class="row">
+                                            <div class="class-name"><span class="class' . $classI . ' deadline-event">&nbsp;</span>Holiday</div>
+                                            <div class="class-date">&nbsp;</div>
+                                        </div>
+                                        ');
+
+                }
+            }
+        }
 
         $safety = 10;
         while(--$safety > 0)
@@ -469,7 +526,8 @@ function studysauce_get_events($lastOrderTime)
             $i = 0;
             $anyMoved = false;
             while ($i < count($events)) {
-                if(in_array($events[$i]['title'], $saved))
+                if(in_array($events[$i]['title'], $saved) ||
+                    substr($events[$i]['title'], 0, 3) == '(F)')
                 {
                     $i++;
                     continue;

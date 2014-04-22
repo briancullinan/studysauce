@@ -361,6 +361,7 @@ if (theme_get_setting('scrolltop_display')) {
 }
 
 global $user;
+drupal_add_css(drupal_get_path('theme', 'successinc') .'/header.css');
 
 if(drupal_is_front_page() && $user->uid != 0)
 {
@@ -368,6 +369,11 @@ if(drupal_is_front_page() && $user->uid != 0)
 //    drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/date_popup.js');
     drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/jquery.timeentry.pack.js');
     drupal_add_library('system', 'ui.datepicker');
+    drupal_add_library('system', 'ui.draggable');
+    drupal_add_library('system', 'ui.resizable');
+    drupal_add_library('system', 'ui.droppable');
+    drupal_add_library('system', 'ui.sortable');
+    drupal_add_library('system', 'ui.progressbar');
 
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/skrollr.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/flipclock/libs/prefixfree.min.js');
@@ -379,19 +385,29 @@ if(drupal_is_front_page() && $user->uid != 0)
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/fullcalendar/fullcalendar.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/checkin.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/plans.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/profile.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/schedule.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/goals.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/user.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/partner.js');
+    drupal_add_js(libraries_get_path('plupload') . '/js/plupload.full.js');
 
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/js/fullcalendar/fullcalendar.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/css/flipclock.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/css/tipsy.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') .'/menu.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') .'/home.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/checkin.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/goals.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/awards.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/reminders.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') .'/deadlines.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') .'/schedule.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') .'/profile.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/metrics.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/plans.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') .'/partner.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') .'/invite.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/user-parent-student.css');
 }
 elseif(drupal_is_front_page() || arg(0) == 'parents' || arg(0) == 'students' ||

@@ -1,0 +1,47 @@
+
+.page-dashboard #invite h3
+{
+    text-align: center;
+}
+
+.page-dashboard #invite .like-us
+{
+    text-align: center;
+}
+
+.page-dashboard #invite .highlighted-link
+{
+    text-align: right;
+}
+
+.page-dashboard #webform-ajax-wrapper-250,
+.page-dashboard #webform-ajax-wrapper-157
+{
+    max-width: 600px;
+    font-size: 20px;
+    margin:0 auto;
+}
+
+.page-dashboard #parent-sponsored .webform-client-form-250,
+.page-dashboard #parent-sponsored .webform-client-form-157
+{
+    margin:0;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px #000000;
+    background: url("images/noise.png") repeat scroll 0 0 #0D0D0D;
+    width:170px;
+}
+
+.page-dashboard #parent-sponsored .webform-component--student-first-name,
+.page-dashboard #parent-sponsored .webform-component--parent-first-name
+{
+    padding-right:1%;
+}
+
+.page-dashboard #parent-sponsored .grid_4,
+.page-dashboard #parent-sponsored #webform-ajax-wrapper-250 > h2,
+.page-dashboard #parent-sponsored #webform-ajax-wrapper-157 > h2,
+.page-dashboard #parent-sponsored #webform-ajax-wrapper-157 p
+{
+    display:none;
+}

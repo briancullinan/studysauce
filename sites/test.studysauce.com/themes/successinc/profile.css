@@ -1,0 +1,148 @@
+
+#profile h1
+{
+    font-size: 72px;
+    color: #FF9900;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.page-dashboard #profile .field-name-field-university,
+.page-dashboard #profile .field-name-field-grades,
+.page-dashboard #profile .field-name-field-weekends,
+.page-dashboard #profile .field-name-field-time-preference,
+.page-dashboard #profile .field-name-field-6-am-11-am,
+.page-dashboard #profile .field-name-field-11-am-4-pm,
+.page-dashboard #profile .field-name-field-4-pm-9-pm,
+.page-dashboard #profile .field-name-field-9-pm-2-am
+{
+    margin-bottom: 10px;
+}
+
+.page-dashboard #profile .field-name-field-time-preference label.option,
+.page-dashboard #profile .field-name-field-weekends label.option,
+.page-dashboard #profile .field-name-field-grades label.option {
+    background: url("/sites/test.studysauce.com/themes/successinc/images/noise_white.png") repeat scroll 0 0 #EEEEEE;
+    padding: 0;
+    margin: 5px 10px 5px -20px;
+    display: inline-block;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    max-width: 135px;
+    vertical-align: middle;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    min-width: 30px;
+}
+
+.page-dashboard #profile .field-name-field-time-preference input.form-radio:checked + label,
+.page-dashboard #profile .field-name-field-weekends input.form-radio:checked + label,
+.page-dashboard #profile .field-name-field-grades input.form-radio:checked + label {
+    background: none repeat scroll 0 0 #CCCCCC;
+    opacity: 1 !important;
+    padding: 5px;
+    margin: 0 5px 0 -25px;
+    z-index: 2;
+}
+
+.field-name-field-weekends,
+.field-name-field-grades
+{
+    width: 295px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.field-name-field-weekends .form-type-radio,
+.field-name-field-grades .form-type-radio
+{
+    display:inline-block;
+}
+
+.page-dashboard #profile .field-name-field-time-preference .field-type-list-integer
+{
+    clear:both;
+}
+
+.page-dashboard #profile .field-name-field-time-preference .field-type-list-integer > label
+{
+    display:inline;
+}
+
+.page-dashboard #profile .form-radios
+{
+    float: right;
+    clear: both;
+    display:inline-block;
+}
+
+.page-dashboard #profile fieldset
+{
+    clear: both;
+}
+
+.field-name-field-weekends .form-type-radio label,
+.field-name-field-grades .form-type-radio label
+{
+    background-color:#EEEEEE;
+    padding:5px;
+    margin:3px 20px 2px -15px;
+    display:inline-block;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    width:150px;
+    vertical-align: middle;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    transition:padding .25s, margin .25s;
+    z-index: 1;
+}
+
+.field-name-field-weekends .form-type-radio label:before,
+.field-name-field-grades .form-type-radio label:before
+{
+    content:" ";
+    position: absolute;
+    top:0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    margin: -8px;
+    border: 3px solid #999999;
+    padding:5px;
+    border-radius: 8px;
+    transition:padding .25s, margin .25s, opacity .25s;
+    z-index: -1;
+    opacity: 0;
+}
+
+.field-name-field-weekends .form-type-radio input.form-radio:checked + label,
+.field-name-field-grades .form-type-radio input.form-radio:checked + label
+{
+    background: none repeat scroll 0 0 #CCCCCC;
+    display: inline-block;
+    opacity: 1 !important;
+    padding: 10px;
+    margin:-2px 15px -3px -20px;
+    transition:padding .25s, margin .25s;
+}
+
+.field-name-field-weekends .form-type-radio input.form-radio:checked + label:before,
+.field-name-field-grades .form-type-radio input.form-radio:checked + label:before
+{
+    margin: -3px;
+    padding:0px;
+    opacity: 1;
+    transition:padding .25s, margin .25s, opacity .25s;
+}
+
+.field-name-field-weekends input,
+.field-name-field-grades input
+{
+    visibility:hidden;
+    margin:0;
+}

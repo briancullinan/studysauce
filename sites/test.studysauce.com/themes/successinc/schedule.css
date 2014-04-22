@@ -1,0 +1,509 @@
+
+.page-dashboard #plan .row,
+.page-dashboard #schedule .row,
+.page-dashboard #goals .row,
+.page-dashboard #deadlines .row
+{
+    clear: both;
+    display: block;
+    vertical-align: top;
+    position: relative;
+    white-space: nowrap;
+}
+
+.page-dashboard #plan .row > *,
+.page-dashboard #schedule .row > *,
+.page-dashboard #goals .row > *,
+.page-dashboard #deadlines .row > *
+{
+    white-space: normal;
+    vertical-align: top;
+}
+
+.page-dashboard a[href="#edit-class"] {
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    background: url(images/edit.png) no-repeat 50% 50% transparent;
+}
+
+.page-dashboard a[href="#remove-class"]
+{
+    display:inline-block;
+    height:24px;
+    width:24px;
+    background: url(images/trash.png) no-repeat 50% 50% transparent;
+}
+
+.page-dashboard #schedule .ui-resizable-handle
+{
+    display:none !important;
+}
+
+.page-dashboard #schedule .field-add-more-submit
+{
+    position: relative;
+    z-index: 0;
+    padding:10px 0;
+    text-shadow: 0 1px 2px rgba(255,255,255,.5);
+    background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+    border-bottom: 0;
+    color:#555555;
+    font-size:22px;
+    font-weight: 700;
+}
+
+.page-dashboard #schedule .field-add-more-submit:active
+{
+    /*margin-top: 2px;*/
+    box-shadow: none;
+}
+
+.page-dashboard #schedule .field-add-more-submit span
+{
+    margin: 0 10px -8px 0;
+    background: url("images/menu_icons_48.png") no-repeat scroll 0 -1728px #FFFFFF;
+    line-height: 100%;
+    border-radius: 100%;
+    display:inline-block;
+    height: 48px;
+    width: 48px;
+    position: relative;
+    z-index: 1;
+    top:-8px;
+    color:transparent;
+    float:left;
+}
+
+.page-dashboard #schedule .field-add-more-submit:active span
+{
+    border-bottom-width:1px;
+}
+
+.page-dashboard #schedule .field-name-field-class-name input.form-text
+{
+    width:100%;
+}
+
+.page-dashboard #schedule .field-name-field-class-name
+{
+    text-align:left;
+}
+
+.page-dashboard #schedule .field-name-field-class-name .form-checkboxes input
+{
+    opacity: 0;
+    visibility: hidden;
+    margin:0;
+}
+
+.page-dashboard #schedule .field-name-field-class-name .form-checkboxes label
+{
+    margin: 3px 0 0 -12px;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    vertical-align: middle;
+    cursor: pointer;
+    text-align: center;
+    opacity: 1 !important;
+    padding: 5px;
+    transition: none 0s ease 0s;
+    width: auto;
+    min-width: 30px;
+    float: none;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.page-dashboard #schedule .field-name-field-class-name .form-checkboxes input:checked + label
+{
+    background: none repeat scroll 0 0 #CCCCCC;
+    opacity: 1 !important;
+    padding: 5px;
+    transition: none 0s ease 0s;
+}
+
+.page-dashboard #schedule.edit-other-only .field-add-more-submit,
+.page-dashboard #schedule.edit-class-only .field-add-more-submit
+{
+    visibility:hidden;
+}
+
+.page-dashboard #schedule .row .field-name-field-class-name .read-only span,
+.page-dashboard #schedule .row .class-name span
+{
+    display: inline-block;
+    height: 22px;
+    width: 22px;
+    border: 3px solid #555555;
+    border-radius: 100%;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #555555;
+    line-height: 15px;
+    margin: -3px 10px 0 0;
+    vertical-align: top;
+}
+
+.page-dashboard .field-name-field-day-of-the-week .read-only span
+{
+    display: inline-block;
+    width: 14.28%;
+    margin-right: -.5em;
+    box-sizing: border-box;
+}
+
+.page-dashboard #schedule .row .read-only label,
+.page-dashboard #schedule .row.edit .form-item > label,
+.page-dashboard #schedule .row.edit .field-name-field-class-name .read-only,
+.page-dashboard #schedule .row.edit .field-name-field-day-of-the-week .read-only,
+.page-dashboard #schedule .row.edit .field-name-field-recurring .read-only,
+.page-dashboard #schedule .row.edit .field-name-field-time .read-only,
+.page-dashboard #schedule .row .field-name-field-class-name .form-type-textfield,
+.page-dashboard #schedule .row .field-name-field-day-of-the-week .form-type-checkboxes,
+.page-dashboard #schedule .row .field-name-field-recurring .form-type-checkboxes,
+.page-dashboard #schedule .row .field-name-field-time .form-type-textfield,
+.page-dashboard #schedule .row .highlighted-link a[href="#save-class"],
+.page-dashboard #schedule .row.edit .highlighted-link .read-only,
+.page-dashboard #schedule .row a[href="#cancel-class"]
+{
+    display:none;
+}
+
+.page-dashboard #schedule .row.edit a[href="#cancel-class"],
+.page-dashboard #schedule .row.edit .highlighted-link,
+.page-dashboard #schedule .row.edit .highlighted-link a[href="#save-class"]
+{
+    display: inline-block;
+}
+
+.page-dashboard #schedule .row.edit:first-child .form-item > label,
+.page-dashboard #schedule .row:first-child .read-only label,
+.page-dashboard #schedule .row.edit .field-name-field-class-name .form-type-textfield,
+.page-dashboard #schedule .row.edit .field-name-field-day-of-the-week .form-type-checkboxes,
+.page-dashboard #schedule .row.edit .field-name-field-recurring .form-type-checkboxes
+{
+    display:block;
+}
+
+.page-dashboard #schedule .row.edit .field-name-field-time .form-type-textfield
+{
+    width:24%;
+    display:inline-block;
+}
+
+.page-dashboard #schedule .row.edit:first-child a[href="#cancel-class"],
+.page-dashboard #schedule .row.edit:first-child a[href="#save-class"]
+{
+    margin-top: 22px;
+}
+
+.page-dashboard #schedule .row.edit:first-child .field-name-field-day-of-the-week .form-item > label,
+.page-dashboard #schedule .row.edit .field-name-field-day-of-the-week .form-type-checkbox > label,
+.page-dashboard #schedule .row:first-child .field-name-field-day-of-the-week label
+{
+    width:14.28%;
+    display:inline-block;
+}
+
+.page-dashboard #schedule .row .field-name-field-class-name .read-only
+{
+    padding: 5px 0;
+}
+
+
+/*
+.page-dashboard #schedule .field-name-field-class-name
+{
+    width:25%;
+    display:inline-block;
+    float:left;
+}
+
+.page-dashboard #schedule .field-name-field-day-of-the-week
+{
+    width:24%;
+    display:inline-block;
+    float:left;
+}
+
+.page-dashboard #schedule .field-name-field-time
+{
+    width:50%;
+    display:inline-block;
+    float:left;
+    position:relative;
+}
+*/
+
+.page-dashboard #schedule .form-submit,
+.page-dashboard #schedule .field-name-field-time .description,
+.page-dashboard #schedule .field-name-field-holidays .description
+{
+    display:none;
+}
+
+.page-dashboard #schedule .field-name-field-time .date-padding div input
+{
+    width:97%;
+}
+
+.page-dashboard #schedule .field-name-field-time
+{
+    width:42%;
+    display: inline-block;
+    min-width: 435px;
+    vertical-align: top;
+}
+
+.page-dashboard #schedule .field-name-field-class-name
+{
+    width: 17%;
+    min-width:200px;
+    display:inline-block;
+    vertical-align: top;
+}
+
+.page-dashboard #schedule .field-name-field-day-of-the-week
+{
+    width: 27%;
+    min-width:280px;
+    display:inline-block;
+    vertical-align: top;
+    text-align: left;
+}
+
+.page-dashboard #schedule .field-name-field-recurring
+{
+    width:120px;
+    display:inline-block;
+    vertical-align: top;
+    text-align: left;
+}
+
+.page-dashboard #schedule .edit .field-name-field-recurring
+{
+    width: 150px;
+}
+
+.page-dashboard #schedule .edit .field-name-field-day-of-the-week
+{
+/*    width:280px; */
+}
+
+.page-dashboard #schedule .field-name-field-day-of-the-week .form-checkboxes .form-item
+{
+    display: inline-block;
+    width: 14.28%;
+    margin-right: -.5em;
+}
+
+.field-name-field-recurring .form-type-checkbox label,
+.field-name-field-day-of-the-week .form-type-checkbox label,
+.field-name-field-recurring .form-type-checkbox label
+{
+    background-color:#EEEEEE;
+    padding:2px;
+    margin:3px 0 0 -12px;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    vertical-align: middle;
+    cursor: pointer;
+    width:30px;
+    text-align: center;
+    float:left;
+}
+
+.field-name-field-day-of-the-week .form-item
+{
+    white-space:normal !important;
+}
+
+.page-dashboard #schedule .field-name-field-time .read-only
+{
+    width: 49%;
+    display:inline-block;
+}
+
+.field-name-recurring input,
+.field-name-field-day-of-the-week input
+{
+    visibility:hidden;
+    margin:0;
+    float:left;
+}
+
+.page-dashboard #schedule .field-name-field-time input[type="checkbox"] + label,
+.page-dashboard #schedule .field-name-field-day-of-the-week .form-type-checkbox label,
+.page-dashboard #schedule .field-name-field-recurring .form-type-checkbox label
+{
+    margin: 3px 0 0 -12px;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    vertical-align: middle;
+    cursor: pointer;
+    width:auto;
+    text-align: center;
+    min-width:30px;
+    float:none;
+    display:inline-block;
+    height: 24px;
+    background: url('images/menu_icons_128.png') no-repeat -54px -2854px transparent;
+    z-index: 1;
+}
+
+.page-dashboard #schedule .field-name-field-day-of-the-week .form-type-checkbox label
+{
+    width:24px;
+    color:transparent;
+}
+
+.page-dashboard #schedule .field-name-field-time input[type="checkbox"]:checked + label,
+.page-dashboard #schedule .field-name-field-day-of-the-week .form-type-checkbox input.form-checkbox:checked + label,
+.page-dashboard #schedule .field-name-field-recurring .form-type-checkbox input.form-checkbox:checked + label
+{
+    background-position: -54px -2740px;
+}
+
+.page-dashboard #schedule .field-name-field-time input[type="checkbox"] + label
+{
+    margin-top:-10px;
+}
+
+.page-dashboard #schedule .field-name-field-time input[type="checkbox"],
+.page-dashboard #schedule .field-name-field-day-of-the-week input,
+.page-dashboard #schedule .field-name-field-recurring input
+{
+    visibility: hidden;
+    margin: 0;
+    float: left;
+}
+
+.page-dashboard #schedule .field-name-field-recurring .form-checkboxes label,
+.page-dashboard #schedule .field-name-field-day-of-the-week .form-checkboxes label
+{
+    display:inline-block;
+    overflow:hidden;
+}
+
+.page-dashboard #schedule .field-name-field-recurring input,
+.page-dashboard #schedule .field-name-field-day-of-the-week input
+{
+    float:none;
+}
+
+.page-dashboard #schedule .field-name-field-time .start-date-wrapper > .form-item .form-item:first-child
+{
+    position:absolute;
+    left:40%;
+}
+
+.page-dashboard #schedule .field-name-field-time .end-date-wrapper > .form-item .form-item:first-child
+{
+    position:absolute;
+    left:70%;
+    top:0;
+}
+
+.page-dashboard #schedule .field-name-field-time .end-date-wrapper > .form-item .form-item:last-child
+{
+    position:absolute;
+    left:20%;
+    top:0;
+}
+
+.page-dashboard #schedule .field-name-field-time .start-date-wrapper > .form-item .form-item:last-child
+{
+    position:absolute;
+    left:0;
+}
+
+.page-dashboard #schedule .highlighted-link
+{
+    clear: both;
+    margin-right: 0;
+    position: relative;
+    text-align: right;
+    display:inline-block;
+}
+
+
+@media all and (max-width: 1350px)
+{
+    .page-dashboard #schedule .row
+    {
+        white-space: normal;
+    }
+
+    .page-dashboard #schedule .field-name-field-class-name
+    {
+        width: 51%;
+    }
+
+    .page-dashboard #schedule .field-name-field-day-of-the-week
+    {
+        width:51%;
+    }
+
+    .page-dashboard #schedule .field-name-field-time
+    {
+        width: 51%;
+    }
+}
+
+@media all and (max-width:980px)
+{
+    .page-dashboard #deadlines .row
+    {
+        white-space: normal;
+    }
+
+    .page-dashboard #schedule .field-add-more-submit
+    {
+        clear:both;
+        margin-bottom:0;
+    }
+
+    .page-dashboard #schedule .field-name-field-class-name,
+    .page-dashboard #schedule .field-name-field-day-of-the-week,
+    .page-dashboard #schedule .field-name-field-time
+    {
+        width:auto;
+        display:block;
+        min-width:0;
+    }
+
+    .page-dashboard #schedule .field-name-field-time > div:first-child,
+    .page-dashboard #schedule .field-name-field-time > div:nth-child(2),
+    .page-dashboard #schedule .field-name-field-time > div:nth-child(3),
+    .page-dashboard #schedule .field-name-field-time > div:last-child
+    {
+        width:50%;
+    }
+
+    .page-dashboard #schedule .field-name-field-time > div:nth-child(3)
+    {
+        clear:both;
+    }
+
+    .page-dashboard #schedule .field-add-more-submit span
+    {
+        position:relative;
+        float:none;
+        top:-14px;
+        margin: 0 10px -10px 10px;
+    }
+}
+
+
+@media all and (max-width:759px)
+{
+
+    .page-dashboard #schedule .row.edit .field-name-field-time .form-type-textfield
+    {
+        width:49%;
+    }
+}
+
+

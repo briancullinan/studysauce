@@ -19,8 +19,7 @@
  */
 ?>
 <?php print $progressbar;
-global $newAwards;
-$awards = studysauce_get_awards();
+list($awards) = studysauce_get_awards();
 $submission = studysauce_render_webform_plain($node, $sid);
 ?>
 
@@ -84,12 +83,12 @@ $submission = studysauce_render_webform_plain($node, $sid);
     <div class="grid_6 retry-link">
         <?php if(!$GLOBALS['studysauce']['webform'][$node->nid]['correct']): ?>
         <a href="#retry">Retry</a>
-        <?php elseif(in_array('beginner-brain', $newAwards)): ?>
+        <?php elseif(in_array('beginner-brain', $awards)): ?>
             &nbsp;
             <script type="text/javascript">
                 jQuery(document).ready(function () {
-                    jQuery('#awards #beginner-brain').removeClass('not-awarded').addClass('awarded');
-                    jQuery('#awards').relocateAward('beginner-brain', '#tips > .pane-content')
+                    jQuery('#badges #beginner-brain').removeClass('not-awarded').addClass('awarded');
+                    jQuery('#badges').relocateAward('beginner-brain', '#tips > .pane-content')
                 });
             </script>
         <?php endif; ?>

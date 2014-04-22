@@ -2,10 +2,20 @@
 
 function _studysauce_get_metrics()
 {
-    global $checkins, $checkouts, $classes;
+    $classesNames = _studysauce_get_schedule_classes();
+    $classes = array();
+    foreach($classesNames as $eid => $c)
+    {
+        $entity = entity_load('field_collection_item', array($eid));
+        $classes[$eid] = $entity[$eid];
+    }
+
+    list($checkins, $checkouts) = studysauce_clean_checkins($classes);
+
     $hours = _studysauce_get_incentives_hours();
     if(!isset($checkins) || !is_array($checkins) || !isset($checkouts) || !is_array($checkouts))
         return array(array(), '', '0 hours', $hours);
+
     $shortTimeIntervals = array(
         'years' => 'yr',
         'year' => 'yr',
@@ -27,7 +37,7 @@ function _studysauce_get_metrics()
     $total = 0;
     foreach($checkins as $t => $c)
     {
-        list($k, $v) = each($checkouts);
+        list($k) = each($checkouts);
 
         $length = $k - $t;
         if($length <= 60)
@@ -36,7 +46,7 @@ function _studysauce_get_metrics()
         $lengthStr = _studysauce_time_elapsed_string($length);
         $rows[$t] = '
             <div class="row">
-                <div class="class-name"><span class="class' . $c . '">&nbsp;</span>' . array_values($classes)[$c] . '</div>
+                <div class="class-name"><span class="class' . $c . '">&nbsp;</span>' . array_values($classesNames)[$c] . '</div>
                 <div class="class-date"><span class="full-only">' . date('j F', $t) . '</span><span class="mobile-only">' . date('j M', $t) . '</span></div>
                 <div class="class-time"><span class="full-only">' . $lengthStr . '</span><span class="mobile-only">' . str_replace(array_keys($shortTimeIntervals), array_values($shortTimeIntervals), $lengthStr) . '</span></div>
             </div>
@@ -46,6 +56,7 @@ function _studysauce_get_metrics()
         $date = new DateTime();
         $date->setTimestamp($t);
         $date->setTime(0, 0, 0);
+        $date = $date->add( new DateInterval('P1D') );
         $g = $date->format('W');
         if(!isset($timeGroups[$g][$c][0]))
         {
@@ -61,13 +72,13 @@ function _studysauce_get_metrics()
             'time' => $t,
             'length' => $length,
             'length0' => $length0,
-            'class' => array_values($classes)[$c]);
+            'class' => array_values($classesNames)[$c]);
 
         $total += $length;
     }
     krsort($rows);
     $rowsOutput = '';
-    foreach($rows as $t => $row)
+    foreach($rows as $row)
         $rowsOutput .= $row;
 
     $total = round($total / 3600, 1);

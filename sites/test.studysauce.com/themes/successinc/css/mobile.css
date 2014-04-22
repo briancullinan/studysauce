@@ -112,16 +112,6 @@ div.landing-position
     padding:0 !important;
 }
 
-.page-dashboard .header
-{
-    background:url(../images/menu_icons_64.png) no-repeat right -1734px;
-}
-
-.page-dashboard.menu-open .header
-{
-    background-position:right -1798px;
-}
-
 .page .take-the-tour, #page .take-the-tour
 {
     left:0 !important;
@@ -204,79 +194,9 @@ div.landing-position
     margin-top:0 !important;
 }
 
-.page-dashboard #site-slogan {
-    display:none;
-}
-
 #header .grid_5
 {
     margin:0;
-}
-
-#site-name img
-{
-    float:left;
-    width:40px !important;
-}
-
-.page-dashboard #main-menu ul
-{
-    padding-top: 50px !important;
-    left:0;
-    width:100%;
-    display:none !important;
-}
-
-.page-dashboard.menu-open #main-menu ul
-{
-    display:block !important;
-}
-
-.page-dashboard.admin-menu #main-menu ul
-{
-    padding-top: 79px !important;
-}
-
-.page-dashboard #main-menu li
-{
-    display:inline-block;
-    width:16.66% !important;
-    float:left;
-    text-align: center !important;
-    height: 62px;
-    padding: 0px !important;
-}
-
-.page-dashboard.parent #main-menu li
-{
-    width:25% !important;
-}
-
-.page-dashboard.student #main-menu li.parents_only
-{
-    display:none;
-}
-
-.page-dashboard.parent #main-menu li.students_only
-{
-    display:none;
-}
-
-.page-dashboard #main-menu a
-{
-    padding:0 !important;
-    font-size: 11px !important;
-}
-
-.page-dashboard #main-menu a.skrollable-between
-{
-    margin:0 !important;
-}
-
-.page-dashboard #main-menu span
-{
-    width:auto !important;
-    display:block !important;
 }
 
 .page-dashboard #home .highlighted-link .more
@@ -288,135 +208,6 @@ div.landing-position
     clear: right;
     text-align: left;
     margin-left: 0 !important;
-}
-
-.page-dashboard #main-menu a[href="#home"] span
-{
-    background-position: 50% -530px !important;
-}
-
-.page-dashboard #main-menu a[href="#awards"] span
-{
-    background-position: 50% -530px !important;
-    /*background-position: 50% -1684px !important;*/
-}
-
-.page-dashboard #main-menu a[href="#checkin"] span
-{
-    background-position: 50% 0 !important;
-}
-
-.page-dashboard #main-menu a[href="#incentives"] span
-{
-    background-position: 50% -50px !important;
-}
-
-.page-dashboard #main-menu a[href="#plan"] span
-{
-    background-position: 50% -93px !important;
-}
-
-.page-dashboard #main-menu a[href="#tips"] span
-{
-    background-position: 50% -150px !important;
-}
-
-.page-dashboard #main-menu a[href="#metrics"] span
-{
-    background-position: 50% -200px !important;
-}
-
-.page-dashboard #main-menu a[href="#dates"] span
-{
-    background-position: 50% -246px !important;
-}
-
-@media all and (max-width: 480px)
-{
-    .page-dashboard #main-menu a
-    {
-        height:60px;
-        overflow:hidden;
-        margin-bottom:22px;
-    }
-
-    .page-dashboard #main-menu span
-    {
-        background: url(../images/menu_icons_32.png) no-repeat top left !important;
-        height:32px !important;
-        margin:5px 0 0 !important;
-    }
-
-    .page-dashboard #main-menu a[href="#home"] span
-    {
-        background-position: 50% -350px !important;
-    }
-
-    .page-dashboard #main-menu a[href="#awards"] span
-    {
-        background-position: 50% -350px !important;
-        /*background-position: 50% -1118px !important;*/
-    }
-
-    .page-dashboard #main-menu a[href="#checkin"] span
-    {
-        background-position: 50% 1px !important;
-    }
-
-    .page-dashboard #main-menu a[href="#incentives"] span
-    {
-        background-position: 50% -30px !important;
-    }
-
-    .page-dashboard #main-menu a[href="#plan"] span
-    {
-        background-position: 50% -61px !important;
-    }
-
-    .page-dashboard #main-menu a[href="#tips"] span
-    {
-        background-position: 50% -98px !important;
-    }
-
-    .page-dashboard #main-menu a[href="#metrics"] span
-    {
-        background-position: 50% -132px !important;
-    }
-
-    .page-dashboard #main-menu a[href="#dates"] span
-    {
-        background-position: 50% -162px !important;
-    }
-
-    .page-dashboard .header
-    {
-        background:url(../images/menu_icons_48.png) no-repeat right -1300px;
-    }
-
-    .page-dashboard.menu-open .header
-    {
-        background-position:right -1348px;
-    }
-
-    #site-name a
-    {
-        font-size:28px !important;
-    }
-
-    #site-name img
-    {
-        width: 30px !important;
-    }
-
-    .page-dashboard #main-menu ul
-    {
-        padding-top: 38px !important;
-    }
-
-    .page-dashboard.admin-menu #main-menu ul
-    {
-        padding-top: 69px !important;
-    }
 }
 
 #webform-component-parents-first-name,
@@ -542,7 +333,7 @@ body.page-node-landing .content > .highlighted-link
 .page-dashboard .page .panel-pane
 {
     margin-left:0 !important;
-    padding-top: 60px !important;
+    padding-top: 80px !important;
 }
 
 /*
@@ -560,12 +351,6 @@ body.page-node-landing .content > .highlighted-link
 .page-dashboard .header .panels-flexible-region-inside
 {
     padding:0 !important;
-}
-
-.page-dashboard #site-name a
-{
-    display:block;
-    width:100%;
 }
 
 .flip-clock-wrapper ul li a div div.inn

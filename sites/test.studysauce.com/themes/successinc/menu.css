@@ -1,0 +1,398 @@
+
+.page-dashboard.admin-menu #main-menu,
+.page-dashboard #main-menu
+{
+    margin-left:0;
+    padding-top:0;
+}
+
+.page-dashboard #main-menu .pane-content
+{
+    min-height: 0;
+    border:0;
+    padding:0;
+}
+
+.page-dashboard #main-menu ul
+{
+    position:fixed;
+    list-style: none none;
+    margin: 115px 0 0;
+    padding: 0;
+    top:0;
+    z-index: 99;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 500px;
+}
+
+.page-dashboard #main-menu li
+{
+    margin: 0;
+    padding:0;
+    width:200px;
+    text-align: left;
+}
+
+.page-dashboard #main-menu li.like-us a
+{
+    background:none;
+}
+
+.page-dashboard #main-menu li.highlighted-link
+{
+    display:none;
+}
+
+.page-dashboard.plan-only #home,
+.page-dashboard.metrics-only #home,
+.page-dashboard.checkin-only #home,
+.page-dashboard.deadlines-only #home,
+.page-dashboard.badges-only #home,
+.page-dashboard.goals-only #home,
+.page-dashboard.account-only #home,
+.page-dashboard.schedule-only #home,
+.page-dashboard.profile-only #home,
+.page-dashboard.tips-only #home,
+.page-dashboard.invite-only #home,
+.page-dashboard.partner-only #home,
+.page-dashboard.terms-only #home,
+.page-dashboard.privacy-only #home,
+.page-dashboard.about-us-only #home,
+.page-dashboard.contact-only #home,
+.page-dashboard.refund-only #home
+{
+    display:none;
+}
+
+.page-dashboard #home,
+.page-dashboard.plan-only #plan,
+.page-dashboard.metrics-only #metrics,
+.page-dashboard.checkin-only #checkin,
+.page-dashboard.deadlines-only #deadlines,
+.page-dashboard.badges-only #badges,
+.page-dashboard.goals-only #goals,
+.page-dashboard.account-only #account,
+.page-dashboard.profile-only #profile,
+.page-dashboard.schedule-only #schedule,
+.page-dashboard.tips-only #tips,
+.page-dashboard.invite-only #invite,
+.page-dashboard.partner-only #partner,
+
+.page-dashboard.awards-only #badges,
+.page-dashboard #checkin.checklist-only #checklist,
+.page-dashboard #plan.checklist-only #checklist,
+.page-dashboard #metrics.empty #metrics-empty,
+.page-dashboard #checkin.mozart-only #mozart-effect,
+.page-dashboard #checkin.empty #empty-schedule,
+.page-dashboard #deadlines.empty #empty-dates,
+.page-dashboard .study-quiz-only #study-quiz,
+.page-dashboard #goals.invite-sent-only #invite-sent,
+.page-dashboard #checkin.sds-message-only #sds-messages,
+.page-dashboard #plan.sds-message-only #sds-messages,
+.page-dashboard .new-award-only #new-award,
+.page-dashboard #home.welcome-only #welcome,
+.page-dashboard.terms-only .page #terms,
+.page-dashboard.about-us-only .page #about-us,
+.page-dashboard.contact-only .page #contact,
+.page-dashboard.privacy-only .page #privacy,
+.page-dashboard.refund-only .page #refund,
+.page-dashboard.user-profile-only #user-profile,
+.page-dashboard #goals.achievement-only .group-achievement,
+.page-dashboard #checkin.timer-expire-only #timer-expire,
+.page-dashboard #plan.timer-expire-only #timer-expire,
+.page-dashboard #deadlines.class-names-only .field-name-field-class-names
+{
+    display:block;
+}
+
+.page-dashboard #checkin.timer-expire-only #checklist,
+.page-dashboard #checkin.sds-message-only .new-award-only #sds-messages,
+.page-dashboard #checkin.timer-expire-only #sds-messages
+.page-dashboard #plan.timer-expire-only #checklist,
+.page-dashboard #plan.sds-message-only .new-award-only #sds-messages,
+.page-dashboard #plan.timer-expire-only #sds-messages
+{
+    display:none;
+}
+
+.page-dashboard #main-menu a.skrollable-after,
+.page-dashboard #main-menu a
+{
+    display:block;
+    font-size: 18px;
+    z-index: 99;
+    position:relative;
+    background-color:#555555;
+    padding:10px 0 10px 5px;
+    color:#DDDDDD;
+    position:relative;
+}
+
+.page-dashboard #main-menu span
+{
+    background: url(images/menu_icons_48.png) no-repeat top left;
+    padding: 0;
+    display:inline-block;
+    overflow:hidden;
+    vertical-align: middle;
+    height:40px;
+    width:60px;
+}
+
+.page-dashboard #main-menu a.skrollable-between
+{
+    z-index:100;
+    padding-left:0;
+    border-left:5px solid #FF9900;
+    font-weight: bold;
+}
+
+.page-dashboard #main-menu a:hover
+{
+    z-index:200;
+    background-color:#FF9900;
+    transition:background-color .5s;
+}
+
+.page-dashboard #main-menu a[href="#home"] span
+{
+    background-position: 50% -530px;
+}
+
+.page-dashboard #main-menu a[href="#environment"] span
+{
+    background-position: 50% 0;
+}
+
+.page-dashboard #main-menu a[href="#time"] span
+{
+    background-position: 50% -93px;
+}
+
+.page-dashboard #main-menu a[href="#strategies"] span
+{
+    background-position: 50% -147px;
+}
+
+.page-dashboard #main-menu a[href="#settings"] span
+{
+    background-position: 50% -1920px;
+}
+
+.page-dashboard #main-menu a[href="#premium"] span
+{
+    background-position: 50% -197px;
+}
+
+.page-dashboard #main-menu ul ul
+{
+    position:static;
+    padding:0;
+    margin:0;
+    float:none;
+    max-height:0;
+    transition-property: max-height;
+    transition: all 1s ease-in-out;
+    overflow: hidden;
+}
+
+.page-dashboard #main-menu ul ul a.skrollable-between
+{
+    padding:10px 0 10px 65px;
+}
+
+.page-dashboard #main-menu ul ul li a
+{
+    padding-left:70px;
+    font-size: 16px;
+}
+
+.page-dashboard #main-menu ul ul li:first-child a
+{
+    margin-top:-10px;
+}
+
+.page-dashboard #main-menu a.selected + ul
+{
+    overflow: visible;
+    max-height:500px;
+    transition-property: max-height;
+    transition: all 1s ease-in-out;
+}
+
+@media all and (max-width: 759px) {
+
+    .page-dashboard #main-menu ul ul li:first-child a
+    {
+        margin-top:0;
+    }
+
+    .page-dashboard #main-menu ul
+    {
+        left:0;
+        width:100%;
+        display:none;
+        margin-top:50px;
+        overflow: visible;
+    }
+
+    .page-dashboard.menu-open #main-menu ul
+    {
+        display:block;
+    }
+
+    .page-dashboard.admin-menu #main-menu ul
+    {
+        padding-top: 0;
+        margin-top:79px;
+    }
+
+    .page-dashboard.admin-menu #main-menu ul ul,
+    .page-dashboard #main-menu ul ul
+    {
+        margin-top: 0;
+        width: 600%;
+        margin-left: -100%;
+    }
+
+    .page-dashboard #main-menu ul li:nth-child(3) ul
+    {
+        margin-left: -200%;
+    }
+
+    .page-dashboard #main-menu ul li:nth-child(3) ul li
+    {
+        width:33.3%;
+    }
+
+    .page-dashboard #main-menu ul li:nth-child(2) ul li
+    {
+        width:25%;
+    }
+
+    .page-dashboard #main-menu ul li:nth-child(4) ul
+    {
+        margin-left: -300%;
+    }
+
+    .page-dashboard #main-menu ul li:nth-child(4) ul li
+    {
+        width:20%;
+    }
+
+    .page-dashboard #main-menu ul li:nth-child(6) ul
+    {
+        margin-left: -500%;
+    }
+
+    .page-dashboard #main-menu ul li:nth-child(6) ul li
+    {
+        width:50%;
+    }
+
+    .page-dashboard #main-menu li
+    {
+        display:inline-block;
+        width:16.66%;
+        float:left;
+        text-align: center;
+        height: 62px;
+        padding: 0;
+    }
+
+    .page-dashboard.parent #main-menu li
+    {
+        width:25% !important;
+    }
+
+    .page-dashboard.student #main-menu li.parents_only
+    {
+        display:none;
+    }
+
+    .page-dashboard.parent #main-menu li.students_only
+    {
+        display:none;
+    }
+
+    .page-dashboard #main-menu a
+    {
+        padding:0 !important;
+        font-size: 11px !important;
+    }
+
+    .page-dashboard #main-menu a.skrollable-between
+    {
+        margin:0 !important;
+    }
+
+    .page-dashboard #main-menu span
+    {
+        width:auto !important;
+        display:block !important;
+    }
+
+}
+
+
+@media all and (max-width: 480px)
+{
+    .page-dashboard #main-menu a
+    {
+        overflow:hidden;
+    }
+
+    .page-dashboard #main-menu span
+    {
+        background: url(images/menu_icons_32.png) no-repeat top left;
+        height:32px;
+        margin:5px 0 0;
+    }
+
+    .page-dashboard #main-menu a[href="#home"] span
+    {
+        background-position: 50% -353px;
+    }
+
+    .page-dashboard #main-menu a[href="#environment"] span
+    {
+        background-position: 50% 0;
+    }
+
+    .page-dashboard #main-menu a[href="#time"] span
+    {
+        background-position: 50% -62px;
+    }
+
+    .page-dashboard #main-menu a[href="#strategies"] span
+    {
+        background-position: 50% -98px;
+    }
+
+    .page-dashboard #main-menu a[href="#settings"] span
+    {
+        background-position: 50% -1280px;
+    }
+
+    .page-dashboard #main-menu a[href="#premium"] span
+    {
+        background-position: 50% -131px;
+    }
+
+    .page-dashboard #main-menu ul
+    {
+        margin-top: 41px;
+    }
+
+    .page-dashboard.admin-menu #main-menu ul
+    {
+        margin-top: 70px;
+    }
+
+    .page-dashboard.admin-menu #main-menu ul ul,
+    .page-dashboard #main-menu ul ul
+    {
+        margin-top:0;
+    }
+}

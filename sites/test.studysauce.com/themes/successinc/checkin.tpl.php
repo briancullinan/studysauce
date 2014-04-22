@@ -1,7 +1,7 @@
 <div id="timer-expire">
     <div>
         <h2>Another session is in the books</h2>
-        <p>You have completed another session, congrats.  <a href="#awards">Have some fun with your study efforts and try to unlock all of our study badges <span>here</span>.</a></p>
+        <p>You have completed another session, congrats.  <a href="#badges">Have some fun with your study efforts and try to unlock all of our study badges <span>here</span>.</a></p>
         <p style="margin-bottom:0;" class="highlighted-link checkboxes"><a class="more" style="margin-bottom:0;" href="#break">Ok</a></p>
         <a href="#break" class="fancy-close">&nbsp;</a>
     </div>
@@ -80,7 +80,7 @@
             <p>The Boy Scouts' motto rings true for studying too.  Try to gather all the materials needed for your study session before you start to focus.  Interrupting your session to search for things will drag down your productivity.  Another helpful tool is to be clear about what you need to accomplish in the study session.  That will keep you focused on the task at hand during your session.</p>
         </div>
         <p style="margin-bottom:0;" class="highlighted-link checkboxes"><a style="margin-bottom:0;" class="more" href="#study">Continue to session</a></p>
-        <a href="#" onclick="jQuery('#checkin').removeClass('sds-message-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
+        <a href="#" onclick="jQuery('#checkin,#plan').removeClass('sds-message-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
     </div>
     <?php
     $newSDS = studysauce_get_sds_messages();
@@ -115,14 +115,13 @@
             <li>Get ready to study for 1 hour, then you can take a short break</li>
         </ol>
         <p class="highlighted-link checkboxes"><a class="more" href="#study">Continue to session</a></p>
-        <a href="#" onclick="jQuery('#checklist input').prop('checked', false); jQuery('#checkin').removeClass('checklist-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
+        <a href="#" onclick="jQuery('#checklist input').prop('checked', false); jQuery('#checkin,#plan').removeClass('checklist-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
     </div>
 </div>
 <div id="empty-schedule">
-    <a href="#edit-schedule"><h2>Click here to set up your class schedule and get started.</h2><small>Then checkin whenever you study using the Check in tab.</small></a>
+    <a href="#schedule"><h2>Click here to set up your class schedule and get started.</h2><small>Then checkin whenever you study using the Check in tab.</small></a>
 </div>
 <?php
-global $classes;
 $classes = _studysauce_get_schedule_classes();
 if(empty($classes)):
     ?>
@@ -137,380 +136,379 @@ if(empty($classes)):
 <?php endif; ?>
 <h2>Check in.  Listen to Mozart.  Track your progress.</h2>
 <div class="grid_6 flip-counter clock flip-clock-wrapper">
-<h3>Time remaining for this study session</h3>
-<ul class="flip">
-    <li data-digit="0"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">0</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">0</div>
-            </div>
-        </a></li>
-    <li data-digit="1"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">1</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">1</div>
-            </div>
-        </a></li>
-    <li data-digit="2"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">2</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">2</div>
-            </div>
-        </a></li>
-    <li data-digit="3"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">3</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">3</div>
-            </div>
-        </a></li>
-    <li data-digit="4"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">4</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">4</div>
-            </div>
-        </a></li>
-    <li data-digit="5"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">5</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">5</div>
-            </div>
-        </a></li>
-    <li data-digit="6"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">6</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">6</div>
-            </div>
-        </a></li>
-    <li data-digit="7"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">7</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">7</div>
-            </div>
-        </a></li>
-    <li data-digit="8"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">8</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">8</div>
-            </div>
-        </a></li>
-    <li data-digit="9"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">9</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">9</div>
-            </div>
-        </a></li>
-</ul>
-<ul class="flip">
-    <li data-digit="0"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">0</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">0</div>
-            </div>
-        </a></li>
-    <li data-digit="1"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">1</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">1</div>
-            </div>
-        </a></li>
-    <li data-digit="2"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">2</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">2</div>
-            </div>
-        </a></li>
-    <li data-digit="3"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">3</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">3</div>
-            </div>
-        </a></li>
-    <li data-digit="4"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">4</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">4</div>
-            </div>
-        </a></li>
-    <li data-digit="5"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">5</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">5</div>
-            </div>
-        </a></li>
-    <li data-digit="6"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">6</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">6</div>
-            </div>
-        </a></li>
-    <li data-digit="7"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">7</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">7</div>
-            </div>
-        </a></li>
-    <li data-digit="8"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">8</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">8</div>
-            </div>
-        </a></li>
-    <li data-digit="9"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">9</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">9</div>
-            </div>
-        </a></li>
-</ul>
-<span class="flip-clock-divider minutes"><span class="flip-clock-dot top"></span><span class="flip-clock-dot bottom"></span></span>
-<ul class="flip">
-    <li data-digit="0"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">0</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">0</div>
-            </div>
-        </a></li>
-    <li data-digit="1"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">1</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">1</div>
-            </div>
-        </a></li>
-    <li data-digit="2"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">2</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">2</div>
-            </div>
-        </a></li>
-    <li data-digit="3"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">3</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">3</div>
-            </div>
-        </a></li>
-    <li data-digit="4"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">4</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">4</div>
-            </div>
-        </a></li>
-    <li data-digit="5"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">5</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">5</div>
-            </div>
-        </a></li>
-</ul>
-<ul class="flip">
-    <li data-digit="0"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">0</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">0</div>
-            </div>
-        </a></li>
-    <li data-digit="1"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">1</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">1</div>
-            </div>
-        </a></li>
-    <li data-digit="2"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">2</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">2</div>
-            </div>
-        </a></li>
-    <li data-digit="3"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">3</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">3</div>
-            </div>
-        </a></li>
-    <li data-digit="4"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">4</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">4</div>
-            </div>
-        </a></li>
-    <li data-digit="5"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">5</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">5</div>
-            </div>
-        </a></li>
-    <li data-digit="6"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">6</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">6</div>
-            </div>
-        </a></li>
-    <li data-digit="7"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">7</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">7</div>
-            </div>
-        </a></li>
-    <li data-digit="8"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">8</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">8</div>
-            </div>
-        </a></li>
-    <li data-digit="9"><a href="#">
-            <div class="up">
-                <div class="shadow"></div>
-                <div class="inn">9</div>
-            </div>
-            <div class="down">
-                <div class="shadow"></div>
-                <div class="inn">9</div>
-            </div>
-        </a></li>
-</ul>
+    <h3>Take a 10 minute break in 1 hour</h3>
+    <ul class="flip">
+        <li data-digit="0"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">0</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">0</div>
+                </div>
+            </a></li>
+        <li data-digit="1"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">1</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">1</div>
+                </div>
+            </a></li>
+        <li data-digit="2"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">2</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">2</div>
+                </div>
+            </a></li>
+        <li data-digit="3"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">3</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">3</div>
+                </div>
+            </a></li>
+        <li data-digit="4"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">4</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">4</div>
+                </div>
+            </a></li>
+        <li data-digit="5"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">5</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">5</div>
+                </div>
+            </a></li>
+        <li data-digit="6"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">6</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">6</div>
+                </div>
+            </a></li>
+        <li data-digit="7"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">7</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">7</div>
+                </div>
+            </a></li>
+        <li data-digit="8"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">8</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">8</div>
+                </div>
+            </a></li>
+        <li data-digit="9"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">9</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">9</div>
+                </div>
+            </a></li>
+    </ul>
+    <ul class="flip">
+        <li data-digit="0"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">0</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">0</div>
+                </div>
+            </a></li>
+        <li data-digit="1"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">1</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">1</div>
+                </div>
+            </a></li>
+        <li data-digit="2"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">2</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">2</div>
+                </div>
+            </a></li>
+        <li data-digit="3"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">3</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">3</div>
+                </div>
+            </a></li>
+        <li data-digit="4"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">4</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">4</div>
+                </div>
+            </a></li>
+        <li data-digit="5"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">5</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">5</div>
+                </div>
+            </a></li>
+        <li data-digit="6"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">6</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">6</div>
+                </div>
+            </a></li>
+        <li data-digit="7"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">7</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">7</div>
+                </div>
+            </a></li>
+        <li data-digit="8"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">8</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">8</div>
+                </div>
+            </a></li>
+        <li data-digit="9"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">9</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">9</div>
+                </div>
+            </a></li>
+    </ul>
+    <span class="flip-clock-divider minutes"><span class="flip-clock-dot top"></span><span class="flip-clock-dot bottom"></span></span>
+    <ul class="flip">
+        <li data-digit="0"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">0</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">0</div>
+                </div>
+            </a></li>
+        <li data-digit="1"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">1</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">1</div>
+                </div>
+            </a></li>
+        <li data-digit="2"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">2</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">2</div>
+                </div>
+            </a></li>
+        <li data-digit="3"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">3</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">3</div>
+                </div>
+            </a></li>
+        <li data-digit="4"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">4</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">4</div>
+                </div>
+            </a></li>
+        <li data-digit="5"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">5</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">5</div>
+                </div>
+            </a></li>
+    </ul>
+    <ul class="flip">
+        <li data-digit="0"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">0</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">0</div>
+                </div>
+            </a></li>
+        <li data-digit="1"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">1</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">1</div>
+                </div>
+            </a></li>
+        <li data-digit="2"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">2</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">2</div>
+                </div>
+            </a></li>
+        <li data-digit="3"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">3</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">3</div>
+                </div>
+            </a></li>
+        <li data-digit="4"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">4</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">4</div>
+                </div>
+            </a></li>
+        <li data-digit="5"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">5</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">5</div>
+                </div>
+            </a></li>
+        <li data-digit="6"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">6</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">6</div>
+                </div>
+            </a></li>
+        <li data-digit="7"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">7</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">7</div>
+                </div>
+            </a></li>
+        <li data-digit="8"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">8</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">8</div>
+                </div>
+            </a></li>
+        <li data-digit="9"><a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">9</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">9</div>
+                </div>
+            </a></li>
+    </ul>
+    <?php print views_embed_view('music_player', 'block_1'); ?>
 
-<?php print views_embed_view('music_player', 'block_1'); ?>
-
-<h4 style="text-align:center;"><a href="#" onclick="jQuery('#checkin').addClass('mozart-only').scrollintoview(); return false;" style="color:#0099be;">The Mozart Effect&reg;</a></h4>
+    <h4 style="text-align:center;"><a href="#" onclick="jQuery('#checkin').addClass('mozart-only').scrollintoview(); return false;" style="color:#0099be;">The Mozart Effect&reg;</a></h4>
 </div>
 <div id="mozart-effect">
     <div>
@@ -530,7 +528,7 @@ if(empty($classes)):
         $classI = 0;
         foreach($classes as $eid => $class)
         {
-            print '<a id="class' . $eid . '" href="#class' . $classI . '" class="class' . $classI . '"><span>&nbsp;</span>' . $class . '</a>';
+            print '<a href="#class' . $classI . '" class="class' . $classI . ' eid' . $eid . '"><span>&nbsp;</span>' . $class . '</a>';
             $classI++;
         }
     else: ?>
@@ -545,4 +543,4 @@ if(empty($classes)):
         <a href="#class8" class="class8"><span>&nbsp;</span>Hist 136</a>
     <? endif; ?>
 </p>
-<p style="clear: both;margin:30px 0 0 0;"><a href="#edit-schedule"><span>Edit schedule</span></a></p>
+<p style="clear: both;margin:30px 0 0 0;"><a href="#schedule"><span>Edit schedule</span></a></p>

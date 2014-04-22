@@ -130,6 +130,14 @@ body {
   width: 700px;
 }
 
+.page-dashboard .container_12,
+.page-dashboard .container_12 .grid_12
+{
+    width: auto;
+    display: block;
+    float: none;
+}
+
 /* `Prefix Extra Space >> 12 Columns
 ----------------------------------------------------------------------------------------------------*/
 

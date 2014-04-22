@@ -1,19 +1,35 @@
 
 jQuery(document).ready(function($) {
 
-    $('#dates').on('click', '.row .field-name-field-assignment .read-only', function () {
+    var deadlines = $('#deadlines');
+    deadlines.on('click', '.row .field-name-field-assignment .read-only', function () {
         jQuery(this).parents('.row').toggleClass('selected');
     });
 
-    $('#dates').on('change', '.field-name-field-class-name select, .field-name-field-reminder input, .field-name-field-due-date input', function () {
+    deadlines.on('change', '.field-name-field-class-name select, .field-name-field-reminder input, .field-name-field-due-date input', function () {
         jQuery(this).parents('.row').datesFunc();
     });
 
-    $('#dates').on('keyup', '.field-name-field-assignment input', function () {
+    deadlines.on('change', '.field-name-field-class-name select', function () {
+        var that = jQuery(this);
+        if(that.val() == 'Nonacademic')
+            that.parents('.row').find('.field-name-field-percent').hide();
+        else
+            that.parents('.row').find('.field-name-field-percent').show();
+    });
+
+    deadlines.on('click', 'a[href="#cancel-dates"]', function (evt) {
+        evt.preventDefault();
+        deadlines.removeClass('edit-date-only').scrollintoview();
+        deadlines.find('.field-add-more-submit').show();
+        jQuery(this).parents('.row').removeClass('edit');
+    });
+
+    deadlines.on('keyup', '.field-name-field-assignment input', function () {
         jQuery(this).parents('.row').datesFunc();
     });
 
-    $('#dates').on('click', 'a[href="#remove-reminder"]', function (evt) {
+    deadlines.on('click', 'a[href="#remove-reminder"]', function (evt) {
         evt.preventDefault();
         var row = jQuery(this).parents('.row');
         $.ajax({
@@ -24,14 +40,14 @@ jQuery(document).ready(function($) {
                        remove: row.attr('id').substr(0, 4) == 'eid-' ? row.attr('id').substring(4) : null
                    },
                    success: function (data) {
-                       jQuery('#dates button + .row ~ .row, #dates button + .row ~ .head').remove();
+                       deadlines.find('button + .row ~ .row, button + .row ~ .head').remove();
                        jQuery(data.reminders).find('button + .row ~ .row, button + .row ~ .head')
-                           .insertBefore(jQuery('#dates .pane-content p').last());
+                           .insertBefore(deadlines.find('.pane-content p').last());
                    }
                });
     });
 
-    $('#dates').on('click', 'a[href="#save-dates"]', function (evt) {
+    deadlines.on('click', 'a[href="#save-dates"]', function (evt) {
         evt.preventDefault();
         if(!jQuery(this).parents('.row').is('.invalid'))
         {
@@ -61,14 +77,20 @@ jQuery(document).ready(function($) {
                            }
 
                            // update key dates list
-                           jQuery('#dates button + .row ~ .row, #dates button + .row ~ .head').remove();
+                           jQuery('#deadlines button + .row ~ .row, #deadlines button + .row ~ .head').remove();
                            jQuery(data.reminders).find('button + .row ~ .row, button + .row ~ .head')
-                               .insertBefore(jQuery('#dates .pane-content p').last());
+                               .insertBefore(deadlines.find('.pane-content p').last());
 
-                           // update tabs
-                           jQuery('#dates').removeClass('edit-date-only');
+                           // update plan tab
+                           var plan = jQuery('#plan');
+                           plan.find('.row, .head').remove();
+                           jQuery(data.plan).find('.row, .head')
+                               .insertBefore(plan.find('.pane-content p').last());
+
+                           // update deadline view state
+                           deadlines.removeClass('edit-date-only');
                            row.removeClass('edit').datesFunc();
-                           jQuery('#dates .field-add-more-submit').show();
+                           deadlines.find('.field-add-more-submit').show();
                            if(jQuery(window).width() <= 759)
                                row.scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
                        }
@@ -76,10 +98,10 @@ jQuery(document).ready(function($) {
         }
     });
 
-    $('#dates').on('click', 'a[href="#edit-reminder"]', function (evt) {
+    deadlines.on('click', 'a[href="#edit-reminder"]', function (evt) {
         evt.preventDefault();
         jQuery(this).parents('.row').addClass('edit').scrollintoview().datesFunc();
-        jQuery('#dates').addClass('edit-date-only');
+        jQuery('#deadlines').addClass('edit-date-only');
     });
 
     $.fn.datesFunc = function () {
@@ -121,7 +143,7 @@ jQuery(document).ready(function($) {
         });
 
         // don't need to limit submit because it goes back to edit mode if invalid
-        /*jQuery('#dates input[value="Save"]').each(function () {
+        /*jQuery('#deadlines input[value="Save"]').each(function () {
          var that = jQuery(this),
          id = that.attr('id');
          that.unbind(Drupal.ajax[id].event);
@@ -132,6 +154,6 @@ jQuery(document).ready(function($) {
          });*/
     };
 
-    jQuery('#dates .row').datesFunc();
+    deadlines.find('.row').datesFunc();
 });
 

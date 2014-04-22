@@ -1,32 +1,32 @@
 
-.page-dashboard #incentives #parent-sponsored .grid_8.connected
+.page-dashboard #goals #parent-sponsored .grid_8.connected
 {
     width:auto;
     text-align: center;
     display:block;
 }
 
-.page-dashboard #incentives #parent-sponsored h4,
-.page-dashboard #incentives .big-arrow
+.page-dashboard #goals #parent-sponsored h4,
+.page-dashboard #goals .big-arrow
 {
     clear:both;
     padding-right:128px;
     position:relative;
 }
 
-.page-dashboard #incentives .big-arrow p
+.page-dashboard #goals .big-arrow p
 {
     position:relative;
 }
 
-.page-dashboard #incentives .row
+.page-dashboard #goals .row
 {
     clear:both;
     padding:5px 0 0 0;
 }
 
-.page-dashboard #incentives #parent-sponsored .not-connected-only h4:after,
-.page-dashboard #incentives .big-arrow p:after
+.page-dashboard #goals #parent-sponsored .not-connected-only h4:after,
+.page-dashboard #goals .big-arrow p:after
 {
     display:block;
     content: " ";
@@ -46,18 +46,18 @@
     background-position:0 -910px;
 }
 
-.page-dashboard #incentives .big-arrow p:after
+.page-dashboard #goals .big-arrow p:after
 {
     right:-138px;
 }
 
-.page-dashboard #incentives .transferred
+.page-dashboard #goals .transferred
 {
     border:2px solid #007700;
     border-radius: 5px;
 }
 
-.page-dashboard #incentives .field-name-field-type
+.page-dashboard #goals .field-name-field-type
 {
     background:url("images/menu_icons_48.png") no-repeat scroll rgba(0, 0, 0, 0);
     background-position:10px -576px;
@@ -72,31 +72,31 @@
     margin-top:0;
 }
 
-.page-dashboard #incentives tr:nth-child(2) .field-name-field-type
+.page-dashboard #goals tr:nth-child(2) .field-name-field-type
 {
     background-position:10px -624px;
 }
 
-.page-dashboard #incentives tr:nth-child(3) .field-name-field-type
+.page-dashboard #goals tr:nth-child(3) .field-name-field-type
 {
     background-position:10px -672px;
 }
 
-.page-dashboard #incentives .vertical-tabs,
-.page-dashboard #incentives .grippie,
+.page-dashboard #goals .vertical-tabs,
+.page-dashboard #goals .grippie,
 #fancybox-content .grippie
 {
     display:none !important;
 }
 
-.page-dashboard #incentives .mobile-only
+.page-dashboard #goals .mobile-only
 {
     display:none;
 }
 
 /*
-.page-dashboard #incentives .field-name-field-type label,
-.page-dashboard #incentives .field-name-field-grade label
+.page-dashboard #goals .field-name-field-type label,
+.page-dashboard #goals .field-name-field-grade label
 {
     margin:0;
     padding:0;
@@ -109,21 +109,21 @@
     transition:opacity 0.3s, height 0.3s, font-size 0.3s, line-height 0.3s, margin 0.3s, padding 0.3s, border-width 0.3s;
 }
 
-.page-dashboard #incentives .field-name-field-type .form-type-radio,
-.page-dashboard #incentives .field-name-field-grade .form-type-radio
+.page-dashboard #goals .field-name-field-type .form-type-radio,
+.page-dashboard #goals .field-name-field-grade .form-type-radio
 {
     line-height:0;
     font-size: 1px;
 }
 
-.page-dashboard #incentives .field-name-field-type,
-.page-dashboard #incentives .field-name-field-grade
+.page-dashboard #goals .field-name-field-type,
+.page-dashboard #goals .field-name-field-grade
 {
     overflow:hidden;
     transition:height 0.3s;
 }
 
-.page-dashboard #incentives .field-name-field-grade:hover label
+.page-dashboard #goals .field-name-field-grade:hover label
 {
     margin:5px;
     padding:5px;
@@ -135,71 +135,71 @@
     transition:opacity 0.3s, height 0.3s, font-size 0.3s, line-height 0.3s, margin 0.3s, padding 0.3s, border-width 0.3s;
 }
 
-.page-dashboard #incentives .field-name-field-grade:hover
+.page-dashboard #goals .field-name-field-grade:hover
 {
     height:200px;
     transition:height 0.3s;
 }
 
-.page-dashboard #incentives .field-name-field-type:hover .form-type-radio,
-.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio
+.page-dashboard #goals .field-name-field-type:hover .form-type-radio,
+.page-dashboard #goals .field-name-field-grade:hover .form-type-radio
 {
     display: block;
 }
 
-.page-dashboard #incentives .field-name-field-grade:hover .form-radios
+.page-dashboard #goals .field-name-field-grade:hover .form-radios
 {
     min-width: 100%;
 }
 */
 
-.page-dashboard #incentives .field-name-field-type,
-.page-dashboard #incentives .field-name-field-hours,
-.page-dashboard #incentives .field-name-field-gpa,
-.page-dashboard #incentives .field-name-field-grade,
-.page-dashboard #incentives .field-name-field-reward,
-.page-dashboard #incentives .row .form-actions
+.page-dashboard #goals .field-name-field-type,
+.page-dashboard #goals .field-name-field-hours,
+.page-dashboard #goals .field-name-field-gpa,
+.page-dashboard #goals .field-name-field-grade,
+.page-dashboard #goals .field-name-field-reward,
+.page-dashboard #goals .row .form-actions
 {
     display:inline-block;
     vertical-align: top;
 }
 
-.page-dashboard #incentives .group-achievement .form-actions
+.page-dashboard #goals .group-achievement .form-actions
 {
     margin-top: 1em;
     display: block;
     clear:both;
 }
 
-.page-dashboard #incentives .field-name-field-hours,
-.page-dashboard #incentives .field-name-field-gpa,
-.page-dashboard #incentives .field-name-field-grade,
-.page-dashboard #incentives .field-name-field-reward
+.page-dashboard #goals .field-name-field-hours,
+.page-dashboard #goals .field-name-field-gpa,
+.page-dashboard #goals .field-name-field-grade,
+.page-dashboard #goals .field-name-field-reward
 {
     margin:0;
     width:27%;
 }
 
-.page-dashboard #incentives .field-name-field-type,
-.page-dashboard #incentives .field-name-field-grade,
-.page-dashboard #incentives .field-name-field-hours,
-.page-dashboard #incentives .field-name-field-gpa,
-.page-dashboard #incentives .field-name-field-other,
-.page-dashboard #incentives .field-name-field-reward
+.page-dashboard #goals .field-name-field-type,
+.page-dashboard #goals .field-name-field-grade,
+.page-dashboard #goals .field-name-field-hours,
+.page-dashboard #goals .field-name-field-gpa,
+.page-dashboard #goals .field-name-field-other,
+.page-dashboard #goals .field-name-field-reward
 {
     padding-top:12px;
 }
 
-.page-dashboard #incentives .field-name-field-hours label,
-.page-dashboard #incentives .field-name-field-grade label,
-.page-dashboard #incentives .field-name-field-gpa label,
-.page-dashboard #incentives .field-name-field-reward label,
+.page-dashboard #goals .field-name-field-hours label,
+.page-dashboard #goals .field-name-field-grade label,
+.page-dashboard #goals .field-name-field-gpa label,
+.page-dashboard #goals .field-name-field-reward label,
 .page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-hours label,
 .page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-grade label,
 .page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-gpa label,
 .page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-reward label,
 .page-dashboard.parent .sponsored #parent-sponsored,
-.page-dashboard #incentives .field-name-field-read-only
+.page-dashboard #goals .field-name-field-read-only
 {
     display:none;
 }
@@ -228,23 +228,23 @@
     margin-top:34px;
 }
 
-.page-dashboard #incentives .field-name-field-other textarea,
-.page-dashboard #incentives .field-name-field-reward textarea
+.page-dashboard #goals .field-name-field-other textarea,
+.page-dashboard #goals .field-name-field-reward textarea
 {
     height:60px;
 }
 
-.page-dashboard #incentives .field-name-field-gpa .form-text
+.page-dashboard #goals .field-name-field-gpa .form-text
 {
     max-width:50px;
 }
 
-.page-dashboard #incentives .field-name-field-reward textarea
+.page-dashboard #goals .field-name-field-reward textarea
 {
 }
 
-.page-dashboard #incentives .form-checkboxes label,
-.page-dashboard #incentives .form-radios label
+.page-dashboard #goals .form-checkboxes label,
+.page-dashboard #goals .form-radios label
 {
     background: #EEEEEE;
     font-weight: bold;
@@ -254,28 +254,28 @@
     cursor: pointer;
 }
 
-.page-dashboard #incentives  .field-name-field-grade .form-radios label:hover
+.page-dashboard #goals  .field-name-field-grade .form-radios label:hover
 {
     background: #DDDDDD;
     border-bottom:3px solid #BBBBBB;
 }
 
 #checklist input,
-.page-dashboard #incentives input.form-checkbox,
-.page-dashboard #incentives input.form-radio
+.page-dashboard #goals input.form-checkbox,
+.page-dashboard #goals input.form-radio
 {
     visibility:hidden;
 }
 
-.page-dashboard #incentives .field-name-field-reward-codes,
-.page-dashboard #incentives .field-name-field-invite
+.page-dashboard #goals .field-name-field-reward-codes,
+.page-dashboard #goals .field-name-field-invite
 {
     display:none;
 }
 
 
-.page-dashboard #incentives input.form-checkbox:checked + label,
-.page-dashboard #incentives input.form-radio:checked + label
+.page-dashboard #goals input.form-checkbox:checked + label,
+.page-dashboard #goals input.form-radio:checked + label
 {
     margin:5px;
     padding:5px;
@@ -287,7 +287,7 @@
     transition:none;
 }
 
-.page-dashboard #incentives .field-name-field-goals strong
+.page-dashboard #goals .field-name-field-goals strong
 {
     font-size:18px;
     font-weight:bold;
@@ -295,13 +295,13 @@
     background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
 }
 
-.page-dashboard #incentives .field-name-field-grade input.form-radio:checked + label
+.page-dashboard #goals .field-name-field-grade input.form-radio:checked + label
 {
     background: #CCCCCC;
     border-bottom:3px solid #AAAAAA;
 }
 
-.page-dashboard #incentives .field-name-field-grade .form-radios label:active
+.page-dashboard #goals .field-name-field-grade .form-radios label:active
 {
     margin-top:7px !important;
     border-bottom-width:1px !important;
@@ -309,57 +309,57 @@
     transition:none;
 }
 
-.page-dashboard #incentives .field-name-field-grade .form-radios
+.page-dashboard #goals .field-name-field-grade .form-radios
 {
     float:left;
 }
 
-.page-dashboard #incentives .form-radios,
-.page-dashboard #incentives .description
+.page-dashboard #goals .form-radios,
+.page-dashboard #goals .description
 {
     display:inline;
 }
 
-.page-dashboard #incentives .description span:last-child
+.page-dashboard #goals .description span:last-child
 {
     display:none;
 }
 
-.page-dashboard #incentives tr.odd .form-item,
-.page-dashboard #incentives tr.even .form-item
+.page-dashboard #goals tr.odd .form-item,
+.page-dashboard #goals tr.even .form-item
 {
     white-space: normal;
 }
 
 
-.page-dashboard #incentives table td,
-.page-dashboard #incentives table th
+.page-dashboard #goals table td,
+.page-dashboard #goals table th
 {
     padding:5px;
 }
 
-.page-dashboard #incentives .field-name-field-grade .form-type-radio
+.page-dashboard #goals .field-name-field-grade .form-type-radio
 {
     width:15%;
     min-width: 50px;
 }
 
-.page-dashboard #incentives .field-name-field-grade .form-type-radio label
+.page-dashboard #goals .field-name-field-grade .form-type-radio label
 {
     text-align: center;
 }
 
-.page-dashboard #incentives .field-name-field-grade .form-type-radio:first-child
+.page-dashboard #goals .field-name-field-grade .form-type-radio:first-child
 {
     display:none;
 }
 
-.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(5),
-.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(6),
-.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(7),
-.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(8),
-.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(9),
-.page-dashboard #incentives .field-name-field-grade .form-type-radio:nth-child(10)
+.page-dashboard #goals .field-name-field-grade .form-type-radio:nth-child(5),
+.page-dashboard #goals .field-name-field-grade .form-type-radio:nth-child(6),
+.page-dashboard #goals .field-name-field-grade .form-type-radio:nth-child(7),
+.page-dashboard #goals .field-name-field-grade .form-type-radio:nth-child(8),
+.page-dashboard #goals .field-name-field-grade .form-type-radio:nth-child(9),
+.page-dashboard #goals .field-name-field-grade .form-type-radio:nth-child(10)
 {
     position:relative;
     left:0;
@@ -367,106 +367,106 @@
     transition:left 0.3s linear, margin-top 0.3s cubic-bezier(0.25,0.1,0.25,1);
 }
 
-.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(5)
+.page-dashboard #goals .field-name-field-grade:hover .form-type-radio:nth-child(5)
 {
     margin-top:-135px;
     left:30%;
     transition:left 0.3s linear, margin-top 0.3s cubic-bezier(0.25,0.1,0.25,1);
 }
 
-.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(6),
-.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(7)
+.page-dashboard #goals .field-name-field-grade:hover .form-type-radio:nth-child(6),
+.page-dashboard #goals .field-name-field-grade:hover .form-type-radio:nth-child(7)
 {
     left:30%;
     transition:left 0.3s linear;
 }
 
-.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(8)
+.page-dashboard #goals .field-name-field-grade:hover .form-type-radio:nth-child(8)
 {
     margin-top:-135px;
     left:60%;
     transition:left 0.3s linear, margin-top 0.3s cubic-bezier(0.25,0.1,0.25,1);
 }
 
-.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(9),
-.page-dashboard #incentives .field-name-field-grade:hover .form-type-radio:nth-child(10)
+.page-dashboard #goals .field-name-field-grade:hover .form-type-radio:nth-child(9),
+.page-dashboard #goals .field-name-field-grade:hover .form-type-radio:nth-child(10)
 {
     left:60%;
     transition:left 0.3s linear;
 }
 
-.page-dashboard #incentives #invite-sent a
+.page-dashboard #goals #invite-sent a
 {
     display:block;
     text-align: center;
 }
 
-.page-dashboard #incentives .step_1 .field-add-more-submit,
-.page-dashboard #incentives .student_step_1,
-.page-dashboard #incentives .student_step_2,
-.page-dashboard #incentives .student_step_3,
-.page-dashboard.student #incentives .parents_only.student_step_1,
-.page-dashboard.student #incentives .parents_only.student_step_2,
-.page-dashboard.student #incentives .parents_only.student_step_3,
-.page-dashboard.parent #incentives .students_only.student_step_1,
-.page-dashboard.parent #incentives .students_only.student_step_2,
-.page-dashboard.parent #incentives .students_only.student_step_3
+.page-dashboard #goals .step_1 .field-add-more-submit,
+.page-dashboard #goals .student_step_1,
+.page-dashboard #goals .student_step_2,
+.page-dashboard #goals .student_step_3,
+.page-dashboard.student #goals .parents_only.student_step_1,
+.page-dashboard.student #goals .parents_only.student_step_2,
+.page-dashboard.student #goals .parents_only.student_step_3,
+.page-dashboard.parent #goals .students_only.student_step_1,
+.page-dashboard.parent #goals .students_only.student_step_2,
+.page-dashboard.parent #goals .students_only.student_step_3
 {
     display:none;
 }
 
-.page-dashboard #incentives .step_1 .student_step_1,
-.page-dashboard #incentives .step_2 .student_step_2,
-.page-dashboard #incentives .step_3 .student_step_3,
-.page-dashboard.student #incentives .step_1 .students_only.student_step_1,
-.page-dashboard.student #incentives .step_2 .students_only.student_step_2,
-.page-dashboard.student #incentives .step_3 .students_only.student_step_3,
-.page-dashboard.parent #incentives .step_1 .parents_only.student_step_1,
-.page-dashboard.parent #incentives .step_2 .parents_only.student_step_2,
-.page-dashboard.parent #incentives .step_3 .parents_only.student_step_3
+.page-dashboard #goals .step_1 .student_step_1,
+.page-dashboard #goals .step_2 .student_step_2,
+.page-dashboard #goals .step_3 .student_step_3,
+.page-dashboard.student #goals .step_1 .students_only.student_step_1,
+.page-dashboard.student #goals .step_2 .students_only.student_step_2,
+.page-dashboard.student #goals .step_3 .students_only.student_step_3,
+.page-dashboard.parent #goals .step_1 .parents_only.student_step_1,
+.page-dashboard.parent #goals .step_2 .parents_only.student_step_2,
+.page-dashboard.parent #goals .step_3 .parents_only.student_step_3
 {
     display:block;
     clear:both;
 }
 
-/*.page-dashboard.student #incentives .step_1 .field-name-field-reward,
-.page-dashboard.student #incentives .step_2 .field-name-field-reward*/
-.page-dashboard #incentives .step_2 .form-actions
+/*.page-dashboard.student #goals .step_1 .field-name-field-reward,
+.page-dashboard.student #goals .step_2 .field-name-field-reward*/
+.page-dashboard #goals .step_2 .form-actions
 {
     display:none;
 }
 
-.page-dashboard #incentives #parent-sponsored .grid_8
+.page-dashboard #goals #parent-sponsored .grid_8
 {
     width:600px;
 }
 
-.page-dashboard.parent #incentives .sponsored #non-sponsored .field-name-field-type,
-.page-dashboard.student #incentives .sponsored #parent-sponsored .field-name-field-type
+.page-dashboard.parent #goals .sponsored #non-sponsored .field-name-field-type,
+.page-dashboard.student #goals .sponsored #parent-sponsored .field-name-field-type
 {
     background-image:url(images/menu_icons_64.png);
     background-position: 0 -1866px;
 }
 
-.page-dashboard.parent #incentives .sponsored #non-sponsored tr:nth-child(2) .field-name-field-type,
-.page-dashboard.student #incentives .sponsored #parent-sponsored tr:nth-child(2) .field-name-field-type
+.page-dashboard.parent #goals .sponsored #non-sponsored tr:nth-child(2) .field-name-field-type,
+.page-dashboard.student #goals .sponsored #parent-sponsored tr:nth-child(2) .field-name-field-type
 {
     background-position: 0 -1930px;
 }
 
-.page-dashboard.parent #incentives .sponsored #non-sponsored tr:nth-child(3) .field-name-field-type,
-.page-dashboard.student #incentives .sponsored #parent-sponsored tr:nth-child(3) .field-name-field-type
+.page-dashboard.parent #goals .sponsored #non-sponsored tr:nth-child(3) .field-name-field-type,
+.page-dashboard.student #goals .sponsored #parent-sponsored tr:nth-child(3) .field-name-field-type
 {
     background-position: 0 -1994px;
 }
 
-.page-dashboard #incentives #parent-sponsored p
+.page-dashboard #goals #parent-sponsored p
 {
     margin:0;
     line-height: 1px;
 }
 
-.page-dashboard #incentives #parent-sponsored h4
+.page-dashboard #goals #parent-sponsored h4
 {
     font-size:24px;
     color:#FFFFFF;
@@ -475,7 +475,7 @@
 }
 
 /*
-.page-dashboard.student #incentives .step_1 .field-name-field-goals
+.page-dashboard.student #goals .step_1 .field-name-field-goals
 {
     text-align: center;
     margin:0 auto -60px;
@@ -491,24 +491,24 @@
     margin-bottom:-25px;
 }
 
-.page-dashboard.parent #incentives #non-sponsored .field-name-field-goals
+.page-dashboard.parent #goals #non-sponsored .field-name-field-goals
 {
     margin:0 auto;
 }
 
-.page-dashboard #incentives select
+.page-dashboard #goals select
 {
     margin:0px;
 }
 
-.page-dashboard #incentives #invite .form-actions,
-.page-dashboard #incentives .form-actions
+.page-dashboard #goals #invite .form-actions,
+.page-dashboard #goals .form-actions
 {
     margin:1em 0 0 1em;
     text-align: right;
 }
 
-.page-dashboard #incentives #invite .form-actions
+.page-dashboard #goals #invite .form-actions
 {
     float:right;
 }
@@ -518,7 +518,7 @@
     margin:1em 0 0 1em;
 }
 
-.page-dashboard #incentives .goal-status
+.page-dashboard #goals .goal-status
 {
     text-align: center;
     margin: 0;
@@ -529,7 +529,7 @@
     white-space: nowrap;
 }
 
-.page-dashboard #incentives .goal-status strong
+.page-dashboard #goals .goal-status strong
 {
     font-size:72px;
     display:block;
@@ -537,7 +537,7 @@
     color:#0099BE;
 }
 
-.page-dashboard #incentives .site-name
+.page-dashboard #goals .site-name
 {
     font-size:24px;
     padding:12px 0px 12px 80px;
@@ -550,23 +550,23 @@
     white-space: nowrap;
 }
 
-.page-dashboard #incentives #student_step_1 .grid_6
+.page-dashboard #goals #student_step_1 .grid_6
 {
     text-align: center;
 }
 
-.page-dashboard #incentives #student_step_1 h3
+.page-dashboard #goals #student_step_1 h3
 {
     font-size: 32px;
     text-align: center;
 }
 
-.page-dashboard #incentives #student_step_1 h3 span,
-.page-dashboard #incentives #student_step_1 h3 img
+.page-dashboard #goals #student_step_1 h3 span,
+.page-dashboard #goals #student_step_1 h3 img
 {
 }
 
-.page-dashboard #incentives #student_step_1 p
+.page-dashboard #goals #student_step_1 p
 {
     text-align: justify;
     margin:0;
@@ -583,19 +583,19 @@
     margin-bottom:50px;
 }
 
-.page-dashboard.parent #incentives h3
+.page-dashboard.parent #goals h3
 {
     float:none;
     max-width: none;
     margin:15px 0 10px;
 }
 
-.page-dashboard #incentives #achievements .grid_6
+.page-dashboard #goals #achievements .grid_6
 {
     width:420px !important;
 }
 
-.page-dashboard #incentives #read-more-incentives
+.page-dashboard #goals #read-more-incentives
 {
     display:none;
 }
@@ -623,6 +623,13 @@
     border-top:0;
 }
 
+.plup-list
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
 .plup-list li
 {
     padding:0;
@@ -638,6 +645,31 @@
     background:none;
 }
 
+#partner-plupload .plup-list li,
+.group-achievement .plup-list li
+{
+    display:none;
+}
+
+#partner-plupload .plup-list li:last-child,
+.group-achievement .plup-list li:last-child
+{
+    display:block;
+}
+
+#partner-plupload .plup-thumb-wrapper,
+.group-achievement .plup-thumb-wrapper
+{
+    text-align: center;
+}
+
+#partner-plupload .plup-thumb-wrapper img,
+.group-achievement .plup-thumb-wrapper img
+{
+    margin:0 auto;
+}
+
+#partner-plupload .plup-select,
 .group-achievement .plup-select
 {
     position:absolute;
@@ -650,17 +682,26 @@
     font-size: 0;
 }
 
+#partner-plupload .plup-select
+{
+    top:-50px;
+    padding-top:50px;
+}
+
 body.file-drag .group-achievement .plup-filelist
 {
     z-index: 2000;
 }
 
+#partner-plupload .plup-remove-file,
+#partner-plupload .plup-remove-item,
 .group-achievement .plup-remove-file,
 .group-achievement .plup-remove-item
 {
     z-index: 100;
 }
 
+#partner-plupload .drag-main,
 .group-achievement .drag-main
 {
     position:absolute;
@@ -670,9 +711,20 @@ body.file-drag .group-achievement .plup-filelist
     padding:0;
     margin-top:-10px;
     color:#333333;
-    text-shadow: 0px 1px 4px rgba(255,255,255,1);
+    text-shadow: 0 1px 4px rgba(255,255,255,1);
+    text-align: center;
 }
 
+#partner-plupload .drag-main
+{
+    top:-50px;
+}
+
+#partner-plupload .drag-more,
+#partner-plupload .plup-filelist-size,
+#partner-plupload .plup-filelist-message,
+#partner-plupload .plup-filelist-remove,
+#partner-plupload .plup-select div,
 .group-achievement .drag-more,
 .group-achievement .plup-filelist-size,
 .group-achievement .plup-filelist-message,
@@ -681,17 +733,22 @@ body.file-drag .group-achievement .plup-filelist
 {
     display:none;
 }
+
+#partner-plupload .plup-bar .plup-upload,
 .group-achievement .plup-bar .plup-upload
 {
     display:none !important;
 }
 
+#partner-plupload .plupload,
+#partner-plupload .plupload-container,
 .group-achievement .plupload,
 .group-achievement .plupload-container
 {
     min-height:200px;
 }
 
+#partner-plupload .plup-filelist-file,
 .group-achievement .plup-filelist-file
 {
     text-overflow: ellipsis;
@@ -699,6 +756,8 @@ body.file-drag .group-achievement .plup-filelist
     overflow: hidden;
 }
 
+#partner-plupload .plup-filelist,
+#partner-plupload .plupload.html5,
 .group-achievement .plup-filelist,
 .group-achievement .plupload.html5
 {
@@ -708,7 +767,6 @@ body.file-drag .group-achievement .plup-filelist
     left:0 !important;
     position:absolute !important;
     background:none;
-    overflow: hidden;
     max-height: none !important;
 }
 
@@ -786,47 +844,48 @@ body.file-drag .group-achievement .plup-filelist
     margin:4px;
 }
 
-.page-dashboard #incentives .step_1 .read-only,
-.page-dashboard #incentives .step_2 .edit .read-only,
-.page-dashboard #incentives .step_3 .edit .read-only,
-.page-dashboard #incentives .step_2 .field-name-field-grade .form-item,
-.page-dashboard #incentives .step_3 .field-name-field-grade .form-item,
-.page-dashboard #incentives .step_2 .field-name-field-gpa .form-item,
-.page-dashboard #incentives .step_3 .field-name-field-gpa .form-item,
-.page-dashboard #incentives .step_2 .field-name-field-hours .form-item,
-.page-dashboard #incentives .step_3 .field-name-field-hours .form-item,
-.page-dashboard #incentives .step_2 .field-name-field-reward .form-item,
-.page-dashboard #incentives .step_3 .field-name-field-reward .form-item,
-.page-dashboard #incentives #parent-sponsored .form-actions .form-submit,
-.page-dashboard #incentives #non-sponsored .form-actions .form-submit,
-.page-dashboard #incentives .row .fancy-close
+.page-dashboard #goals .step_1 .read-only,
+.page-dashboard #goals .step_2 .edit .read-only,
+.page-dashboard #goals .step_3 .edit .read-only,
+.page-dashboard #goals .step_2 .field-name-field-grade .form-item,
+.page-dashboard #goals .step_3 .field-name-field-grade .form-item,
+.page-dashboard #goals .step_2 .field-name-field-gpa .form-item,
+.page-dashboard #goals .step_3 .field-name-field-gpa .form-item,
+.page-dashboard #goals .step_2 .field-name-field-hours .form-item,
+.page-dashboard #goals .step_3 .field-name-field-hours .form-item,
+.page-dashboard #goals .step_2 .field-name-field-reward .form-item,
+.page-dashboard #goals .step_3 .field-name-field-reward .form-item,
+.page-dashboard #goals #parent-sponsored .form-actions .form-submit,
+.page-dashboard #goals .row .highlighted-link a[href="#save-incentive"],
+.page-dashboard #goals .row a[href="#cancel-incentive"]
 {
     display:none;
 }
 
-.page-dashboard #incentives .step_2 .edit .field-name-field-grade .form-item,
-.page-dashboard #incentives .step_3 .edit .field-name-field-grade .form-item,
-.page-dashboard #incentives .step_2 .edit .field-name-field-gpa .form-item,
-.page-dashboard #incentives .step_3 .edit .field-name-field-gpa .form-item,
-.page-dashboard #incentives .step_2 .edit .field-name-field-hours .form-item,
-.page-dashboard #incentives .step_3 .edit .field-name-field-hours .form-item,
-.page-dashboard #incentives .step_2 .edit .field-name-field-reward .form-item,
-.page-dashboard #incentives .step_3 .edit .field-name-field-reward .form-item,
-.page-dashboard #incentives .step_1 td .form-actions .form-submit,
-.page-dashboard #incentives #parent-sponsored .edit .form-actions .form-submit,
-.page-dashboard #incentives #non-sponsored .edit .form-actions .form-submit,
-.page-dashboard #incentives .row.edit .fancy-close
+.page-dashboard #goals .row .highlighted-link,
+.page-dashboard #goals .step_2 .edit .field-name-field-grade .form-item,
+.page-dashboard #goals .step_3 .edit .field-name-field-grade .form-item,
+.page-dashboard #goals .step_2 .edit .field-name-field-gpa .form-item,
+.page-dashboard #goals .step_3 .edit .field-name-field-gpa .form-item,
+.page-dashboard #goals .step_2 .edit .field-name-field-hours .form-item,
+.page-dashboard #goals .step_3 .edit .field-name-field-hours .form-item,
+.page-dashboard #goals .step_2 .edit .field-name-field-reward .form-item,
+.page-dashboard #goals .step_3 .edit .field-name-field-reward .form-item,
+.page-dashboard #goals .step_1 td .form-actions .form-submit,
+.page-dashboard #goals #parent-sponsored .edit .form-actions .form-submit,
+.page-dashboard #goals .row.edit .highlighted-link a[href="#save-incentive"],
+.page-dashboard #goals .row.edit a[href="#cancel-incentive"]
 {
     display:inline-block;
 }
 
-.page-dashboard #incentives .row.unsaved .fancy-close
+.page-dashboard #goals .row.unsaved .fancy-close
 {
     display:none;
 }
 
-.page-dashboard #incentives .step_2 .read-only a,
-.page-dashboard #incentives .step_3 .read-only a
+.page-dashboard #goals .step_2 .read-only a,
+.page-dashboard #goals .step_3 .read-only a
 {
     display:inline-block;
     height:24px;
@@ -863,40 +922,9 @@ body.file-drag .group-achievement .plup-filelist
     margin:40px 10px;
 }
 
-.page-dashboard #webform-ajax-wrapper-250,
-.page-dashboard #webform-ajax-wrapper-157
-{
-    max-width: 600px;
-    font-size: 20px;
-}
-
-.page-dashboard #parent-sponsored .webform-client-form-250,
-.page-dashboard #parent-sponsored .webform-client-form-157
-{
-    margin:0;
-    border: 1px solid #000000;
-    box-shadow: 0 0 10px #000000;
-    background: url("images/noise.png") repeat scroll 0 0 #0D0D0D;
-    width:170px;
-}
-
-.page-dashboard #parent-sponsored .webform-component--student-first-name,
-.page-dashboard #parent-sponsored .webform-component--parent-first-name
-{
-    padding-right:1%;
-}
-
-.page-dashboard #parent-sponsored .grid_4,
-.page-dashboard #parent-sponsored #webform-ajax-wrapper-250 > h2,
-.page-dashboard #parent-sponsored #webform-ajax-wrapper-157 > h2,
-.page-dashboard #parent-sponsored #webform-ajax-wrapper-157 p
-{
-    display:none;
-}
-
 @media all and (min-width: 1250px)
 {
-    .page-dashboard #incentives .grid_6
+    .page-dashboard #goals .grid_6
     {
         width:380px;
         margin:0 10px;
@@ -906,24 +934,24 @@ body.file-drag .group-achievement .plup-filelist
 
 @media all and (max-width:1250px)
 {
-    .page-dashboard #incentives .field-name-field-hours,
-    .page-dashboard #incentives .field-name-field-gpa,
-    .page-dashboard #incentives .field-name-field-grade,
-    .page-dashboard #incentives .field-name-field-reward
+    .page-dashboard #goals .field-name-field-hours,
+    .page-dashboard #goals .field-name-field-gpa,
+    .page-dashboard #goals .field-name-field-grade,
+    .page-dashboard #goals .field-name-field-reward
     {
         margin:0;
         width:31%;
     }
 
     .page-dashboard.student .sponsored #parent-sponsored tr:first-child .form-actions,
-    .page-dashboard #incentives .field-name-field-goals tr .form-actions
+    .page-dashboard #goals .field-name-field-goals tr .form-actions
     {
         display:block;
         margin-top:1em;
         margin-left: 0;
     }
 
-    .page-dashboard #incentives #parent-sponsored .grid_8
+    .page-dashboard #goals #parent-sponsored .grid_8
     {
         width: 320px;
     }
@@ -941,7 +969,7 @@ body.file-drag .group-achievement .plup-filelist
         margin-left:70px;
     }
 
-    .page-dashboard.parent #incentives #non-sponsored .field-name-field-goals
+    .page-dashboard.parent #goals #non-sponsored .field-name-field-goals
     {
         margin:0 auto;
     }
@@ -949,19 +977,19 @@ body.file-drag .group-achievement .plup-filelist
 
 @media all and (min-width: 980px) and (max-width: 1250px)
 {
-    .page-dashboard #incentives #parent-sponsored .not-connected-only h4,
-    .page-dashboard #incentives .big-arrow
+    .page-dashboard #goals #parent-sponsored .not-connected-only h4,
+    .page-dashboard #goals .big-arrow
     {
         padding-right:0;
     }
 
-    .page-dashboard #incentives #parent-sponsored .not-connected-only h4:after,
-    .page-dashboard #incentives .big-arrow p:after
+    .page-dashboard #goals #parent-sponsored .not-connected-only h4:after,
+    .page-dashboard #goals .big-arrow p:after
     {
         display:none;
     }
 
-    .page-dashboard #incentives .grid_6
+    .page-dashboard #goals .grid_6
     {
         display:block !important;
     }
@@ -971,40 +999,40 @@ body.file-drag .group-achievement .plup-filelist
 {
 
 
-    .page-dashboard #incentives .row
+    .page-dashboard #goals .row
     {
         padding:40px 0 0 0;
     }
 
-    .page-dashboard #incentives .row:nth-child(2)
+    .page-dashboard #goals .row:nth-child(2)
     {
         padding:20px 0 0 0;
     }
 
-    .page-dashboard #incentives .form-item .description span:first-child
+    .page-dashboard #goals .form-item .description span:first-child
     {
         display:none;
     }
 
-    .page-dashboard #incentives .full-only
+    .page-dashboard #goals .full-only
     {
         display:none;
     }
 
-    .page-dashboard #incentives .mobile-only
+    .page-dashboard #goals .mobile-only
     {
         display:block;
         margin-top:0;
         margin-bottom:12px;
     }
 
-    .page-dashboard #incentives .form-item .description span:last-child
+    .page-dashboard #goals .form-item .description span:last-child
     {
         display:inline;
     }
 
-    .page-dashboard #incentives #invite .form-actions,
-    .page-dashboard #incentives .form-actions
+    .page-dashboard #goals #invite .form-actions,
+    .page-dashboard #goals .form-actions
     {
         float:none;
         text-align: center;
@@ -1019,66 +1047,66 @@ body.file-drag .group-achievement .plup-filelist
         margin-top:12px;
     }
 
-    .page-dashboard #incentives select
+    .page-dashboard #goals select
     {
         margin:0 5px;
     }
 
-    .page-dashboard #incentives #read-more-incentives
+    .page-dashboard #goals #read-more-incentives
     {
         display:block;
         text-align: center;
         margin-top:20px;
     }
 
-    .page-dashboard #incentives #read-more-incentives h3
+    .page-dashboard #goals #read-more-incentives h3
     {
         text-align: center;
     }
 
-    .page-dashboard #incentives #student_step_1 .grid_6,
-    .page-dashboard #incentives #read-more-incentives .grid_6
+    .page-dashboard #goals #student_step_1 .grid_6,
+    .page-dashboard #goals #read-more-incentives .grid_6
     {
         display:none;
     }
 
-    .page-dashboard #incentives #read-more-incentives .grid_6 h3,
-    .page-dashboard #incentives #read-more-incentives .grid_6 img
+    .page-dashboard #goals #read-more-incentives .grid_6 h3,
+    .page-dashboard #goals #read-more-incentives .grid_6 img
     {
         display:none;
     }
 
-    .page-dashboard #incentives #read-more-incentives .grid_6 p
+    .page-dashboard #goals #read-more-incentives .grid_6 p
     {
         text-align: left;
     }
 
-    .page-dashboard #incentives #parent-sponsored .grid_8
+    .page-dashboard #goals #parent-sponsored .grid_8
     {
         width: 200px;
     }
 
-    .page-dashboard.student #incentives .step_1 .field-name-field-goals
+    .page-dashboard.student #goals .step_1 .field-name-field-goals
     {
         width: auto;
         margin-bottom:0;
     }
 
-    .page-dashboard #incentives #parent-sponsored .grid_8
+    .page-dashboard #goals #parent-sponsored .grid_8
     {
         width: 200px;
         display:inline-block;
         float:left;
     }
 
-    .page-dashboard #incentives #parent-sponsored .grid_4
+    .page-dashboard #goals #parent-sponsored .grid_4
     {
         margin: 0 auto;
         text-align: center;
         width: 200px;
     }
 
-    .page-dashboard #incentives #parent-sponsored h4
+    .page-dashboard #goals #parent-sponsored h4
     {
         margin:20px 0;
     }
@@ -1090,14 +1118,14 @@ body.file-drag .group-achievement .plup-filelist
         text-align: left;
     }
 
-    .page-dashboard #incentives #parent-sponsored h4,
-    .page-dashboard #incentives .big-arrow
+    .page-dashboard #goals #parent-sponsored h4,
+    .page-dashboard #goals .big-arrow
     {
         padding-right:0;
     }
 
-    .page-dashboard #incentives #parent-sponsored .not-connected-only h4:after,
-    .page-dashboard #incentives .big-arrow p:after
+    .page-dashboard #goals #parent-sponsored .not-connected-only h4:after,
+    .page-dashboard #goals .big-arrow p:after
     {
         display:none;
     }
@@ -1105,26 +1133,26 @@ body.file-drag .group-achievement .plup-filelist
 
 @media all and (max-width: 980px)
 {
-    .page-dashboard #incentives #achievements .grid_6
+    .page-dashboard #goals #achievements .grid_6
     {
         width:auto;
     }
 
-    .page-dashboard.parent #incentives .sponsored #non-sponsored .field-name-field-type,
-    .page-dashboard.student #incentives .sponsored #parent-sponsored .field-name-field-type
+    .page-dashboard.parent #goals .sponsored #non-sponsored .field-name-field-type,
+    .page-dashboard.student #goals .sponsored #parent-sponsored .field-name-field-type
     {
         background-image:url(images/menu_icons_128.png);
         background-position: 50% -3712px;
     }
 
-    .page-dashboard.parent #incentives .sponsored #non-sponsored tr:nth-child(2) .field-name-field-type,
-    .page-dashboard.student #incentives .sponsored #parent-sponsored tr:nth-child(2) .field-name-field-type
+    .page-dashboard.parent #goals .sponsored #non-sponsored tr:nth-child(2) .field-name-field-type,
+    .page-dashboard.student #goals .sponsored #parent-sponsored tr:nth-child(2) .field-name-field-type
     {
         background-position: 50% -3840px;
     }
 
-    .page-dashboard.parent #incentives .sponsored #non-sponsored tr:nth-child(3) .field-name-field-type,
-    .page-dashboard.student #incentives .sponsored #parent-sponsored tr:nth-child(3) .field-name-field-type
+    .page-dashboard.parent #goals .sponsored #non-sponsored tr:nth-child(3) .field-name-field-type,
+    .page-dashboard.student #goals .sponsored #parent-sponsored tr:nth-child(3) .field-name-field-type
     {
         background-position: 50% -3968px;
     }
@@ -1138,7 +1166,7 @@ body.file-drag .group-achievement .plup-filelist
         margin:0 20px !important
     }
 
-    .page-dashboard #incentives .field-name-field-type
+    .page-dashboard #goals .field-name-field-type
     {
         background: url("images/menu_icons_64.png") no-repeat scroll transparent;
         text-align: center;
@@ -1154,7 +1182,7 @@ body.file-drag .group-achievement .plup-filelist
         margin-top:0;
     }
 
-    .page-dashboard #incentives .field-name-field-type strong
+    .page-dashboard #goals .field-name-field-type strong
     {
         font-size: 28px;
         display: inline-block;
@@ -1162,12 +1190,12 @@ body.file-drag .group-achievement .plup-filelist
         height: 32px;
     }
 
-    .page-dashboard #incentives tr:nth-child(2) .field-name-field-type
+    .page-dashboard #goals tr:nth-child(2) .field-name-field-type
     {
         background-position:50% -800px;
     }
 
-    .page-dashboard #incentives tr:nth-child(3) .field-name-field-type
+    .page-dashboard #goals tr:nth-child(3) .field-name-field-type
     {
         background-position:50% -864px;
     }
@@ -1177,7 +1205,7 @@ body.file-drag .group-achievement .plup-filelist
         text-align: justify !important;
     }
 
-    .page-dashboard #incentives #student_step_1 p
+    .page-dashboard #goals #student_step_1 p
     {
         text-align: left !important;
     }
@@ -1188,25 +1216,25 @@ body.file-drag .group-achievement .plup-filelist
         clear:both !important;
     }
 
-    .page-dashboard #incentives #parent-sponsored .grid_8
+    .page-dashboard #goals #parent-sponsored .grid_8
     {
         width:300px !important;
     }
 
-    .page-dashboard #incentives .field-name-field-goals strong
+    .page-dashboard #goals .field-name-field-goals strong
     {
         margin:0;
         padding:0;
     }
 
-    .page-dashboard #incentives .field-name-field-grade,
-    .page-dashboard #incentives .field-name-field-hours,
-    .page-dashboard #incentives .field-name-field-gpa,
-    .page-dashboard #incentives .field-name-field-other,
-    .page-dashboard #incentives .field-name-field-reward,
-    .page-dashboard #incentives .field-name-field-goals,
-    .page-dashboard #incentives .field-name-field-goals > div,
-    .page-dashboard #incentives .field-name-field-goals > div > div
+    .page-dashboard #goals .field-name-field-grade,
+    .page-dashboard #goals .field-name-field-hours,
+    .page-dashboard #goals .field-name-field-gpa,
+    .page-dashboard #goals .field-name-field-other,
+    .page-dashboard #goals .field-name-field-reward,
+    .page-dashboard #goals .field-name-field-goals,
+    .page-dashboard #goals .field-name-field-goals > div,
+    .page-dashboard #goals .field-name-field-goals > div > div
     {
         display:block;
         width:auto;
@@ -1215,25 +1243,25 @@ body.file-drag .group-achievement .plup-filelist
         text-align: left;
     }
 
-    .page-dashboard #incentives .field-name-field-grade label,
-    .page-dashboard #incentives .field-name-field-hours label,
-    .page-dashboard #incentives .field-name-field-gpa label,
-    .page-dashboard #incentives .field-name-field-other label,
-    .page-dashboard #incentives .field-name-field-reward label,
-    .page-dashboard #incentives .read-only label
+    .page-dashboard #goals .field-name-field-grade label,
+    .page-dashboard #goals .field-name-field-hours label,
+    .page-dashboard #goals .field-name-field-gpa label,
+    .page-dashboard #goals .field-name-field-other label,
+    .page-dashboard #goals .field-name-field-reward label,
+    .page-dashboard #goals .read-only label
     {
         display:inline-block !important;
         min-width:65px;
         text-align: right;
     }
 
-    .page-dashboard #incentives .field-name-field-reward .form-type-textarea label
+    .page-dashboard #goals .field-name-field-reward .form-type-textarea label
     {
         margin-right:-75px;
         vertical-align: top;
     }
 
-    .page-dashboard #incentives .field-name-field-reward .form-textarea-wrapper
+    .page-dashboard #goals .field-name-field-reward .form-textarea-wrapper
     {
         margin-left:80px;
         vertical-align: top;
@@ -1243,24 +1271,24 @@ body.file-drag .group-achievement .plup-filelist
 
 @media all and (max-width: 480px)
 {
-    .page-dashboard #incentives #achievements .grid_6
+    .page-dashboard #goals #achievements .grid_6
     {
         clear:both;
         width:auto !important;
         height: auto !important;
     }
 
-    .page-dashboard #incentives #parent-sponsored .grid_4
+    .page-dashboard #goals #parent-sponsored .grid_4
     {
         float:none !important;
     }
 
-    .page-dashboard #incentives #parent-sponsored .grid_8
+    .page-dashboard #goals #parent-sponsored .grid_8
     {
         width:auto !important;
     }
 
-    .page-dashboard #incentives .field-name-field-type
+    .page-dashboard #goals .field-name-field-type
     {
         width:auto !important;
     }

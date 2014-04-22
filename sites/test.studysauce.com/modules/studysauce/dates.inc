@@ -1,5 +1,40 @@
 <?php
 
+function studysauce_any_dates()
+{
+    global $user;
+    $query = new EntityFieldQuery();
+    $entities = $query->entityCondition('entity_type', 'node')
+        ->propertyCondition('type', 'key_dates')
+        ->propertyCondition('title', $user->mail)
+        ->propertyCondition('status', 1)
+        ->range(0, 1)
+        ->execute();
+
+    $rebuild = false;
+    if (!empty($entities['node'])) {
+        $nodes = array_keys($entities['node']);
+        $nid = array_shift($nodes);
+        $node = node_load($nid);
+
+        if (isset($node->field_reminders[LANGUAGE_NONE][0]['value']))
+        {
+            $headStr = '';
+            $first = true;
+            foreach ($node->field_reminders[LANGUAGE_NONE] as $i => $reminder)
+            {
+                $eid = $reminder['value'];
+                $entity = entity_load('field_collection_item', array($eid));
+                if (!empty($entity))
+                {
+                    if(isset($entity[$eid]->field_due_date['und'][0]['value']))
+                        return true;
+                }
+            }
+        }
+    }
+    return false;
+}
 
 function studysauce_save_dates()
 {
@@ -79,7 +114,9 @@ function studysauce_save_dates()
     $node = node_submit($node); // Prepare node for saving
     node_save($node);
 
-    print json_encode(array('reminders' => '<div>' . theme('studysauce-reminders') . '</div>'));
+    print json_encode(array(
+        'reminders' => '<div>' . theme('studysauce-deadlines') . '</div>',
+        'plan' => '<div>' . theme('studysauce-plans') . '</div>'));
     drupal_exit();
 }
 

@@ -3,8 +3,8 @@
 
 function studysauce_checkin()
 {
-    module_load_include('inc', 'node', 'node.pages');
     global $user;
+
     $query = new EntityFieldQuery();
     $entities = $query->entityCondition('entity_type', 'node')
         ->propertyCondition('type', 'schedule')
@@ -39,8 +39,6 @@ function studysauce_checkin()
                         $last = key($entity->field_utc_checkin['und']);
                         $entity->field_utc_checkin['und'][$last]['value2'] = date('Y-m-d H:i:s', time());
                         $entity->save();
-
-                        $awards = studysauce_get_awards();
                     }
                     else
                     {
@@ -66,9 +64,8 @@ function studysauce_checkin()
     $newSDS = studysauce_get_sds_messages();
     $lastSDS = end($newSDS);
 
-    global $classes;
-    $classes = _studysauce_get_schedule_classes();
     list($times, $rows, $total, $hours) = _studysauce_get_metrics();
+    list($awards) = studysauce_get_awards();
 
     print json_encode(array(
         'lastSDS' => $lastSDS,

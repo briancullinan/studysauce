@@ -43,92 +43,60 @@
 <?php endif; ?>
 
 <!-- #header-wrapper -->
-<div id="header-wrapper" class="clearfix">
+<div class="header-wrapper header">
 
-    <!-- #header -->
-    <div id="header" class="clearfix">
-        <div class="container_12">
+    <?php if ($site_name): ?>
+        <div id="site-name">
+            <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
+                <img src="/sites/studysauce.com/themes/successinc/logo 4 trans 2.png" height="48"
+                    width="48" alt=""/><b>Study</b> Sauce</a>
 
-            <!-- #header-inside -->
-            <div id="header-inside" class="clearfix">
-
-                <div class="grid_5">
-                    <div class="mt-grid-fix">
-
-                        <!-- #header-inside-left -->
-                        <div id="header-inside-left">
-
-                            <?php if ($logo): ?>
-                                <div id="logo">
-                                    <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home">
-                                        <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>"/> </a>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if ($site_name): ?>
-                                <div id="site-name">
-                                    <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><img
-                                            src="/sites/studysauce.com/themes/successinc/logo 4 trans 2.png" height="48"
-                                            width="48" alt=""/><b>Study</b> Sauce</a>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if ($site_slogan): ?>
-                                <div id="site-slogan">
-                                    <?php print $site_slogan; ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if ($page['header']) : ?>
-                                <?php print render($page['header']); ?>
-                            <?php endif; ?>
-
-                        </div>
-                        <!-- EOF: #header-inside-left -->
-
-                    </div>
+            <?php if ($site_slogan): ?>
+                <div id="site-slogan">
+                    <?php print $site_slogan; ?>
                 </div>
-
-                <?php if ($page['navigation']) : ?>
-                    <div class="grid_7">
-                        <div class="mt-grid-fix">
-
-                            <!-- #header-inside-right -->
-                            <div id="header-inside-right">
-                                <div id="main-navigation" class="clearfix">
-                                    <?php print drupal_render($page['navigation']); ?>
-                                </div>
-                            </div>
-                            <!-- EOF: #header-inside-right -->
-
-                        </div>
-                    </div>
-                <?php endif; ?>
-
-            </div>
-            <!-- EOF: #header-inside -->
+            <?php endif; ?>
 
         </div>
-    </div>
-    <!-- EOF: #header -->
+    <?php endif; ?>
 
-    <!-- #banner -->
-    <?php if ($page['banner']): ?>
-        <div id="banner" class="clearfix">
-            <div class="container_12">
-                <div id="banner-inside" class="clearfix">
-                    <div class="grid_12">
-                        <div class="mt-grid-fix">
-                            <?php print render($page['banner']); ?>
-                        </div>
+    <?php if ($page['navigation']) : ?>
+        <div class="grid_7">
+            <div class="mt-grid-fix">
+
+                <!-- #header-inside-right -->
+                <div id="header-inside-right">
+                    <div id="main-navigation" class="clearfix">
+                        <?php print drupal_render($page['navigation']); ?>
                     </div>
                 </div>
+                <!-- EOF: #header-inside-right -->
+
             </div>
         </div>
     <?php endif; ?>
-    <!-- EOF: #banner -->
 
 </div>
+    <!-- EOF: #header-inside -->
+
+    <!-- EOF: #header -->
+
+<!-- #banner -->
+<?php if ($page['banner']): ?>
+    <div id="banner" class="clearfix">
+        <div class="container_12">
+            <div id="banner-inside" class="clearfix">
+                <div class="grid_12">
+                    <div class="mt-grid-fix">
+                        <?php print render($page['banner']); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+<!-- EOF: #banner -->
+
 <!-- EOF: #header-wrapper -->
 
 <!-- #page-top -->

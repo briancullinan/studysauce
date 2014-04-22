@@ -1,0 +1,133 @@
+
+.page-dashboard #partner h2
+{
+
+}
+
+.page-dashboard #partner .partner-faqs,
+.page-dashboard #partner .partner-setup,
+.page-dashboard #partner .partner-invite > .form-item:first-child,
+.page-dashboard #partner .partner-invite > .form-item:nth-child(2),
+.page-dashboard #partner .partner-invite,
+.page-dashboard #partner a[href="#partner-upload"]
+{
+    width:49%;
+    display:inline-block;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+.page-dashboard #partner .partner-invite
+{
+    padding:10% 10px;
+    text-align: center;
+}
+
+.page-dashboard #partner .partner-faqs
+{
+    border: 3px solid #666666;
+    border-radius: 5px;
+    height: 100%;
+    min-height: 500px;
+    padding:10px;
+    overflow-y:auto;
+    background-color: #cccccc;
+}
+
+.page-dashboard #partner .partner-faqs h3
+{
+    margin-top:0;
+}
+
+.page-dashboard #partner a[href="#partner-upload"]
+{
+    padding:10px;
+    position: relative;
+}
+
+.page-dashboard #partner a[href="#partner-upload"] span
+{
+    display:block;
+    position: absolute;
+    top:30px;
+    margin-top:-12px;
+    text-align: center;
+    width: 100%;
+    margin-left:-10px;
+}
+
+#partner-plupload
+{
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    width: 29%;
+    margin: 10%;
+    border: 3px solid #555555;
+    border-radius: 100%;
+}
+
+#partner-plupload img
+{
+    width: 100%;
+    height:auto;
+    padding: 10px;
+}
+
+.page-dashboard #partner ul.partner-permissions
+{
+    list-style-type: none;
+    padding: 0;
+    margin:0;
+    text-align: left;
+}
+
+.page-dashboard #partner ul input[type="checkbox"]
+{
+    position: relative;
+    z-index: 1;
+    margin-left: 10px;
+    visibility: hidden;
+}
+
+.page-dashboard #partner ul label
+{
+    display: inline;
+    position: relative;
+    z-index: 10;
+    margin-left: -30px;
+    padding-left: 30px;
+    background: url('images/menu_icons_128.png') no-repeat -54px -2851px transparent;
+    line-height: 26px;
+    font-size: 20px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.page-dashboard sup.premium
+{
+    margin: -10px 0;
+    line-height: 0;
+    color: #FF0000;
+    font-size: 10px;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 1px 3px;
+    border: 1px solid #FF0000;
+    border-radius: 5px;
+}
+
+.page-dashboard #partner ul input[type="checkbox"]:checked + label {
+    background-position: -54px -2737px;
+}
+
+@media all and (max-width: 1250px)
+{
+    .page-dashboard #partner .partner-invite > .form-item:first-child,
+    .page-dashboard #partner .partner-invite > .form-item:nth-child(2)
+    {
+        width: auto;
+    }
+
+}

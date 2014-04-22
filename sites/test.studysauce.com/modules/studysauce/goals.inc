@@ -1,5 +1,179 @@
 <?php
 
+
+/**
+ * Plupload's upload function.
+ */
+function studysauce_goals_upload_page() {
+
+    drupal_add_http_header('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT', TRUE);
+    drupal_add_http_header('Last-Modified', gmdate("D, d M Y H:i:s") . ' GMT', TRUE);
+    drupal_add_http_header('Cache-Control', 'no-store, no-cache, must-revalidate post-check=0, pre-check=0', TRUE);
+    drupal_add_http_header('Pragma', 'no-cache', TRUE);
+
+    // Settings
+    $targetDir = $GLOBALS['conf']['file_temporary_path'] .'/';
+    // 5 minutes execution time
+    @set_time_limit(5 * 60);
+    // Uncomment this one to fake upload time
+    // usleep(5000);
+
+    // Get parameters
+    $chunk = isset($_REQUEST['chunk']) ? $_REQUEST['chunk'] : 0;
+    $chunks = isset($_REQUEST['chunks']) ? $_REQUEST['chunks'] : 0;
+    $filename = isset($_REQUEST['name']) ? $_REQUEST['name'] : '';
+
+    // Clean the fileName for security reasons
+    $extensions = 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp *';
+    $filename = file_munge_filename($filename, $extensions, FALSE);
+
+    // Make sure the fileName is unique but only if chunking is disabled
+    if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $filename)) {
+        $ext = strrpos($filename, '.');
+        $filename_a = substr($filename, 0, $ext);
+        $filename_b = substr($filename, $ext);
+
+        $count = 1;
+        while (file_exists($targetDir . DIRECTORY_SEPARATOR . $filename_a . '_' . $count . $filename_b))
+            $count++;
+
+        $filename = $filename_a . '_' . $count . $filename_b;
+    }
+
+
+    // Look for the content type header
+    if (isset($_SERVER['HTTP_CONTENT_TYPE'])) {
+        $contentType = $_SERVER['HTTP_CONTENT_TYPE'];
+    }
+
+    if (isset($_SERVER['CONTENT_TYPE'])) {
+        $contentType = $_SERVER['CONTENT_TYPE'];
+    }
+
+    // Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
+    if (strpos($contentType, 'multipart') !== false) {
+        if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+            // Open temp file
+            $out = fopen($targetDir . DIRECTORY_SEPARATOR . $filename, $chunk == 0 ? 'wb' : 'ab');
+            if ($out) {
+                // Read binary input stream and append it to temp file
+                $in = fopen($_FILES['file']['tmp_name'], 'rb');
+
+                if ($in) {
+                    while ($buff = fread($in, 4096))
+                        fwrite($out, $buff);
+                } else {
+                    die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+                }
+
+                fclose($in);
+                fclose($out);
+                @unlink($_FILES['file']['tmp_name']);
+            } else {
+                die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
+            }
+        } else {
+            die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
+        }
+    } else {
+        // Open temp file
+        $out = fopen($targetDir . DIRECTORY_SEPARATOR . $filename, $chunk == 0 ? 'wb' : 'ab');
+        if ($out) {
+            // Read binary input stream and append it to temp file
+            $in = fopen("php://input", 'rb');
+
+            if ($in) {
+                while ($buff = fread($in, 4096)) {
+                    fwrite($out, $buff);
+                }
+            } else {
+                die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+            }
+
+            fclose($in);
+            fclose($out);
+        } else {
+            die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
+        }
+    }
+
+    if ((isset($_GET['chunk']) && ($_GET['chunk'] + 1) == $_GET['chunks']) || (!isset($_GET['chunk']))) {
+        $source = 'temporary://'. $filename;
+        $file = new stdClass();
+        $file->uid      = $GLOBALS['user']->uid;
+        $file->status   = 0;
+        $file->filename = $filename;
+        $file->uri      = $source;
+        $file->filemime = file_get_mimetype($file->filename);
+        $file->filesize = filesize($source);
+        // Save url argument(instance_id) so we can validate file by instance settings
+        $file->arg = arg(1);
+
+        $e = FALSE;
+        // Here we validate file
+        studysauce_plupload_file_validation($file, $e);
+
+        if ($e === FALSE) {
+            $return = file_save($file);
+            // Generate a secure version of file uri for temporary delivery.
+            $file->secure_uri = image_style_url('achievement', $file->uri);
+            // We build it as a temp but will deliver it as a public.
+            $file->secure_uri = str_replace('system/temporary', variable_get('file_public_path', 'sites/default/files'), $file->secure_uri);
+        }
+        else {
+            file_unmanaged_delete($file->uri);
+            $return = (object) array('error_message' => $e);
+        }
+
+        drupal_json_output($return);
+    }
+}
+
+
+/**
+ * Default validation function.
+ * In most cases Pluplaod will be used for images so we use image-specific validation.
+ * Non-image files has no support right now.
+ */
+function studysauce_plupload_file_validation(&$file, &$e) {
+    if (!isset($file->arg) || (isset($file->arg) && is_numeric($file->arg))) {
+        // Check if file is image
+        $passImage = file_validate_is_image($file);
+        if (!empty($passImage)) {
+            $e = reset($passImage);
+            return;
+        }
+
+        // Check if file has allowed extension
+        $passExt = file_validate_extensions($file, 'png gif jpg jpeg');
+        if (!empty($passExt)) {
+            $e = reset($passExt);
+            return;
+        }
+
+        // Check if file doesn't exceed the maximal allowed size
+        $passSize = file_validate_size($file, parse_size(''), 0);
+        if (!empty($passSize)) {
+            $e = reset($passSize);
+            return;
+        }
+
+        // Check if file name isn't too long
+        $passLength = file_validate_name_length($file);
+        if (!empty($passLength)) {
+            $e = reset($passLength);
+            return;
+        }
+
+        // Check if file meet the resolution restrictions
+        $passRes = file_validate_image_resolution($file, '', '');
+        if (!empty($passRes)) {
+            $e = reset($passRes);
+            return;
+        }
+    }
+}
+
 function _studysauce_unsponsored_goals()
 {
     global $user;
@@ -79,11 +253,13 @@ function studysauce_save_goals()
         $entities = array();
         if (is_array($node->field_goals[LANGUAGE_NONE]))
         {
-            foreach ($node->field_goals[LANGUAGE_NONE] as $i => $class)
+            foreach ($node->field_goals[LANGUAGE_NONE] as $i => $goal)
             {
-                $eid = $class['value'];
+                $eid = $goal['value'];
                 $entity = entity_load('field_collection_item', array($eid));
-                if($entity[$eid]->field_type[LANGUAGE_NONE][0]['value'] == $_POST['type'])
+                if(($entity[$eid]->field_type[LANGUAGE_NONE][0]['value'] == 'behavior' && $_POST['type'] == 'hours') ||
+                    ($entity[$eid]->field_type[LANGUAGE_NONE][0]['value'] == 'milestone' && $_POST['type'] == 'grade') ||
+                    ($entity[$eid]->field_type[LANGUAGE_NONE][0]['value'] == 'outcome' && $_POST['type'] == 'gpa'))
                     $thisEid = $entity[$eid]->item_id;
                 $entities[$eid] = $entity[$eid];
             }
@@ -116,6 +292,57 @@ function studysauce_save_goals()
         $entity->save();
     }
 
+    if(isset($_POST['claim']) && isset($_POST['uploads']) && isset($_POST['message']))
+    {
+        // get the entity we are claiming
+        if (is_array($node->field_goals[LANGUAGE_NONE]))
+        {
+            foreach ($node->field_goals[LANGUAGE_NONE] as $i => $goal)
+            {
+                if($goal['value'] == $_POST['claim'])
+                {
+                    $eid = $goal['value'];
+                    $entity = entity_load('field_collection_item', array($eid));
+                    // create a new achievement entity
+                    $entity[$eid]->revision = 1;
+                    $entity[$eid]->field_photo_evidence['und'][0]['fid'] = $_POST['uploads'][0]['fid'];
+                    $entity[$eid]->field_message['und'][0]['value'] = $_POST['message'];
+                    $entity[$eid]->save();
+
+                    break;
+                }
+            }
+        }
+
+        foreach ($_POST['uploads'] AS $i => $upload)
+        {
+
+            break;
+                if ($items && $items[0]['fid'] > 0) {
+                    $field = field_info_field($instance['field_name']);
+                    $destination = file_field_widget_uri($field, $instance);
+                    foreach ($items AS $delta => $item) {
+                        $file = file_load($item['fid']);
+                        // Filefield paths integration
+                        if (module_exists('filefield_paths') && isset($item['rename'])) {
+                            $file->origname = $item['rename'];
+                            file_save($file);
+                        } else {
+                            $fileName = isset($item['rename']) ? $item['rename'] : $file->filename;
+                            $dir = isset($instance['settings']['file_directory']) ? $instance['settings']['file_directory'] .'/' : '';
+                            $location = token_replace($field['settings']['uri_scheme'] .'://'. $dir);
+                            $filePath = $location . $fileName;
+                            if ($file->uri !== $filePath) {
+                                file_prepare_directory($location, FILE_CREATE_DIRECTORY);
+                                file_move($file, $filePath);
+                            }
+                        }
+                    }
+                }
+        }
+
+    }
+
     $node = node_submit($node); // Prepare node for saving
     node_save($node);
 
@@ -128,7 +355,7 @@ function studysauce_save_goals()
         {
             $commands[] = ajax_command_invoke('#parent-sponsored .node-incentive-form, #parent-sponsored .grid_6, #parent-sponsored h4', 'remove');
             $commands[] = array('command' => 'insert', 'method' => 'append', 'selector' => '#parent-sponsored', 'data' => drupal_render($parent), 'settings' => null);
-            $commands[] = ajax_command_invoke('.page-dashboard #incentives .pane-content > div', 'addClass', array('done'));
+            $commands[] = ajax_command_invoke('.page-dashboard #goals .pane-content > div', 'addClass', array('done'));
         }
 
         $form['changed']['#value'] = $form['changed']['#default_value'];
@@ -165,7 +392,7 @@ function studysauce_save_goals()
                     ? $conn[0]->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $conn[0]->field_last_name[LANGUAGE_NONE][0]['value']
                     : 'parent') . ',',
             'link' => l('Study Sauce', 'user/login', array(
-                'query' => array('achievement' => $last['code'], 'destination' => '#incentives'),
+                'query' => array('achievement' => $last['code'], 'destination' => '#goals'),
                 'absolute' => true,
                 'attributes' => array('style' => 'color:#FF9900;')))));
 
@@ -195,7 +422,7 @@ function studysauce_save_goals()
                     ? $conn[0]->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $conn[0]->field_last_name[LANGUAGE_NONE][0]['value']
                     : 'parent') . ',',
             'link' => l('Study Sauce', 'user/login', array(
-                'query' => array('reward' => $GLOBALS['rewards_code'], 'destination' => '#incentives'),
+                'query' => array('reward' => $GLOBALS['rewards_code'], 'destination' => '#goals'),
                 'absolute' => true,
                 'attributes' => array('style' => 'color:#FF9900;')))));
 
@@ -204,7 +431,7 @@ function studysauce_save_goals()
         $message['result'] = $system->mail($message);
     }
 
-    $awards = studysauce_get_awards();
+    list($awards) = studysauce_get_awards();
     print json_encode(array(
         'goals' => '<div>' . theme('studysauce-goals') . '</div>',
         'awards' => $awards,
@@ -222,8 +449,8 @@ function _studysauce_get_achievements()
         do
         {
             $goal = $parent->field_goals[LANGUAGE_NONE][$i];
-            if(isset($goal['#entity']->field_achievements[LANGUAGE_NONE][0]))
-                foreach($goal['#entity']->field_achievements[LANGUAGE_NONE] as $j => $achievement)
+            if(isset($goal->field_achievements[LANGUAGE_NONE][0]))
+                foreach($goal->field_achievements[LANGUAGE_NONE] as $j => $achievement)
                 {
                     $entity = entity_load('field_collection_item', array($achievement['value']));
                     $achievement = $entity[$achievement['value']];
@@ -250,36 +477,35 @@ function _studysauce_get_achievements()
     }
 
     $achievements = array();
+    $goals = _studysauce_unsponsored_goals();
     $i = 0;
-    if(isset($form['field_goals'][LANGUAGE_NONE][0]))
-        do
-        {
-            $goal = $form['field_goals'][LANGUAGE_NONE][$i];
-            if(isset($goal['#entity']->field_achievements[LANGUAGE_NONE][0]))
-                foreach($goal['#entity']->field_achievements[LANGUAGE_NONE] as $j => $achievement)
+    foreach($goals as $i => $goal)
+    {
+        if(isset($goal->field_achievements[LANGUAGE_NONE][0]))
+            foreach($goal->field_achievements[LANGUAGE_NONE] as $j => $achievement)
+            {
+                $entity = entity_load('field_collection_item', array($achievement['value']));
+                $achievement = $entity[$achievement['value']];
+                $time = $achievement->field_time_achieved[LANGUAGE_NONE][0]['value'];
+                $achievements[$time]['code'] = $achievement->field_code[LANGUAGE_NONE][0]['value'];
+                $achievements[$time]['activated'] = $achievement->field_activated[LANGUAGE_NONE][0]['value'];
+                $image = '';
+                $message = '';
+                if(isset($achievement->field_photo_evidence[LANGUAGE_NONE][0]['filename']))
                 {
-                    $entity = entity_load('field_collection_item', array($achievement['value']));
-                    $achievement = $entity[$achievement['value']];
-                    $time = $achievement->field_time_achieved[LANGUAGE_NONE][0]['value'];
-                    $achievements[$time]['code'] = $achievement->field_code[LANGUAGE_NONE][0]['value'];
-                    $achievements[$time]['activated'] = $achievement->field_activated[LANGUAGE_NONE][0]['value'];
-                    $image = '';
-                    $message = '';
-                    if(isset($achievement->field_photo_evidence[LANGUAGE_NONE][0]['filename']))
-                    {
-                        $uri = $achievement->field_photo_evidence[LANGUAGE_NONE][0]['uri'];
-                        $image =  '<img src="' . image_style_url('achievement', $uri) . '" />';
-                    }
-                    if(isset($achievement->field_message[LANGUAGE_NONE][0]['value']) &&
-                        isset($achievement->field_time_achieved[LANGUAGE_NONE][0]['value']))
-                    {
-                        $message = '<p>' . $achievement->field_message[LANGUAGE_NONE][0]['value'] . '</p>';
-                    }
-                    $achievements[$time]['content'] = '<div class="grid_' . (!empty($image) && !empty($message) ? 6 : 3) .
-                        (isset($_SESSION['studysauce']['achievement']) && $_SESSION['studysauce']['achievement'] == $achievements[$time]['code'] ? ' highlighted' : '') . '"><strong>' .
-                        date('F jS, Y', $time) . '</strong>' . $image . $message . '</div>';
+                    $uri = $achievement->field_photo_evidence[LANGUAGE_NONE][0]['uri'];
+                    $image =  '<img src="' . image_style_url('achievement', $uri) . '" />';
                 }
-        } while (isset($form['field_goals'][LANGUAGE_NONE][++$i]));
+                if(isset($achievement->field_message[LANGUAGE_NONE][0]['value']) &&
+                    isset($achievement->field_time_achieved[LANGUAGE_NONE][0]['value']))
+                {
+                    $message = '<p>' . $achievement->field_message[LANGUAGE_NONE][0]['value'] . '</p>';
+                }
+                $achievements[$time]['content'] = '<div class="grid_' . (!empty($image) && !empty($message) ? 6 : 3) .
+                    (isset($_SESSION['studysauce']['achievement']) && $_SESSION['studysauce']['achievement'] == $achievements[$time]['code'] ? ' highlighted' : '') . '"><strong>' .
+                    date('F jS, Y', $time) . '</strong>' . $image . $message . '</div>';
+            }
+    }
 
     ksort($achievements);
     $result = '';

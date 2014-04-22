@@ -24,6 +24,11 @@ html, body {
     height:auto !important;
 }
 
+html
+{
+    overflow-y: scroll;
+}
+
 *, input
 {
     font-family: 'Ubuntu',Helvetica Neue,Arial,sans-serif;
@@ -309,46 +314,14 @@ img {
     padding:0;
 }
 
-#header-top .block {
-    padding: 0 0 15px;
-}
-
-@media all and (max-width: 759px) {
-    #header-top .block {
-        padding: 0 0 5px;
-    }
-}
-
-.subfooter .block,
-#subfooter .block {
-    padding: 15px 0;
-}
-
 /* Layout */
 .mt-grid-fix {
     padding: 0 5px;
 }
 
-.header,
-#header {
-    clear: both;
-    padding: 5px 0
-}
-
-#header-top-inside {
-    padding: 12px 0;
-}
-
-#header-top {
-    background-color: #1c1c1c;
-    min-height: 55px;
-    margin-bottom: -15px;
-}
-
-.header-wrapper,
-.page-node-landing #header,
-#header-wrapper {
-    background: url("images/board_blue.png") no-repeat 50% 50% #b76003;
+.subfooter .block,
+#subfooter .block {
+    padding: 15px 0;
 }
 
 .landing-home .footer
@@ -357,15 +330,6 @@ img {
     color:#666666;
 }
 
-.page-dashboard .header-wrapper
-{
-    position:fixed;
-    width:100%;
-    left:0;
-    z-index: 100;
-    color:#ffffff;
-    background:#0099BE;
-}
 
 #line-items-div
 {
@@ -422,12 +386,6 @@ img {
     display:none;
 }
 
-.page-dashboard
-{
-    background: #0099BE url(images/grunge.png) repeat fixed 0 0;
-    position:relative;
-}
-
 .page-dashboard .page-top
 {
     background: url("images/noise_gray.png") repeat scroll 0 0 #ffffff;
@@ -438,157 +396,6 @@ img {
 {
     float:right;
     text-align: right;
-}
-
-.page-dashboard.admin-menu #main-menu,
-.page-dashboard #main-menu
-{
-    margin-left:0;
-    padding-top:0;
-}
-
-.page-dashboard #main-menu .pane-content
-{
-    min-height: 0;
-    border:0;
-    padding:0;
-}
-
-.page-dashboard #main-menu ul
-{
-    position:fixed;
-    float:left;
-    list-style: none none;
-    margin: 0;
-    padding: 115px 0 0;
-    top:0;
-    z-index: 99;
-}
-
-.page-dashboard #main-menu li
-{
-    margin: 0;
-    padding:0;
-    width:200px;
-    text-align: left;
-}
-
-.page-dashboard #main-menu li.like-us a
-{
-    background:none;
-}
-
-.page-dashboard #main-menu li.highlighted-link
-{
-    display:none;
-}
-
-.page-dashboard.about-us-only .page #awards,
-.page-dashboard.about-us-only .page #home,
-.page-dashboard.about-us-only .page #checkin,
-.page-dashboard.about-us-only .page #incentives,
-.page-dashboard.about-us-only .page #tips,
-.page-dashboard.about-us-only .page #plan,
-.page-dashboard.about-us-only .page #metrics,
-.page-dashboard.about-us-only .page #dates,
-.page-dashboard.privacy-only .page #awards,
-.page-dashboard.privacy-only .page #home,
-.page-dashboard.privacy-only .page #checkin,
-.page-dashboard.privacy-only .page #incentives,
-.page-dashboard.privacy-only .page #tips,
-.page-dashboard.privacy-only .page #plan,
-.page-dashboard.privacy-only .page #metrics,
-.page-dashboard.privacy-only .page #dates,
-.page-dashboard.refund-only .page #awards,
-.page-dashboard.refund-only .page #home,
-.page-dashboard.refund-only .page #checkin,
-.page-dashboard.refund-only .page #incentives,
-.page-dashboard.refund-only .page #tips,
-.page-dashboard.refund-only .page #plan,
-.page-dashboard.refund-only .page #metrics,
-.page-dashboard.refund-only .page #dates,
-.page-dashboard.contact-only .page #awards,
-.page-dashboard.contact-only .page #home,
-.page-dashboard.contact-only .page #checkin,
-.page-dashboard.contact-only .page #incentives,
-.page-dashboard.contact-only .page #tips,
-.page-dashboard.contact-only .page #plan,
-.page-dashboard.contact-only .page #metrics,
-.page-dashboard.contact-only .page #dates,
-.page-dashboard.terms-only .page #awards,
-.page-dashboard.terms-only .page #home,
-.page-dashboard.terms-only .page #checkin,
-.page-dashboard.terms-only .page #incentives,
-.page-dashboard.terms-only .page #tips,
-.page-dashboard.terms-only .page #plan,
-.page-dashboard.terms-only .page #metrics,
-.page-dashboard.terms-only .page #dates,
-.page-dashboard.user-profile-only .page #awards,
-.page-dashboard.user-profile-only .page #home,
-.page-dashboard.user-profile-only .page #checkin,
-.page-dashboard.user-profile-only .page #incentives,
-.page-dashboard.user-profile-only .page #tips,
-.page-dashboard.user-profile-only .page #plan,
-.page-dashboard.user-profile-only .page #metrics,
-.page-dashboard.user-profile-only .page #dates,
-.page-dashboard .page #terms,
-.page-dashboard .page #about-us,
-.page-dashboard .page #contact,
-.page-dashboard .page #privacy,
-.page-dashboard .page #refund,
-.page-dashboard #main-menu li.terms-only,
-.page-dashboard #user-profile,
-.page-dashboard .page #awards,
-.page-dashboard .page #home,
-.page-dashboard .page #checkin,
-.page-dashboard .page #incentives,
-.page-dashboard .page #tips,
-.page-dashboard .page #plan,
-.page-dashboard .page #metrics,
-.page-dashboard .page #dates,
-.page-dashboard.awards-only #home,
-.page-dashboard.awards-only #checkin,
-.page-dashboard.awards-only #incentives,
-.page-dashboard.awards-only #tips,
-.page-dashboard.awards-only #plan,
-.page-dashboard.awards-only #metrics,
-.page-dashboard.awards-only #dates,
-.page-dashboard #awards
-{
-    display:none;
-}
-
-.page-dashboard.awards-only #awards,
-.page-dashboard #checkin.checklist-only #checklist,
-.page-dashboard #dates.edit-schedule #schedule,
-.page-dashboard #metrics.empty #metrics-empty,
-.page-dashboard #checkin.mozart-only #mozart-effect,
-.page-dashboard #checkin.empty #empty-schedule,
-.page-dashboard #dates.empty #empty-dates,
-.page-dashboard #tips.study-quiz-only #study-quiz,
-.page-dashboard #incentives.invite-only #invite,
-.page-dashboard #incentives.invite-sent-only #invite-sent,
-.page-dashboard #checkin.sds-message-only #sds-messages,
-.page-dashboard .new-award-only #new-award,
-.page-dashboard #home.welcome-only #welcome,
-.page-dashboard.terms-only .page #terms,
-.page-dashboard.about-us-only .page #about-us,
-.page-dashboard.contact-only .page #contact,
-.page-dashboard.privacy-only .page #privacy,
-.page-dashboard.refund-only .page #refund,
-.page-dashboard.user-profile-only #user-profile,
-.page-dashboard #incentives.achievement-only .group-achievement,
-.page-dashboard #checkin.timer-expire-only #timer-expire,
-.page-dashboard #dates.class-names-only .field-name-field-class-names
-{
-    display:block;
-}
-
-.page-dashboard #checkin.timer-expire-only #checklist,
-.page-dashboard #checkin.sds-message-only .new-award-only #sds-messages,
-.page-dashboard #checkin.timer-expire-only #sds-messages
-{
-    display:none;
 }
 
 .page-dashboard .page #user-profile .content,
@@ -609,91 +416,11 @@ img {
 }
 */
 
-.page-dashboard #main-menu a.skrollable-after,
-.page-dashboard #main-menu a,
-.page-dashboard #main-menu a[href="#home"],
-.page-dashboard #main-menu a[href="#checkin"],
-.page-dashboard #main-menu a[href="#incentives"],
-.page-dashboard #main-menu a[href="#plan"],
-.page-dashboard #main-menu a[href="#tips"],
-.page-dashboard #main-menu a[href="#metrics"],
-.page-dashboard #main-menu a[href="#dates"],
-.page-dashboard #main-menu a[href="#back"],
-.page-dashboard #main-menu a[href="#terms-of-service"]
-{
-    display:block;
-    font-size: 18px;
-    z-index: 99;
-    position:relative;
-    background-color:#555555;
-    padding:10px 0;
-    color:#DDDDDD;
-}
-
-.page-dashboard #main-menu span
-{
-    background: url(images/menu_icons_48.png) no-repeat top left;
-    padding: 0;
-    display:inline-block;
-    overflow:hidden;
-    vertical-align: middle;
-    height:40px;
-    width:70px;
-}
-
-.page-dashboard #main-menu a.skrollable-between
-{
-    padding:15px 0 15px 5px;
-    margin:-5px 0 -5px -5px;
-    z-index:100;
-    background-color:#FF9900;
-}
-
-.page-dashboard #main-menu a[href="#home"] span
-{
-    background-position: 10px -530px;
-}
-
-.page-dashboard #main-menu a[href="#awards"] span
-{
-    background-position: 10px -530px;
-    /*background-position: 10px -1684px;*/
-}
-
-.page-dashboard #main-menu a[href="#checkin"] span
-{
-    background-position: 10px 0;
-}
-
-.page-dashboard #main-menu a[href="#incentives"] span
-{
-    background-position: 10px -50px;
-}
-
-.page-dashboard #main-menu a[href="#plan"] span
-{
-    background-position: 10px -93px;
-}
-
-.page-dashboard #main-menu a[href="#tips"] span
-{
-    background-position: 10px -147px;
-}
-
-.page-dashboard #main-menu a[href="#metrics"] span
-{
-    background-position: 10px -197px;
-}
-
-.page-dashboard #main-menu a[href="#dates"] span
-{
-    background-position: 10px -246px;
-}
-
 .page-dashboard .page .panel-pane
 {
     margin-left:200px;
     padding-top: 110px;
+    display:none;
 }
 
 .landing-home .page-top .grid_6:nth-child(4)
@@ -798,7 +525,9 @@ img {
     .page-dashboard .container_12,
     .page-dashboard .container_12 .grid_12
     {
-        width:1200px;
+        width: auto;
+        display: block;
+        float: none;
     }
 
     .page-dashboard .header-wrapper .container_12 .grid_7
@@ -901,10 +630,7 @@ img {
     }
 
     .page-dashboard #main-menu .full-only,
-    .page-dashboard #metrics img.full-size,
-    .page-dashboard #home h2.full-size,
-    .page-dashboard #home h3,
-    .page-dashboard #home .big-arrow
+    .page-dashboard #metrics img.full-size
     {
         display:none;
     }
@@ -943,7 +669,7 @@ img {
 .page-dashboard a[href="/user/logout"],
 .page-dashboard a.user-account,
 .page-dashboard a[href="#mail"],
-.page-dashboard .header-wrapper a[href="#awards"]
+.page-dashboard .header-wrapper a[href="#badges"]
 {
     display:inline-block;
     height:32px;
@@ -968,7 +694,7 @@ img {
     background-position: left -193px;
 }
 
-.page-dashboard .header-wrapper a[href="#awards"]
+.page-dashboard .header-wrapper a[href="#badges"]
 {
     background-position: left -1056px;
 }
@@ -1069,57 +795,6 @@ img {
 
 #sidebar {
     clear: both;
-}
-
-/* Logo - Site name*/
-#logo {
-    padding: 0 0 10px 0;
-}
-
-#logo:hover {
-    opacity: 0.8;
-    transition: all 0.2s ease-in-out;
-}
-
-#site-name a {
-    color: #ffffff;
-    font-size: 42px;
-    padding: 0;
-    line-height: 110%;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    white-space: nowrap;
-}
-
-#site-name a:hover {
-    text-decoration: none;
-    opacity: 0.8;
-    transition: all 0.2s ease-in-out;
-}
-
-#site-name img
-{
-    float:left;
-    width:65px;
-    margin:0 5px;
-}
-
-#site-slogan {
-    font-size: 16px;
-    line-height: 130%;
-    font-weight: 400;
-    color: #eeeeee;
-    white-space: nowrap;
-    font-style: italic;
-}
-
-@media all and (max-width: 980px) {
-    #site-name a {
-        font-size: 36px;
-    }
-
-    #site-slogan {
-        font-size: 15px;
-    }
 }
 
 /* Main navigation */
@@ -2238,7 +1913,6 @@ ul.company-info li.last {
 
 .page-dashboard .group-achievement > div,
 .page-dashboard #invite-sent > h2,
-.page-dashboard #invite > div,
 .page-dashboard #sds-messages > div,
 .page-dashboard #new-award > div,
 .page-dashboard #welcome > div,
@@ -2248,10 +1922,9 @@ ul.company-info li.last {
 .page-dashboard #mozart-effect > div,
 .page-dashboard #empty-schedule > a,
 .page-dashboard #empty-dates > a,
-.page-dashboard #study-preferences > div,
 .page-dashboard #metrics-empty > a,
 .page-dashboard #timer-expire > div,
-.page-dashboard #dates .field-name-field-class-names > div
+.page-dashboard #deadlines .field-name-field-class-names > div
 {
     max-width: 600px;
     margin:5% auto;
@@ -2261,11 +1934,6 @@ ul.company-info li.last {
     border-radius: 10px;
     position:relative;
     text-align:left;
-}
-
-.page-dashboard #study-preferences > div
-{
-    background: url("/sites/test.studysauce.com/themes/successinc/images/noise_white.png") repeat scroll 0 0 #EEEEEE;
 }
 
 .page-dashboard #metrics-empty > a,
@@ -2292,16 +1960,15 @@ ul.company-info li.last {
 .page-dashboard #checklist > div,
 .page-dashboard #study-quiz > div
 {
-    margin:5%;
-    max-width: none;
+    max-width: 550px;
 }
 
-#timer-expire a[href="#awards"]
+#timer-expire a[href="#badges"]
 {
     color: #666666;
 }
 
-#timer-expire a[href="#awards"] span
+#timer-expire a[href="#badges"] span
 {
     color: #FF9900;
 }
@@ -2323,9 +1990,8 @@ ul.company-info li.last {
     margin-bottom:0;
 }
 
-.page-dashboard #dates .field-name-field-class-names h3,
-.page-dashboard #schedule form h3,
-.page-dashboard #study-preferences h3
+.page-dashboard #deadlines .field-name-field-class-names h3,
+.page-dashboard #schedule form h3
 {
     margin-top:0;
     margin-bottom:1em;
@@ -2599,7 +2265,6 @@ label {
 }
 
 .chatboxtextarea, input.form-text, textarea {
-    background: #ebebeb;
     color: #838383;
     font-size: 16px;
     font-style: italic;
@@ -3926,7 +3591,7 @@ ul.contextual-links li a:hover {
     padding:0;
 }
 
-.page-dashboard #dates .field-name-field-class-names .row,
+.page-dashboard #deadlines .field-name-field-class-names .row,
 .page-dashboard #schedule .field-name-field-classes .row,
 .page-dashboard #schedule .field-name-field-classes tr,
 .node-schedule-form .field-name-field-holidays tr
@@ -5568,59 +5233,6 @@ tbody
     display:inline-block;
 }
 
-.page-dashboard #home ol
-{
-    font-size: 22px;
-    font-weight: bold;
-    list-style-type: none;
-    padding:0;
-}
-
-.page-dashboard #home p:first-of-type
-{
-    margin-top:32px;
-}
-
-.page-dashboard #home li h4
-{
-    font-size: 32px;
-    margin-top:20px;
-    clear:both;
-}
-
-.page-dashboard #home li h4 span
-{
-    display: inline-block;
-    float: left;
-    font-size: 78px;
-    font-style: italic;
-    line-height: 85px;
-    width: 60px;
-    margin-top:-10px;
-}
-
-.page-dashboard #home li > span
-{
-    display: block;
-    font-size: 16px;
-    font-weight: 400;
-    margin-left: 60px;
-    margin-right:30px;
-    clear:right;
-}
-
-.page-dashboard #parent_home,
-.page-dashboard #student_home
-{
-    display:none;
-}
-
-.page-dashboard.parent #parent_home,
-.page-dashboard.student #student_home
-{
-    display:block;
-}
-
 .page-dashboard #user_profile
 {
     min-height: 400px;
@@ -5631,8 +5243,8 @@ tbody
     margin-top:100px;
 }
 
-/*.page-dashboard #incentives input.form-checkbox[checked] + label,
-.page-dashboard #incentives input.form-radio[checked] + label,*/
+/*.page-dashboard #goals input.form-checkbox[checked] + label,
+.page-dashboard #goals input.form-radio[checked] + label,*/
 #checklist ol.checkboxes
 {
     list-style: none;
@@ -5662,7 +5274,7 @@ tbody
 
 .page-dashboard.student .parents_only,
 .page-dashboard.parent .students_only,
-.page-dashboard.parent .header-wrapper a[href="#awards"].students_only
+.page-dashboard.parent .header-wrapper a[href="#badges"].students_only
 {
     display:none;
 }
@@ -5673,7 +5285,7 @@ tbody
     clear:both;
 }
 
-.page-dashboard #dates .field-name-field-class-names .highlighted-link,
+.page-dashboard #deadlines .field-name-field-class-names .highlighted-link,
 .page-dashboard #checkin .highlighted-link,
 .page-dashboard #user-profile .form-actions
 {
@@ -5683,21 +5295,23 @@ tbody
 .page-dashboard #home #connections,
 .page-dashboard #home #user_profile,
 .page-dashboard #home #welcome,
-.page-dashboard #incentives #incentives-saved,
+.page-dashboard #goals #goals-saved,
 .page-dashboard #checkin #checklist,
+.page-dashboard #plan #checklist,
 .page-dashboard #schedule,
 .page-dashboard #empty-schedule,
 .page-dashboard #empty-dates,
 .page-dashboard #mozart-effect,
 .page-dashboard #metrics-empty,
 .page-dashboard #checkin #timer-expire,
+.page-dashboard #plan #timer-expire,
+.page-dashboard #plan #sds-messages,
 .page-dashboard #new-award,
 .page-dashboard #checkin #sds-messages,
-.page-dashboard #incentives #invite,
-.page-dashboard #incentives #invite-sent,
-.page-dashboard #tips #study-quiz,
+.page-dashboard #goals #invite-sent,
+.page-dashboard #study-quiz,
 .page-dashboard .group-achievement,
-.page-dashboard #dates .field-name-field-class-names
+.page-dashboard #deadlines .field-name-field-class-names
 {
     display:none;
 }
@@ -5709,13 +5323,11 @@ tbody
 .page-dashboard #metrics-empty:before,
 .page-dashboard #empty-schedule:before,
 .page-dashboard #empty-dates:before,
-.page-dashboard #study-preferences:before,
 .page-dashboard #mozart-effect:before,
 .page-dashboard #checklist:before,
-.page-dashboard #dates .field-name-field-class-names:before,
+.page-dashboard #deadlines .field-name-field-class-names:before,
 .page-dashboard #new-award:before,
 .page-dashboard #sds-messages:before,
-.page-dashboard #invite:before,
 .page-dashboard #invite-sent:before,
 .page-dashboard #welcome:before,
 .page-dashboard .group-achievement:before,
@@ -5764,10 +5376,8 @@ tbody
 .page-dashboard.parent #checkin .parents_only h2,
 .page-dashboard.parent #checkin .parents_only a,
 .page-dashboard.parent #checkin .parents_only,
-.page-dashboard #schedule,
 .page-dashboard #empty-schedule,
 .page-dashboard #empty-dates,
-.page-dashboard #study-preferences,
 .page-dashboard #mozart-effect,
 .page-dashboard #metrics-empty,
 .page-dashboard #checklist,
@@ -5775,11 +5385,10 @@ tbody
 .page-dashboard #new-award,
 .page-dashboard #study-quiz,
 .page-dashboard #sds-messages,
-.page-dashboard #invite,
 .page-dashboard #invite-sent,
 .page-dashboard .group-achievement,
 .page-dashboard #timer-expire,
-.page-dashboard #dates .field-name-field-class-names
+.page-dashboard #deadlines .field-name-field-class-names
 {
     position:absolute;
     left:0;
@@ -5960,18 +5569,6 @@ tbody
     display:inline;
 }
 
-.page-dashboard #invite h3
-{
-    text-align: center;
-    margin-right:100px;
-}
-
-.page-dashboard #invite .like-us
-{
-    text-align: center;
-    margin-right:100px;
-}
-
 #study-quiz .webform-confirmation > .grid_6,
 #study-quiz .highlighted-link
 {
@@ -5982,13 +5579,6 @@ tbody
 #study-quiz .webform-confirmation > .retry-link
 {
     text-align: left;
-}
-
-.page-dashboard.student #home li
-{
-    display:inline-block;
-    width:32%;
-    vertical-align: top;
 }
 
 #study-quiz .webform-confirmation .mobile-only

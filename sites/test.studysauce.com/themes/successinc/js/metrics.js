@@ -2,9 +2,17 @@
 
     Date.prototype.getWeekNumber = function () {
         var d = new Date(+this);
-        d.setHours(0, 0, 0);
+        d.setHours(0, 0, 0, 0);
         d.setDate(d.getDate() + 4 - (d.getDay() || 7));
         return Math.ceil((((d - new Date(d.getFullYear(), 0, 1)) / 8.64e7) + 1) / 7);
+    };
+
+    Date.prototype.getFirstDayOfWeek = function () {
+        var d = new Date(+this);
+        d.setHours(0, 0, 0, 0);
+        var day = d.getDay(),
+            diff = d.getDate() - day + (day == 0 ? 0:0); // adjust when day is sunday
+        return new Date(d.setDate(diff));
     };
 
     $(document).ready(function () {
@@ -82,9 +90,7 @@
                 s.bases = {};
                 s.values.forEach(function (d) {
                     d.length = +d.length;
-                    d.time = new Date(+d.time * 1000);
-                    d.time.setHours(0, 0, 0, 0);
-                    d.time.setDate(d.time.getDate() - (d.time.getDay() || 7));
+                    d.time = new Date(+d.time * 1000).getFirstDayOfWeek();
                     d.length0 = +d.length0;
                     // add the groups length that came before this one
                     var g = d.time.getWeekNumber();
@@ -125,24 +131,17 @@
             if (classes.length == 0)
                 return;
 
-            var now = new Date();
-            now.setHours(0, 0, 0, 0);
-            now.setDate(now.getDate() + 4 - (now.getDay() || 7));
+            var now = new Date().getFirstDayOfWeek();
             var weeks = now.getWeekNumber() - d3.min(classes, function (c) { return c.minTime; }).getWeekNumber();
             if (weeks < 5)
                 weeks = 5;
             if (weeks > 20)
                 weeks = 20;
 
-            var startTime = new Date(Math.floor(now.getTime() / 604800000 - weeks) * 604800000),
-                endTime = new Date(Math.floor(now.getTime() / 604800000) * 604800000);
-            startTime.setHours(0, 0, 0, 0);
-            startTime.setDate(startTime.getDate() + 4 - (startTime.getDay() || 7));
-            endTime.setHours(0, 0, 0, 0);
-            endTime.setDate(endTime.getDate() + 4 - (endTime.getDay() || 7));
-            endTime = new Date(endTime.getTime() - 1);
+            var endTime = new Date(Math.floor(now.getTime())).getWeekNumber()+1.5,
+                startTime = endTime - weeks;
 
-            x = d3.time.scale()
+            x = d3.scale.linear()
                 .domain([startTime, endTime])
                 .range([0, w - m[1] - m[3]]);
 
@@ -157,28 +156,31 @@
             xAxis = d3.svg.axis()
                 .orient("bottom")
                 .scale(x)
-                .ticks(weeks)
-                .tickFormat(function (d) {
+                .ticks(4)
+                .tickFormat(function (w) {
+                                var firstOfTheYear = new Date('1/1/' + new Date().getFullYear()).getTime(),
+                                    d = new Date(firstOfTheYear + w * 604800000).getFirstDayOfWeek();
                                 return (d.getMonth() + 1) + '/' + d.getDate() + ' - ';
                             });
             xAxisLine2 = d3.svg.axis()
                 .orient("bottom")
                 .scale(x)
-                .ticks(weeks)
-                .tickFormat(function (d) {
-                                var d2 = new Date(d.getTime() + 604800000 - 1);
+                .ticks(4)
+                .tickFormat(function (w) {
+                             var firstOfTheYear = new Date('1/1/' + new Date().getFullYear()).getTime(),
+                                 d = new Date(firstOfTheYear + w * 604800000).getFirstDayOfWeek();
+                             var d2 = new Date(d.getTime() + 604800000 - 1);
                                 return (d2.getMonth() + 1) + '/' + d2.getDate();
                             });
             xAxisTotals = d3.svg.axis()
                 .orient("bottom")
                 .scale(x)
-                .ticks(weeks)
-                .tickFormat(function (d) {
+                .ticks(4)
+                .tickFormat(function (w) {
                                 var result = 0;
-                                var g = d.getWeekNumber();
                                 classes.forEach(function (c) {
-                                    if (typeof c.bases[g] != 'undefined')
-                                        result += c.bases[g];
+                                    if (typeof c.bases[w] != 'undefined')
+                                        result += c.bases[w];
                                 });
                                 var rounded = Math.round(result * 10 / 3600) / 10;
                                 return result == 0 ? '' : rounded;
@@ -215,8 +217,12 @@
                 e.selectAll("rect")
                     .data(function (d) { return d.values; })
                     .enter().append("rect")
-                    .attr("x", function (d) { return x(d.time); })
-                    .attr("y", function (d) { return y(d.length0 + d.length); })
+                    .attr("x", function (d) {
+                                              return x(d.time.getWeekNumber());
+                                          })
+                    .attr("y", function (d) {
+                                              return y(d.length0 + d.length);
+                                          })
                     .attr("width", 30)
                     .attr("height", function (d) { return h - y(d.length); })
                     .style("fill", color(p.key))
@@ -236,12 +242,11 @@
                        });
 
             svg.select('.x.axisT')
-                .selectAll('text').each(function (d) {
-                                         var g = d.getWeekNumber();
+                .selectAll('text').each(function (w) {
                                          var weekTotal = 0;
                                          classes.forEach(function (c) {
-                                             if(typeof c.bases[g] != 'undefined')
-                                                 weekTotal += c.bases[g];
+                                             if(typeof c.bases[w] != 'undefined')
+                                                 weekTotal += c.bases[w];
                                          });
                                          d3.select(this).attr('transform', 'translate(15,' + y(weekTotal) + ')');
                                      });

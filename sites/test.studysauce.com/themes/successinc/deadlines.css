@@ -1,0 +1,674 @@
+
+.page-dashboard #deadlines .head
+{
+    background-color:#555555;
+    color: #eeeeee;
+    margin-top:30px;
+    padding:5px;
+    clear:both;
+}
+
+.page-dashboard #deadlines .row
+{
+    position: relative;
+    vertical-align: top;
+    clear:both;
+}
+
+.page-dashboard #deadlines .row.is_hidden
+{
+    display:none !important;
+}
+
+.page-dashboard #deadlines .node-key_dates-form
+{
+    min-height: 450px;
+}
+
+.page-dashboard #deadlines #new-dates-row
+{
+    display:none;
+}
+
+.page-dashboard #deadlines.edit-date-only .field-add-more-submit
+{
+    display:none;
+}
+
+.page-dashboard #deadlines.edit-date-only .row.edit,
+.page-dashboard #deadlines.edit-date-only #new-dates-row.edit
+{
+    display:block;
+}
+
+.page-dashboard #deadlines .field-name-field-class-name
+.page-dashboard #deadlines .field-name-field-assignment,
+.page-dashboard #deadlines .field-name-field-due-date,
+.page-dashboard #deadlines .field-name-field-reminder,
+.page-dashboard #deadlines .field-name-field-percent
+{
+    vertical-align: top;
+    display:block;
+}
+
+.page-dashboard #deadlines .field-name-field-class-name .read-only
+{
+    width: 130px;
+    padding:5px 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow:hidden;
+    height:22px;
+}
+
+.page-dashboard #deadlines .field-name-field-assignment .read-only a
+{
+    display:block;
+}
+
+.page-dashboard #deadlines .field-name-field-assignment .read-only
+{
+    width: 320px;
+    padding:5px 0;
+}
+
+.page-dashboard #deadlines .field-name-field-percent .read-only
+{
+    width:100px;
+    padding:5px 0;
+}
+
+.page-dashboard #deadlines .field-name-field-reminder .read-only
+{
+    width:350px;
+    padding:5px 0;
+}
+
+.page-dashboard #deadlines .field-name-field-completed .read-only
+{
+    width:50px;
+    padding:5px 0;
+    position: absolute;
+    top:0;
+    right:0;
+    text-align: right;
+    z-index:2;
+}
+
+.page-dashboard a[href="#edit-reminder"]
+{
+    display:inline-block;
+    height:24px;
+    width:24px;
+    background: url(images/edit.png) no-repeat 50% 50% transparent;
+}
+
+.page-dashboard a[href="#remove-reminder"]
+{
+    display:inline-block;
+    height:24px;
+    width:24px;
+    background: url(images/trash.png) no-repeat 50% 50% transparent;
+}
+
+.page-dashboard #deadlines .field-name-field-class-name .form-type-select,
+.page-dashboard #deadlines .field-name-field-assignment .form-type-textfield,
+.page-dashboard #deadlines .field-name-field-percent .form-type-textfield,
+.page-dashboard #deadlines .field-name-field-due-date .form-type-date-popup,
+.page-dashboard #deadlines .row .highlighted-link,
+.page-dashboard #deadlines .field-name-field-reminder .form-type-checkboxes,
+.page-dashboard #deadlines .field-name-field-reminder-sent,
+.page-dashboard #deadlines .field-name-field-completed .form-type-checkbox,
+.page-dashboard #deadlines a[href="#cancel-dates"]
+
+{
+    display:none;
+}
+
+.page-dashboard #deadlines .field-name-field-class-name,
+.page-dashboard #deadlines .field-name-field-assignment,
+.page-dashboard #deadlines .field-name-field-due-date,
+.page-dashboard #deadlines .field-name-field-reminder,
+.page-dashboard #deadlines .field-name-field-percent,
+.page-dashboard #deadlines .field-name-field-completed
+{
+    display: inline-block;
+    padding: 0 5px;
+    vertical-align: top;
+}
+
+.page-dashboard #deadlines .field-name-field-reminder
+{
+    padding:0;
+}
+
+.page-dashboard #deadlines .field-name-field-class-name
+{
+    padding-left:0;
+}
+
+.page-dashboard #deadlines label:not(.option)
+{
+    display:none;
+}
+
+.page-dashboard #deadlines .head:nth-child(2)
+{
+    margin-top:0;
+}
+
+.page-dashboard #deadlines .row.edit label:not(.option)
+{
+    display:block;
+}
+
+.page-dashboard #deadlines .row.first label:not(.option)
+{
+    margin-top:-22px;
+    position:relative;
+    top:-40px;
+    display:block;
+}
+
+.page-dashboard #deadlines .field-name-field-class-name .form-type-select
+{
+    width:130px;
+}
+
+.page-dashboard #deadlines .field-name-field-class-name .form-type-select select
+{
+    width:100%;
+}
+
+.page-dashboard #deadlines .row.first:nth-child(2).edit .field-name-field-class-name .form-type-select
+{
+    margin-top:32px;
+}
+
+.page-dashboard #deadlines .row.first:nth-child(2) .field-name-field-class-name .read-only
+{
+    margin-top: 22px;
+}
+
+.page-dashboard #deadlines .field-name-field-assignment .form-type-textfield
+{
+    width:320px;
+}
+
+.page-dashboard #deadlines .field-name-field-due-date .form-type-date-popup,
+.page-dashboard #deadlines .field-name-field-due-date fieldset
+{
+    width:110px;
+}
+
+.page-dashboard #deadlines .field-name-field-reminder .form-type-checkboxes
+{
+    width:250px;
+}
+
+.page-dashboard #deadlines .field-name-field-percent .form-type-textfield
+{
+    width:85px;
+}
+
+.page-dashboard #deadlines .edit .field-name-field-class-name .read-only,
+.page-dashboard #deadlines .edit .field-name-field-percent .read-only,
+.page-dashboard #deadlines .edit .field-name-field-assignment .read-only,
+.page-dashboard #deadlines .edit .field-name-field-reminder .read-only
+{
+    display:none;
+}
+
+.page-dashboard #deadlines .edit .field-name-field-class-name .form-type-select,
+.page-dashboard #deadlines .edit .field-name-field-assignment .form-type-textfield,
+.page-dashboard #deadlines .edit .field-name-field-percent .form-type-textfield,
+.page-dashboard #deadlines .edit .field-name-field-due-date .form-type-date-popup,
+.page-dashboard #deadlines .edit .field-name-field-reminder .form-type-checkboxes,
+.page-dashboard #deadlines .edit .field-name-field-reminder .form-checkboxes
+{
+    display:block;
+}
+
+.page-dashboard #deadlines .row.edit .highlighted-link,
+.page-dashboard #deadlines .edit a[href="#cancel-dates"]
+{
+    display:inline-block;
+}
+
+.page-dashboard #deadlines .edit .field-name-field-completed .read-only
+{
+    display:none;
+}
+
+.page-dashboard #deadlines input[type="submit"]
+{
+    display:none;
+}
+
+.page-dashboard #deadlines .field-name-field-class-name .read-only span
+{
+    display:inline-block;
+    height: 22px;
+    width: 22px;
+    border:3px solid #555555;
+    border-radius: 100%;
+    text-align: center;
+    font-size: 14px;
+    line-height: 15px;
+    margin:-3px 10px 0 0;
+    vertical-align: top;
+}
+
+.page-dashboard #deadlines .class0
+{
+    background-color:#FF0D00;
+}
+
+.page-dashboard #deadlines .class1
+{
+    background-color:#FF9900;
+}
+
+.page-dashboard #deadlines .class2
+{
+    background-color:#FFD700;
+}
+
+.page-dashboard #deadlines .class3
+{
+    background-color:#BAF300;
+}
+
+.page-dashboard #deadlines .class4
+{
+    background-color:#2DD700;
+}
+
+.page-dashboard #deadlines .class5
+{
+    background-color:#009999;
+}
+
+.page-dashboard #deadlines .class6
+{
+    background-color:#1122AA;
+}
+
+.page-dashboard #deadlines .class7
+{
+    background-color:#6A0AAB;
+}
+
+.page-dashboard #deadlines .class8
+{
+    background-color:#BE008A;
+}
+
+.page-dashboard #deadlines .field-name-field-due-date .description,
+.page-dashboard #deadlines .field-name-field-due-date legend
+{
+    display:none;
+}
+
+.page-dashboard #deadlines .field-name-field-due-date .date-padding,
+.page-dashboard #deadlines .field-name-field-due-date fieldset
+{
+    padding:0;
+    margin:0;
+    border:0;
+    min-width: 0;
+    float:none;
+}
+
+.page-dashboard #deadlines table td
+{
+    padding:5px;
+}
+
+.page-dashboard #deadlines .field-add-more-submit
+{
+    position: relative;
+    z-index: 0;
+    padding:10px 0;
+    text-shadow: 0 1px 2px rgba(255,255,255,.5);
+    background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+    border-bottom: 0;
+    color:#555555;
+    font-size:22px;
+    margin:0;
+}
+
+.page-dashboard #deadlines .field-add-more-submit:active
+{
+    /*margin-top: 2px;*/
+    box-shadow: none;
+}
+
+.page-dashboard #deadlines .field-add-more-submit span
+{
+    margin: 0 10px -8px 0;
+    background: url("images/menu_icons_48.png") no-repeat scroll 0 -1728px #FFFFFF;
+    line-height: 100%;
+    border-radius: 100%;
+    display:inline-block;
+    height: 48px;
+    width: 48px;
+    position: relative;
+    z-index: 1;
+    top:-8px;
+    color:transparent;
+    float:left;
+}
+
+.page-dashboard #deadlines .field-add-more-submit:active span
+{
+    border-bottom-width:1px;
+}
+
+.page-dashboard #deadlines .node-key_dates-form .form-actions
+{
+    text-align: right;
+    float:right;
+    display:none;
+}
+
+.page-dashboard .field-name-field-reminder input
+{
+    z-index: -1;
+}
+
+.page-dashboard .field-name-field-day-of-the-week .read-only span,
+.page-dashboard .field-name-field-recurring .read-only span,
+.page-dashboard .field-name-field-reminder .read-only span,
+.page-dashboard .field-name-field-reminder label.option
+{
+    display:inline-block;
+    padding:20px 0 0 0;
+    position: relative;
+    z-index:1;
+    background: url('images/menu_icons_128.png') no-repeat -54px -2854px transparent;
+    font-size: 14px;
+    width:50px;
+    text-align: center;
+}
+
+
+.page-dashboard .field-name-field-day-of-the-week .read-only span
+{
+    padding:2px;
+    margin:3px 0 0 0;
+    color:transparent;
+}
+
+.page-dashboard .field-name-field-reminder label.option
+{
+    cursor: pointer;
+    margin-top:-20px;
+    display:block;
+    float:left;
+}
+
+.page-dashboard .field-name-field-day-of-the-week .read-only span.checked,
+.page-dashboard .field-name-field-recurring .read-only span.checked,
+.page-dashboard .field-name-field-reminder .read-only span.checked,
+.page-dashboard .field-name-field-reminder input:checked + label.option
+{
+    background-position: -54px -2741px;
+}
+
+.page-dashboard #deadlines .clearfix:first-child
+{
+    text-align: left;
+    padding-top:15px;
+    padding-bottom:15px;
+}
+
+.page-dashboard #deadlines .invalid .highlighted-link .more
+{
+    background-color: #aaaaaa;
+    border-color: #888888;
+    margin-top: 0;
+    border-bottom-width: 3px;
+    box-shadow: none;
+}
+
+.page-dashboard .field-name-field-reminder input
+{
+    visibility: hidden;
+    margin: 0;
+}
+
+.page-dashboard .field-name-field-reminder .form-type-checkbox
+{
+    display: inline-block;
+    text-align: center;
+    float:left;
+    width:50px;
+}
+
+.page-dashboard .big-plus
+{
+    display:block;
+    position:absolute;
+}
+
+.page-dashboard #deadlines .highlighted-link
+{
+    text-align: right;
+}
+
+@media all and (min-width:980px) and (max-width: 1250px)
+{
+
+    .page-dashboard .field-name-field-reminder .read-only span
+    {
+        width:40px
+    }
+
+    .page-dashboard .field-name-field-reminder .form-type-checkbox,
+    .page-dashboard .field-name-field-reminder label.option
+    {
+        width: 40px;
+    }
+
+    .page-dashboard #deadlines .field-name-field-due-date .form-type-date-popup,
+    .page-dashboard #deadlines .field-name-field-due-date fieldset
+    {
+        width:100px;
+    }
+
+    .page-dashboard #deadlines .field-name-field-reminder .form-type-checkboxes
+    {
+        width: 200px;
+    }
+
+    .page-dashboard #deadlines .field-name-field-reminder .read-only
+    {
+        width: 230px;
+    }
+
+    .page-dashboard #deadlines .field-name-field-assignment .read-only
+    {
+        width: 180px;
+    }
+
+    .page-dashboard #deadlines .field-name-field-assignment .form-type-textfield
+    {
+        width:160px;
+    }
+
+    .page-dashboard #deadlines .field-name-field-class-name .form-type-select
+    {
+        width:100px;
+    }
+}
+
+@media all and (min-width:980px)
+{
+    .page-dashboard #deadlines .field-name-field-assignment a
+    {
+        color: #666666;
+        cursor: default;
+    }
+}
+
+@media all and (max-width:980px)
+{
+
+    .page-dashboard #deadlines .edit .field-name-field-reminder .form-checkboxes .form-type-checkbox:first-child
+    {
+        margin-left: -10px;
+    }
+
+    .page-dashboard #deadlines .field-name-field-reminder .read-only
+    {
+        margin:0 auto;
+        text-align: center;
+    }
+
+    .page-dashboard #deadlines .head:nth-child(2)
+    {
+        margin-top: 0;
+    }
+
+    .page-dashboard #deadlines .field-add-more-submit span
+    {
+        position:relative;
+        float:none;
+        top:-14px;
+        margin: 0 10px -10px 10px;
+    }
+
+    .page-dashboard #deadlines .read-only label
+    {
+        display:none !important;
+    }
+
+    .page-dashboard #deadlines label:not(.option)
+    {
+        display:block;
+    }
+
+    .page-dashboard #deadlines .field-name-field-class-name .read-only
+    {
+        position:absolute;
+        color:#0099be;
+        z-index:0;
+    }
+
+    .page-dashboard #deadlines .field-name-field-assignment .read-only
+    {
+        width:auto;
+        padding:5px 45px 5px 140px;
+        color:#0099be;
+        cursor:pointer;
+        position:relative;
+        z-index:1;
+    }
+
+    .page-dashboard #deadlines .field-name-field-percent .read-only
+    {
+        position: absolute;
+        top: 0;
+        right: 0;
+        text-align: right;
+        color:#0099be;
+        z-index:0;
+    }
+
+    .page-dashboard #deadlines .field-name-field-completed .read-only
+    {
+        top:32px;
+    }
+
+    .page-dashboard #deadlines .field-name-field-reminder .read-only
+    {
+        width:auto;
+    }
+
+    .page-dashboard #deadlines .row.first:nth-child(2).edit .field-name-field-class-name .form-type-select,
+    .page-dashboard #deadlines .row.first:nth-child(2) .field-name-field-class-name .read-only
+    {
+        margin-top: 0;
+    }
+
+    .page-dashboard #deadlines .row.first label:not(.option)
+    {
+        position: static;
+        margin-top:0;
+        top: 0;
+    }
+
+    .page-dashboard #deadlines .clearfix:first-child
+    {
+        text-align: center;
+    }
+
+    .page-dashboard #deadlines .highlighted-link
+    {
+        float:none;
+        text-align: center;
+    }
+
+    .page-dashboard #deadlines .field-name-field-class-name,
+    .page-dashboard #deadlines .field-name-field-assignment,
+    .page-dashboard #deadlines .field-name-field-completed
+    {
+        display:block;
+        vertical-align: top;
+        width: auto;
+        clear:both;
+        padding:0;
+    }
+
+    .page-dashboard #deadlines .field-name-field-due-date,
+    .page-dashboard #deadlines .field-name-field-reminder,
+    .page-dashboard #deadlines .field-name-field-percent
+    {
+        display:inline-block;
+        vertical-align: top;
+        width: auto;
+        padding:0;
+    }
+
+    .page-dashboard #deadlines .field-name-field-reminder .form-checkboxes,
+    .page-dashboard #deadlines .field-name-field-reminder .read-only,
+    .page-dashboard #deadlines .field-name-field-completed .form-type-checkbox,
+    .page-dashboard #deadlines .field-name-field-completed .read-only
+    {
+        display:none;
+    }
+
+    .page-dashboard #deadlines .selected .field-name-field-reminder .form-checkboxes,
+    .page-dashboard #deadlines .selected .field-name-field-reminder .read-only,
+    .page-dashboard #deadlines .selected .field-name-field-completed .read-only
+    {
+        display:block;
+    }
+
+    .page-dashboard #deadlines .edit .field-name-field-reminder .read-only,
+    .page-dashboard #deadlines .edit .field-name-field-completed .read-only
+    {
+        display:none;
+    }
+
+    .page-dashboard #deadlines .field-name-field-assignment .form-type-textfield,
+    .page-dashboard #deadlines .field-name-field-class-name .form-type-select
+    {
+        width: auto;
+    }
+
+}
+
+@media all and (max-width:480px)
+{
+    .page-dashboard .field-name-field-reminder .read-only span
+    {
+        width:42px;
+    }
+
+    .page-dashboard #deadlines .field-name-field-reminder .read-only
+    {
+        text-align: left;
+    }
+}
