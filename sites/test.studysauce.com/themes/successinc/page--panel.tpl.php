@@ -359,12 +359,12 @@ Remarketing tags may not be associated with personally identifiable information 
     /* ]]> */
 </script>
 <script type="text/javascript"
-        src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.googleadservices.com/pagead/conversion.js">
+        src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.googleadservices.com/pagead/conversion.js">
 </script>
 <noscript>
     <div style="display:inline;">
         <img height="1" width="1" style="border-style:none;" alt=""
-             src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://googleads.g.doubleclick.net/pagead/viewthroughconversion/990070454/?value=0&amp;guid=ON&amp;script=0"/>
+             src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://googleads.g.doubleclick.net/pagead/viewthroughconversion/990070454/?value=0&amp;guid=ON&amp;script=0"/>
     </div>
 </noscript>
 <?php if (arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'schedule'): ?>
@@ -381,12 +381,12 @@ Remarketing tags may not be associated with personally identifiable information 
         /* ]]> */
     </script>
     <script type="text/javascript"
-            src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.googleadservices.com/pagead/conversion.js">
+            src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.googleadservices.com/pagead/conversion.js">
     </script>
     <noscript>
         <div style="display:inline;">
             <img height="1" width="1" style="border-style:none;" alt=""
-                 src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.googleadservices.com/pagead/conversion/990070454/?value=0&amp;label=h6z4CKLN9gcQto2N2AM&amp;guid=ON&amp;script=0"/>
+                 src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.googleadservices.com/pagead/conversion/990070454/?value=0&amp;label=h6z4CKLN9gcQto2N2AM&amp;guid=ON&amp;script=0"/>
         </div>
     </noscript>
 <?php elseif (arg(1) == '13' || arg(1) == '89'): ?>
@@ -400,10 +400,10 @@ Remarketing tags may not be associated with personally identifiable information 
         var google_conversion_value = 0;
         var google_remarketing_only = false;
         /* ]]> */ </script>
-    <script type="text/javascript" src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.googleadservices.com/pagead/conversion.js"></script>
+    <script type="text/javascript" src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.googleadservices.com/pagead/conversion.js"></script>
     <noscript>
         <div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt=""
-                                          src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.googleadservices.com/pagead/conversion/990070454/?value=0&amp;label=zcRCCKqagAgQto2N2AM&amp;guid=ON&amp;script=0"/>
+                                          src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.googleadservices.com/pagead/conversion/990070454/?value=0&amp;label=zcRCCKqagAgQto2N2AM&amp;guid=ON&amp;script=0"/>
         </div>
     </noscript>
     <!-- Facebook Code for Conversion Tracking -->
@@ -414,12 +414,12 @@ Remarketing tags may not be associated with personally identifiable information 
         (function () {
             var fpw = document.createElement('script');
             fpw.async = true;
-            fpw.src = '<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://connect.facebook.net/en_US/fp.js';
+            fpw.src = '<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://connect.facebook.net/en_US/fp.js';
             var ref = document.getElementsByTagName('script')[0];
             ref.parentNode.insertBefore(fpw, ref);
         })(); </script>
     <noscript><img height="1" width="1" alt="" style="display:none"
-                   src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.facebook.com/offsite_event.php?id=6008770260529&amp;value=0&amp;currency=USD"/>
+                   src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.facebook.com/offsite_event.php?id=6008770260529&amp;value=0&amp;currency=USD"/>
     </noscript>
 <?php elseif (arg(0) == 'welcome'): ?>
     <!-- Facebook Code for Conversion Tracking -->
@@ -430,12 +430,12 @@ Remarketing tags may not be associated with personally identifiable information 
         (function () {
             var fpw = document.createElement('script');
             fpw.async = true;
-            fpw.src = '<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://connect.facebook.net/en_US/fp.js';
+            fpw.src = '<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://connect.facebook.net/en_US/fp.js';
             var ref = document.getElementsByTagName('script')[0];
             ref.parentNode.insertBefore(fpw, ref);
         })(); </script>
     <noscript><img height="1" width="1" alt="" style="display:none"
-                   src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.facebook.com/offsite_event.php?id=6008770262329&amp;value=0&amp;currency=USD"/>
+                   src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.facebook.com/offsite_event.php?id=6008770262329&amp;value=0&amp;currency=USD"/>
     </noscript>
 <?php endif; ?>
 

@@ -1,3 +1,7 @@
+<?php
+drupal_add_css(drupal_get_path('theme', 'successinc') .'/tips.css');
+?>
+
 <h2 class="highlighted-link">Top 10 study tips</h2>
 <div class="grid_6">
     <h3>Good study habits</h3>

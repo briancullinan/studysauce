@@ -21,7 +21,7 @@
                                     <tbody>
                                     <tr>
                                         <td><img
-                                                src="<?php print url('<front>', array('absolute' => true, 'https' => false)); ?>sites/test.studysauce.com/themes/successinc/images/emails/top.gif"
+                                                src="<?php print url('<front>', array('absolute' => true, 'https' => false)); ?><?php print drupal_get_path('theme', 'successinc'); ?>/images/emails/top.gif"
                                                 alt="" width="648" height="122" border="0"
                                                 style="display: block; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; ">
                                         </td>
@@ -29,7 +29,7 @@
                                     </tbody>
                                 </table>
                                 <table width="630" border="0" cellspacing="0" cellpadding="0" align="center"
-                                       style="margin-top: 0px; margin-right: auto; margin-bottom: 0px; margin-left: auto; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; background-image:url(http://test.studysauce.com/sites/test.studysauce.com/themes/successinc/images/noise_gray.png); background-color:#EEEEEE; ">
+                                       style="margin-top: 0px; margin-right: auto; margin-bottom: 0px; margin-left: auto; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; background-image:url(<?php print url('<front>', array('absolute' => true, 'https' => false)); ?><?php print drupal_get_path('theme', 'successinc'); ?>/images/noise_gray.png); background-color:#EEEEEE; ">
                                     <tbody>
                                     <tr>
                                         <td>

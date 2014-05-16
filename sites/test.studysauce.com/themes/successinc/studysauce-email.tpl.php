@@ -20,7 +20,7 @@
                                     <tbody>
                                     <tr>
                                         <td rowspan="2" align="right"
-                                            style="text-align: right; border-top-left-radius: 5px; background-color:#EEEEEE; background-image:url(http://test.studysauce.com/sites/test.studysauce.com/themes/successinc/images/noise_gray.png);"
+                                            style="text-align: right; border-top-left-radius: 5px; background-color:#EEEEEE; background-image:url(<?php print url('<front>', array('absolute' => true, 'https' => false)); ?><?php print drupal_get_path('theme', 'successinc'); ?>/images/noise_gray.png);"
                                             bgcolor="#EEEEEE">
                                             <img
                                                 src="<?php print url(drupal_get_path('theme', 'successinc'), array('absolute' => true, 'https' => false)); ?>/images/emails/icon.gif"
@@ -28,7 +28,7 @@
                                                 style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; max-width: 100%; width: auto; height: auto; min-width: 64px;"/>
                                         </td>
                                         <td height="20" width="180"
-                                            style="font-size: 20px; border-top-right-radius: 5px; background-color:#EEEEEE; background-image:url(http://test.studysauce.com/sites/test.studysauce.com/themes/successinc/images/noise_gray.png);"
+                                            style="font-size: 20px; border-top-right-radius: 5px; background-color:#EEEEEE; background-image:url(<?php print url('<front>', array('absolute' => true, 'https' => false)); ?><?php print drupal_get_path('theme', 'successinc'); ?>/images/noise_gray.png);"
                                             bgcolor="#EEEEEE">&nbsp;</td>
                                         <td width="10" style="text-align: right; background-color:#FFFFFF; width:10px;"
                                             bgcolor="white" rowspan="2">
@@ -40,7 +40,7 @@
                                     </tr>
                                     <tr>
                                         <td width="180"
-                                            style="font-size:28px; color:#FF9900; padding:30px 30px 30px 10px; text-align: right; vertical-align: middle; background: #EEEEEE url(http://test.studysauce.com/sites/test.studysauce.com/themes/successinc/images/noise_gray.png);"
+                                            style="font-size:28px; color:#FF9900; padding:30px 30px 30px 10px; text-align: right; vertical-align: middle; background: #EEEEEE url(<?php print url('<front>', array('absolute' => true, 'https' => false)); ?><?php print drupal_get_path('theme', 'successinc'); ?>/images/noise_gray.png);"
                                             bgcolor="#EEEEEE">
                                             <p style="font-size:28px; color:#FF9900; text-align: right; vertical-align: middle;"><strong>Study</strong> Sauce</p>
                                         </td>
@@ -49,7 +49,7 @@
                                 </table>
                                 <table border="0" cellspacing="0" cellpadding="0" align="center"
                                        bgcolor="#EEEEEE" width="100%"
-                                       style="margin-top: 0px; margin-right: auto; margin-bottom: 0px; margin-left: auto; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; background-image:url(http://test.studysauce.com/sites/test.studysauce.com/themes/successinc/images/noise_gray.png); background-color:#EEEEEE; width:100%; ">
+                                       style="margin-top: 0px; margin-right: auto; margin-bottom: 0px; margin-left: auto; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; background-image:url(<?php print url('<front>', array('absolute' => true, 'https' => false)); ?><?php print drupal_get_path('theme', 'successinc'); ?>/images/noise_gray.png); background-color:#EEEEEE; width:100%; ">
                                     <tbody>
                                     <tr>
                                         <td style="padding: 20px;">
@@ -106,7 +106,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="padding-top: <?php print isset($footer) ? '100' : '10'; ?>px; ">
+                                        <td style="padding-top: <?php print (isset($footer) ? '100' : '10'); ?>px; ">
                                             <img
                                                 src="<?php print url(drupal_get_path('theme', 'successinc'), array('absolute' => true, 'https' => false)); ?>/images/emails/btm.gif"
                                                 alt="" border="0" width="100%" height="21"

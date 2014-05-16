@@ -7,11 +7,18 @@
 .page-dashboard #metrics
 {
     position:relative;
+    text-align: center;
 }
 
 .page-dashboard #metrics.empty
 {
     overflow:hidden;
+}
+
+.page-dashboard #metrics .centrify
+{
+    margin:0 auto;
+    display:inline-block;
 }
 
 .page-dashboard #checkin.empty #metrics.empty #metrics-empty a
@@ -91,6 +98,7 @@
     overflow: hidden;
     height: 22px;
     vertical-align: top;
+    text-align: left;
 }
 
 .page-dashboard #metrics .row .class-date

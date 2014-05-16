@@ -60,7 +60,11 @@
 .page-dashboard.privacy-only #home,
 .page-dashboard.about-us-only #home,
 .page-dashboard.contact-only #home,
-.page-dashboard.refund-only #home
+.page-dashboard.refund-only #home,
+.page-dashboard.premium-only #home,
+.page-dashboard.tips-time-only #home,
+.page-dashboard.tips-env-only #home,
+.page-dashboard.tips-strategy-only #home
 {
     display:none;
 }
@@ -78,6 +82,10 @@
 .page-dashboard.tips-only #tips,
 .page-dashboard.invite-only #invite,
 .page-dashboard.partner-only #partner,
+.page-dashboard.premium-only #premium,
+.page-dashboard.tips-time-only #tips-time,
+.page-dashboard.tips-env-only #tips-env,
+.page-dashboard.tips-strategy-only #tips-strategy,
 
 .page-dashboard.awards-only #badges,
 .page-dashboard #checkin.checklist-only #checklist,
@@ -233,7 +241,7 @@
         left:0;
         width:100%;
         display:none;
-        margin-top:50px;
+        margin-top:56px;
         overflow: visible;
     }
 

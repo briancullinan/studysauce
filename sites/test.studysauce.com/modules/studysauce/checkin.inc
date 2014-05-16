@@ -19,6 +19,10 @@ function studysauce_checkin()
         $nid = array_shift($nodes);
         $node = node_load($nid);
         $node->revision = 1;
+
+        if(isset($_POST['touchedMusic']))
+            $node->field_touched_music['und'][0]['value'] = 1;
+
         if(isset($node->field_classes['und'][0]['value']))
         {
             foreach($node->field_classes['und'] as $i => $class)

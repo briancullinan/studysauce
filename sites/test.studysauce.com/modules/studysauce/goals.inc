@@ -1,178 +1,6 @@
 <?php
 
 
-/**
- * Plupload's upload function.
- */
-function studysauce_goals_upload_page() {
-
-    drupal_add_http_header('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT', TRUE);
-    drupal_add_http_header('Last-Modified', gmdate("D, d M Y H:i:s") . ' GMT', TRUE);
-    drupal_add_http_header('Cache-Control', 'no-store, no-cache, must-revalidate post-check=0, pre-check=0', TRUE);
-    drupal_add_http_header('Pragma', 'no-cache', TRUE);
-
-    // Settings
-    $targetDir = $GLOBALS['conf']['file_temporary_path'] .'/';
-    // 5 minutes execution time
-    @set_time_limit(5 * 60);
-    // Uncomment this one to fake upload time
-    // usleep(5000);
-
-    // Get parameters
-    $chunk = isset($_REQUEST['chunk']) ? $_REQUEST['chunk'] : 0;
-    $chunks = isset($_REQUEST['chunks']) ? $_REQUEST['chunks'] : 0;
-    $filename = isset($_REQUEST['name']) ? $_REQUEST['name'] : '';
-
-    // Clean the fileName for security reasons
-    $extensions = 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp *';
-    $filename = file_munge_filename($filename, $extensions, FALSE);
-
-    // Make sure the fileName is unique but only if chunking is disabled
-    if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $filename)) {
-        $ext = strrpos($filename, '.');
-        $filename_a = substr($filename, 0, $ext);
-        $filename_b = substr($filename, $ext);
-
-        $count = 1;
-        while (file_exists($targetDir . DIRECTORY_SEPARATOR . $filename_a . '_' . $count . $filename_b))
-            $count++;
-
-        $filename = $filename_a . '_' . $count . $filename_b;
-    }
-
-
-    // Look for the content type header
-    if (isset($_SERVER['HTTP_CONTENT_TYPE'])) {
-        $contentType = $_SERVER['HTTP_CONTENT_TYPE'];
-    }
-
-    if (isset($_SERVER['CONTENT_TYPE'])) {
-        $contentType = $_SERVER['CONTENT_TYPE'];
-    }
-
-    // Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
-    if (strpos($contentType, 'multipart') !== false) {
-        if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
-            // Open temp file
-            $out = fopen($targetDir . DIRECTORY_SEPARATOR . $filename, $chunk == 0 ? 'wb' : 'ab');
-            if ($out) {
-                // Read binary input stream and append it to temp file
-                $in = fopen($_FILES['file']['tmp_name'], 'rb');
-
-                if ($in) {
-                    while ($buff = fread($in, 4096))
-                        fwrite($out, $buff);
-                } else {
-                    die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
-                }
-
-                fclose($in);
-                fclose($out);
-                @unlink($_FILES['file']['tmp_name']);
-            } else {
-                die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
-            }
-        } else {
-            die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
-        }
-    } else {
-        // Open temp file
-        $out = fopen($targetDir . DIRECTORY_SEPARATOR . $filename, $chunk == 0 ? 'wb' : 'ab');
-        if ($out) {
-            // Read binary input stream and append it to temp file
-            $in = fopen("php://input", 'rb');
-
-            if ($in) {
-                while ($buff = fread($in, 4096)) {
-                    fwrite($out, $buff);
-                }
-            } else {
-                die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
-            }
-
-            fclose($in);
-            fclose($out);
-        } else {
-            die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
-        }
-    }
-
-    if ((isset($_GET['chunk']) && ($_GET['chunk'] + 1) == $_GET['chunks']) || (!isset($_GET['chunk']))) {
-        $source = 'temporary://'. $filename;
-        $file = new stdClass();
-        $file->uid      = $GLOBALS['user']->uid;
-        $file->status   = 0;
-        $file->filename = $filename;
-        $file->uri      = $source;
-        $file->filemime = file_get_mimetype($file->filename);
-        $file->filesize = filesize($source);
-        // Save url argument(instance_id) so we can validate file by instance settings
-        $file->arg = arg(1);
-
-        $e = FALSE;
-        // Here we validate file
-        studysauce_plupload_file_validation($file, $e);
-
-        if ($e === FALSE) {
-            $return = file_save($file);
-            // Generate a secure version of file uri for temporary delivery.
-            $file->secure_uri = image_style_url('achievement', $file->uri);
-            // We build it as a temp but will deliver it as a public.
-            $file->secure_uri = str_replace('system/temporary', variable_get('file_public_path', 'sites/default/files'), $file->secure_uri);
-        }
-        else {
-            file_unmanaged_delete($file->uri);
-            $return = (object) array('error_message' => $e);
-        }
-
-        drupal_json_output($return);
-    }
-}
-
-
-/**
- * Default validation function.
- * In most cases Pluplaod will be used for images so we use image-specific validation.
- * Non-image files has no support right now.
- */
-function studysauce_plupload_file_validation(&$file, &$e) {
-    if (!isset($file->arg) || (isset($file->arg) && is_numeric($file->arg))) {
-        // Check if file is image
-        $passImage = file_validate_is_image($file);
-        if (!empty($passImage)) {
-            $e = reset($passImage);
-            return;
-        }
-
-        // Check if file has allowed extension
-        $passExt = file_validate_extensions($file, 'png gif jpg jpeg');
-        if (!empty($passExt)) {
-            $e = reset($passExt);
-            return;
-        }
-
-        // Check if file doesn't exceed the maximal allowed size
-        $passSize = file_validate_size($file, parse_size(''), 0);
-        if (!empty($passSize)) {
-            $e = reset($passSize);
-            return;
-        }
-
-        // Check if file name isn't too long
-        $passLength = file_validate_name_length($file);
-        if (!empty($passLength)) {
-            $e = reset($passLength);
-            return;
-        }
-
-        // Check if file meet the resolution restrictions
-        $passRes = file_validate_image_resolution($file, '', '');
-        if (!empty($passRes)) {
-            $e = reset($passRes);
-            return;
-        }
-    }
-}
 
 function _studysauce_unsponsored_goals()
 {
@@ -210,6 +38,7 @@ function _studysauce_unsponsored_goals()
             isset($milestone) ? $milestone : null,
             isset($outcome) ? $outcome : null);
     }
+    return array(null, null, null);
 }
 
 
@@ -290,9 +119,15 @@ function studysauce_save_goals()
             $entity->field_gpa[LANGUAGE_NONE][0]['value'] = $_POST['value'];
         }
         $entity->save();
+
+        if(!isset($thisEid))
+        {
+            $node = node_submit($node); // Prepare node for saving
+            node_save($node);
+        }
     }
 
-    if(isset($_POST['claim']) && isset($_POST['uploads']) && isset($_POST['message']))
+    if(isset($_POST['claim']) && isset($_POST['message']))
     {
         // get the entity we are claiming
         if (is_array($node->field_goals[LANGUAGE_NONE]))
@@ -305,7 +140,18 @@ function studysauce_save_goals()
                     $entity = entity_load('field_collection_item', array($eid));
                     // create a new achievement entity
                     $entity[$eid]->revision = 1;
-                    $entity[$eid]->field_photo_evidence['und'][0]['fid'] = $_POST['uploads'][0]['fid'];
+                    if(isset($_POST['uploads']))
+                    {
+                        $entity[$eid]->field_photo_evidence['und'][0]['fid'] = $_POST['uploads'][0]['fid'];
+                        $file = file_load($_POST['uploads'][0]['fid']);
+                        $fileName = isset($_POST['uploads'][0]['rename']) ? $_POST['uploads'][0]['rename'] : $file->filename;
+                        $location = 'public:///';
+                        $filePath = $location . $fileName;
+                        if ($file->uri !== $filePath) {
+                            file_prepare_directory($location, FILE_CREATE_DIRECTORY);
+                            file_move($file, $filePath);
+                        }
+                    }
                     $entity[$eid]->field_message['und'][0]['value'] = $_POST['message'];
                     $entity[$eid]->save();
 
@@ -314,37 +160,8 @@ function studysauce_save_goals()
             }
         }
 
-        foreach ($_POST['uploads'] AS $i => $upload)
-        {
-
-            break;
-                if ($items && $items[0]['fid'] > 0) {
-                    $field = field_info_field($instance['field_name']);
-                    $destination = file_field_widget_uri($field, $instance);
-                    foreach ($items AS $delta => $item) {
-                        $file = file_load($item['fid']);
-                        // Filefield paths integration
-                        if (module_exists('filefield_paths') && isset($item['rename'])) {
-                            $file->origname = $item['rename'];
-                            file_save($file);
-                        } else {
-                            $fileName = isset($item['rename']) ? $item['rename'] : $file->filename;
-                            $dir = isset($instance['settings']['file_directory']) ? $instance['settings']['file_directory'] .'/' : '';
-                            $location = token_replace($field['settings']['uri_scheme'] .'://'. $dir);
-                            $filePath = $location . $fileName;
-                            if ($file->uri !== $filePath) {
-                                file_prepare_directory($location, FILE_CREATE_DIRECTORY);
-                                file_move($file, $filePath);
-                            }
-                        }
-                    }
-                }
-        }
 
     }
-
-    $node = node_submit($node); // Prepare node for saving
-    node_save($node);
 
     // load parent sponsored node
     /*
@@ -486,6 +303,8 @@ function _studysauce_get_achievements()
             {
                 $entity = entity_load('field_collection_item', array($achievement['value']));
                 $achievement = $entity[$achievement['value']];
+                if(!isset($achievement->field_time_achieved[LANGUAGE_NONE][0]['value']))
+                    continue;
                 $time = $achievement->field_time_achieved[LANGUAGE_NONE][0]['value'];
                 $achievements[$time]['code'] = $achievement->field_code[LANGUAGE_NONE][0]['value'];
                 $achievements[$time]['activated'] = $achievement->field_activated[LANGUAGE_NONE][0]['value'];

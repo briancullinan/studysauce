@@ -1,8 +1,7 @@
 <h2>Enter important dates and we will send you reminders</h2>
-<button class="field-add-more-submit ajax-processed" name="field_reminders_add_more" value="Add new"
-        onclick="jQuery('#deadlines .row').first().addClass('edit'); jQuery(this).hide(); jQuery('#deadlines').addClass('edit-date-only').scrollintoview(); ">
-    Add <span>&nbsp;</span> new
-</button>
+<a href="#add-deadline" class="field-add-more-submit ajax-processed" name="field_reminders_add_more" onclick="jQuery('#deadlines .row').first().addClass('edit'); jQuery(this).hide(); jQuery('#deadlines').addClass('edit-date-only').scrollintoview(); return false;">
+    Add <span>+</span> new
+</a>
 
 <div class="row invalid" id="new-dates-row">
     <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
@@ -126,21 +125,29 @@ if (!empty($entities['node'])) {
             if (!empty($entity))
                 $entities[$eid] = $entity[$eid];
         }
-        uasort($entities, function ($a, $b) { return strtotime($a->field_due_date['und'][0]['value']) - strtotime($b->field_due_date['und'][0]['value']); });
+        uasort($entities, function ($a, $b) {
+            if(isset($a->field_due_date['und'][0]['value']) && isset($b->field_due_date['und'][0]['value']))
+                return strtotime($a->field_due_date['und'][0]['value']) - strtotime($b->field_due_date['und'][0]['value']);
+        });
         $headStr = '';
         $first = true;
         foreach ($entities as $eid => $reminder)
         {
+            if(!isset($reminder->field_due_date['und'][0]['value']))
+                continue;
             $time = strtotime($reminder->field_due_date['und'][0]['value']);
             if($headStr != date('j F', $time))
             {
                 $headStr = date('j F', $time);
-                ?><div class="head"><?php print $headStr; ?></div><?
+                ?><div class="head <?php
+            print ($time < strtotime(date('Y/m/d')) - 86400 ? 'hide' : ''); ?>"><?php print $headStr; ?></div><?
             }
             $reminders = array_map(function ($x) { return $x['value']; }, $reminder->field_reminder['und']);
             $classI = array_search($reminder->field_class_name['und'][0]['value'], array_values($classes));
             ?>
-            <div class="row <?php print ($first && !($first = false) ? 'first' : ''); ?>" id="eid-<?php print $eid; ?>">
+            <div class="row <?php
+            print ($first && !($first = false) ? 'first' : ''); ?> <?php
+            print ($time < strtotime(date('Y/m/d')) - 86400 ? 'hide' : ''); ?>" id="eid-<?php print $eid; ?>">
                 <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
                     <div class="read-only"><span class="class<?php print $classI; ?>">&nbsp;</span><?php print htmlspecialchars($reminder->field_class_name['und'][0]['value'], ENT_QUOTES); ?></div>
                     <div class="form-item form-type-select">
@@ -152,10 +159,10 @@ if (!empty($entities['node'])) {
 
                             foreach ($classes as $j => $c) {
                                 ?>
-                                <option value="<?php print htmlspecialchars($c, ENT_QUOTES); ?>" <?php print $reminder->field_class_name['und'][0]['value'] == $c ? 'selected' : ''; ?>><?php print htmlspecialchars($c, ENT_QUOTES); ?></option><?php
+                                <option value="<?php print htmlspecialchars($c, ENT_QUOTES); ?>" <?php print ($reminder->field_class_name['und'][0]['value'] == $c ? 'selected' : ''); ?>><?php print htmlspecialchars($c, ENT_QUOTES); ?></option><?php
                             }
                             ?>
-                            <option value="Nonacademic" <?php print $reminder->field_class_name['und'][0]['value'] == 'Nonacademic' ? 'selected' : ''; ?>>Nonacademic</option>
+                            <option value="Nonacademic" <?php print ($reminder->field_class_name['und'][0]['value'] == 'Nonacademic' ? 'selected' : ''); ?>>Nonacademic</option>
                         </select>
                     </div>
                 </div>
@@ -224,6 +231,7 @@ if (!empty($entities['node'])) {
                         </div>
                     </div>
                 </div>
+                <?php if($reminder->field_class_name['und'][0]['value'] != 'Nonacademic'): ?>
                 <div class="field-type-number-integer field-name-field-percent field-widget-number form-wrapper">
                     <div class="read-only"><label>% of grade</label><?php print $reminder->field_percent['und'][0]['value']; ?>%</div>
                     <div class="form-item form-type-textfield">
@@ -231,6 +239,7 @@ if (!empty($entities['node'])) {
                         <input type="text" name="dates-percent" value="<?php print $reminder->field_percent['und'][0]['value']; ?>" size="12" maxlength="10" class="form-text">
                     </div>
                 </div>
+                <?php endif; ?>
                 <div class="field-type-list-boolean field-name-field-completed field-widget-options-onoff form-wrapper">
                     <div class="read-only"><a href="#edit-reminder">&nbsp;</a><a href="#remove-reminder">&nbsp;</a></div>
                     <div class="form-item form-type-checkbox">
@@ -251,7 +260,7 @@ if (!empty($entities['node'])) {
 
 ?>
 <div id="empty-dates">
-    <a href="#schedule"><h2>Click here to set up your class schedule and get started.</h2><small>Then set important dates on the Reminders tab.</small></a>
+    <a href="#schedule"><h2>Click here to set up your class schedule and get started.</h2><small>Then set important dates on the Deadlines tab.</small></a>
 </div>
 <?php
 

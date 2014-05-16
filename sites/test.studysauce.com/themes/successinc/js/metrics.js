@@ -135,10 +135,10 @@
             var weeks = now.getWeekNumber() - d3.min(classes, function (c) { return c.minTime; }).getWeekNumber();
             if (weeks < 5)
                 weeks = 5;
-            if (weeks > 20)
-                weeks = 20;
+            if (weeks > 5)
+                weeks = 5;
 
-            var endTime = new Date(Math.floor(now.getTime())).getWeekNumber()+1.5,
+            var endTime = new Date(Math.floor(now.getTime())).getWeekNumber()+0.5,
                 startTime = endTime - weeks;
 
             x = d3.scale.linear()
@@ -156,7 +156,7 @@
             xAxis = d3.svg.axis()
                 .orient("bottom")
                 .scale(x)
-                .ticks(4)
+                .ticks(5)
                 .tickFormat(function (w) {
                                 var firstOfTheYear = new Date('1/1/' + new Date().getFullYear()).getTime(),
                                     d = new Date(firstOfTheYear + w * 604800000).getFirstDayOfWeek();
@@ -165,7 +165,7 @@
             xAxisLine2 = d3.svg.axis()
                 .orient("bottom")
                 .scale(x)
-                .ticks(4)
+                .ticks(5)
                 .tickFormat(function (w) {
                              var firstOfTheYear = new Date('1/1/' + new Date().getFullYear()).getTime(),
                                  d = new Date(firstOfTheYear + w * 604800000).getFirstDayOfWeek();
@@ -175,7 +175,7 @@
             xAxisTotals = d3.svg.axis()
                 .orient("bottom")
                 .scale(x)
-                .ticks(4)
+                .ticks(5)
                 .tickFormat(function (w) {
                                 var result = 0;
                                 classes.forEach(function (c) {

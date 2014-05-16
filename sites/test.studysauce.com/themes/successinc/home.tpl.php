@@ -3,15 +3,8 @@ global $user;
 $user = user_load($user->uid);
 $classes = _studysauce_get_schedule_classes();
 global $user;
-if(!isset($orders))
-{
-    $orders = _studysauce_orders_by_uid($user->uid);
-    $conn = studysauce_get_connections();
-    foreach ($conn as $i => $c)
-        $orders = array_merge($orders, _studysauce_orders_by_uid($c->uid));
-}
-// get event schedule
-$lastOrder = end($orders);
+
+$lastOrder = _studysauce_orders_by_uid($user->uid);
 
 $quizSubmissions = array();
 $quiz = db_select('webform_submissions', 's')
@@ -55,6 +48,21 @@ if (!empty($entities['node']))
     }
 }
 
+$query = new EntityFieldQuery();
+$entities = $query->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'strategies')
+    ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+    ->propertyCondition('status', 1)
+    ->range(0,1)
+    ->execute();
+if (!empty($entities['node']))
+{
+    $nodes = array_keys($entities['node']);
+    $nid = array_shift($nodes);
+    // used to check profile and checkin times
+    $strategies = node_load($nid);
+}
+
 // check if goals is filled out
 list($b) = _studysauce_unsponsored_goals();
 
@@ -62,9 +70,9 @@ list($b) = _studysauce_unsponsored_goals();
 <div id="study-quiz">
     <div>
         <?php
-        $node = node_load(17);
-        webform_node_view($node, 'full');
-        print theme_webform_view($node->content); ?>
+        $quiz = node_load(17);
+        webform_node_view($quiz, 'full');
+        print theme_webform_view($quiz->content); ?>
         <a href="#" onclick="jQuery('#home').removeClass('study-quiz-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
         <p style="margin-bottom:0;line-height: 1px; clear:both;">&nbsp;</p>
     </div>
@@ -79,7 +87,7 @@ list($b) = _studysauce_unsponsored_goals();
     <div class="grid_6 highlighted-link">
         <h3>What you can do as a parent</h3>
         <ol>
-            <li><h4><span>1</span> Invite student <a href="#invite2" onclick="jQuery.fancybox({href: jQuery(this).is('.connected') ? '#connections' : '#webform-ajax-wrapper-250', hideOnContentClick: false, centerOnScroll: true, padding:0, type: 'inline'}); return false;" class="more">Invite</a></h4><span>Send an invitation to your student to join and learn the best study methods.</span></li>
+            <li><h4><span>1</span> Invite student <a href="#invite" class="more">Invite</a></h4><span>Send an invitation to your student to join and learn the best study methods.</span></li>
             <li><h4><span>2</span> Set up incentives <a href="#goals" class="more">Set goals</a></h4><span>Give your student a little extra motivation. Incentive psychology works, try it!</span></li>
             <li><h4><span>3</span> Upgrade <a href="#plan" class="more">Study plan</a></h4><span>Purchase a personalized study plan for your student. We guarantee a higher GPA or your money back.</span></li>
         </ol>
@@ -87,7 +95,7 @@ list($b) = _studysauce_unsponsored_goals();
 </div>
 <div id="student_home" class="students_only">
     <h2>Study Sauce focuses on the 3 principles of studying</h2>
-    <img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/home-wheel.png" style="float:left;" />
+    <img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/home-wheel.png" />
     <div id="getting-started">
         <h3>Getting started is easy</h3>
         <p>
@@ -100,7 +108,19 @@ list($b) = _studysauce_unsponsored_goals();
             <input id="home-tasks-deadlines" name="home-schedule" type="checkbox" readonly="readonly"
                 <?php print (studysauce_any_dates() ? 'checked="checked"' : ''); ?> />
             <label for="home-tasks-deadlines"><a href="#deadlines">Set up deadline reminders</a></label><br />
-            <input id="home-tasks-checklist" name="home-schedule" type="checkbox" readonly="readonly" />
+            <input id="home-tasks-checklist" name="home-schedule" type="checkbox" readonly="readonly"
+                <?php print (count($classes) &&
+                studysauce_any_dates() &&
+                !empty($lastOrder) &&
+                count($checkins) > 1 &&
+                isset($node->field_touched_music['und'][0]['value']) &&
+                count($quizSubmissions) &&
+                isset($node->field_grades['und'][0]['value']) &&
+                isset($b->field_hours['und'][0]['value']) &&
+                isset($user->field_partners['und'][0]['value']) &&
+                isset($strategies->field_spaced_strategies['und'][0]['value']) &&
+                isset($strategies->field_active_strategies['und'][0]['value']) &&
+                isset($strategies->field_teach_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
             <label for="home-tasks-checklist">Complete checklists below</label>
         </p>
     </div>
@@ -136,7 +156,7 @@ list($b) = _studysauce_unsponsored_goals();
                     <?php print (count($checkins) > 1 ? 'checked="checked"' : ''); ?> />
                 <label for="home-tips"><a href="#checkin">Get personalized study tips when you check in</a></label><br />
                 <input id="home-music" name="home-music" type="checkbox" readonly="readonly"
-                    />
+                    <?php print (isset($node->field_touched_music['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-music"><a href="#checkin">Experiment with classical music to see if it helps you focus</a></label>
             </p>
         </li>
@@ -146,26 +166,26 @@ list($b) = _studysauce_unsponsored_goals();
             <p>Understand how you best learn.  Use the best study methods for the specific task.</p>
             <p>
                 <input id="home-profile" name="home-profile" type="checkbox" readonly="readonly"
-                    <?php print (isset($node->field_university['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
+                    <?php print (isset($node->field_grades['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-profile"><a href="#profile">Take the learning diagnostic <sup class="premium">Premium</sup></a></label><br />
                 <input id="home-goals" name="home-goals" type="checkbox" readonly="readonly"
                     <?php print (isset($b->field_hours['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-goals"><a href="#goals">Create your study goals</a></label><br />
                 <input id="home-partner" name="home-partner" type="checkbox" readonly="readonly"
-                    />
+                    <?php print (isset($user->field_partners['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-partner"><a href="#partner">Invite an accountability partner</a></label><br />
                 <input id="home-spaced" name="home-spaced" type="checkbox" readonly="readonly"
-                    />
+                    <?php print (isset($strategies->field_spaced_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-spaced"><a href="#plan">Complete a spaced repetition study session <sup class="premium">Premium</sup></a></label><br />
                 <input id="home-active" name="home-active" type="checkbox" readonly="readonly"
-                    />
+                    <?php print (isset($strategies->field_active_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-active">Complete an active recall exercise <sup class="premium">Premium</sup></label><br />
                 <input id="home-teach" name="home-teach" type="checkbox" readonly="readonly"
-                    />
+                    <?php print (isset($strategies->field_teach_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-teach">Complete a teaching video <sup class="premium">Premium</sup></label><br />
-                <input id="home-friend" name="home-friend" type="checkbox" readonly="readonly"
+                <?php /* <input id="home-friend" name="home-friend" type="checkbox" readonly="readonly"
                     />
-                <label for="home-friend">Ask a friend a question <sup class="premium">Premium</sup></label>
+                <label for="home-friend">Ask a friend a question <sup class="premium">Premium</sup></label> */ ?>
             </p>
         </li>
     </ol>

@@ -146,28 +146,7 @@
 
                             <?php print render($page['help']); ?>
 
-                            <?php if (arg(0) == 'welcome'): ?>
-                                <h1 class="page-title" style="margin:0;margin:0 auto;">
-                                    <ul class="guide">
-                                        <li><span><span><img src="/sites/studysauce.com/themes/successinc/correct_b.png"
-                                                             style="margin-bottom:-5px"/></span>Done</span></li>
-                                    </ul>
-                                </h1>
-                            <?php /* elseif ((arg(0) == 'node' && arg(1) == '89') ||
-                                (arg(0) == 'node' && arg(1) == '13') ||
-                                (arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'schedule') ||
-                                (arg(0) == 'user' && arg(1) == 'register') ||
-                                (arg(0) == 'cart' && arg(1) == 'checkout')
-                            ): ?>
-                                <h1 class="page-title" style="margin:0;margin:0 auto;">
-                                    <ul class="guide">
-                                        <li><span><span>1</span>Basic information</span></li>
-                                        <li><span><span>2</span>Select plan</span></li>
-                                        <li><span><span>3</span>Payment</span></li>
-                                        <li><span><span>4</span>Create schedule</span></li>
-                                    </ul>
-                                </h1>
-                            <?php */ elseif ($title && $title != 'Landing page' && arg(0) != 'user'): ?>
+                            <?php if ($title): ?>
                                 <h1 class="page-title"><?php print $title; ?></h1>
                             <?php endif; ?>
 
@@ -217,7 +196,7 @@
 <?php if (theme_get_setting('frontpage_emulate') || !drupal_is_front_page()): ?>
 
 <?php if ($page['sidebar_first']) { ?>
-<div class="grid_8">
+<div class="">
     <div class="mt-grid-fix">
         <?php } else { ?>
         <div class="grid_12">
@@ -319,52 +298,10 @@
     </div><!-- EOF:#footer -->
 <?php endif; ?>
 
-<?php if ($page['sub_footer_first'] || $page['sub_footer_second'] || $page['sub_footer_third']): ?>
-    <div id="subfooter" class="clearfix">
-        <div class="container_12">
+<div id="subfooter">
+<?php print theme('studysauce-footer'); ?>
+</div>
 
-            <!-- #subfooter-inside -->
-            <div id="subfooter-inside" class="clearfix">
-                <div class="grid_4">
-                    <div class="mt-grid-fix">
-                        <!-- #subfooter-first -->
-                        <?php if ($page['sub_footer_first']): ?>
-                            <div class="subfooter-area">
-                                <?php print render($page['sub_footer_first']); ?>
-                            </div>
-                        <?php endif; ?>
-                        <!-- EOF: #subfooter-first -->
-                    </div>
-                </div>
-                <div class="grid_4">
-                    <div class="mt-grid-fix">
-                        <!-- #subfooter-second -->
-                        <?php if ($page['sub_footer_second']): ?>
-                            <div class="subfooter-area">
-                                <?php print render($page['sub_footer_second']); ?>
-                            </div>
-                        <?php endif; ?>
-                        <!-- EOF: #subfooter-second -->
-                    </div>
-                </div>
-                <div class="grid_4">
-                    <div class="mt-grid-fix">
-                        <!-- #footer-bottom-right -->
-                        <?php if ($page['sub_footer_third']): ?>
-                            <div class="subfooter-area">
-                                <?php print render($page['sub_footer_third']); ?>
-                            </div>
-                        <?php endif; ?>
-                        <!-- EOF: #footer-bottom-right -->
-                    </div>
-                    <?php print 'Copyright ' . date('Y'); ?>
-                </div>
-            </div>
-            <!-- EOF: #subfooter-inside -->
-
-        </div>
-    </div><!-- EOF:#footer-bottom -->
-<?php endif; ?>
 <!-- Google Code for Remarketing Tag -->
 <!--------------------------------------------------
 Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. See more information and instructions on how to setup the tag on: http://google.com/ads/remarketingsetup
@@ -377,12 +314,12 @@ Remarketing tags may not be associated with personally identifiable information 
     /* ]]> */
 </script>
 <script type="text/javascript"
-        src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.googleadservices.com/pagead/conversion.js">
+        src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.googleadservices.com/pagead/conversion.js">
 </script>
 <noscript>
     <div style="display:inline;">
         <img height="1" width="1" style="border-style:none;" alt=""
-             src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://googleads.g.doubleclick.net/pagead/viewthroughconversion/990070454/?value=0&amp;guid=ON&amp;script=0"/>
+             src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://googleads.g.doubleclick.net/pagead/viewthroughconversion/990070454/?value=0&amp;guid=ON&amp;script=0"/>
     </div>
 </noscript>
 <?php if (arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'schedule'): ?>
@@ -399,12 +336,12 @@ Remarketing tags may not be associated with personally identifiable information 
         /* ]]> */
     </script>
     <script type="text/javascript"
-            src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.googleadservices.com/pagead/conversion.js">
+            src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.googleadservices.com/pagead/conversion.js">
     </script>
     <noscript>
         <div style="display:inline;">
             <img height="1" width="1" style="border-style:none;" alt=""
-                 src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.googleadservices.com/pagead/conversion/990070454/?value=0&amp;label=h6z4CKLN9gcQto2N2AM&amp;guid=ON&amp;script=0"/>
+                 src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.googleadservices.com/pagead/conversion/990070454/?value=0&amp;label=h6z4CKLN9gcQto2N2AM&amp;guid=ON&amp;script=0"/>
         </div>
     </noscript>
 <?php elseif (arg(1) == '13' || arg(1) == '89'): ?>
@@ -418,10 +355,10 @@ Remarketing tags may not be associated with personally identifiable information 
         var google_conversion_value = 0;
         var google_remarketing_only = false;
         /* ]]> */ </script>
-    <script type="text/javascript" src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.googleadservices.com/pagead/conversion.js"></script>
+    <script type="text/javascript" src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.googleadservices.com/pagead/conversion.js"></script>
     <noscript>
         <div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt=""
-                                          src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.googleadservices.com/pagead/conversion/990070454/?value=0&amp;label=zcRCCKqagAgQto2N2AM&amp;guid=ON&amp;script=0"/>
+                                          src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.googleadservices.com/pagead/conversion/990070454/?value=0&amp;label=zcRCCKqagAgQto2N2AM&amp;guid=ON&amp;script=0"/>
         </div>
     </noscript>
     <!-- Facebook Code for Conversion Tracking -->
@@ -432,12 +369,12 @@ Remarketing tags may not be associated with personally identifiable information 
         (function () {
             var fpw = document.createElement('script');
             fpw.async = true;
-            fpw.src = '<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://connect.facebook.net/en_US/fp.js';
+            fpw.src = '<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://connect.facebook.net/en_US/fp.js';
             var ref = document.getElementsByTagName('script')[0];
             ref.parentNode.insertBefore(fpw, ref);
         })(); </script>
     <noscript><img height="1" width="1" alt="" style="display:none"
-                   src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.facebook.com/offsite_event.php?id=6008770260529&amp;value=0&amp;currency=USD"/>
+                   src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.facebook.com/offsite_event.php?id=6008770260529&amp;value=0&amp;currency=USD"/>
     </noscript>
 <?php elseif (arg(0) == 'welcome'): ?>
     <!-- Facebook Code for Conversion Tracking -->
@@ -448,12 +385,12 @@ Remarketing tags may not be associated with personally identifiable information 
         (function () {
             var fpw = document.createElement('script');
             fpw.async = true;
-            fpw.src = '<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://connect.facebook.net/en_US/fp.js';
+            fpw.src = '<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://connect.facebook.net/en_US/fp.js';
             var ref = document.getElementsByTagName('script')[0];
             ref.parentNode.insertBefore(fpw, ref);
         })(); </script>
     <noscript><img height="1" width="1" alt="" style="display:none"
-                   src="<?php print $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'; ?>://www.facebook.com/offsite_event.php?id=6008770262329&amp;value=0&amp;currency=USD"/>
+                   src="<?php print ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http'); ?>://www.facebook.com/offsite_event.php?id=6008770262329&amp;value=0&amp;currency=USD"/>
     </noscript>
 <?php endif; ?>
 

@@ -18,7 +18,6 @@ html, body {
     color: #666666;
     outline: 0 none;
     vertical-align: baseline;
-    background:url("images/noise.png") repeat scroll 0 0 #0D0D0D;
     text-align: justify;
     min-height: 100%;
     height:auto !important;
@@ -100,58 +99,6 @@ h5 {
     font-size: 24px;
     color: #ffffff;
     margin: 0;
-}
-
-.guide,
-#page-top .menu,
-.page-title ul
-{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display:block;
-}
-
-.guide li,
-#page-top .menu li,
-.page-title li
-{
-    margin: 0;
-    padding: 0;
-    display:inline-block;
-    line-height: 45px;
-}
-
-.guide li > span > span,
-.page-title li > span > span
-{
-    padding:5px 15px;
-    border:2px solid #CCCCCC;
-    background-color:#666666;
-    border-radius: 4px;
-    margin-right:5px !important;
-}
-
-.guide li > span,
-.page-title li > span
-{
-    border-bottom:2px solid #CCCCCC;
-    color: #FFFFFF;
-    font-size: 24px;
-}
-
-.page-parent-4 .guide li:nth-child(1) > span,
-.page-student-2 .guide li:nth-child(1) > span,
-.page-student-3 .guide li:nth-child(2) > span,
-.page-student-4 .guide li:nth-child(3) > span,
-.page-cart-checkout .page-title li:nth-child(3) > span,
-.page-welcome .page-title li:nth-child(1) > span,
-.page-node-89 .page-title li:nth-child(2) > span,
-.page-node-13 .page-title li:nth-child(2) > span,
-.page-user-register .page-title li:nth-child(1) > span,
-.page-node-add-schedule .page-title li:nth-child(4) > span
-{
-    border-bottom:2px solid #993300;
 }
 
 #promoted h2 {
@@ -300,10 +247,6 @@ img {
     margin-top: 20px;
 }
 
-.block {
-    padding: 0 0 25px;
-}
-
 #block-views-slideshow-block-1.block, #block-system-main.block {
     padding: 0;
     margin: 0;
@@ -317,11 +260,6 @@ img {
 /* Layout */
 .mt-grid-fix {
     padding: 0 5px;
-}
-
-.subfooter .block,
-#subfooter .block {
-    padding: 15px 0;
 }
 
 .landing-home .footer
@@ -419,8 +357,31 @@ img {
 .page-dashboard .page .panel-pane
 {
     margin-left:200px;
-    padding-top: 110px;
+    padding-top:76px;
     display:none;
+}
+
+.page-dashboard.admin-menu .page .panel-pane
+{
+    padding-top: 110px;
+}
+
+@media all and (max-width: 759px)
+{
+    .page-dashboard .page .panel-pane
+    {
+        margin-left:0 !important;
+        padding-top: 68px !important;
+    }
+}
+
+@media all and (max-width: 480px)
+{
+    .page-dashboard .page .panel-pane
+    {
+        margin-left:0 !important;
+        padding-top: 56px !important;
+    }
 }
 
 .landing-home .page-top .grid_6:nth-child(4)
@@ -538,13 +499,6 @@ img {
     .page-dashboard .panel-flexible .header-wrapper .highlighted-link
     {
         margin-left:140px;
-    }
-
-    .page-dashboard .pane-content .grid_6,
-    .pane-content .grid_6
-    {
-        width:400px;
-        margin:0 30px;
     }
 
     .page-dashboard #student_home .grid_6.big-arrow,
@@ -789,7 +743,7 @@ img {
     padding-top: 10px;
 }
 
-#main, #sidebar, .main {
+.page-node-landing #main, #sidebar, .main {
     padding: 25px 0;
 }
 
@@ -1883,34 +1837,8 @@ ul.company-info li.last {
     text-align: right;
 }
 
-.page-dashboard .empty #schedule .fancy-close
-{
-    display:none;
-}
-
-.page-dashboard #schedule .node-schedule-form .field-name-field-classes .form-item > label
-{
-    display: none;
-}
-
-.page-dashboard #schedule .field-name-field-classes .form-type-textfield
-{
-    margin-bottom:1em;
-    margin-top:0;
-}
-
-.page-dashboard #schedule .form-item
-{
-    margin:0;
-}
-
-.page-dashboard #schedule .form-actions,
-.page-dashboard #schedule .field-add-more-submit
-{
-    margin-top:5px;
-    margin-bottom:0;
-}
-
+.page-dashboard #plan .buy-plan > a,
+.page-dashboard #profile .buy-plan > a,
 .page-dashboard .group-achievement > div,
 .page-dashboard #invite-sent > h2,
 .page-dashboard #sds-messages > div,
@@ -1929,13 +1857,15 @@ ul.company-info li.last {
     max-width: 600px;
     margin:5% auto;
     padding:20px;
-    background: url("/sites/test.studysauce.com/themes/successinc/images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+    background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
     box-shadow: 0 0 20px rgba(0,0,0,.75);
     border-radius: 10px;
     position:relative;
     text-align:left;
 }
 
+.page-dashboard #plan .buy-plan > a,
+.page-dashboard #profile .buy-plan > a,
 .page-dashboard #metrics-empty > a,
 .page-dashboard #empty-dates > a,
 .page-dashboard #empty-schedule > a
@@ -1944,6 +1874,15 @@ ul.company-info li.last {
     text-align: center;
 }
 
+.page-dashboard #plan .buy-plan > a,
+.page-dashboard #profile .buy-plan > a
+{
+    top: 50%;
+    margin-top:-50px;
+}
+
+.page-dashboard #plan .buy-plan h2,
+.page-dashboard #profile .buy-plan h2,
 .page-dashboard #metrics-empty h2,
 .page-dashboard #empty-dates h2,
 .page-dashboard #empty-schedule h2
@@ -2039,17 +1978,8 @@ input[type="button"]:hover {
     text-decoration: none;
 }
 
-.page-parent-4 .guide li:nth-child(1) > span > span,
-.page-student-2 .guide li:nth-child(1) > span > span,
-.page-student-3 .guide li:nth-child(2) > span > span,
-.page-student-4 .guide li:nth-child(3) > span > span,
 .page-cart-checkout #edit-continue,
-.page-welcome .page-title li:nth-child(1) > span > span,
-.page-cart-checkout .page-title li:nth-child(3) > span > span,
-.page-node-89 .page-title li:nth-child(2) > span > span,
-.page-node-13 .page-title li:nth-child(2) > span > span,
-.page-user-register .page-title li:nth-child(1) > span > span,
-.page-node-add-schedule .page-title li:nth-child(4) > span > span,
+.highlighted-link.more,
 .highlighted-link .more,
 .highlighted-link a.more
 {
@@ -2069,23 +1999,16 @@ input[type="button"]:hover {
     text-shadow: 0px 1px 2px rgba(255,255,255,.5);
 }
 
-.page-parent-4 .guide li:nth-child(1) > span > span,
-.page-student-2 .guide li:nth-child(1) > span > span,
-.page-student-3 .guide li:nth-child(2) > span > span,
-.page-student-4 .guide li:nth-child(3) > span > span,
-.page-cart-checkout .page-title li:nth-child(3) > span > span,
-.page-welcome .page-title li:nth-child(1) > span > span,
-.page-node-89 .page-title li:nth-child(2) > span > span,
-.page-node-13 .page-title li:nth-child(2) > span > span,
-.page-user-register .page-title li:nth-child(1) > span > span,
-.page-node-add-schedule .page-title li:nth-child(4) > span > span
-{
-    -webkit-appearance: none;
-    padding: 5px 15px;
-    border:2px solid #993300;
-    font-size: 24px;
-}
-
+#partner.invalid .highlighted-link .more,
+#partner.invalid .highlighted-link .more:hover,
+#invite.invalid .highlighted-link .more,
+#invite.invalid .highlighted-link .more:hover,
+.page-path-customization2.invalid .highlighted-link .more,
+.page-path-customization2.invalid .highlighted-link .more:hover,
+.page-path-customization.invalid .highlighted-link .more,
+.page-path-customization.invalid .highlighted-link .more:hover,
+.page-path-profile.invalid .highlighted-link .more,
+.page-path-profile.invalid .highlighted-link .more:hover,
 .edit.invalid .highlighted-link .more,
 .edit.invalid .highlighted-link .more:hover,
 form.invalid .edit .highlighted-link .more:hover,
@@ -2096,6 +2019,7 @@ form.invalid .edit .highlighted-link .more
     margin-top: 0;
     border-bottom-width: 3px;
     box-shadow: none;
+    cursor: default;
 }
 
 
@@ -2104,6 +2028,7 @@ form.invalid .edit .highlighted-link .more
     padding:5px;
 }
 
+.highlighted-link.more:hover,
 .highlighted-link a.more:hover,
 .highlighted-link .more:hover {
     -webkit-appearance: none;
@@ -2113,6 +2038,7 @@ form.invalid .edit .highlighted-link .more
 }
 
 .view-promoted-posts .more-link a:active,
+.highlighted-link.more:active,
 .highlighted-link .more:active,
 .highlighted-link a.more:active,
 div.links ul li a:active,
@@ -2688,14 +2614,25 @@ ul.social-bookmarks li.linkedin a {
 .subfooter,
 #subfooter {
     background: #0d0d0d url("images/noise_darkgray.png") repeat;
-    padding: 5px 0 0 0;
     color: #626262;
     font-weight: bold;
     font-size: 12px;
     text-align: center;
     vertical-align: middle;
+    padding-top:3px;
+    position:fixed;
+    bottom:0;
+    top:auto;
+    left:0;
+    right:0;
+    width:100%;
+    z-index:100;
 }
 
+#about-us a[href*="facebook"],
+#about-us a[href*="google"],
+#about-us a[href*="twitter"],
+#about-us a[href*="contact"],
 #invite a[href*="facebook"],
 #invite a[href*="google"],
 #invite a[href*="twitter"]
@@ -2707,14 +2644,21 @@ ul.social-bookmarks li.linkedin a {
     line-height: 55px;
 }
 
+#about-us a[href*="google"],
 #invite a[href*="google"]
 {
     background-position:0 -95px;
 }
 
+#about-us a[href*="twitter"],
 #invite a[href*="twitter"]
 {
     background-position:0 -190px;
+}
+
+#about-us a[href*="contact"]
+{
+    background-position:0 -381px;
 }
 
 .subfooter a[href*="facebook"],
@@ -2726,7 +2670,7 @@ ul.social-bookmarks li.linkedin a {
 {
     background:url(images/social_sprites_v2.png) no-repeat 0 0 transparent;
     background-size:25px auto;
-    height:25px;
+    height:27px;
     width:25px;
     display:inline-block;
     line-height: 35px;
@@ -2753,18 +2697,6 @@ ul.social-bookmarks li.linkedin a {
 .subfooter .fb-like
 {
     display:inline-block;
-}
-
-.page-dashboard .subfooter
-{
-    padding-top:3px;
-    position:fixed;
-    bottom:0;
-    top:auto;
-    left:0;
-    right:0;
-    width:100%;
-    z-index:100;
 }
 
 .subfooter #block-block-2.block,
@@ -3329,290 +3261,6 @@ ul.contextual-links li a:hover {
     height: 0;
 }
 
-.field-name-field-message .field-add-more-submit,
-.field-name-field-message .field-label,
-.field-name-field-message .tabledrag-toggle-weight-wrapper,
-.field-name-field-message .field-multiple-drag,
-.node-incentive-form .tabledrag-hide,
-.node-incentive-form .tabledrag-toggle-weight-wrapper,
-.node-incentive-form .field-multiple-drag,
-.node-incentive-form .field-label,
-.node-schedule-form .tabledrag-hide,
-.node-schedule-form .tabledrag-toggle-weight-wrapper,
-.node-schedule-form .field-multiple-drag,
-.node-schedule-form .field-label,
-.node-schedule-form .field-name-field-time legend
-{
-    display:none;
-}
-
-.field-name-field-message table td,
-.field-name-field-message table th
-{
-    margin:0;
-    padding:0;
-}
-
-.field-name-field-message tr
-{
-    display:none;
-}
-
-.field-name-field-message tr:last-child
-{
-    display:table-row;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-class-name input
-{
-    width:100%;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-class-name
-{
-    width:25%;
-    display:inline-block;
-    float:left;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-day-of-the-week
-{
-    width:24%;
-    display:inline-block;
-    float:left;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-time
-{
-    width:50%;
-    display:inline-block;
-    float:left;
-    position:relative;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-time .date-padding > div:first-child
-{
-    width:30%;
-    display:inline-block;
-}
-
-.node-schedule-form #node_schedule_form_group_study.collapsible .fieldset-legend
-{
-    padding-left:0;
-    padding-right:10px;
-    background-position:right 55%;
-}
-
-.node-schedule-form #node_schedule_form_group_periods .form-item .form-item
-{
-    display:inline-block;
-    margin:0;
-}
-
-.node-schedule-form #node_schedule_form_group_periods .form-item label
-{
-    display: inline-block;
-    margin: 0;
-    padding: 5px;
-}
-
-.node-schedule-form #node_schedule_form_group_periods .form-item .form-radios
-{
-    float:right;
-    clear:both;
-}
-
-.node-schedule-form .field-name-field-day-of-the-week .form-checkboxes > .form-item,
-.node-schedule-form #node_schedule_form_group_periods .field-type-list-integer > .form-item
-{
-    clear:both;
-    margin:0;
-    padding:0;
-    line-height:30px;
-}
-
-.node-schedule-form legend .summary,
-.node-schedule-form legend .fieldset-legend-prefix,
-.node-schedule-form .field-name-field-classes .field-name-field-time .description,
-.node-schedule-form .field-name-field-holidays .description
-{
-    display:none;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-time .date-padding > div:last-child
-{
-    width:20%;
-    display:inline-block;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-time .date-padding div input
-{
-    width:97%;
-}
-
-.node-schedule-form .field-name-field-classes table .form-submit
-{
-    display:none;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-time fieldset,
-.node-schedule-form .field-name-field-classes .field-name-field-time div
-{
-    padding:0;
-    border:0;
-    margin:0;
-    float:none;
-    display:inline;
-}
-
-.node-schedule-form .field-name-field-classes td
-{
-    padding:1em 0;
-}
-
-.node-schedule-form .field-name-field-day-of-the-week .form-checkboxes
-{
-    position:relative;
-    text-align: center;
-    margin-bottom:-15px;
-    margin-top:-5px;
-}
-
-.node-schedule-form .field-name-field-day-of-the-week .form-checkboxes .form-item
-{
-    display:inline-block;
-}
-
-.node-schedule-form .field-name-field-day-of-the-week .form-checkboxes label
-{
-    display:block;
-    overflow:hidden;
-}
-
-.node-schedule-form .field-name-field-classes tr:first-child .form-item label,
-.node-schedule-form .field-name-field-classes tr .field-name-field-day-of-the-week .form-type-checkbox label
-{
-    visibility:visible;
-    top:0;
-    text-align: center;
-}
-
-.node-schedule-form .field-name-field-classes .form-item > label,
-.node-schedule-form .field-name-field-classes  tr .field-name-field-time .form-item > label
-{
-    visibility:hidden;
-}
-
-.node-schedule-form .field-name-field-classes tr:first-child .field-name-field-time .start-date-wrapper .form-item .date-padding label
-{
-    visibility:visible;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-time .start-date-wrapper > .form-item .form-item:first-child
-{
-    position:absolute;
-    left:40%;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-time .end-date-wrapper > .form-item .form-item:first-child
-{
-    position:absolute;
-    left:70%;
-    top:0;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-time .end-date-wrapper > .form-item .form-item:last-child
-{
-    position:absolute;
-    left:20%;
-    top:0;
-}
-
-.node-schedule-form .field-name-field-classes .field-name-field-time .start-date-wrapper > .form-item .form-item:last-child
-{
-    position:absolute;
-    left:0;
-}
-
-.node-schedule-form .field-name-field-holidays
-{
-    position:relative;
-    padding-top:20px;
-}
-
-.node-schedule-form #node_schedule_form_group_periods,
-.node-schedule-form #node_schedule_form_group_study,
-.node-schedule-form .field-name-field-holidays fieldset
-{
-    border:none;
-    padding:0;
-    margin:0;
-}
-
-.node-schedule-form .field-name-field-holidays tr:first-child legend
-{
-    display:block;
-    position:absolute;
-    top:0;
-    left:0;
-}
-
-.node-schedule-form .field-name-field-holidays legend
-{
-    display:none;
-}
-
-.page-dashboard .field-name-field-classes td
-{
-    display:inline;
-}
-
-.field-name-field-reminders .tabledrag-hide,
-.field-name-field-reminders .tabledrag-toggle-weight-wrapper,
-.page-dashboard .node-key_dates-form .vertical-tabs,
-.page-dashboard .field-name-field-reminders td.field-multiple-drag,
-.page-dashboard .field-name-field-reminders thead,
-.page-dashboard .field-name-field-reminders .delta-order,
-.page-dashboard .field-name-field-class-names td.field-multiple-drag,
-.page-dashboard .field-name-field-class-names thead,
-.page-dashboard .field-name-field-class-names .delta-order,
-.page-dashboard .field-name-field-classes thead,
-.page-dashboard .field-name-field-classes td.field-multiple-drag,
-.page-dashboard .field-name-field-classes .delta-order,
-.page-dashboard .field-name-field-goals thead,
-.page-dashboard .field-name-field-goals td.field-multiple-drag,
-.page-dashboard .field-name-field-goals .delta-order
-{
-    display: none;
-}
-
-.field-name-field-reminders table td
-{
-    padding:0;
-}
-
-.page-dashboard #deadlines .field-name-field-class-names .row,
-.page-dashboard #schedule .field-name-field-classes .row,
-.page-dashboard #schedule .field-name-field-classes tr,
-.node-schedule-form .field-name-field-holidays tr
-{
-    display:inline;
-    background-color:transparent;
-    float:left;
-    width:180px;
-    padding:0 5px 0 0;
-}
-
-.page-dashboard #schedule .node-schedule-form .field-name-field-classes .field-name-field-class-name
-{
-    width: 100%;
-}
-
-.node-schedule-form .field-name-field-holidays td, .node-schedule-form .field-name-field-holidays th
-{
-    border:none;
-}
-
 .messages.warning,
 .messages.status
 {
@@ -3629,10 +3277,39 @@ ul.contextual-links li a:hover {
     color:inherit;
 }
 
+.not-logged-in.page-user-register,
+.not-logged-in.page-user
+{
+    background: url(images/grunge.png) repeat fixed 0 0 #CCCCCC;
+}
+
 .not-logged-in.page-user-register #page,
 .not-logged-in.page-user #page
 {
     text-align: center;
+    margin-left:10px;
+    margin-right:10px;
+    margin-top:10px;
+}
+
+.not-logged-in.page-user-register .field-name-field-first-name,
+.not-logged-in.page-user-register .field-name-field-last-name
+{
+    width:50%;
+    box-sizing: border-box;
+    display:inline-block;
+}
+
+.not-logged-in.page-user-register .field-name-field-first-name
+{
+    margin-left:-2px;
+    padding-right:2px;
+}
+
+.not-logged-in.page-user-register .field-name-field-last-name
+{
+    margin-right:-2px;
+    padding-left:2px;
 }
 
 .not-logged-in.page-user #page h1
@@ -3648,13 +3325,13 @@ ul.contextual-links li a:hover {
 }
 
 .page-student-2 .webform-client-form,
-.page-cart-checkout #main,
 .not-logged-in.page-user-register #main,
 .not-logged-in.page-user #main
 {
     max-width: 400px;
     margin:0 auto;
 }
+
 
 #user-register-form .form-item-mail .description
 {
@@ -3681,16 +3358,6 @@ ul.contextual-links li a:hover {
     display:none;
 }
 
-.uc-store-address-field .form-item label
-{
-    width:auto;
-}
-
-.uc-store-address-field .form-item
-{
-    padding:0;
-}
-
 .uc-store-address-field .form-item-panes-billing-billing-first-name,
 .uc-store-address-field .form-item-panes-billing-billing-last-name,
 .webform-component--your-first-name,
@@ -3701,14 +3368,12 @@ ul.contextual-links li a:hover {
 .webform-component--parent-last-name,
 .webform-component--parents-last-name,
 .webform-component--parents-first-name,
-.field-name-field-first-name,
-.field-name-field-last-name,
 #user-profile .form-type-password
 {
-    width:50%;
-    margin: -2px;
-    padding: 2px;
-    display:inline-block;
+    width: 50%;
+    margin: 0 -2px;
+    padding: 0 2px !important;
+    display: inline-block;
     vertical-align: bottom;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -3717,11 +3382,6 @@ ul.contextual-links li a:hover {
 .page-user .connector-button-wrapper
 {
     display:block;
-}
-
-.node-schedule-form .field-add-more-submit
-{
-    float:left;
 }
 
 .node-schedule-form .field-name-field-holidays td,
@@ -3735,6 +3395,7 @@ ul.contextual-links li a:hover {
 .landing-home #subfooter
 {
     padding-top:0;
+    position:static;
 }
 
 .landing-home .pane-testimonials
@@ -3768,11 +3429,6 @@ ul.contextual-links li a:hover {
 {
     width:auto;
     max-width:60%;
-}
-
-#uc-cart-checkout-form #cart-pane
-{
-    display:none;
 }
 
 .front .view-promoted-posts .views-field-field-teaser-image img
@@ -4357,157 +4013,6 @@ hr
     color:#FF9900;
 }
 
-.page-node-89 .product-info, .page-node-89 .add-to-cart,
-.page-node-13 .product-info, .page-node-13 .add-to-cart
-{
-    clear:both;
-    display:none;
-}
-
-.page-node-89 .price-is-right span,
-.page-node-13 .price-is-right span
-{
-    font-size: 18px;
-}
-
-.page-node-89 .price-is-right,
-.page-node-13 .price-is-right
-{
-    background-color: #DDDDDD;
-    border-radius: 38px 38px 38px 38px;
-    color: #555555;
-    font-size: 14px;
-    height: 38px;
-    left: 0;
-    line-height: 18px;
-    margin-left: 10px;
-    margin-top: 70px;
-    padding: 8px;
-    position: absolute;
-    width: 38px;
-}
-
-.page-node-89 .product-wrapper p.wrap-button,
-.page-node-13 .product-wrapper p.wrap-button
-{
-    position:absolute;
-    bottom:0;
-    width:100%;
-}
-
-.page-node-89 .product-wrapper a,
-.page-node-13 .product-wrapper a
-{
-    display:block;
-    margin:20px;
-    text-align: center;
-    text-decoration: none;
-}
-
-.page-node-89 .product-wrapper p,
-.page-node-13 .product-wrapper p
-{
-    margin:0;
-}
-
-.page-node-89 .product-wrapper h3,
-.page-node-13 .product-wrapper h3
-{
-    font-weight: bold;
-    color:#555555;
-    margin:20px 20px 0 20px;
-    text-transform: uppercase;
-    border-bottom:2px solid #555555;
-    text-align: center;
-}
-
-.page-node-89 .product-wrapper .recommended,
-.page-node-13 .product-wrapper .recommended
-{
-    font-size:16px;
-    float:right;
-    white-space: nowrap;
-    color:#FF9900;
-    padding-top:5px;
-    text-transform: uppercase;
-    margin:0 20px 0 0;
-}
-
-.page-node-89 .product-wrapper > div,
-.page-node-13 .product-wrapper > div
-{
-    position:relative;
-    min-height:300px;
-    margin:0;
-}
-
-.page-node-89 .product-wrapper li br,
-.page-node-13 .product-wrapper li br
-{
-    display:none;
-}
-
-.page-node-89 .product-wrapper .highlighted-link .price-is-right,
-.page-node-13 .product-wrapper .highlighted-link .price-is-right
-{
-    background-color: #FF9900;
-}
-
-.page-node-89 .product-wrapper .highlighted-link .price-is-right span,
-.page-node-13 .product-wrapper .highlighted-link .price-is-right span
-{
-    color:#0D0D0D;
-}
-
-.page-node-89 .product-wrapper .highlighted-link h3,
-.page-node-13 .product-wrapper .highlighted-link h3
-{
-    color:#FFFFFF;
-}
-
-/*
-.page-node-89 .product-wrapper select,
-.page-node-13 .product-wrapper select
-{
-    width:82px;
-}
-*/
-
-.page-node-89 .product-wrapper .highlighted-link,
-.page-node-13 .product-wrapper .highlighted-link
-{
-    background: url("images/noise.png") repeat scroll 0 0 #0D0D0D;
-    border:4px solid #ffffff;
-    box-shadow:0 1px 2px rgba(0,0,0,.5);
-    color:#FFFFFF;
-    border-radius: 8px;
-}
-
-.page-node-89 .product-wrapper .and-more img,
-.page-node-13 .product-wrapper .and-more img
-{
-    width:24px;
-    height:24px;
-    position:relative;
-    top:5px;
-}
-
-.page-node-89 .product-wrapper .and-more,
-.page-node-13 .product-wrapper .and-more
-{
-    margin-left:68px;
-    margin-top:3px;
-}
-
-.page-node-89 .product-wrapper ul,
-.page-node-13 .product-wrapper ul
-{
-    margin-left:55px;
-    margin-right:5px;
-    margin-bottom:0;
-    text-align: left;
-}
-
 .money-back
 {
     background: url("banner-left.png") no-repeat left top;
@@ -4537,25 +4042,6 @@ hr
 .money-back p span
 {
     color:#FF9900;
-}
-
-.page-node-89 #page h1,
-.page-node-13 #page h1
-{
-    color:#0D0D0D;
-    text-align: center;
-    text-transform: uppercase;
-    margin:0;
-    font-weight: bold;
-    font-size: 32px;
-}
-
-.page-node-89 .product-wrapper,
-.page-node-13 .product-wrapper
-{
-    display: block;
-    float: none;
-    margin: 0 auto;
 }
 
 .webform-confirmation .links
@@ -5182,23 +4668,6 @@ tbody
     margin-top: 2px;
 }
 
-.panels-flexible-region
-{
-}
-
-.node-schedule-form legend,
-.form-checkboxes .form-item,
-.form-radios .form-item,
-.field-type-list-integer
-{
-    margin:1em 0;
-}
-
-.node-schedule-form label
-{
-    margin: 1em 0 0;
-}
-
 .page-node-landing .content > .highlighted-link
 {
     clear:right;
@@ -5316,6 +4785,7 @@ tbody
     display:none;
 }
 
+.page-dashboard #profile .buy-plan:before,
 .page-dashboard.parent #metrics .parents_only:before,
 .page-dashboard.parent #checkin .parents_only:before,
 .page-dashboard #study-quiz:before,
@@ -5342,6 +4812,11 @@ tbody
     left:0;
     background-color:rgba(255,255,255,.75);
     z-index:-1;
+}
+
+.page-dashboard #profile .buy-plan:before
+{
+    z-index: 0;
 }
 
 .page-dashboard.parent #metrics .parents_only h2,
@@ -5586,11 +5061,6 @@ tbody
     display:none;
 }
 
-.page-dashboard #tips .grid_6
-{
-    clear:right;
-}
-
 @media all and (max-width: 980px)
 {
     .webform-confirmation .quiz-wrapper
@@ -5662,11 +5132,6 @@ tbody
     padding-left:48px;
     min-height: 48px;
     padding-top:10px;
-}
-
-.node-schedule-form legend, .form-checkboxes .form-item, .form-radios .form-item, .field-type-list-integer
-{
-    margin:0;
 }
 
 .container-inline-date .form-item .form-item,

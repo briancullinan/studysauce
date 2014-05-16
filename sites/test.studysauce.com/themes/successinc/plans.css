@@ -4,9 +4,23 @@
     margin-bottom:-28px;
 }
 
+.page-dashboard #plan .buy-plan
+{
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    bottom:0;
+    right:0;
+    background: url(images/plan_background.png) no-repeat 50% 50% #FFFFFF;
+    background-size: 100% auto;
+}
+
 .page-dashboard #plan #calendar
 {
     max-height:500px;
+    margin-bottom:20px;
 }
 
 .page-dashboard #plan .fc-event
@@ -20,7 +34,7 @@
     margin:0;
     text-align: center;
     font-size: 14px;
-    color: #555;
+    color: #FFFFFF;
 }
 
 .page-dashboard #plan .fc-agenda-axis
@@ -44,7 +58,13 @@
 .page-dashboard #plan .free-event,
 .page-dashboard #plan .other-event
 {
-    color:#555555;
+    color:#ffffff;
+    background-color: #555555;
+}
+
+.page-dashboard #plan .other-event
+{
+    background-color: #000000;
 }
 
 .page-dashboard #plan .drag-event
@@ -52,7 +72,7 @@
     background-color:#EEEEEE;
 }
 
-.page-dashboard #plan .free-event .fc-event-title small
+.page-dashboard #plan .fc-event-title small
 {
     display:none;
 }
@@ -122,7 +142,22 @@
     display: block;
     position: absolute;
     left: 50%;
-    margin-left: 200px;
+    margin-left: 235px;
+    width:165px;
+}
+
+.page-dashboard #plan .return-to-top
+{
+    display: block;
+    position: fixed;
+    left: 50%;
+    margin-left: 365px;
+    width:100px;
+    background: url(images/arrow-up.png) no-repeat 0 0 transparent;
+    bottom:50px;
+    text-align: center;
+    padding-top:50px;
+    z-index: 9999;
 }
 
 .page-dashboard #plan .flip-clock-wrapper ul li a div div.inn
@@ -153,17 +188,17 @@
 .page-dashboard #plan .strategy-teach,
 .page-dashboard #plan .strategy-active,
 .page-dashboard #plan .strategy-spaced,
-.page-dashboard #plan .strategy-other-notes,
+.page-dashboard #plan .strategy-other,
 .page-dashboard #plan .field-select-strategy
 {
     margin:0 auto;
     max-width: 800px;
     display:none;
-    padding-right: 200px;
+    padding-right: 165px;
     box-sizing: border-box;
 }
 
-.page-dashboard #plan .selected .strategy-other-notes
+.page-dashboard #plan .selected .strategy-other
 {
     display:block;
 }
@@ -178,6 +213,12 @@
 {
     display:block;
     margin-top:30px;
+}
+
+.page-dashboard #plan .row.selected .highlighted-link
+{
+    display:block;
+    text-align: right;
 }
 
 .page-dashboard #plan .strategy-upload
@@ -269,19 +310,28 @@
 {
     display:block;
     position: absolute;
-    top:30px;
+    top:25px;
     margin-top:-12px;
     text-align: center;
     width: 100%;
     margin-left:-10px;
 }
 
-.page-dashboard #plan a[href="#strategy-upload"] img
+.strategy-upload .plup-select
 {
-    width: 100%;
-    height:auto;
     border-radius: 5px;
     border:3px solid #555555;
+    box-sizing: border-box;
+}
+
+.strategy-upload .drag-main
+{
+    top:15px;
+}
+
+.strategy-upload:hover .drag-main
+{
+    color:#02CEE8;
 }
 
 .page-dashboard #plan .field-select-strategy label
@@ -311,10 +361,9 @@
     display:none;
 }
 
-.page-dashboard #plan .fc-event-title small
+.page-dashboard #plan .ui-resizable-handle
 {
-    clear:both;
-    display:block;
+    display: none !important;
 }
 
 .page-dashboard #plan .field-name-field-class-name .read-only span,
@@ -331,63 +380,70 @@
     vertical-align: top;
 }
 
-.page-dashboard #schedule .class,
-.page-dashboard #plan .class
+.page-dashboard #plan .class .class,
+.page-path-schedule .class,
+.page-dashboard #plan .class-event.fc-event
 {
     border: 3px solid #555555;
-    color:#555555;
+    color:#FFFFFF;
+    background: #000000;
 }
 
-.page-dashboard #schedule .class0,
-.page-dashboard #plan .class0
+.page-dashboard #plan .cidf .class
+{
+    background: #555555;
+}
+
+.page-dashboard #plan .class0.fc-event,
+.page-dashboard #plan .class0 .class
 {
     background-color:#FF1100;
 }
 
-.page-dashboard #schedule .class1,
-.page-dashboard #plan .class1
+.page-dashboard #plan .class1.fc-event,
+.page-dashboard #plan .class1 .class
 {
     background-color:#FF9900;
 }
 
-.page-dashboard #schedule .class2,
-.page-dashboard #plan .class2
+.page-dashboard #plan .class2.fc-event,
+.page-dashboard #plan .class2 .class
 {
     background-color:#FFDD00;
 }
 
-.page-dashboard #schedule .class3,
-.page-dashboard #plan .class3
+.page-dashboard #plan .class3.fc-event,
+.page-dashboard #plan .class3 .class
 {
     background-color:#BBEE00;
 }
 
-.page-dashboard #schedule .class4,
-.page-dashboard #plan .class4
+.page-dashboard #plan .class4.fc-event,
+.page-dashboard #plan .class4 .class
 {
     background-color:#33DD00;
 }
 
-.page-dashboard #schedule .class5,
-.page-dashboard #plan .class5
+.page-dashboard #plan .class5.fc-event,
+.page-dashboard #plan .class5 .class
 {
     background-color:#009999;
 }
 
-.page-dashboard #schedule .class6,
-.page-dashboard #plan .class6
+.page-dashboard #plan .class6.fc-event,
+.page-dashboard #plan .class6 .class
 {
     background-color:#1133AA;
 }
 
-.page-dashboard #schedule .class7,
-.page-dashboard #plan .class7
+.page-dashboard #plan .class7.fc-event,
+.page-dashboard #plan .class7 .class
 {
     background-color:#6611AA;
 }
 
-.page-dashboard #schedule .class8,
-.page-dashboard #plan .class8
+.page-dashboard #plan .class8.fc-event,
+.page-dashboard #plan .class8 .class
 {
     background-color:#BB0088;
 }
@@ -641,7 +697,7 @@
     .page-dashboard #plan .strategy-teach,
     .page-dashboard #plan .strategy-active,
     .page-dashboard #plan .strategy-spaced,
-    .page-dashboard #plan .strategy-other-notes
+    .page-dashboard #plan .strategy-other
     {
         clear:both;
         padding-right: 0;

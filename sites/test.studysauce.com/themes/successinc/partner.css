@@ -4,6 +4,11 @@
 
 }
 
+.page-dashboard #partner .ui-progressbar
+{
+    display:none;
+}
+
 .page-dashboard #partner .partner-faqs,
 .page-dashboard #partner .partner-setup,
 .page-dashboard #partner .partner-invite > .form-item:first-child,
@@ -15,6 +20,16 @@
     display:inline-block;
     vertical-align: top;
     box-sizing: border-box;
+}
+
+.page-dashboard #partner .partner-faqs
+{
+    width:33%;
+}
+
+.page-dashboard #partner .partner-setup
+{
+    width:66%;
 }
 
 .page-dashboard #partner .partner-invite
@@ -61,17 +76,32 @@
     box-sizing: border-box;
     position: relative;
     display: inline-block;
-    width: 29%;
-    margin: 10%;
-    border: 3px solid #555555;
-    border-radius: 100%;
+    width: 49%;
+    border-radius: 5px;
+}
+
+#partner-plupload .drag-main
+{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    margin-top: -10px;
+    color: #333333;
+    text-shadow: 0 1px 4px rgba(255,255,255,1);
+    text-align: center;
+}
+
+#partner-plupload:hover .drag-main
+{
+    color:#02CEE8;
 }
 
 #partner-plupload img
 {
     width: 100%;
     height:auto;
-    padding: 10px;
 }
 
 .page-dashboard #partner ul.partner-permissions
@@ -128,6 +158,24 @@
     .page-dashboard #partner .partner-invite > .form-item:nth-child(2)
     {
         width: auto;
+    }
+
+}
+
+
+@media all and (max-width: 980px)
+{
+
+    .page-dashboard #partner .partner-faqs,
+    .page-dashboard #partner .partner-setup
+    {
+        width:auto;
+        display: block;
+    }
+
+    .page-dashboard #partner .partner-faqs
+    {
+        margin-top: 30px;
     }
 
 }

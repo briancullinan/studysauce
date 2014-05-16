@@ -10,14 +10,6 @@ jQuery(document).ready(function($) {
         jQuery(this).parents('.row').datesFunc();
     });
 
-    deadlines.on('change', '.field-name-field-class-name select', function () {
-        var that = jQuery(this);
-        if(that.val() == 'Nonacademic')
-            that.parents('.row').find('.field-name-field-percent').hide();
-        else
-            that.parents('.row').find('.field-name-field-percent').show();
-    });
-
     deadlines.on('click', 'a[href="#cancel-dates"]', function (evt) {
         evt.preventDefault();
         deadlines.removeClass('edit-date-only').scrollintoview();
@@ -40,9 +32,8 @@ jQuery(document).ready(function($) {
                        remove: row.attr('id').substr(0, 4) == 'eid-' ? row.attr('id').substring(4) : null
                    },
                    success: function (data) {
-                       deadlines.find('button + .row ~ .row, button + .row ~ .head').remove();
-                       jQuery(data.reminders).find('button + .row ~ .row, button + .row ~ .head')
-                           .insertBefore(deadlines.find('.pane-content p').last());
+                       deadlines.find('#new-dates-row ~ .row, #new-dates-row ~ .head')
+                           .replaceWith(jQuery(data.reminders).find('#new-dates-row ~ .row, #new-dates-row ~ .head'));
                    }
                });
     });
@@ -63,7 +54,7 @@ jQuery(document).ready(function($) {
                            assignment: row.find('.field-name-field-assignment input').val(),
                            reminders: reminders.join(','),
                            due: row.find('.field-name-field-due-date input').val(),
-                           percent: row.find('.field-name-field-percent input').val()
+                           percent: row.find('.field-name-field-percent').is(':visible') ? row.find('.field-name-field-percent input').val() : 0
                        },
                        success: function (data) {
                            // clear input form
@@ -77,9 +68,8 @@ jQuery(document).ready(function($) {
                            }
 
                            // update key dates list
-                           jQuery('#deadlines button + .row ~ .row, #deadlines button + .row ~ .head').remove();
-                           jQuery(data.reminders).find('button + .row ~ .row, button + .row ~ .head')
-                               .insertBefore(deadlines.find('.pane-content p').last());
+                           deadlines.find('#new-dates-row ~ .row, #new-dates-row ~ .head')
+                               .replaceWith(jQuery(data.reminders).find('#new-dates-row ~ .row, #new-dates-row ~ .head'));
 
                            // update plan tab
                            var plan = jQuery('#plan');
@@ -126,6 +116,11 @@ jQuery(document).ready(function($) {
                 that.removeClass('invalid').addClass('valid');
                 that.parents('form').removeClass('invalid').addClass('valid');
             }
+
+            if(that.find('.field-name-field-class-name select').val() == 'Nonacademic')
+                that.find('.field-name-field-percent').hide();
+            else
+                that.find('.field-name-field-percent').show();
 
             that.find('.field-name-field-due-date input').datepicker({
                                                                          minDate: 0,

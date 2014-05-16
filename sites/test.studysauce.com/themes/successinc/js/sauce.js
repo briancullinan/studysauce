@@ -77,6 +77,37 @@
             }
         });
 
+        // setup footer menu loading
+        jQuery(footerLinks).each(function (i, x) {
+            jQuery('body').on('click', 'a[href="/' + x + '"], a[href="/' + x + '"]', function (evt) {
+                evt.preventDefault();
+
+                // add a panel for us to load in to
+                var pane = jQuery('#' + x + '.panel-pane');
+                if(pane.length == 0)
+                {
+                    pane = jQuery('<div id="' + x + '" class="panel-pane"><div class="pane-content" /></div>')
+                        .appendTo(jQuery('.page .grid_12 > div'))
+                        .on('click', 'a[href="/"]', function (evt) {
+                                evt.preventDefault();
+                                jQuery('body').removeClass(footerOnly).removeClass(menuOnly);
+                            });
+                }
+
+                // load the panel content
+                var url = jQuery(this).attr('href');
+                jQuery('body').removeClass(footerOnly).removeClass(menuOnly).addClass(x + '-only');
+                window.location.hash = '#' + x;
+                pane.find('.pane-content').addClass('loading')
+                    .load(url + ' #page .content', function () {
+                              pane.find('.pane-content').removeClass('loading');
+                          });
+                if(x == 'about-us')
+                    $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', '/' + pathToTheme + '/about.css') );
+                jQuery(window).trigger('scroll');
+            });
+        });
+
         jQuery('#invite').on('click', '.like-us a', function (evt) {
             var href = jQuery(this).attr('href');
             /*if(href.indexOf('facebook') > 0)
@@ -192,9 +223,9 @@
         //   it triggers the menu clicking
         $(window).on('hashchange', function(){
             _gaq.push(['_trackPageview', location.pathname + location.search  + location.hash]);
-            if(jQuery('#main-menu a[href="' + location.hash + '"]').length > 0)
+            if(jQuery('#main-menu a[href="' + location.hash + '"], .subfooter a[href="/' + location.hash.substring(1) + '"], #subfooter  a[href="/' + location.hash.substring(1) + '"]').length > 0)
             {
-                jQuery('#main-menu a[href="' + location.hash + '"]').trigger('click');
+                jQuery('#main-menu a[href="' + location.hash + '"], .subfooter a[href="/' + location.hash.substring(1) + '"], #subfooter  a[href="/' + location.hash.substring(1) + '"]').trigger('click');
             }
         });
         $(window).trigger('hashchange');
@@ -240,31 +271,6 @@
             jQuery('body').removeClass(footerOnly).addClass('user-profile-only');
             window.location.hash = '#user-profile';
             jQuery(window).trigger('scroll');
-        });
-
-        jQuery(footerLinks).each(function (i, x) {
-            jQuery('#subfooter a[href="/' + x + '"], .subfooter a[href="/' + x + '"]').click(function (evt) {
-                evt.preventDefault();
-
-                var pane = jQuery('#' + x + '.panel-pane');
-                if(pane.length == 0)
-                {
-                    pane = jQuery('<div id="' + x + '" class="panel-pane"><div class="pane-content" /></div>')
-                        .appendTo(jQuery('.page .grid_12 > div'))
-                        .on('click', 'a[href="/"]', function (evt) {
-                                evt.preventDefault();
-                                jQuery('body').removeClass(footerOnly).removeClass(menuOnly);
-                            });
-                }
-                var url = jQuery(this).attr('href');
-                jQuery('body').removeClass(footerOnly).removeClass(menuOnly).addClass(x + '-only');
-                window.location.hash = '#' + x;
-                pane.find('.pane-content').addClass('loading')
-                    .load(url + ' #page .content', function () {
-                              pane.find('.pane-content').removeClass('loading');
-                          });
-                jQuery(window).trigger('scroll');
-            });
         });
 
         jQuery(window).scroll(function () {

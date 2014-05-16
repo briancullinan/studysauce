@@ -1,5 +1,20 @@
+<?php
+drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/schedule.js');
+drupal_add_css(drupal_get_path('theme', 'successinc') .'/schedule.css');
+drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/jquery.timeentry.pack.js');
+drupal_add_library('system', 'ui.datepicker');
+drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/jquery.scrollintoview.js');
+
+if(drupal_get_path_alias(current_path()) == 'schedule')
+    print theme('studysauce-funnel');
+?>
 
 <h2>Enter your class + work schedule below</h2>
+<div class="field-type-text field-name-field-university field-widget-text-textfield form-wrapper">
+    <label for="schedule-university">School name</label>
+    <input class="text-full form-text required" type="text" id="schedule-university" name="schedule-university"
+           size="60" maxlength="255" value="<?php print (isset($node->field_university['und'][0]['value']) ? $node->field_university['und'][0]['value'] : ''); ?>">
+</div>
 
 <?php
 global $user;
@@ -36,10 +51,9 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <label>&nbsp;</label>
                     <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?></div>
                 <div class="form-item form-type-textfield">
-                    <label for="schedule-class-name">Class name</label>
+                    <label>Class name</label>
                     <input name="schedule-class-name" value="<?php print $c; ?>"
                            class="text-full form-text jquery_placeholder-processed"
-                           onkeyup='var startDate = jQuery(this).parents(".field-type-text").parent().find(".start-date-wrapper .form-type-textfield:first-child input"); if(startDate.val() == "" &amp;&amp; startDate.attr("placeholder") != "Start") startDate.val(startDate.attr("placeholder"));var endDate = jQuery(this).parents(".field-type-text").parent().find(".end-date-wrapper .form-type-textfield:first-child input"); if(endDate.val() == "" &amp;&amp; endDate.attr("placeholder") != "End") endDate.val(endDate.attr("placeholder"));'
                            type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
                 </div>
             </div>
@@ -110,11 +124,10 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
             </div>
             <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
                 <div class="form-item form-type-textfield">
-                    <label for="schedule-value-time">Time</label>
+                    <label>Time</label>
                     <input name="schedule-value-time"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($startDate == null ? '' : date('h:ia', $startDate)); ?>"
-                           onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "Start") myDate.val(myDate.attr("placeholder"));'
                            type="text" size="15" maxlength="10" placeholder="Start" value="">
                 </div>
                 <div class="form-item form-type-textfield">
@@ -122,16 +135,13 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <input name="schedule-value2-time"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($endDate == null ? '' : date('h:ia', $endDate)); ?>"
-                           onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "End") myDate.val(myDate.attr("placeholder"));'
                            type="text" size="15" maxlength="10" placeholder="End" value="">
                 </div>
                 <div class="form-item form-type-textfield">
-                    <label
-                        for="schedule-value-date">Date</label>
+                    <label>Date</label>
                     <input name="schedule-value-date"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($startDate == null ? '' : date('m/d/Y', $startDate)); ?>"
-                           onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .start-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
                            type="text" size="20" maxlength="30" placeholder="First class" value="">
                 </div>
                 <div class="form-item form-type-textfield">
@@ -139,20 +149,16 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <input name="schedule-value2-date"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($endDate == null ? '' : date('m/d/Y', $endDate)); ?>"
-                           onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .end-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
                            type="text" size="20" maxlength="30" placeholder="Last class" value="">
                 </div>
                 <div class="read-only"><label>Time</label><?php print ($startDate == null ? '' : date('h:i A', $startDate)) . ' - ' . ($endDate == null ? '' : date('h:i A', $endDate)); ?></div>
                 <div class="read-only"><label>Date</label><?php print ($startDate == null ? '' : date('m/d/y', $startDate)) . ' - ' . ($endDate == null ? '' : date('m/d/y', $endDate)); ?></div>
             </div>
             <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="c" />
-            <?php if($eid > 0): ?>
-                <a href="#cancel-class" class="more">Cancel</a>
-            <?php endif; ?>
-            <div class="highlighted-link">
-                <div class="read-only"><label>&nbsp;</label><a href="#edit-class">&nbsp;</a>
-                    <a href="#remove-class">&nbsp;</a></div>
-                <a href="#save-class" class="more">Save</a>
+            <div class="read-only">
+                <label>&nbsp;</label>
+                <a href="#edit-class">&nbsp;</a>
+                <a href="#remove-class">&nbsp;</a>
             </div>
         </div>
     <?php
@@ -163,11 +169,9 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
 <div id="add-class-dialog" class="row invalid">
     <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
         <div class="form-item form-type-textfield">
-            <label for="schedule-class-name">Class name</label>
+            <label>Class name</label>
             <input name="schedule-class-name"
                    class="text-full form-text jquery_placeholder-processed"
-                   id="schedule-class-name"
-                   onkeyup='var startDate = jQuery(this).parents(".field-type-text").parent().find(".start-date-wrapper .form-type-textfield:first-child input"); if(startDate.val() == "" &amp;&amp; startDate.attr("placeholder") != "Start") startDate.val(startDate.attr("placeholder"));var endDate = jQuery(this).parents(".field-type-text").parent().find(".end-date-wrapper .form-type-textfield:first-child input"); if(endDate.val() == "" &amp;&amp; endDate.attr("placeholder") != "End") endDate.val(endDate.attr("placeholder"));'
                    type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
         </div>
     </div>
@@ -225,46 +229,44 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
             <label for="schedule-value-time">Time</label>
             <input name="schedule-value-time"
                    class="date-clear form-text jquery_placeholder-processed"
-                   id="schedule-value-time"
-                   onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "Start") myDate.val(myDate.attr("placeholder"));'
                    type="text" size="15" maxlength="10" placeholder="Start" value="">
         </div>
         <div class="form-item form-type-textfield">
             <label>&nbsp;</label>
             <input name="schedule-value2-time"
                    class="date-clear form-text jquery_placeholder-processed"
-                   id="schedule-value2-time"
-                   onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "End") myDate.val(myDate.attr("placeholder"));'
                    type="text" size="15" maxlength="10" placeholder="End" value="">
         </div>
         <div class="form-item form-type-textfield">
             <label for="schedule-value-date">Date</label>
             <input name="schedule-value-date"
                    class="date-clear form-text jquery_placeholder-processed"
-                   id="schedule-value-date"
-                   onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .start-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
                    type="text" size="20" maxlength="30" placeholder="First class" value="">
         </div>
         <div class="form-item form-type-textfield">
             <label>&nbsp;</label>
             <input name="schedule-value2-date"
                    class="date-clear form-text jquery_placeholder-processed"
-                   id="schedule-value2-date"
-                   onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .end-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
                    type="text" size="20" maxlength="30" placeholder="Last class" value="">
         </div>
     </div>
     <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="c" />
-    <a href="#cancel-class" class="more">Cancel</a>
-    <div class="highlighted-link">
-        <a href="#save-class" class="more">Save</a>
-    </div>
 </div>
 
-<a class="field-add-more-submit ajax-processed" href="#add-class">
-    Add <span>&nbsp;</span> class
-</a>
-<p>&nbsp;</p>
+<p class="class-actions">
+    <a class="field-add-more-submit ajax-processed" href="#add-class">Add <span>+</span> class</a>
+    <a href="#save-class" class="highlighted-link more">Save</a>
+</p>
+
+<?php if(drupal_get_path_alias(current_path()) == 'schedule'): ?>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('.page-path-schedule').addClass('edit-class-only');
+            jQuery('.page-path-schedule .row').not('#add-class-dialog, #add-other-dialog').addClass('edit');
+        });
+    </script>
+<?php endif; ?>
+
 <hr style="margin-bottom:0;line-height: 1px;clear: both;" />
 <p style="margin-bottom:0;">&nbsp;</p>
 <h2>Enter work or other recurring obligations here</h2>
@@ -295,16 +297,15 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <label>&nbsp;</label>
                     <span>&nbsp;</span><?php print $c; ?></div>
                 <div class="form-item form-type-textfield">
-                    <label for="schedule-class-name">Class name</label>
+                    <label>Class name</label>
                     <input name="schedule-class-name" value="<?php print $c; ?>"
                            class="text-full form-text jquery_placeholder-processed"
-                           onkeyup='var startDate = jQuery(this).parents(".field-type-text").parent().find(".start-date-wrapper .form-type-textfield:first-child input"); if(startDate.val() == "" &amp;&amp; startDate.attr("placeholder") != "Start") startDate.val(startDate.attr("placeholder"));var endDate = jQuery(this).parents(".field-type-text").parent().find(".end-date-wrapper .form-type-textfield:first-child input"); if(endDate.val() == "" &amp;&amp; endDate.attr("placeholder") != "End") endDate.val(endDate.attr("placeholder"));'
                            type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
                 </div>
             </div>
             <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
                 <div class="read-only">
-                    <label>Day of the week</label>
+                    <label>M</label><label>Tu</label><label>W</label><label>Th</label><label>F</label><label>Sa</label><label>Su</label>
                     <span class="<?php print (in_array('M', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">M</span>
                     <span class="<?php print (in_array('Tu', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Tu</span>
                     <span class="<?php print (in_array('W', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">W</span>
@@ -313,7 +314,7 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <span class="<?php print (in_array('Sa', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Sa</span>
                     <span class="<?php print (in_array('Su', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Su</span></div>
                 <div class="form-item form-type-checkboxes">
-                    <label>Day of the week</label>
+                    <label>M</label><label>Tu</label><label>W</label><label>Th</label><label>F</label><label>Sa</label><label>Su</label>
                     <div class="form-checkboxes">
                         <div class="form-item form-type-checkbox">
                             <input name="schedule-dotw-M" class="form-checkbox"
@@ -366,6 +367,21 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                         </div>
                     </div>
                 </div>
+                <div class="field-type-list-text field-name-field-recurring field-widget-options-buttons form-wrapper">
+                    <label>Recurring</label>
+                    <div class="read-only">
+                        <span class="<?php print (!in_array('monthly', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Weekly</span>
+                        <span class="<?php print (in_array('monthly', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Monthly</span><br />
+                    </div>
+                    <div class="form-checkboxes form-type-checkbox">
+                        <input type="radio" name="schedule-reoccurring-<?php print $eid; ?>" id="other-schedule-weekly-<?php print $eid; ?>"
+                               value="weekly" class="form-checkbox" <?php print (!in_array('monthly', $daysOfTheWeek) ? 'checked="checked"' : ''); ?>/>
+                        <label for="other-schedule-weekly-<?php print $eid; ?>">Weekly</label>
+                        <input type="radio" name="schedule-reoccurring-<?php print $eid; ?>" id="other-schedule-monthly-<?php print $eid; ?>"
+                               value="monthly" class="form-checkbox" <?php print (in_array('monthly', $daysOfTheWeek) ? 'checked="checked"' : ''); ?>/>
+                        <label for="other-schedule-monthly-<?php print $eid; ?>">Monthly</label>
+                    </div>
+                </div>
             </div>
             <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
                 <div class="form-item form-type-textfield">
@@ -373,7 +389,6 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <input name="schedule-value-time"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($startDate == null ? '' : date('h:ia', $startDate)); ?>"
-                           onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "Start") myDate.val(myDate.attr("placeholder"));'
                            type="text" size="15" maxlength="10" placeholder="Start" value="">
                 </div>
                 <div class="form-item form-type-textfield">
@@ -381,7 +396,6 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <input name="schedule-value2-time"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($endDate == null ? '' : date('h:ia', $endDate)); ?>"
-                           onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "End") myDate.val(myDate.attr("placeholder"));'
                            type="text" size="15" maxlength="10" placeholder="End" value="">
                 </div>
                 <div class="form-item form-type-textfield">
@@ -390,7 +404,6 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <input name="schedule-value-date"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($startDate == null ? '' : date('m/d/Y', $startDate)); ?>"
-                           onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .start-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
                            type="text" size="20" maxlength="30" placeholder="First class" value="">
                 </div>
                 <div class="form-item form-type-textfield">
@@ -398,151 +411,114 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <input name="schedule-value2-date"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($endDate == null ? '' : date('m/d/Y', $endDate)); ?>"
-                           onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .end-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
                            type="text" size="20" maxlength="30" placeholder="Last class" value="">
                 </div>
                 <div class="read-only"><label>Time</label><?php print ($startDate == null ? '' : date('h:i A', $startDate)) . ' - ' . ($endDate == null ? '' : date('h:i A', $endDate)); ?></div>
                 <div class="read-only"><label>Date</label><?php print ($startDate == null ? '' : date('m/d/y', $startDate)) . ' - ' . ($endDate == null ? '' : date('m/d/y', $endDate)); ?></div>
             </div>
-            <div class="field-type-list-text field-name-field-recurring field-widget-options-buttons form-wrapper">
-                <div class="read-only"><label>Recurring</label>
-                    <span class="<?php print (!in_array('monthly', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Weekly</span>
-                    <span class="<?php print (in_array('monthly', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Monthly</span><br />
-                </div>
-                <div class="form-item form-type-checkboxes">
-                    <label>Recurring</label>
-                    <div class="form-checkboxes form-type-checkbox">
-                        <input type="radio" name="schedule-reoccurring" id="other-schedule-weekly"
-                               value="weekly" class="form-checkbox" <?php print (!in_array('monthly', $daysOfTheWeek) ? 'checked="checked"' : ''); ?>/>
-                        <label for="other-schedule-weekly">Weekly</label>
-                        <input type="radio" name="schedule-reoccurring" id="other-schedule-monthly"
-                               value="monthly" class="form-checkbox" <?php print (in_array('monthly', $daysOfTheWeek) ? 'checked="checked"' : ''); ?>/>
-                        <label for="other-schedule-monthly">Monthly</label>
-                    </div>
-                </div>
-            </div>
             <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="o" />
-            <a href="#cancel-class" class="more">Cancel</a>
-            <div class="highlighted-link">
-                <div class="read-only"><label>&nbsp;</label><a href="#edit-class">&nbsp;</a>
-                    <a href="#remove-class">&nbsp;</a></div>
-                <a href="#save-class" class="more">Save</a>
+            <div class="read-only">
+                <label>&nbsp;</label>
+                <a href="#edit-class">&nbsp;</a>
+                <a href="#remove-class">&nbsp;</a>
             </div>
         </div>
     <?php
     }
     ?>
-</div>
 
-<div id="add-other-dialog" class="row invalid">
-    <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
-        <div class="form-item form-type-textfield">
-            <label for="other-schedule-class-name">Event title</label>
-            <input name="schedule-class-name"
-                   class="text-full form-text jquery_placeholder-processed"
-                   id="other-schedule-class-name"
-                   onkeyup='var startDate = jQuery(this).parents(".field-type-text").parent().find(".start-date-wrapper .form-type-textfield:first-child input"); if(startDate.val() == "" &amp;&amp; startDate.attr("placeholder") != "Start") startDate.val(startDate.attr("placeholder"));var endDate = jQuery(this).parents(".field-type-text").parent().find(".end-date-wrapper .form-type-textfield:first-child input"); if(endDate.val() == "" &amp;&amp; endDate.attr("placeholder") != "End") endDate.val(endDate.attr("placeholder"));'
-                   type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
-        </div>
-    </div>
-    <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
-        <div class="form-item form-type-checkboxes">
-            <label>Recurring</label>
-            <div class="form-checkboxes form-type-checkbox">
-                <input type="radio" name="schedule-reoccurring" id="other-schedule-weekly" value="weekly" class="form-checkbox" checked="checked" />
-                <label for="other-schedule-weekly">Weekly</label>
-                <input type="radio" name="schedule-reoccurring" id="other-schedule-monthly" value="monthly" class="form-checkbox" />
-                <label for="other-schedule-monthly">Monthly</label>
+    <div id="add-other-dialog" class="row invalid">
+        <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+            <div class="form-item form-type-textfield">
+                <label>Event title</label>
+                <input name="schedule-class-name"
+                       class="text-full form-text jquery_placeholder-processed"
+                       type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
             </div>
-            <div class="form-checkboxes">
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-M" class="form-checkbox"
-                           id="other-schedule-dotw-M" type="checkbox" value="M"> <label
-                        class="option" for="other-schedule-dotw-M">M </label>
-
+        </div>
+        <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
+            <div class="form-item form-type-checkboxes">
+                <label>M</label><label>Tu</label><label>W</label><label>Th</label><label>F</label><label>Sa</label><label>Su</label>
+                <div class="form-checkboxes">
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-M" class="form-checkbox"
+                               id="other-schedule-dotw-M" type="checkbox" value="M">
+                        <label class="option" for="other-schedule-dotw-M">M</label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-Tu" class="form-checkbox"
+                               id="other-schedule-dotw-Tu" type="checkbox" value="Tu">
+                        <label class="option" for="other-schedule-dotw-Tu">Tu</label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-W" class="form-checkbox"
+                               id="other-schedule-dotw-W" type="checkbox" value="W">
+                        <label class="option" for="other-schedule-dotw-W">W</label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-Th" class="form-checkbox"
+                               id="other-schedule-dotw-Th" type="checkbox" value="Th">
+                        <label class="option" for="other-schedule-dotw-Th">Th</label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-F" class="form-checkbox"
+                               id="other-schedule-dotw-F" type="checkbox" value="F">
+                        <label class="option" for="other-schedule-dotw-F">F</label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-Sa" class="form-checkbox"
+                               id="other-schedule-dotw-Sa" type="checkbox" value="Sa">
+                        <label class="option" for="other-schedule-dotw-Sa">Sa</label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-Su" class="form-checkbox"
+                               id="other-schedule-dotw-Su" type="checkbox" value="Su">
+                        <label class="option" for="other-schedule-dotw-Su">Su</label>
+                    </div>
                 </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-Tu" class="form-checkbox"
-                           id="other-schedule-dotw-Tu" type="checkbox" value="Tu"> <label
-                        class="option" for="other-schedule-dotw-Tu">Tu </label>
-
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-W" class="form-checkbox"
-                           id="other-schedule-dotw-W" type="checkbox" value="W"> <label
-                        class="option" for="other-schedule-dotw-W">W </label>
-
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-Th" class="form-checkbox"
-                           id="other-schedule-dotw-Th" type="checkbox" value="Th"> <label
-                        class="option" for="other-schedule-dotw-Th">Th </label>
-
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-F" class="form-checkbox"
-                           id="other-schedule-dotw-F" type="checkbox" value="F"> <label
-                        class="option" for="other-schedule-dotw-F">F </label>
-
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-Sa" class="form-checkbox"
-                           id="other-schedule-dotw-Sa" type="checkbox" value="Sa"> <label
-                        class="option" for="other-schedule-dotw-Sa">Sa </label>
-
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-Su" class="form-checkbox"
-                           id="other-schedule-dotw-Su" type="checkbox" value="Su"> <label
-                        class="option" for="other-schedule-dotw-Su">Su </label>
-
+                <div class="field-name-field-recurring">
+                    <label>Recurring</label>
+                    <div class="form-checkboxes form-type-checkbox">
+                        <input type="radio" name="schedule-reoccurring" id="other-schedule-weekly" value="weekly" class="form-checkbox" checked="checked" />
+                        <label for="other-schedule-weekly">Weekly</label>
+                        <input type="radio" name="schedule-reoccurring" id="other-schedule-monthly" value="monthly" class="form-checkbox" />
+                        <label for="other-schedule-monthly">Monthly</label>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
+            <div class="form-item form-type-textfield">
+                <label>Time</label>
+                <input name="schedule-value-time"
+                       class="date-clear form-text jquery_placeholder-processed"
+                       type="text" size="15" maxlength="10" placeholder="Start" value="">
+            </div>
+            <div class="form-item form-type-textfield">
+                <label>&nbsp;</label>
+                <input name="schedule-value2-time"
+                       class="date-clear form-text jquery_placeholder-processed"
+                       type="text" size="15" maxlength="10" placeholder="End" value="">
+            </div>
+            <div class="form-item form-type-textfield">
+                <label>Date</label>
+                <input name="schedule-value-date"
+                       class="date-clear form-text jquery_placeholder-processed"
+                       type="text" size="20" maxlength="30" placeholder="Start" value="">
+            </div>
+            <div class="form-item form-type-textfield">
+                <label>&nbsp;</label>
+                <input name="schedule-value2-date"
+                       class="date-clear form-text jquery_placeholder-processed"
+                       type="text" size="20" maxlength="30" placeholder="End" value="">
+            </div>
+        </div>
+        <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="o" />
     </div>
-    <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
-        <div class="form-item form-type-textfield">
-            <label for="other-schedule-value-time">Time</label>
-            <input name="schedule-value-time"
-                   class="date-clear form-text jquery_placeholder-processed"
-                   id="other-schedule-value-time"
-                   onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "Start") myDate.val(myDate.attr("placeholder"));'
-                   type="text" size="15" maxlength="10" placeholder="Start" value="">
-        </div>
-        <div class="form-item form-type-textfield">
-            <label>&nbsp;</label>
-            <input name="schedule-value2-time"
-                   class="date-clear form-text jquery_placeholder-processed"
-                   id="other-schedule-value2-time"
-                   onchange='var myDate = jQuery(this).parents(".form-type-textfield").prev().find("input"); if(myDate.val() == "" &amp;&amp; myDate.attr("placeholder") != "End") myDate.val(myDate.attr("placeholder"));'
-                   type="text" size="15" maxlength="10" placeholder="End" value="">
-        </div>
-        <div class="form-item form-type-textfield">
-            <label
-                for="other-schedule-value-date">Date</label>
-            <input name="schedule-value-date"
-                   class="date-clear form-text jquery_placeholder-processed"
-                   id="other-schedule-value-date"
-                   onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .start-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
-                   type="text" size="20" maxlength="30" placeholder="Start" value="">
-        </div>
-        <div class="form-item form-type-textfield">
-            <label>&nbsp;</label>
-            <input name="schedule-value2-date"
-                   class="date-clear form-text jquery_placeholder-processed"
-                   id="other-schedule-value2-date"
-                   onchange='var that = jQuery(this).val(); jQuery(".field-name-field-time .end-date-wrapper .form-type-textfield:first-child input").each(function () { jQuery(this).attr("placeholder", that); });'
-                   type="text" size="20" maxlength="30" placeholder="End" value="">
-        </div>
-    </div>
-    <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="o" />
-    <a href="#cancel-class" class="more">Cancel</a>
-    <div class="highlighted-link">
-        <a href="#save-class" class="more">Save</a>
-    </div>
+
 </div>
 
-<a class="field-add-more-submit ajax-processed" href="#add-other">
-    Add <span>&nbsp;</span> other event
-</a>
-<p>&nbsp;</p>
+<p class="other-actions">
+    <a class="field-add-more-submit ajax-processed" href="#add-other">Add <span>+</span> other event</a>
+    <a href="#save-class" class="highlighted-link more">Save</a>
+</p>

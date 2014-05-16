@@ -1,0 +1,68 @@
+
+.page-dashboard #account .field-name-account-renewal label,
+.page-dashboard #account .field-name-account-type label,
+.page-dashboard #account .field-name-field-first-name label,
+.page-dashboard #account .field-name-field-first-name input,
+.page-dashboard #account .field-name-field-last-name label,
+.page-dashboard #account .field-name-field-last-name input,
+.page-dashboard #account .form-item-mail label,
+.page-dashboard #account .form-item-mail input,
+.page-dashboard #account .form-item-current-pass label,
+.page-dashboard #account .form-item-current-pass input,
+.page-dashboard #account .form-item-pass label,
+.page-dashboard #account .form-item-pass input
+{
+    display:inline-block;
+    width: 49%;
+    vertical-align: top;
+}
+
+.page-dashboard #account .form-actions
+{
+    text-align: right;
+    margin:0;
+}
+
+.page-dashboard #account a[href="#cancel-account"]
+{
+    float:left;
+}
+
+.page-dashboard #account .field-name-account-type,
+.page-dashboard #account .field-name-account-renewal
+{
+    clear: both;
+}
+
+.page-dashboard #account .field-name-account-type .form-checkboxes label
+{
+    background: url('images/menu_icons_128.png') no-repeat -53px -2854px transparent;
+    display: inline-block;
+    width: auto;
+    text-align: left;
+    padding-left: 25px;
+    cursor: pointer;
+    padding-right:20px;
+}
+
+.page-dashboard #account .field-name-account-type .form-checkboxes input:checked + label
+{
+    background-position: -53px -2740px;
+}
+
+.page-dashboard #account .field-name-account-type .highlighted-link,
+.page-dashboard #account .field-name-account-type .form-checkboxes
+{
+    display: inline-block;
+}
+
+.page-dashboard #account .field-name-account-type .highlighted-link
+{
+    float:right;
+}
+
+.page-dashboard #account .field-name-account-type input
+{
+    visibility: hidden;
+    margin-right: -20px;
+}

@@ -20,6 +20,7 @@ function successinc_breadcrumb($variables){
 
 function successinc_preprocess_page(&$variables)
 {
+
     // if this is a panel page, add template suggestions
     if(($panel_page = page_manager_get_current_page())) {
         $layout = explode(':', $panel_page['handler']->conf['display']->layout);
@@ -60,6 +61,8 @@ function _studysauce_reminders_date_sort($a, $b)
  * Override or insert variables into the html template.
  */
 function successinc_preprocess_html(&$variables) {
+
+    $variables['classes_array'][] = 'page-path-' . drupal_clean_css_identifier(drupal_get_path_alias(current_path()));
 
 	if (empty($variables['page']['banner'])) {
 		$variables['classes_array'][] = 'no-banner';
@@ -362,6 +365,9 @@ if (theme_get_setting('scrolltop_display')) {
 
 global $user;
 drupal_add_css(drupal_get_path('theme', 'successinc') .'/header.css');
+drupal_add_css(drupal_get_path('theme', 'successinc') .'/buy.css');
+drupal_add_css(drupal_get_path('theme', 'successinc') .'/funnel.css');
+drupal_add_js('window.pathToTheme=' . json_encode(path_to_theme()) . ';', 'inline');
 
 if(drupal_is_front_page() && $user->uid != 0)
 {
@@ -385,8 +391,6 @@ if(drupal_is_front_page() && $user->uid != 0)
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/fullcalendar/fullcalendar.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/checkin.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/plans.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/profile.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/schedule.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/goals.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/user.js');
@@ -402,7 +406,6 @@ if(drupal_is_front_page() && $user->uid != 0)
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/goals.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/awards.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/deadlines.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/schedule.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/profile.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/metrics.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/plans.css');

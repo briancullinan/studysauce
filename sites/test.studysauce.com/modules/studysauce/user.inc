@@ -1,13 +1,37 @@
 <?php
 
-function studysauce_save_user()
+function studysauce_save_user($user = null, &$edit = array())
 {
-    global $user;
-    $user = user_load($user->uid);
-    $changes = array();
+    if(!isset($edit))
+        $edit = array();
+
+    if($user == null)
+    {
+        global $user;
+        $user = user_load($user->uid);
+    }
+
+    if(isset($_POST['cancel']))
+    {
+        $edit = array('user_cancel_notify' => false);
+        user_cancel($edit, $user->uid, 'user_cancel_block');
+        return;
+    }
+
+    if(isset($_POST['first']) && isset($_POST['last']) && isset($_POST['email']))
+    {
+        $edit['field_first_name']['und'][0]['value'] = $_POST['first'];
+        $edit['field_last_name']['und'][0]['value'] = $_POST['last'];
+        $edit['mail'] = $_POST['email'];
+        if(isset($_POST['pass']) && !empty($_POST['pass']))
+            $edit['pass'] = $_POST['pass'];
+
+        user_save($user, $edit);
+    }
+
     // if parent selected jump down below, everything else assume student
     if(substr($user->mail, -strlen('@internal.example.org')) != '@internal.example.org')
-        if(!isset($_POST['parent-student']) || $_POST['parent-student'] != 'parent')
+        if(isset($_POST['parent-student']) && $_POST['parent-student'] == 'student')
         {
             $msg = <<< EOHTML
 Congratulations on taking the first step to becoming a great studier.  To get the most out of Study Sauce, we recommend a few key things to do.
@@ -37,9 +61,8 @@ EOHTML;
             $system = drupal_mail_system('studysauce', 'welcome');
             $new_message['result'] = $system->mail($new_message);
 
-            $changes['field_parent_student']['und'][0]['value'] = 'student';
         }
-        else
+        elseif(isset($_POST['parent-student']) && $_POST['parent-student'] == 'parent')
         {
             $msg = <<< EOHTML
 Thank you for joining Study Sauce.  To get the most out of our service, we recommend a few key things to do.
@@ -69,10 +92,8 @@ EOHTML;
             $system = drupal_mail_system('studysauce', 'welcome');
             $new_message['result'] = $system->mail($new_message);
 
-            $changes['field_parent_student']['und'][0]['value'] = 'parent';
         }
 
-    user_save($user, $changes);
 }
 
 

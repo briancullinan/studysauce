@@ -1,3 +1,17 @@
+<?php
+
+global $user;
+$user = user_load($user->uid);
+if(isset($user->field_partners['und'][0]['value']))
+{
+    $partner = entity_load('field_collection_item', array($user->field_partners['und'][0]['value']));
+    $partner = $partner[$user->field_partners['und'][0]['value']];
+    $permissions = isset($partner->field_permissions['und']) && is_array($partner->field_permissions['und'])
+        ? array_map(function ($x) { return $x['value']; }, $partner->field_permissions['und'])
+        : array();
+}
+
+?>
 <h2>Choosing an accountability partner can be invaluable to achieving your goals</h2>
 <br />
 <div class="partner-setup">
@@ -6,7 +20,21 @@
     <div class="plupload" id="partner-plupload">
         <div class="plup-list-wrapper">
             <ul class="plup-list clearfix ui-sortable">
+                <?php if(isset($partner->field_partner_photo['und'][0]['fid'])):
+                    $file = file_load($partner->field_partner_photo['und'][0]['fid']);
+                    ?>
+                    <li class="ui-state-default">
+                        <div class="plup-thumb-wrapper">
+                            <img src="<?php print image_style_url('achievement', $file->uri); ?>" title="">
+                        </div>
+                        <a class="plup-remove-item"></a>
+                        <input type="hidden" name="partner-plupload[0][fid]" value="<?php print $file->fid; ?>">
+                        <input type="hidden" name="partner-plupload[0][weight]" value="0">
+                        <input type="hidden" name="partner-plupload[0][rename]" value="<?php print $file->filename; ?>">
+                    </li>
+                <?php else: ?>
                 <img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/empty-photo.png" height="200" width="200" alt="Upload" />
+                <?php endif; ?>
             </ul>
         </div>
         <div class="plup-filelist" id="partner-plupload-filelist">
@@ -25,29 +53,28 @@
             </table>
         </div>
         <div class="plup-bar clearfix">
+            <input type="hidden" id="partner-upload-path" value="<?php print url('node/plup/partner', array('query' => array('plupload_token' => drupal_get_token('plupload-handle-uploads')))); ?>" />
             <a href="#partner-select" class="plup-select" id="partner-plupload-select">Add</a>
             <a hre="#partner-upload" class="plup-upload" id="partner-plupload-upload">Upload</a>
             <div class="plup-progress"></div>
         </div>
-        <div class="plupload html5"
-             style="position: absolute; background-color: transparent; width: 0px; height: 0px; overflow: hidden; z-index: -1; opacity: 0; top: 0px; left: 0px;">
-            <input style="font-size: 999px; position: absolute; width: 100%; height: 100%;" type="file"
-                   accept="image/png,image/gif,image/jpeg,image/*" multiple="multiple"></div>
     </div>
 
     <div class="partner-invite">
         <div
             class="form-item webform-component webform-component-textfield">
             <input type="text" id="partner-first" name="partner-first"
-                   value="" size="60" maxlength="128" class="form-text required" placeholder="First name">
+                   value="<?php print (isset($partner->field_first_name['und'][0]['value']) ? $partner->field_first_name['und'][0]['value'] : ''); ?>" size="60" maxlength="128" class="form-text required" placeholder="First name">
         </div>
         <div
             class="form-item webform-component webform-component-textfield">
-            <input type="text" id="partner-last" name="partner-last" value=""
+            <input type="text" id="partner-last" name="partner-last"
+                   value="<?php print (isset($partner->field_last_name['und'][0]['value']) ? $partner->field_last_name['und'][0]['value'] : ''); ?>"
                    size="60" maxlength="128" class="form-text required" placeholder="Last name">
         </div>
         <div class="form-item webform-component webform-component-email">
             <input class="email form-text form-email required" type="email" id="partner-email"
+                   value="<?php print (isset($partner->field_email['und'][0]['value']) ? $partner->field_email['und'][0]['value'] : ''); ?>"
                    name="partner-email" size="60" placeholder="Email address">
         </div>
         <div class="highlighted-link form-actions">
@@ -56,17 +83,23 @@
 
     <h3>My partner is allowed to see:</h3>
     <ul class="partner-permissions">
-        <li><input type="checkbox" value="goals" id="partner-goals" name="partner-goals" />
+        <li><input type="checkbox" value="goals" id="partner-goals" name="partner-goals"
+                <?php print (isset($permissions) && in_array('goals', $permissions) ? 'checked' : 'unchecked'); ?> />
             <label for="partner-goals">My goals</label></li>
-        <li><input type="checkbox" value="metrics" id="partner-metrics" name="partner-metrics" />
+        <li><input type="checkbox" value="metrics" id="partner-metrics" name="partner-metrics"
+                <?php print (isset($permissions) && in_array('metrics', $permissions) ? 'checked' : 'unchecked'); ?> />
             <label for="partner-metrics">My study metrics</label></li>
-        <li><input type="checkbox" value="deadlines" id="partner-deadlines" name="partner-deadlines" />
+        <li><input type="checkbox" value="deadlines" id="partner-deadlines" name="partner-deadlines"
+                <?php print (isset($permissions) && in_array('deadlines', $permissions) ? 'checked' : 'unchecked'); ?> />
             <label for="partner-deadlines">My deadlines</label></li>
-        <li><input type="checkbox" value="uploads" id="partner-uploads" name="partner-uploads" />
+        <li><input type="checkbox" value="uploads" id="partner-uploads" name="partner-uploads"
+                <?php print (isset($permissions) && in_array('uploads', $permissions) ? 'checked' : 'unchecked'); ?> />
             <label for="partner-uploads">My uploaded content <sup class="premium">Premium</sup></label></li>
-        <li><input type="checkbox" value="plan" id="partner-plan" name="partner-plan" />
+        <li><input type="checkbox" value="plan" id="partner-plan" name="partner-plan"
+                <?php print (isset($permissions) && in_array('plan', $permissions) ? 'checked' : 'unchecked'); ?> />
             <label for="partner-plan">My study plan <sup class="premium">Premium</sup></label></li>
-        <li><input type="checkbox" value="profile" id="partner-profile" name="partner-profile" />
+        <li><input type="checkbox" value="profile" id="partner-profile" name="partner-profile"
+                <?php print (isset($permissions) && in_array('profile', $permissions) ? 'checked' : 'unchecked'); ?> />
             <label for="partner-profile">My study profiles <sup class="premium">Premium</sup></label></li>
     </ul>
 </div>

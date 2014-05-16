@@ -16,7 +16,7 @@ $studyConnections = studysauce_get_connections();
 $setup = studysauce_is_incentives_setup();
 ?>
 <div
-    class="step_<?php print $setup; ?> <?php print empty($studyConnections) ? 'not-connected' : 'connected'; ?> <?php print isset($parent) ? 'sponsored' : ''; ?>">
+    class="step_<?php print $setup; ?> <?php print (empty($studyConnections) ? 'not-connected' : 'connected'); ?> <?php print (isset($parent) ? 'sponsored' : ''); ?>">
 
 <div id="student_step_1">
     <h2 class="students_only student_step_1">Set goals and rewards, then get sponsored by your parents</h2>
@@ -86,10 +86,6 @@ $setup = studysauce_is_incentives_setup();
                         <a hre="#goal-upload" class="plup-upload" id="goals-plupload-upload">Upload</a>
                         <div class="plup-progress"></div>
                     </div>
-                    <div class="plupload html5"
-                         style="position: absolute; background-color: transparent; width: 0px; height: 0px; overflow: hidden; z-index: -1; opacity: 0; top: 0px; left: 0px;">
-                        <input style="font-size: 999px; position: absolute; width: 100%; height: 100%;" type="file"
-                               accept="image/png,image/gif,image/jpeg,image/*" multiple="multiple"></div>
                 </div>
             </div>
         </div>
@@ -342,8 +338,7 @@ $setup = studysauce_is_incentives_setup();
     </div>
     <?php endif; ?>
     <p style="clear:both;margin:0;text-align: center;margin-top:20px;">
-        <a href="#checkin" class="read-only students_only">Use the check-in tab to start reaching your goal.</a>
-        <a href="#checkin" class="read-only parents_only">Your student will be guided by our study detection software every time they check in to study.</a>
+        <a href="#partner" class="read-only">Now invite someone to help keep you accountable to your goals.</a>
     </p>
 </div>
 <div id="achievements">

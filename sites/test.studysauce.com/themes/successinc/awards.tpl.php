@@ -19,7 +19,7 @@ list($awards, $lastAward) = studysauce_get_awards();
 </div>
 <h2>Your Study Badges <small>(click on badges for detail)</small></h2>
 <div class="awards">
-    <a href="#setup-pulse" id="setup-pulse" class="<?php print $awards['setup-pulse'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Pulse Detected</a>
+    <a href="#setup-pulse" id="setup-pulse" class="<?php print ($awards['setup-pulse'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Pulse Detected</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Pulse Detected</h3>
@@ -34,7 +34,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Our Study Detection Software will automatically guide you to become a great studier.  Enter your class information <span>here</span> to unlock this badge.</p>
     </div>
-    <a href="#setup-hours" id="setup-hours" class="<?php print $awards['setup-hours'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Study Hours</a>
+    <a href="#setup-hours" id="setup-hours" class="<?php print ($awards['setup-hours'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Study Hours</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Study Hours</h3>
@@ -48,7 +48,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>This is your most important goal.  It will not only allow you to start using our Study Detection Software to learn the best study methods, but it will also help you change your ingrained study behavior.  <a href="#goals" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#goals .field-name-field-goals tr:nth-child(1) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study hours goal <span>here</span> to unlock.</a></p>
     </div>
-    <a href="#setup-milestone" id="setup-milestone" class="<?php print $awards['setup-milestone'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Study Milestone</a>
+    <a href="#setup-milestone" id="setup-milestone" class="<?php print ($awards['setup-milestone'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Study Milestone</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Study Milestone</h3>
@@ -62,7 +62,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Milestones will help you feel good about your progress as the term goes on.  <a href="#goals" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#goals .field-name-field-goals tr:nth-child(2) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study milestones goal <span>here</span> to unlock.</a></p>
     </div>
-    <a href="#setup-outcome" id="setup-outcome" class="<?php print $awards['setup-outcome'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Study Outcome</a>
+    <a href="#setup-outcome" id="setup-outcome" class="<?php print ($awards['setup-outcome'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Study Outcome</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Study Outcome</h3>
@@ -76,7 +76,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p><a href="#goals" onclick="if(jQuery(window).outerWidth(true) <= 963) { jQuery('#goals .field-name-field-goals tr:nth-child(3) .field-name-field-type').scrollintoview({padding: {top:80,bottom:jQuery(window).height(),left:0,right:0}}); return false; }">Set up your study outcome goal <span>here</span> to unlock.</a></p>
     </div>
-    <a href="#setup-linked" id="setup-linked" class="<?php print $awards['setup-linked'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Linked</a>
+    <a href="#setup-linked" id="setup-linked" class="<?php print ($awards['setup-linked'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Linked</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Linked</h3>
@@ -90,7 +90,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p><a href="#invite">Connect your account with your parent or other sponsor on Study Sauce <span>here</span>.  Once connected, they can sponsor your study goals and you can earn rewards.</a></p>
     </div>
-    <a href="#beginner-checkin" id="beginner-checkin" class="<?php print $awards['beginner-checkin'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Baby Steps</a>
+    <a href="#beginner-checkin" id="beginner-checkin" class="<?php print ($awards['beginner-checkin'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Baby Steps</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Baby Steps</h3>
@@ -104,7 +104,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p><a href="#checkin">To unlock, complete your first study session by checking in <span>here</span>.</a></p>
     </div>
-    <a href="#beginner-checklist" id="beginner-checklist" class="<?php print $awards['beginner-checklist'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Flight Student</a>
+    <a href="#beginner-checklist" id="beginner-checklist" class="<?php print ($awards['beginner-checklist'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Flight Student</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Flight Student</h3>
@@ -118,7 +118,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Complete one full study flight checklist (must click all the checkmarks) before a study session.</p>
     </div>
-    <a href="#beginner-commuter" id="beginner-commuter" class="<?php print $awards['beginner-commuter'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Commuter</a>
+    <a href="#beginner-commuter" id="beginner-commuter" class="<?php print ($awards['beginner-commuter'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Commuter</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Commuter</h3>
@@ -132,7 +132,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Check in from two different study locations to unlock this badge.  Changing study locations is proven to increase retention of your study materials and is a key method to improve your study performance.</p>
     </div>
-    <a href="#beginner-mix" id="beginner-mix" class="<?php print $awards['beginner-mix'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Mix It Up</a>
+    <a href="#beginner-mix" id="beginner-mix" class="<?php print ($awards['beginner-mix'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Mix It Up</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Mix It Up</h3>
@@ -146,7 +146,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Complete two check-ins of different class subjects in a single setting to unlock.</p>
     </div>
-    <a href="#beginner-breaks" id="beginner-breaks" class="<?php print $awards['beginner-breaks'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Breather</a>
+    <a href="#beginner-breaks" id="beginner-breaks" class="<?php print ($awards['beginner-breaks'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Breather</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Breather</h3>
@@ -160,7 +160,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Breaks are important for your performance.  Take a 10-15 minute break between study sessions to unlock.  If your break is too long, or too short it won't count...</p>
     </div>
-    <a href="#beginner-cram" id="beginner-cram" class="<?php print $awards['beginner-cram'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Rehabbing Crammer</a>
+    <a href="#beginner-cram" id="beginner-cram" class="<?php print ($awards['beginner-cram'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Rehabbing Crammer</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Rehabbing Crammer</h3>
@@ -174,7 +174,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Check in five days in a row to unlock.</p>
     </div>
-    <a href="#beginner-brain" id="beginner-brain" class="<?php print $awards['beginner-brain'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Big Brain</a>
+    <a href="#beginner-brain" id="beginner-brain" class="<?php print ($awards['beginner-brain'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Big Brain</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Big Brain</h3>
@@ -188,7 +188,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p><a href="#study-quiz">Take the study quiz <span>here</span> and score 100% to unlock this badge.</a></p>
     </div>
-    <a href="#beginner-sponsored" id="beginner-sponsored" class="<?php print $awards['beginner-sponsored'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Get Sponsored</a>
+    <a href="#beginner-sponsored" id="beginner-sponsored" class="<?php print ($awards['beginner-sponsored'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Get Sponsored</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Get Sponsored</h3>
@@ -202,7 +202,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Invite your parents to Study Sauce and have them sponsor one of your goals.  Many of our students find that their parents are happy to pay money in exchange for hard work studying.</p>
     </div>
-    <a href="#beginner-chicken" id="beginner-chicken" class="<?php print $awards['beginner-chicken'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Chicken Dinner</a>
+    <a href="#beginner-chicken" id="beginner-chicken" class="<?php print ($awards['beginner-chicken'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Chicken Dinner</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Chicken Dinner</h3>
@@ -216,7 +216,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>To unlock, check in during your study sessions over the week to reach your weekly study hours goal.</p>
     </div>
-    <a href="#beginner-apples" id="beginner-apples" class="<?php print $awards['beginner-apples'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Them Apples</a>
+    <a href="#beginner-apples" id="beginner-apples" class="<?php print ($awards['beginner-apples'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Them Apples</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Them Apples</h3>
@@ -230,7 +230,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p><a href="#goals">Claim or brag about your study milestone <span>here</span>.</a>  We recommend uploading a selfie holding your exam or paper.  If you are linked, your parent/sponsor will get a copy and will love it.  Either way, you can record your achievement for posterity.</p>
     </div>
-    <a href="#beginner-jackpot" id="beginner-jackpot" class="<?php print $awards['beginner-jackpot'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Jackpot</a>
+    <a href="#beginner-jackpot" id="beginner-jackpot" class="<?php print ($awards['beginner-jackpot'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Jackpot</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Jackpot</h3>
@@ -244,7 +244,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Get a sponsor for a study goal, complete the goal, and claim the reward.</p>
     </div>
-    <a href="#intermediate-flier" id="intermediate-flier" class="<?php print $awards['intermediate-flier'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Frequent Flier</a>
+    <a href="#intermediate-flier" id="intermediate-flier" class="<?php print ($awards['intermediate-flier'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Frequent Flier</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Frequent Flier</h3>
@@ -258,7 +258,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Check in from five different study locations to unlock this badge.  Changing study locations is proven to increase retention of your study materials and is a key method to improve your study performance.</p>
     </div>
-    <a href="#intermediate-cross" id="intermediate-cross" class="<?php print $awards['intermediate-cross'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Crosstrainer</a>
+    <a href="#intermediate-cross" id="intermediate-cross" class="<?php print ($awards['intermediate-cross'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Crosstrainer</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Crosstrainer</h3>
@@ -272,7 +272,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Study different classes in a single study session on five different occasions.</p>
     </div>
-    <a href="#intermediate-breaker" id="intermediate-breaker" class="<?php print $awards['intermediate-breaker'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Breaker, Breaker</a>
+    <a href="#intermediate-breaker" id="intermediate-breaker" class="<?php print ($awards['intermediate-breaker'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Breaker, Breaker</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Breaker, Breaker</h3>
@@ -286,7 +286,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Take 5 study breaks of 10-15 minutes between study sessions to unlock.</p>
     </div>
-    <a href="#intermediate-cured" id="intermediate-cured" class="<?php print $awards['intermediate-cured'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Cured Crammer</a>
+    <a href="#intermediate-cured" id="intermediate-cured" class="<?php print ($awards['intermediate-cured'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Cured Crammer</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Cured Crammer</h3>
@@ -300,7 +300,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Check in ten days in a row to unlock.</p>
     </div>
-    <a href="#intermediate-disco" id="intermediate-disco" class="<?php print $awards['intermediate-disco'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Disco Stu</a>
+    <a href="#intermediate-disco" id="intermediate-disco" class="<?php print ($awards['intermediate-disco'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Disco Stu</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Disco Stu</h3>
@@ -314,7 +314,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Complete any combination of five goals to unlock.</p>
     </div>
-    <a href="#intermediate-high" id="intermediate-high" class="<?php print $awards['intermediate-high'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>High Life</a>
+    <a href="#intermediate-high" id="intermediate-high" class="<?php print ($awards['intermediate-high'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>High Life</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>High Life</h3>
@@ -328,7 +328,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Claim any combination of five rewards to unlock.</p>
     </div>
-    <a href="#advanced-magellan" id="advanced-magellan" class="<?php print $awards['advanced-magellan'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Magellan</a>
+    <a href="#advanced-magellan" id="advanced-magellan" class="<?php print ($awards['advanced-magellan'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Magellan</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Magellan</h3>
@@ -342,7 +342,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Check in from ten different study locations to unlock this badge.  Changing study locations is proven to increase retention of your study materials and is a key method to improve your study performance.</p>
     </div>
-    <a href="#advanced-bo" id="advanced-bo" class="<?php print $awards['advanced-bo'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Bo Jackson</a>
+    <a href="#advanced-bo" id="advanced-bo" class="<?php print ($awards['advanced-bo'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Bo Jackson</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Bo Jackson</h3>
@@ -356,7 +356,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Complete check-ins of different class subjects in a single setting on 10 separate occasions to unlock.</p>
     </div>
-    <a href="#advanced-comber" id="advanced-comber" class="<?php print $awards['advanced-comber'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Beach Comber</a>
+    <a href="#advanced-comber" id="advanced-comber" class="<?php print ($awards['advanced-comber'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Beach Comber</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Beach Comber</h3>
@@ -370,7 +370,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Take 5 study breaks of 10-15 minutes between study sessions to unlock.</p>
     </div>
-    <a href="#advanced-nocram" id="advanced-nocram" class="<?php print $awards['advanced-nocram'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span><div class="mobile-only">Thunder-struck</div><div class="full-only">Thunderstruck</div></a>
+    <a href="#advanced-nocram" id="advanced-nocram" class="<?php print ($awards['advanced-nocram'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span><div class="mobile-only">Thunder-struck</div><div class="full-only">Thunderstruck</div></a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Thunderstruck</h3>
@@ -384,7 +384,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Check in twenty-five days in a row to unlock.</p>
     </div>
-    <a href="#advanced-magneto" id="advanced-magneto" class="<?php print $awards['advanced-magneto'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Magneto</a>
+    <a href="#advanced-magneto" id="advanced-magneto" class="<?php print ($awards['advanced-magneto'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Magneto</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Magneto</h3>
@@ -398,7 +398,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Complete any combination of ten goals to unlock.</p>
     </div>
-    <a href="#advanced-wall" id="advanced-wall" class="<?php print $awards['advanced-wall'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Wall Street</a>
+    <a href="#advanced-wall" id="advanced-wall" class="<?php print ($awards['advanced-wall'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Wall Street</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Wall Street</h3>
@@ -412,7 +412,7 @@ list($awards, $lastAward) = studysauce_get_awards();
         <h4>Badge description</h4>
         <p>Claim any combination of ten rewards to unlock.</p>
     </div>
-    <a href="#advanced-veni" id="advanced-veni" class="<?php print $awards['advanced-veni'] ? 'awarded' : 'not-awarded'; ?>"><span>&nbsp;</span>Veni, Vidi, Vici</a>
+    <a href="#advanced-veni" id="advanced-veni" class="<?php print ($awards['advanced-veni'] ? 'awarded' : 'not-awarded'); ?>"><span>&nbsp;</span>Veni, Vidi, Vici</a>
     <div class="description before-only">
         <span class="awardArrow">&nbsp;</span>
         <h3>Veni, Vidi, Vici</h3>

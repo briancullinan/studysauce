@@ -15,14 +15,17 @@ if(empty($times)):
     <a href="#checkin" onclick="jQuery('#checkin').scrollintoview();"><h2>Check in to start tracking your study hours</h2></a>
 </div>
 <h2>Study metrics</h2>
+<div class="centrify">
 <div id="timeline">
     <h3>Study hours by week</h3>
-    <h4 style="margin:5px 0; color:#555;"><?php print $hours > 0 ? ('Goal: ' . $hours . ' hours') : '&nbsp;'; ?></h4>
+    <h4 style="margin:5px 0; color:#555;"><?php print ($hours > 0 ? ('Goal: ' . $hours . ' hours') : '&nbsp;'); ?></h4>
 </div>
 <div id="pie-chart">
     <h3>Study hours by class</h3>
     <h4 style="margin:5px 0; color:#555;">Total study hours: <strong id="study-total"><?php print $total; ?></strong></h4>
 </div>
+</div>
+<hr/>
 <script type="text/javascript">
     window.initialHistory = <?php print json_encode($times); ?>;
     window.classNames = <?php print json_encode(array_values($classesNames)); ?>;

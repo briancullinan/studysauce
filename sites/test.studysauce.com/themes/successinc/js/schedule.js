@@ -1,13 +1,15 @@
 
 jQuery(document).ready(function($) {
 
+    var schedule = $('#schedule, .page-path-schedule').first();
+
     $.fn.planFunc = function () {
         jQuery(this).each(function () {
             var row = $(this).closest('.row');
             if(row.find('.field-name-field-class-name input').val().trim() == '' ||
                row.find('.field-name-field-day-of-the-week .form-type-checkboxes .form-type-checkbox input:checked, ' +
-                        '.field-name-field-day-of-the-week .form-type-checkboxes.form-type-checkbox input[value="monthly"]:checked, ' +
-                        '.field-name-field-day-of-the-week .form-type-checkboxes.form-type-checkbox input[value="yearly"]:checked').length == 0 ||
+                        '.field-name-field-recurring input[value="monthly"]:checked, ' +
+                        '.field-name-field-recurring input[value="yearly"]:checked').length == 0 ||
                row.find('.field-name-field-time input[name="schedule-value-time"]').val().trim() == '' ||
                row.find('.field-name-field-time input[name="schedule-value2-time"]').val().trim() == '' ||
                row.find('.field-name-field-time input[name="schedule-value-date"]').val().trim() == '' ||
@@ -44,26 +46,29 @@ jQuery(document).ready(function($) {
         });
     };
 
-    $('#schedule').on('click', 'a[href="#edit-class"]', function (evt) {
+    schedule.on('click', 'a[href="#edit-class"]', function (evt) {
         evt.preventDefault();
-        jQuery('#schedule').removeClass('edit-class-only edit-other-only').addClass('edit-class-only');
+        schedule.removeClass('edit-class-only edit-other-only').addClass('edit-class-only');
         var that = $(this),
             row = that.parents('.row');
         row.addClass('edit').planFunc();
     });
 
-    $('#schedule').on('click', 'a[href="#cancel-class"]', function (evt) {
+    schedule.on('click', 'a[href="#cancel-class"]', function (evt) {
         evt.preventDefault();
         jQuery(this).parents('.row').removeClass('edit');
-        jQuery('#schedule').removeClass('edit-class-only edit-other-only').scrollintoview();
+        schedule.removeClass('edit-class-only edit-other-only').scrollintoview();
     });
 
     function updateTabs(data, row)
     {
         // update calendar events
         window.planEvents = data.events;
-        if(calendar && typeof calendar.fullCalendar != 'undefined')
+        if(calendar != null && typeof calendar.fullCalendar != 'undefined')
             calendar.fullCalendar('refetchEvents');
+
+        // reset edit mode
+        schedule.removeClass('edit-class-only edit-other-only');
 
         // update class schedule
         jQuery('.schedule .row').remove();
@@ -87,6 +92,7 @@ jQuery(document).ready(function($) {
         // update metrics
         jQuery('#metrics .row:not(.heading)').remove();
         jQuery('#checkins-list').append(data.rows);
+        if(typeof $.fn.updateMetrics != 'undefined')
         jQuery('#metrics').updateMetrics(data.times);
         if (data.times.length == 0)
             jQuery('#metrics').addClass('empty');
@@ -101,7 +107,7 @@ jQuery(document).ready(function($) {
             checkedIn = jQuery('#checkin .classes a.checked-in').length > 0 ? jQuery('#checkin .classes a.checked-in').attr('id').substring(5) : '';
         for(var eid in data.classes)
         {
-            jQuery('#checkin .classes').append('<a id="class' + eid + '" href="#class' + c + '" class="class' + c + ' ' + (checkedIn == eid ? 'checked-in' : '') + '"><span>&nbsp;</span>' + data.classes[eid] + '</a>');
+            jQuery('#checkin .classes').append('<a href="#class' + c + '" class="class' + c + ' cid' + eid + ' ' + (checkedIn == eid ? 'checked-in' : '') + '"><span>&nbsp;</span>' + data.classes[eid] + '</a>');
             c++;
         }
         if(c > 0)
@@ -127,7 +133,7 @@ jQuery(document).ready(function($) {
         });
 
         // update awards such as pulse detected for setting up a class
-        if (typeof data.awards != 'undefined') {
+        if (typeof data.awards != 'undefined' && typeof $.fn.relocateAward != 'undefined') {
             var lastAward = null;
             for (var i in data.awards) {
                 if (data.awards[i] != false && jQuery('#badges #' + i).is('.not-awarded')) {
@@ -147,28 +153,42 @@ jQuery(document).ready(function($) {
         // scroll back to tab they clicked edit on
     }
 
-    /*
-    jQuery('body').on('click', 'a[href="#schedule"]', function (evt) {
-        jQuery('#schedule').removeClass('edit-other-only').addClass('edit-class-only');
-        jQuery('#schedule #schedule-type').val('c');
-        jQuery('#schedule #schedule-weekly').prop('checked', true);
-        jQuery('#schedule .field-add-more-submit').hide();
-        jQuery('#schedule #add-class-dialog').addClass('edit').scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
-    });
-    */
-    $('#schedule').on('click', 'a[href="#add-class"]', function (evt) {
+    schedule.on('click', 'a[href="#add-class"]', function (evt) {
         evt.preventDefault();
-        jQuery('#schedule #add-class-dialog').addClass('edit');
-        jQuery('#schedule').removeClass('edit-other-only').addClass('edit-class-only');
+        var count = schedule.find('.row').length,
+            addClass = schedule.find('#add-class-dialog').last(),
+            newClass = addClass.clone().attr('id', '').addClass('edit').insertBefore(addClass);
+        newClass.find('input[type="checkbox"], input[type="radio"]').each(function () {
+            var that = jQuery(this),
+                oldId = that.attr('id');
+            that.attr('id', oldId + count);
+            if(that.is('[type="radio"]'))
+                that.attr('name', that.attr('name') + count);
+            newClass.find('label[for="' + oldId + '"]').attr('for', oldId + count);
+        });
+        newClass.planFunc();
+        schedule.removeClass('edit-other-only').addClass('edit-class-only');
     });
 
-    $('#schedule').on('click', 'a[href="#add-other"]', function (evt) {
+    schedule.on('click', 'a[href="#add-other"]', function (evt) {
         evt.preventDefault();
-        jQuery('#schedule #add-other-dialog').addClass('edit');
-        jQuery('#schedule').removeClass('edit-class-only').addClass('edit-other-only');
+        var count = schedule.find('.row').length,
+            addOther = schedule.find('#add-other-dialog').last(),
+            newClass = addOther.clone().attr('id', '').addClass('edit').insertBefore(addOther);
+        newClass.find('input[type="checkbox"], input[type="radio"]').each(function () {
+            var that = jQuery(this),
+                oldId = that.attr('id');
+            that.attr('id', oldId + count);
+            if(that.is('[type="radio"]'))
+                that.attr('name', that.attr('name') + count);
+            newClass.find('label[for="' + oldId + '"]').attr('for', oldId + count);
+        });
+        newClass.find('.field-name-field-recurring input[value="weekly"]').prop('checked', true);
+        newClass.planFunc();
+        schedule.removeClass('edit-class-only').addClass('edit-other-only');
     });
 
-    $('#schedule').on('click', 'a[href="#remove-class"]', function (evt) {
+    schedule.on('click', 'a[href="#remove-class"]', function (evt) {
         evt.preventDefault();
         var row = jQuery(this).parents('.row');
         $.ajax({
@@ -184,81 +204,67 @@ jQuery(document).ready(function($) {
                });
     });
 
-    function clearInputs()
-    {
-        $('#schedule #schedule-class-name').val('');
-        $('#schedule #schedule-type').val('');
-        $('#schedule #add-class-dialog input[name*="schedule-dotw-"]:checked').prop('checked', false);
-        $('#schedule #schedule-value-date').val('');
-        $('#schedule #schedule-value-time').val('');
-        $('#schedule #schedule-value2-date').val('');
-        $('#schedule #schedule-value2-time').val('');
-    }
-
-    $('#schedule').on('click', 'a[href="#save-class"]', function (evt) {
+    schedule.on('click', 'a[href="#save-class"]', function (evt) {
         evt.preventDefault();
-        var that = $(this),
-            row = that.parents('.row');
-        if(!row.is('.invalid'))
-        {
-            var dotw = row.find('.field-name-field-day-of-the-week input[name*="schedule-dotw-"]:checked').map(function (i, x) {return $(x).val();}).get();
+        var classes = [];
+        schedule.find('.row.edit.valid, .row.valid.edit').each(function () {
+            var row = $(this),
+                dotw = row.find('.field-name-field-day-of-the-week input[name*="schedule-dotw-"]:checked').map(function (i, x) {return $(x).val();}).get();
             if(row.find('.field-name-field-recurring input[value="monthly"]:checked').length > 0)
                 dotw[dotw.length] = 'monthly';
             else if(row.find('.field-name-field-recurring input[value="yearly"]:checked').length > 0)
                 dotw[dotw.length] = 'yearly';
+            classes[classes.length] = {
+                className: row.find('.field-name-field-class-name input').val(),
+                dotw: dotw.join(','),
+                start: row.find('.field-name-field-time input[name="schedule-value-date"]').val() + ' ' + row.find('.field-name-field-time input[name="schedule-value-time"]').val(),
+                end: row.find('.field-name-field-time input[name="schedule-value2-date"]').val() + ' ' + row.find('.field-name-field-time input[name="schedule-value2-time"]').val(),
+                type: row.find('input[name="schedule-type"]').val()
+            };
+        });
+        if(classes.length > 0)
             $.ajax({
                        url: '/node/save/schedule',
                        type: 'POST',
                        dataType: 'json',
                        data: {
-                           className: row.find('.field-name-field-class-name input').val(),
-                           dotw: dotw.join(','),
-                           start: row.find('.field-name-field-time input[name="schedule-value-date"]').val() + ' ' + row.find('.field-name-field-time input[name="schedule-value-time"]').val(),
-                           end: row.find('.field-name-field-time input[name="schedule-value2-date"]').val() + ' ' + row.find('.field-name-field-time input[name="schedule-value2-time"]').val(),
-                           type: row.find('input[name="schedule-type"]').val()
+                           university: schedule.find('.field-name-field-university input').val(),
+                           classes: classes
                        },
                        success: function (data) {
-                           clearInputs();
-
-                           // reset edit mode on saved row, in-case it is the add row
-                           $('#schedule').removeClass('edit-class-only edit-other-only');
-                           row.removeClass('edit valid').addClass('invalid');
-                           jQuery('#schedule .field-add-more-submit').show();
-
                            updateTabs(data);
                        }
                    });
-        }
     });
 
-    $('#schedule').on('keyup', '.field-name-field-class-name input', function () {
+    schedule.on('keyup', '.field-name-field-class-name input', function () {
         jQuery(this).parents('.row').planFunc();
     });
-    $('#schedule').on('change', '.field-name-field-class-name input', function () {
+    schedule.on('change', '.field-name-field-class-name input', function () {
         jQuery(this).parents('.row').planFunc();
     });
-    $('#schedule').on('change', '.field-name-field-day-of-the-week input', function () {
+    schedule.on('change', '.field-name-field-day-of-the-week input', function () {
         jQuery(this).parents('.row').planFunc();
     });
-    $('#schedule').on('change', '.field-name-field-day-of-the-week .form-checkboxes.form-type-checkbox input', function () {
+
+    var safety = false;
+    schedule.on('change', '.field-name-field-recurring input', function () {
         var that = $(this),
             row = that.parents('.row');
-        if(that.is(':checked') && that.val() == 'daily')
-            row.find('input[name*="schedule-dotw-"]').prop('checked', true);
-        else
-            row.find('input[name*="schedule-dotw-"]').prop('checked', false);
 
-        if(that.is(':checked') && that.val() == 'weekly')
-            row.find('.field-name-field-day-of-the-week .form-checkboxes .form-type-checkbox').show();
+        if(row.find('.field-name-field-recurring input[value="weekly"]').is(':checked'))
+            row.find('.field-name-field-day-of-the-week .form-checkboxes .form-type-checkbox').css('visibility', 'visible');
         else
-            row.find('.field-name-field-day-of-the-week .form-checkboxes .form-type-checkbox').hide();
+            row.find('.field-name-field-day-of-the-week .form-checkboxes .form-type-checkbox').css('visibility', 'hidden');
+
     });
-    $('#schedule').on('keyup', '.field-name-field-time input[type="text"]', function () {
+
+    schedule.on('keyup', '.field-name-field-time input[type="text"]', function () {
         jQuery(this).parents('.row').planFunc();
     });
-    $('#schedule').on('change', '.field-name-field-time input[type="text"]', function () {
+    schedule.on('change', '.field-name-field-time input[type="text"]', function () {
         jQuery(this).parents('.row').planFunc();
     });
-    $('#schedule .schedule .row, #schedule .other-schedule .row, #add-class-dialog, #add-other-dialog').planFunc();
+    schedule.find('.schedule .row, .other-schedule .row').not('#add-class-dialog, #add-other-dialog').planFunc();
 
 });

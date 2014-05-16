@@ -1,31 +1,30 @@
 
+// Bind removing of file to selector elements
+function plup_remove_item(selector) {
+    jQuery(selector).bind('click', function(event) {
+        var parent = jQuery(this).parent();
+        var parentsParent = parent.parent();
+        parent.remove();
+        parentsParent.trigger('formUpdated');
+    });
+}
+
+// Bind resize effect on title and alt fields on focus
+function plup_resize_input(selector) {
+    var w = jQuery(selector).outerWidth();
+    if (w < 300) {
+        jQuery(selector).bind('focus', function(event) {
+            jQuery(this).css('z-index', 10).animate({'width': '300px'}, 300);
+        });
+        jQuery(selector).bind('blur', function(event) {
+            jQuery(this).removeAttr('style');
+        });
+    }
+}
 
 jQuery(document).ready(function() {
 
     var $ = jQuery;
-
-    // Bind removing of file to selector elements
-    function plup_remove_item(selector) {
-        $(selector).bind('click', function(event) {
-            var parent = $(this).parent();
-            var parentsParent = parent.parent();
-            parent.remove();
-            parentsParent.trigger('formUpdated');
-        });
-    }
-
-    // Bind resize effect on title and alt fields on focus
-    function plup_resize_input(selector) {
-        var w = $(selector).outerWidth();
-        if (w < 300) {
-            $(selector).bind('focus', function(event) {
-                $(this).css('z-index', 10).animate({'width': '300px'}, 300);
-            });
-            $(selector).bind('blur', function(event) {
-                $(this).removeAttr('style');
-            });
-        }
-    }
 
     var uploader = new plupload.Uploader({
         alt_field: 0,
@@ -47,7 +46,7 @@ jQuery(document).ready(function() {
         max_files: 1,
         multipart: false,
         multiple_queues: true,
-        name: "field_goals[und][0][field_photo_evidence][und]",
+        name: "goals-plupload-upload",
         runtimes: "html5,gears,flash,silverlight,browserplus,html4",
         silverlight_xap_url: "/sites/all/libraries/plupload/js/plupload.silverlight.xap",
         title_field: 0,
@@ -207,6 +206,18 @@ jQuery(document).ready(function() {
                    success: function (data) {
                        brag.removeClass('gid' + gid);
                        $('#goals').removeClass('achievement-only').scrollintoview();
+
+                       // clear uploads
+                       $.each(uploader.files, function (i, file) {
+                           uploader.removeFile(file);
+                       });
+                       $('#goals-plupload').find('.plup-list').children().remove();
+                       brag.find('textarea').val('');
+
+                       // update achievements
+                       jQuery('#achievements > *').remove();
+                       jQuery(data.achievements).find('> *')
+                           .appendTo(jQuery('#achievements'));
                    }
                });
     });

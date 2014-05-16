@@ -8,51 +8,88 @@
     margin-bottom: 10px;
 }
 
-.page-dashboard #profile .field-name-field-university,
-.page-dashboard #profile .field-name-field-grades,
-.page-dashboard #profile .field-name-field-weekends,
-.page-dashboard #profile .field-name-field-time-preference,
-.page-dashboard #profile .field-name-field-6-am-11-am,
-.page-dashboard #profile .field-name-field-11-am-4-pm,
-.page-dashboard #profile .field-name-field-4-pm-9-pm,
-.page-dashboard #profile .field-name-field-9-pm-2-am
+.page-dashboard #profile .buy-plan
+{
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    bottom:0;
+    right:0;
+    background: url(images/profile_background.jpg) no-repeat 50% 50% #FFFFFF;
+    background-size: 100% auto;
+}
+
+.field-name-field-university,
+.field-name-field-grades,
+.field-name-field-weekends,
+.field-name-field-time-preference,
+.field-name-field-6-am-11-am,
+.field-name-field-11-am-4-pm,
+.field-name-field-4-pm-9-pm,
+.field-name-field-9-pm-2-am
 {
     margin-bottom: 10px;
 }
 
-.page-dashboard #profile .field-name-field-time-preference label.option,
-.page-dashboard #profile .field-name-field-weekends label.option,
-.page-dashboard #profile .field-name-field-grades label.option {
-    background: url("/sites/test.studysauce.com/themes/successinc/images/noise_white.png") repeat scroll 0 0 #EEEEEE;
-    padding: 0;
-    margin: 5px 10px 5px -20px;
+.field-name-type-of-studying label.option,
+.field-name-difficulty-level label.option,
+.field-name-field-time-preference label.option,
+.field-name-field-weekends label.option,
+.field-name-field-grades label.option,
+.field-name-field-profile-question-study-much label.option,
+.field-name-field-profile-question-education label.option,
+.field-name-field-profile-question-mindset label.option,
+.field-name-field-profile-question-time-management label.option,
+.field-name-field-profile-question-devices label.option
+{
+    background: url('images/menu_icons_128.png') no-repeat -54px -2854px transparent;
+    padding: 0 15px 0 25px;
+    margin: 0 0 0 0;
     display: inline-block;
     border-radius: 5px 5px 5px 5px;
     font-weight: bold;
-    max-width: 135px;
+    max-width: 48%;
     vertical-align: middle;
     cursor: pointer;
-    text-align: center;
+    text-align: left;
     position: relative;
     z-index: 1;
     min-width: 30px;
+    box-sizing: border-box;
 }
 
-.page-dashboard #profile .field-name-field-time-preference input.form-radio:checked + label,
-.page-dashboard #profile .field-name-field-weekends input.form-radio:checked + label,
-.page-dashboard #profile .field-name-field-grades input.form-radio:checked + label {
-    background: none repeat scroll 0 0 #CCCCCC;
+.field-name-field-profile-question-study-much label.option,
+.field-name-field-profile-question-education label.option,
+.field-name-field-profile-question-devices label.option,
+.field-name-field-profile-question-time-management label.option,
+.field-name-field-profile-question-mindset label.option
+{
+    display:block;
+}
+
+.field-name-type-of-studying input:checked + label.option,
+.field-name-difficulty-level input:checked + label.option,
+.field-name-field-time-preference input.form-radio:checked + label,
+.field-name-field-weekends input.form-radio:checked + label,
+.field-name-field-grades input.form-radio:checked + label,
+.field-name-field-profile-question-study-much input:checked + label,
+.field-name-field-profile-question-education input:checked + label,
+.field-name-field-profile-question-devices input:checked + label,
+.field-name-field-profile-question-mindset input:checked + label,
+.field-name-field-profile-question-time-management input:checked + label
+{
+    background-position: -54px -2740px;
     opacity: 1 !important;
-    padding: 5px;
-    margin: 0 5px 0 -25px;
+    padding: 0 15px 0 25px;
+    margin: 0 0 0 0;
     z-index: 2;
 }
 
 .field-name-field-weekends,
 .field-name-field-grades
 {
-    width: 295px;
-    display: inline-block;
     vertical-align: top;
 }
 
@@ -62,26 +99,21 @@
     display:inline-block;
 }
 
-.page-dashboard #profile .field-name-field-time-preference .field-type-list-integer
+.field-name-field-time-preference .field-type-list-integer
 {
     clear:both;
 }
 
-.page-dashboard #profile .field-name-field-time-preference .field-type-list-integer > label
+.field-name-field-time-preference .field-type-list-integer > label
 {
     display:inline;
 }
 
-.page-dashboard #profile .form-radios
+.field-name-field-time-preference .form-radios
 {
     float: right;
     clear: both;
     display:inline-block;
-}
-
-.page-dashboard #profile fieldset
-{
-    clear: both;
 }
 
 .field-name-field-weekends .form-type-radio label,
@@ -89,7 +121,7 @@
 {
     background-color:#EEEEEE;
     padding:5px;
-    margin:3px 20px 2px -15px;
+    margin:3px 20px 2px 0;
     display:inline-block;
     border-radius: 5px 5px 5px 5px;
     font-weight: bold;
@@ -140,9 +172,205 @@
     transition:padding .25s, margin .25s, opacity .25s;
 }
 
+.field-name-type-of-studying input,
+.field-name-difficulty-level input,
+.field-name-field-time-preference input,
 .field-name-field-weekends input,
-.field-name-field-grades input
+.field-name-field-grades input,
+.field-name-field-profile-question-study-much input,
+.field-name-field-profile-question-education input,
+.field-name-field-profile-question-devices input,
+.field-name-field-profile-question-mindset input,
+.field-name-field-profile-question-time-management input
 {
     visibility:hidden;
-    margin:0;
+    margin: 0 0 0 -20px;
+    float:left;
 }
+
+.class-profile .row
+{
+    clear:both;
+    margin-bottom:10px;
+}
+
+.class-profile .row > *
+{
+    display:inline-block;
+}
+
+.class-profile .field-name-field-class-name
+{
+    width:20%;
+}
+
+.class-profile .field-name-type-of-studying
+{
+    display:inline-block;
+    width:39%;
+    margin-right: 10%;
+}
+
+.class-profile > .field-name-type-of-studying
+{
+    margin-left:20%;
+    vertical-align: bottom;
+    margin-right:10%;
+}
+
+.class-profile > .field-name-difficulty-level:not(:nth-of-type(2)) label,
+.class-profile > .field-name-type-of-studying:not(:first-of-type) label
+{
+    width:30%;
+    display:inline-block;
+    position: relative;
+    text-align: center;
+}
+
+.class-profile .field-name-difficulty-level
+{
+    display:inline-block;
+    width:29%;
+}
+
+.field-name-type-of-studying label.option,
+.field-name-difficulty-level label.option
+{
+    width:30%;
+    background-position: 50% -2854px;
+}
+
+.field-name-type-of-studying input:checked + label.option,
+.field-name-difficulty-level input:checked + label.option
+{
+    background-position: 50% -2740px;
+}
+
+.page-path-customization2 .field-name-field-class-name span,
+.page-path-profile .field-name-field-class-name span {
+    display: inline-block;
+    height: 22px;
+    width: 22px;
+    border: 3px solid #555555;
+    border-radius: 100%;
+    text-align: center;
+    font-size: 14px;
+    line-height: 15px;
+    margin: -3px 10px 0 0;
+    vertical-align: top;
+}
+
+.page-path-profile .class
+{
+    border: 3px solid #555555;
+    color:#555555;
+}
+
+.page-path-customization2 .class0,
+.page-path-profile .class0
+{
+    background-color:#FF1100;
+}
+
+.page-path-customization2 .class1,
+.page-path-profile .class1
+{
+    background-color:#FF9900;
+}
+
+.page-path-customization2 .class2,
+.page-path-profile .class2
+{
+    background-color:#FFDD00;
+}
+
+.page-path-customization2 .class3,
+.page-path-profile .class3
+{
+    background-color:#BBEE00;
+}
+
+.page-path-customization2 .class4,
+.page-path-profile .class4
+{
+    background-color:#33DD00;
+}
+
+.page-path-customization2 .class5,
+.page-path-profile .class5
+{
+    background-color:#009999;
+}
+
+.page-path-customization2 .class6,
+.page-path-profile .class6
+{
+    background-color:#1133AA;
+}
+
+.page-path-customization2 .class7,
+.page-path-profile .class7
+{
+    background-color:#6611AA;
+}
+
+.page-path-customization2 .class8,
+.page-path-profile .class8
+{
+    background-color:#BB0088;
+}
+
+.study-preferences,
+.field-name-field-profile-question-education,
+.field-name-field-profile-question-devices,
+.field-name-field-profile-question-mindset,
+.field-name-field-profile-question-study-much,
+.field-name-field-profile-question-time-management,
+.class-profile
+{
+    display:none;
+    min-height: 400px;
+}
+
+.page-dashboard #profile .study-preferences,
+.page-path-customization .study-preferences,
+.page-path-profile .field-name-field-profile-question-mindset,
+.page-path-customization2 .class-profile
+{
+    display:block;
+}
+
+.field-name-field-profile-question-mindset > *:not(h2),
+.field-name-field-profile-question-mindset
+{
+    /* TODO: fix this design margin-left:80px !important; */
+}
+
+.class-profile h2 span,
+.study-preferences h2 span,
+.field-name-field-profile-question-study-much h2 span,
+.field-name-field-profile-question-education h2 span,
+.field-name-field-profile-question-mindset h2 span,
+.field-name-field-profile-question-time-management h2 span,
+.field-name-field-profile-question-devices h2 span
+{
+    float:right;
+}
+
+@media all and (max-width: 760px)
+{
+    .field-name-field-weekends, .field-name-field-grades
+    {
+        width: auto;
+        display: block;
+    }
+
+    .field-name-field-weekends label.option,
+    .field-name-field-grades label.option
+    {
+        display: block;
+        width: auto;
+        max-width: none;
+    }
+}
+

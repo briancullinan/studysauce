@@ -10,8 +10,18 @@
 .page-dashboard #goals .big-arrow
 {
     clear:both;
-    padding-right:128px;
+    padding-right:75px;
     position:relative;
+}
+
+.page-dashboard #goals .ui-progressbar
+{
+    display:none;
+}
+
+.page-dashboard #goals .big-arrow + .grid_6
+{
+    padding-left:75px;
 }
 
 .page-dashboard #goals .big-arrow p
@@ -61,10 +71,10 @@
 {
     background:url("images/menu_icons_48.png") no-repeat scroll rgba(0, 0, 0, 0);
     background-position:10px -576px;
-    height:24px;
-    padding: 12px 10px 12px 68px;
-    width:170px;
+    padding: 12px 10px 14px 68px;
+    width:23%;
     margin-top:0;
+    box-sizing: border-box;
 }
 
 .page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-type
@@ -72,12 +82,12 @@
     margin-top:0;
 }
 
-.page-dashboard #goals tr:nth-child(2) .field-name-field-type
+.page-dashboard #goals .row:nth-child(2) .field-name-field-type
 {
     background-position:10px -624px;
 }
 
-.page-dashboard #goals tr:nth-child(3) .field-name-field-type
+.page-dashboard #goals .row:nth-child(3) .field-name-field-type
 {
     background-position:10px -672px;
 }
@@ -168,7 +178,9 @@
 {
     margin-top: 1em;
     display: block;
-    clear:both;
+    clear: both;
+    text-align: right;
+    margin-bottom: 0;
 }
 
 .page-dashboard #goals .field-name-field-hours,
@@ -177,7 +189,21 @@
 .page-dashboard #goals .field-name-field-reward
 {
     margin:0;
-    width:27%;
+    width:38%;
+    box-sizing: border-box;
+}
+
+.page-dashboard #goals .field-name-field-reward
+{
+    padding-right:100px;
+    margin-right:-100px;
+}
+
+.page-dashboard #goals .edit .field-name-field-hours,
+.page-dashboard #goals .edit .field-name-field-gpa,
+.page-dashboard #goals .edit .field-name-field-grade,
+.page-dashboard #goals .edit .field-name-field-reward
+{
 }
 
 .page-dashboard #goals .field-name-field-type,
@@ -204,26 +230,27 @@
     display:none;
 }
 
-.page-dashboard #non-sponsored tr:first-child .field-name-field-hours label,
-.page-dashboard #non-sponsored tr:first-child .field-name-field-grade label,
-.page-dashboard #non-sponsored tr:first-child .field-name-field-gpa label,
-.page-dashboard #non-sponsored tr:first-child .field-name-field-reward label,
-.page-dashboard.student .sponsored #parent-sponsored tr:first-child .field-name-field-hours label,
-.page-dashboard.student .sponsored #parent-sponsored tr:first-child .field-name-field-grade label,
-.page-dashboard.student .sponsored #parent-sponsored tr:first-child .field-name-field-gpa label,
-.page-dashboard.student .sponsored #parent-sponsored tr:first-child .field-name-field-reward label
+.page-dashboard #goals .row:first-child .field-name-field-hours label,
+.page-dashboard #goals .row:first-child .field-name-field-grade label,
+.page-dashboard #goals .row:first-child .field-name-field-gpa label,
+.page-dashboard #goals .row:first-child .field-name-field-reward label
 {
     display:block;
 }
 
-.page-dashboard.student .sponsored #parent-sponsored tr:first-child .field-name-field-type,
-.page-dashboard #non-sponsored tr:first-child .field-name-field-type
+.page-dashboard #goals .row:first-child .field-name-field-type
 {
     margin-top:20px;
 }
 
-.page-dashboard.student .sponsored #parent-sponsored tr:first-child .form-actions,
-.page-dashboard #non-sponsored tr:first-child .form-actions
+.page-dashboard #goals .row a[href="#cancel-incentive"],
+.page-dashboard #goals .row .highlighted-link
+{
+    margin-top:20px;
+}
+
+.page-dashboard #goals .row:first-child .highlighted-link,
+.page-dashboard #goals .row:first-child a[href="#cancel-incentive"]
 {
     margin-top:34px;
 }
@@ -287,12 +314,13 @@
     transition:none;
 }
 
-.page-dashboard #goals .field-name-field-goals strong
+.page-dashboard #goals .field-name-field-type strong
 {
     font-size:18px;
     font-weight:bold;
     display:inline-block;
     background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+    white-space: nowrap;
 }
 
 .page-dashboard #goals .field-name-field-grade input.form-radio:checked + label
@@ -483,14 +511,6 @@
 }
 */
 
-.page-dashboard #parent-sponsored .webform-client-form-250,
-.page-dashboard #parent-sponsored .webform-client-form-157
-{
-    float: right;
-    margin-top:-75px;
-    margin-bottom:-25px;
-}
-
 .page-dashboard.parent #goals #non-sponsored .field-name-field-goals
 {
     margin:0 auto;
@@ -499,23 +519,6 @@
 .page-dashboard #goals select
 {
     margin:0px;
-}
-
-.page-dashboard #goals #invite .form-actions,
-.page-dashboard #goals .form-actions
-{
-    margin:1em 0 0 1em;
-    text-align: right;
-}
-
-.page-dashboard #goals #invite .form-actions
-{
-    float:right;
-}
-
-.page-dashboard.student .sponsored #non-sponsored tr:first-child .form-actions
-{
-    margin:1em 0 0 1em;
 }
 
 .page-dashboard #goals .goal-status
@@ -592,7 +595,7 @@
 
 .page-dashboard #goals #achievements .grid_6
 {
-    width:420px !important;
+    width:426px;
 }
 
 .page-dashboard #goals #read-more-incentives
@@ -645,30 +648,35 @@
     background:none;
 }
 
+.strategy-upload .plup-list li,
 #partner-plupload .plup-list li,
 .group-achievement .plup-list li
 {
     display:none;
 }
 
+.strategy-upload .plup-list li:last-child,
 #partner-plupload .plup-list li:last-child,
 .group-achievement .plup-list li:last-child
 {
     display:block;
 }
 
+.strategy-upload .plup-thumb-wrapper,
 #partner-plupload .plup-thumb-wrapper,
 .group-achievement .plup-thumb-wrapper
 {
     text-align: center;
 }
 
+.strategy-upload .plup-thumb-wrapper img,
 #partner-plupload .plup-thumb-wrapper img,
 .group-achievement .plup-thumb-wrapper img
 {
     margin:0 auto;
 }
 
+.strategy-upload .plup-select,
 #partner-plupload .plup-select,
 .group-achievement .plup-select
 {
@@ -688,11 +696,15 @@
     padding-top:50px;
 }
 
+body.file-drag .strategy-upload .plup-filelist
+body.file-drag #partner-plupload .plup-filelist
 body.file-drag .group-achievement .plup-filelist
 {
     z-index: 2000;
 }
 
+.strategy-upload .plup-remove-file,
+.strategy-upload .plup-remove-item,
 #partner-plupload .plup-remove-file,
 #partner-plupload .plup-remove-item,
 .group-achievement .plup-remove-file,
@@ -701,7 +713,7 @@ body.file-drag .group-achievement .plup-filelist
     z-index: 100;
 }
 
-#partner-plupload .drag-main,
+.strategy-upload .drag-main,
 .group-achievement .drag-main
 {
     position:absolute;
@@ -715,11 +727,11 @@ body.file-drag .group-achievement .plup-filelist
     text-align: center;
 }
 
-#partner-plupload .drag-main
-{
-    top:-50px;
-}
-
+.strategy-upload .drag-more,
+.strategy-upload .plup-filelist-size,
+.strategy-upload .plup-filelist-message,
+.strategy-upload .plup-filelist-remove,
+.strategy-upload .plup-select div,
 #partner-plupload .drag-more,
 #partner-plupload .plup-filelist-size,
 #partner-plupload .plup-filelist-message,
@@ -734,12 +746,15 @@ body.file-drag .group-achievement .plup-filelist
     display:none;
 }
 
+.strategy-upload .plup-bar .plup-upload,
 #partner-plupload .plup-bar .plup-upload,
 .group-achievement .plup-bar .plup-upload
 {
     display:none !important;
 }
 
+.strategy-upload .plupload,
+.strategy-upload .plupload-container,
 #partner-plupload .plupload,
 #partner-plupload .plupload-container,
 .group-achievement .plupload,
@@ -748,6 +763,7 @@ body.file-drag .group-achievement .plup-filelist
     min-height:200px;
 }
 
+.strategy-upload .plup-filelist-file,
 #partner-plupload .plup-filelist-file,
 .group-achievement .plup-filelist-file
 {
@@ -756,6 +772,8 @@ body.file-drag .group-achievement .plup-filelist
     overflow: hidden;
 }
 
+.strategy-upload .plup-filelist,
+.strategy-upload .plupload.html5,
 #partner-plupload .plup-filelist,
 #partner-plupload .plupload.html5,
 .group-achievement .plup-filelist,
@@ -879,7 +897,7 @@ body.file-drag .group-achievement .plup-filelist
     display:inline-block;
 }
 
-.page-dashboard #goals .row.unsaved .fancy-close
+.page-dashboard #goals .row.unsaved a[href="#cancel-incentive"]
 {
     display:none;
 }
@@ -901,14 +919,6 @@ body.file-drag .group-achievement .plup-filelist
     margin-top:10px;
 }
 
-.page-dashboard .webform-client-form-250,
-.page-dashboard .webform-client-form-157
-{
-    border-radius: 4px;
-    padding: 5px;
-    position: relative;
-}
-
 .page-dashboard #parent-sponsored .webform-client-form .form-text
 {
     width:100%;
@@ -922,14 +932,17 @@ body.file-drag .group-achievement .plup-filelist
     margin:40px 10px;
 }
 
+.page-dashboard #goals .grid_6
+{
+    width:50%;
+    margin:0;
+    display:block;
+    box-sizing: border-box;
+}
+
 @media all and (min-width: 1250px)
 {
-    .page-dashboard #goals .grid_6
-    {
-        width:380px;
-        margin:0 10px;
-        display:block !important;
-    }
+
 }
 
 @media all and (max-width:1250px)
@@ -939,8 +952,6 @@ body.file-drag .group-achievement .plup-filelist
     .page-dashboard #goals .field-name-field-grade,
     .page-dashboard #goals .field-name-field-reward
     {
-        margin:0;
-        width:31%;
     }
 
     .page-dashboard.student .sponsored #parent-sponsored tr:first-child .form-actions,
@@ -999,6 +1010,17 @@ body.file-drag .group-achievement .plup-filelist
 {
 
 
+    .page-dashboard #goals .field-name-field-reward
+    {
+        padding-right: 0;
+        margin-right: 0;
+    }
+
+    .page-dashboard #goals .row .highlighted-link
+    {
+        display: block;
+    }
+
     .page-dashboard #goals .row
     {
         padding:40px 0 0 0;
@@ -1041,7 +1063,7 @@ body.file-drag .group-achievement .plup-filelist
         margin-left: 0;
     }
 
-    .page-dashboard.student .sponsored #non-sponsored tr:first-child .form-actions
+    .page-dashboard.student #goals .row:first-child .form-actions
     {
         margin-left: 0;
         margin-top:12px;
@@ -1111,13 +1133,6 @@ body.file-drag .group-achievement .plup-filelist
         margin:20px 0;
     }
 
-    .page-dashboard #parent-sponsored .webform-client-form-250,
-    .page-dashboard #parent-sponsored .webform-client-form-157
-    {
-        margin:-20px 0;
-        text-align: left;
-    }
-
     .page-dashboard #goals #parent-sponsored h4,
     .page-dashboard #goals .big-arrow
     {
@@ -1138,25 +1153,6 @@ body.file-drag .group-achievement .plup-filelist
         width:auto;
     }
 
-    .page-dashboard.parent #goals .sponsored #non-sponsored .field-name-field-type,
-    .page-dashboard.student #goals .sponsored #parent-sponsored .field-name-field-type
-    {
-        background-image:url(images/menu_icons_128.png);
-        background-position: 50% -3712px;
-    }
-
-    .page-dashboard.parent #goals .sponsored #non-sponsored tr:nth-child(2) .field-name-field-type,
-    .page-dashboard.student #goals .sponsored #parent-sponsored tr:nth-child(2) .field-name-field-type
-    {
-        background-position: 50% -3840px;
-    }
-
-    .page-dashboard.parent #goals .sponsored #non-sponsored tr:nth-child(3) .field-name-field-type,
-    .page-dashboard.student #goals .sponsored #parent-sponsored tr:nth-child(3) .field-name-field-type
-    {
-        background-position: 50% -3968px;
-    }
-
     .page-dashboard #student_step_2 .highlighted-link
     {
         text-align: center !important;
@@ -1175,9 +1171,10 @@ body.file-drag .group-achievement .plup-filelist
         background-position:50% -736px;
         width: auto;
         display:block;
+        box-sizing: content-box;
     }
 
-    .page-dashboard #non-sponsored tr:first-child .field-name-field-type
+    .page-dashboard #goals .row:first-child .field-name-field-type
     {
         margin-top:0;
     }
@@ -1190,35 +1187,19 @@ body.file-drag .group-achievement .plup-filelist
         height: 32px;
     }
 
-    .page-dashboard #goals tr:nth-child(2) .field-name-field-type
+    .page-dashboard #goals .row:nth-child(2) .field-name-field-type
     {
         background-position:50% -800px;
     }
 
-    .page-dashboard #goals tr:nth-child(3) .field-name-field-type
+    .page-dashboard #goals .row:nth-child(3) .field-name-field-type
     {
         background-position:50% -864px;
     }
 
-    .page-dashboard #student_step_2 .highlighted-link p
+    .page-dashboard #goals
     {
-        text-align: justify !important;
-    }
-
-    .page-dashboard #goals #student_step_1 p
-    {
-        text-align: left !important;
-    }
-
-    .page-dashboard #student_step_2 .highlighted-link
-    {
-        text-align: center !important;
-        clear:both !important;
-    }
-
-    .page-dashboard #goals #parent-sponsored .grid_8
-    {
-        width:300px !important;
+        text-align: center;
     }
 
     .page-dashboard #goals .field-name-field-goals strong
@@ -1241,6 +1222,7 @@ body.file-drag .group-achievement .plup-filelist
         max-width: none;
         clear:both;
         text-align: left;
+        padding-right:0px;
     }
 
     .page-dashboard #goals .field-name-field-grade label,

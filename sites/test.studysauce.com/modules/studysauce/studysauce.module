@@ -35,6 +35,12 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['node/save/profile'] = array(
+        'page callback' => 'studysauce_save_profile',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     $items['node/save/key_dates'] = array(
         'page callback' => 'studysauce_save_dates',
         'access callback' => true,
@@ -53,6 +59,12 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['partner/save'] = array(
+        'page callback' => 'studysauce_save_partner',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     $items['order/completed'] = array(
         'page callback' => 'studysauce_order_completed',
         'access callback' => true,
@@ -61,12 +73,225 @@ function studysauce_menu_alter(&$items) {
 
     $items['node/plup/goals'] = array(
         'title' => 'Plupload upload page',
-        'page callback' => 'studysauce_goals_upload_page',
+        'page callback' => 'studysauce_upload_page',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
+    $items['node/plup/partner'] = array(
+        'title' => 'Plupload upload page',
+        'page callback' => 'studysauce_upload_page',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
+    $items['node/plup/plan'] = array(
+        'title' => 'Plupload upload page',
+        'page callback' => 'studysauce_upload_page',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
+    $items['node/save/strategies'] = array(
+        'page callback' => 'studysauce_save_strategies',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
+    $items['invite/send'] = array(
+        'title' => 'Plupload upload page',
+        'page callback' => 'studysauce_invite_send',
         'access callback' => true,
         'type' => MENU_CALLBACK
     );
 
     return $items;
+}
+
+/**
+ * Plupload's upload function.
+ */
+function studysauce_upload_page() {
+
+    drupal_add_http_header('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT', TRUE);
+    drupal_add_http_header('Last-Modified', gmdate("D, d M Y H:i:s") . ' GMT', TRUE);
+    drupal_add_http_header('Cache-Control', 'no-store, no-cache, must-revalidate post-check=0, pre-check=0', TRUE);
+    drupal_add_http_header('Pragma', 'no-cache', TRUE);
+
+    // Settings
+    $targetDir = $GLOBALS['conf']['file_temporary_path'] .'/';
+    // 5 minutes execution time
+    @set_time_limit(5 * 60);
+    // Uncomment this one to fake upload time
+    // usleep(5000);
+
+    // Get parameters
+    $chunk = isset($_REQUEST['chunk']) ? $_REQUEST['chunk'] : 0;
+    $chunks = isset($_REQUEST['chunks']) ? $_REQUEST['chunks'] : 0;
+    $filename = isset($_REQUEST['name']) ? $_REQUEST['name'] : '';
+
+    // Clean the fileName for security reasons
+    $extensions = 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp *';
+    $filename = file_munge_filename($filename, $extensions, FALSE);
+
+    // Make sure the fileName is unique but only if chunking is disabled
+    if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $filename)) {
+        $ext = strrpos($filename, '.');
+        $filename_a = substr($filename, 0, $ext);
+        $filename_b = substr($filename, $ext);
+
+        $count = 1;
+        while (file_exists($targetDir . DIRECTORY_SEPARATOR . $filename_a . '_' . $count . $filename_b))
+            $count++;
+
+        $filename = $filename_a . '_' . $count . $filename_b;
+    }
+
+
+    // Look for the content type header
+    if (isset($_SERVER['HTTP_CONTENT_TYPE'])) {
+        $contentType = $_SERVER['HTTP_CONTENT_TYPE'];
+    }
+
+    if (isset($_SERVER['CONTENT_TYPE'])) {
+        $contentType = $_SERVER['CONTENT_TYPE'];
+    }
+
+    // Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
+    if (strpos($contentType, 'multipart') !== false) {
+        if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+            // Open temp file
+            $out = fopen($targetDir . DIRECTORY_SEPARATOR . $filename, $chunk == 0 ? 'wb' : 'ab');
+            if ($out) {
+                // Read binary input stream and append it to temp file
+                $in = fopen($_FILES['file']['tmp_name'], 'rb');
+
+                if ($in) {
+                    while ($buff = fread($in, 4096))
+                        fwrite($out, $buff);
+                } else {
+                    die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+                }
+
+                fclose($in);
+                fclose($out);
+                @unlink($_FILES['file']['tmp_name']);
+            } else {
+                die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
+            }
+        } else {
+            die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
+        }
+    } else {
+        // Open temp file
+        $out = fopen($targetDir . DIRECTORY_SEPARATOR . $filename, $chunk == 0 ? 'wb' : 'ab');
+        if ($out) {
+            // Read binary input stream and append it to temp file
+            $in = fopen("php://input", 'rb');
+
+            if ($in) {
+                while ($buff = fread($in, 4096)) {
+                    fwrite($out, $buff);
+                }
+            } else {
+                die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+            }
+
+            fclose($in);
+            fclose($out);
+        } else {
+            die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
+        }
+    }
+
+    if ((isset($_GET['chunk']) && ($_GET['chunk'] + 1) == $_GET['chunks']) || (!isset($_GET['chunk']))) {
+        $source = 'temporary://'. $filename;
+        $file = new stdClass();
+        $file->uid      = $GLOBALS['user']->uid;
+        $file->status   = 0;
+        $file->filename = $filename;
+        $file->uri      = $source;
+        $file->filemime = file_get_mimetype($file->filename);
+        $file->filesize = filesize($source);
+        // Save url argument(instance_id) so we can validate file by instance settings
+        $file->arg = arg(1);
+
+        $e = FALSE;
+        // Here we validate file
+        studysauce_plupload_file_validation($file, $e);
+
+        if ($e === FALSE) {
+            $return = file_save($file);
+            // Generate a secure version of file uri for temporary delivery.
+            $file->secure_uri = image_style_url('achievement', $file->uri);
+            // We build it as a temp but will deliver it as a public.
+            $file->secure_uri = str_replace('system/temporary', variable_get('file_public_path', 'sites/default/files'), $file->secure_uri);
+
+            if(current_path() == 'node/plup/plan')
+            {
+                module_load_include('utility.inc', 'video');
+                module_load_include('field.inc', 'video');
+                $transcoder = new Transcoder();
+                $thumbnails = $transcoder->extractFrames((array)$file, array());
+                $thumbnails[0]->secure_uri = image_style_url('achievement', $thumbnails[0]->uri);
+                // We build it as a temp but will deliver it as a public.
+                $thumbnails[0]->secure_uri = str_replace('system/temporary', variable_get('file_public_path', 'sites/default/files'), $thumbnails[0]->secure_uri);
+                $thumbnails[0]->thumbnail = $thumbnails[0]->fid;
+                $thumbnails[0]->fid = $file->fid;
+                $return = $thumbnails[0];
+            }
+        }
+        else {
+            file_unmanaged_delete($file->uri);
+            $return = (object) array('error_message' => $e);
+        }
+
+        drupal_json_output($return);
+    }
+}
+
+/**
+ * Default validation function.
+ * In most cases Pluplaod will be used for images so we use image-specific validation.
+ * Non-image files has no support right now.
+ */
+function studysauce_plupload_file_validation(&$file, &$e) {
+    if (!isset($file->arg) || (isset($file->arg) && is_numeric($file->arg))) {
+        // Check if file is image
+        $passImage = file_validate_is_image($file);
+        if (!empty($passImage)) {
+            $e = reset($passImage);
+            return;
+        }
+
+        // Check if file has allowed extension
+        $passExt = file_validate_extensions($file, 'png gif jpg jpeg');
+        if (!empty($passExt)) {
+            $e = reset($passExt);
+            return;
+        }
+
+        // Check if file doesn't exceed the maximal allowed size
+        $passSize = file_validate_size($file, parse_size(''), 0);
+        if (!empty($passSize)) {
+            $e = reset($passSize);
+            return;
+        }
+
+        // Check if file name isn't too long
+        $passLength = file_validate_name_length($file);
+        if (!empty($passLength)) {
+            $e = reset($passLength);
+            return;
+        }
+
+        // Check if file meet the resolution restrictions
+        $passRes = file_validate_image_resolution($file, '', '');
+        if (!empty($passRes)) {
+            $e = reset($passRes);
+            return;
+        }
+    }
 }
 
 function studysauce_order_completed()
@@ -308,9 +533,12 @@ function studysauce_init()
     module_load_include('inc', 'studysauce', 'dates');
     module_load_include('inc', 'studysauce', 'checkin');
     module_load_include('inc', 'studysauce', 'user');
+    module_load_include('inc', 'studysauce', 'partner');
     module_load_include('inc', 'studysauce', 'goals');
     module_load_include('inc', 'studysauce', 'metrics');
     module_load_include('inc', 'studysauce', 'badges');
+    module_load_include('inc', 'studysauce', 'invite');
+    module_load_include('inc', 'studysauce', 'profile');
 
     global $user;
     if(isset($_GET['invite_parent']))
@@ -766,11 +994,21 @@ function studysauce_copy_password_info($form, &$form_state)
             $form_state['values']['panes']['customer']['pass'];
 }
 
+function studysauce_user_presave(&$edit, $account, $category) {
+    if (($account->is_new || (isset($account->original) && empty($account->original->field_first_name))) && (isset($edit['field_first_name']['und'][0]['value']) ||
+        isset($account->field_first_name['und'][0]['value']))) {
+        $_POST['parent-student'] = 'student';
+        studysauce_save_user((object)((array)$account + $edit), $edit);
+    }
+}
+
 function studysauce_form_alter(&$form, &$form_state, $form_id) {
     global $user;
 
     switch ($form_id) {
         case 'uc_cart_checkout_form':
+            drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/buy.js');
+
             $form['actions']['continue']['#value'] = 'Complete order';
             $form['#submit'][] = 'studysauce_onepagecheckout_form_submit';
             $form['panes']['customer']['#title'] = 'Confirm <b>your</b> email address';
@@ -780,19 +1018,46 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
                 unset($form['panes']['customer']['new_account']);
                 array_unshift($form['#validate'], 'studysauce_copy_password_info');
             }
+            $form['panes']['customer']['#weight'] = 1;
             unset($form['panes']['customer']['#description']);
+
+            // add product buttons to checkout page
+            $items = uc_cart_get_contents();
+            foreach ($items as $item)
+            {
+                if($item->nid == 13);
+                {
+                    if(end($item->data['attributes']) == 14)
+                        $form['panes']['payment']['#description'] = '<a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout">$9.99/mo</a> <a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout" class="checked">$99/year <sup>Recommended</sup></a>';
+                    else
+                        $form['panes']['payment']['#description'] = '<a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout" class="checked">$9.99/mo</a> <a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout">$99/year <sup>Recommended</sup></a>';
+                }
+            }
+
             if(isset($_SESSION['studysauce']['email']))
                 $form['panes']['customer']['primary_email']['#default_value'] = $_SESSION['studysauce']['email'];
+
             if(isset($_SESSION['studysauce']['parent_first']))
                 $form['panes']['billing']['address']['#default_value']->billing_first_name = $_SESSION['studysauce']['parent_first'];
             elseif(isset($_SESSION['studysauce']['first']))
                 $form['panes']['billing']['address']['#default_value']->billing_first_name = $_SESSION['studysauce']['first'];
+            elseif(isset($user->field_first_name['und'][0]['value']))
+                $form['panes']['billing']['address']['#default_value']->billing_first_name = $user->field_first_name['und'][0]['value'];
+
             if(isset($_SESSION['studysauce']['parent_last']))
                 $form['panes']['billing']['address']['#default_value']->billing_last_name = $_SESSION['studysauce']['parent_last'];
             elseif(isset($_SESSION['studysauce']['last']))
                 $form['panes']['billing']['address']['#default_value']->billing_last_name = $_SESSION['studysauce']['last'];
+            elseif(isset($user->field_last_name['und'][0]['value']))
+                $form['panes']['billing']['address']['#default_value']->billing_last_name = $user->field_last_name['und'][0]['value'];
+
             $form['panes']['comments']['#description'] = 'Any other instructions for us as we build your personal study plan?';
             hide($form['actions']['cancel']);
+            $form['funnel_tracker'] = array(
+                '#type' => 'markup',
+                '#markup' => theme('studysauce-funnel'),
+                '#weight' => -100
+            );
             break;
         case 'user_register_form': // user register page
             $form['account']['pass']['#type'] = 'password';
@@ -1201,6 +1466,25 @@ function _studysauce_get_schedule_classes($mail = null)
         }
     }
     return $classes;
+}
+
+function _studysauce_get_touched()
+{
+    global $user;
+    $query = new EntityFieldQuery();
+    $entities = $query->entityCondition('entity_type', 'node')
+        ->propertyCondition('type', 'schedule')
+        ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+        ->propertyCondition('status', 1)
+        ->range(0,1)
+        ->execute();
+    if (!empty($entities['node']))
+    {
+        $nodes = array_keys($entities['node']);
+        $nid = array_shift($nodes);
+        $node = node_load($nid);
+        return isset($node->field_touched_music['und'][0]['value']) && $node->field_touched_music['und'][0]['value'] == 1;
+    }
 }
 
 function _studysauce_submit_user_ajax($form, &$form_state)
@@ -1614,6 +1898,42 @@ function studysauce_get_sds_messages()
  * TODO: should this be put in our module instead of theme directory?
  */
 function studysauce_theme_registry_alter(&$theme_registry) {
+    $theme_registry['studysauce-strategies'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/strategies',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-about'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/about',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-premium'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/premium',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-footer'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/footer',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-funnel'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/funnel',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-account'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/account',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
     $theme_registry['studysauce-header'] = array(
         'template' => drupal_get_path('theme', 'successinc') . '/header',
         'theme path' => drupal_get_path('theme', 'successinc'),
@@ -1652,6 +1972,24 @@ function studysauce_theme_registry_alter(&$theme_registry) {
     );
     $theme_registry['studysauce-tips'] = array(
         'template' => drupal_get_path('theme', 'successinc') . '/tips',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-tips-time'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/tips-time',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-tips-env'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/tips-env',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-tips-strategy'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/tips-strategy',
         'theme path' => drupal_get_path('theme', 'successinc'),
         'type' => 'module',
         'preprocess functions' => array(),
@@ -1738,17 +2076,29 @@ function studysauce_theme_registry_alter(&$theme_registry) {
 
 function _studysauce_orders_by_uid($uid, $order_status = 'completed')
 {
-    $query = db_select('uc_orders', 'uo');
-    $query->addField('uo', 'order_id');
-    $query->addField('uo', 'order_total');
-    $query->addField('uo', 'order_status'); // optional: $query->addField('uo', 'product_count');
-    $query->addField('uo', 'created');
-    $query->addJoin('LEFT', 'uc_order_products', 'p', 'p.order_id = uo.order_id');
-    $query->addField('p', 'nid');
-    $query->condition('order_status', $order_status);
-    $query->condition('uid', $uid);
-    $result = $query->execute()->fetchAll();
-    return $result;
+    $uids = array($uid);
+    $conn = studysauce_get_connections();
+    foreach ($conn as $i => $c)
+        $uids[] = $c->uid;
+
+    $orders = array();
+    foreach($uids as $uid)
+    {
+        $query = db_select('uc_orders', 'uo');
+        $query->addField('uo', 'order_id');
+        $query->addField('uo', 'order_total');
+        $query->addField('uo', 'order_status'); // optional: $query->addField('uo', 'product_count');
+        $query->addField('uo', 'created');
+        $query->addJoin('LEFT', 'uc_order_products', 'p', 'p.order_id = uo.order_id');
+        $query->addField('p', 'nid');
+        $query->condition('order_status', $order_status);
+        $query->condition('uid', $uid);
+        $orders = array_merge($orders, $query->execute()->fetchAll());
+    }
+    $keys = array_map(function ($x) { return (isset($x->created) ? $x->created : 0); }, $orders);
+    array_multisort($keys, SORT_NUMERIC, SORT_DESC, $orders);
+    $o = end($orders);
+    return $o;
 }
 
 function studysauce_webform_submission_render_alter(&$renderable)

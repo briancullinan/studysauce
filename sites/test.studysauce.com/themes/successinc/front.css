@@ -21,6 +21,8 @@
 
 .page-students2 .flexslider,
 .page-parents2 .flexslider,
+.page-students .flexslider,
+.page-parents .flexslider,
 .front .flexslider
 {
     box-shadow: none;
@@ -120,7 +122,11 @@
 
 @media all and (max-width: 759px)
 {
-    .page-students2 .flexslider, .page-parents2 .flexslider, .front .flexslider
+    .page-students2 .flexslider,
+    .page-parents2 .flexslider,
+    .page-students .flexslider,
+    .page-parents .flexslider,
+    .front .flexslider
     {
         padding-top:100px;
         padding-bottom:60px;

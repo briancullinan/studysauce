@@ -506,6 +506,7 @@ if(empty($classes)):
                 </div>
             </a></li>
     </ul>
+    <input name="touchedMusic" type="hidden" value="<?php print (_studysauce_get_touched() ? '1' : '0'); ?>" />
     <?php print views_embed_view('music_player', 'block_1'); ?>
 
     <h4 style="text-align:center;"><a href="#" onclick="jQuery('#checkin').addClass('mozart-only').scrollintoview(); return false;" style="color:#0099be;">The Mozart Effect&reg;</a></h4>
@@ -523,12 +524,12 @@ if(empty($classes)):
         <a href="#" onclick="jQuery('#checkin').removeClass('mozart-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
     </div>
 </div>
-<p class="grid_6 classes <?php print empty($classes) ? 'empty' : 'not-empty'; ?>"><?php
+<p class="grid_6 classes <?php print (empty($classes) ? 'empty' : 'not-empty'); ?>"><?php
     if(!empty($classes)):
         $classI = 0;
-        foreach($classes as $eid => $class)
+        foreach($classes as $cid => $class)
         {
-            print '<a href="#class' . $classI . '" class="class' . $classI . ' eid' . $eid . '"><span>&nbsp;</span>' . $class . '</a>';
+            print '<a href="#class' . $classI . '" class="class' . $classI . ' cid' . $cid . '"><span>&nbsp;</span>' . $class . '</a>';
             $classI++;
         }
     else: ?>

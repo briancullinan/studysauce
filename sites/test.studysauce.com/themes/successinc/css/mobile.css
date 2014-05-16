@@ -330,12 +330,6 @@ body.page-node-landing .content > .highlighted-link
     display:none;
 }
 
-.page-dashboard .page .panel-pane
-{
-    margin-left:0 !important;
-    padding-top: 80px !important;
-}
-
 /*
 .page-dashboard.fancybox-active .page .panel-pane
 {

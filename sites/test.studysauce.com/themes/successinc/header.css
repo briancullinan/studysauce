@@ -35,6 +35,7 @@
     color:#ffffff;
     background:#0099BE;
     white-space: nowrap;
+    height: 56px;
 }
 
 /* Logo - Site name*/
@@ -93,6 +94,10 @@
     text-align: center;
     white-space: nowrap;
     box-sizing: border-box;
+}
+
+#partner-message span
+{
     font-size: 22px;
 }
 
@@ -109,7 +114,6 @@
     margin:-5px 0 -10px 0;
     background-color: #EEEEEE;
     border-radius: 100%;
-    border: 5px solid #eeeeee;
 }
 
 #site-name a {
@@ -146,6 +150,7 @@
 }
 
 @media all and (max-width: 980px) {
+
     #site-name a {
         font-size: 36px;
     }
@@ -158,6 +163,20 @@
 
 @media all and (max-width: 759px) {
 
+    .page-dashboard .header-wrapper
+    {
+        height: 46px;
+    }
+
+    #site-name,
+    .page-dashboard #site-name
+    {
+        position:static;
+        display:block;
+        width:auto;
+    }
+
+    #site-slogan,
     .page-dashboard #site-slogan {
         display:none;
     }
@@ -190,17 +209,16 @@
         display:none;
     }
 
-    #site-name
-    {
-        position:static;
-        display:block;
-        width:auto;
-    }
 }
 
 
 @media all and (max-width: 480px)
 {
+
+    .page-dashboard .header-wrapper
+    {
+        height: 33px;
+    }
 
     .page-dashboard .header
     {
