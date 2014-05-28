@@ -10,7 +10,7 @@
     display: inline-block;
     padding: 10px;
     color: #FFFFFF;
-    margin-top: 10%;
+    margin-top: 5%;
     margin-left: 8%;
 }
 
@@ -19,7 +19,7 @@
     text-align: center;
     width: 353px;
     margin-left: 8%;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 .page-dashboard #premium h2 span
@@ -50,6 +50,7 @@
     width:32%;
     display: inline-block;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     padding:30px;
     position:relative;
     min-height: 300px;
@@ -158,9 +159,45 @@
     {
         font-size:24px;
     }
+
     .page-dashboard #premium .highlighted-link
     {
         width: 277px;
+        margin-bottom:80px;
+    }
+
+    .page-dashboard #premium li
+    {
+        padding:5px;
+        display:block;
+        width:auto;
+        min-height: 0;
+        margin:40px 0;
+    }
+
+    .page-dashboard #premium li:before
+    {
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+    .page-dashboard #premium ol
+    {
+        margin-top:100px;
+    }
+
+    .page-dashboard #premium .img-wrapper
+    {
+        bottom:75%;
+        top:0;
+        min-height: 300px;
+    }
+
+    .page-dashboard #premium .img-wrapper img
+    {
+        margin-bottom:0;
     }
 }
 

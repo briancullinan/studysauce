@@ -44,15 +44,12 @@ $lastOrder = _studysauce_orders_by_uid($user->uid);
 <div class="form-item form-type-radios field-name-account-type">
     <label>Account type:</label>
     <div class="form-checkboxes">
-        <input type="radio" value="free" name="account-type" id="account-type-free" <?php print(!isset($lastOrder) ? 'checked="checked"' : ''); ?> />
+        <input readonly="readonly" type="radio" value="free" name="account-type" id="account-type-free" <?php print(!$lastOrder ? 'checked="checked"' : ''); ?> />
         <label for="account-type-free">Free</label>
-        <input type="radio" value="monthly" name="account-type" id="account-type-monthly" <?php print(isset($lastOrder) && is_object($lastOrder) && floatval($lastOrder->order_total) == 9.99000 ? 'checked="checked"' : ''); ?> />
+        <input readonly="readonly" type="radio" value="monthly" name="account-type" id="account-type-monthly" <?php print(isset($lastOrder) && is_object($lastOrder) && floatval($lastOrder->order_total) == 9.99000 ? 'checked="checked"' : ''); ?> />
         <label for="account-type-monthly">Monthly</label>
-        <input type="radio" value="annual" name="account-type" id="account-type-annual" <?php print(isset($lastOrder) && is_object($lastOrder) && floatval($lastOrder->order_total) > 9.99000 ? 'checked="checked"' : ''); ?> />
-        <label for="account-type-annual">Annual</label>
-    </div>
-    <div class="highlighted-link">
-        <a href="/buy" class="more">Upgrade</a>
+        <input readonly="readonly" type="radio" value="yearly" name="account-type" id="account-type-yearly" <?php print(isset($lastOrder) && is_object($lastOrder) && floatval($lastOrder->order_total) > 9.99000 ? 'checked="checked"' : ''); ?> />
+        <label for="account-type-yearly">Annual</label>
     </div>
 </div>
 <div class="form-item form-type-radios field-name-account-renewal">
@@ -66,9 +63,10 @@ $lastOrder = _studysauce_orders_by_uid($user->uid);
             : 'N/A'); ?></label>
 </div>
 <br />
-<?php /* TODO: follow Drupal flow until database block is finished
- <div class="highlighted-link form-actions form-wrapper">
-    <a href="#cancel-account">Delete your account</a> <a class="more form-submit ajax-processed" href="#save-account">Save</a></div>
- */
+<div class="highlighted-link form-actions form-wrapper">
+<!--<a href="#cancel-account">Delete your account</a> --><a class="more form-submit ajax-processed" href="#save-account">Save</a>
+    <a href="/buy" class="more">Upgrade</a>
+
+</div>
 
 

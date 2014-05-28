@@ -24,7 +24,8 @@
         });
         jQuery('#home').on('change', 'input', function (evt) {
             evt.preventDefault();
-            jQuery(this).prop('checked', jQuery(this).data('origState'));
+            if(jQuery(this).prop('checked') != jQuery(this).data('origState'))
+                jQuery(this).prop('checked', jQuery(this).data('origState'));
         });
 
         jQuery('body').on('click', 'a[href="#study-quiz"]', function (evt) {
@@ -51,22 +52,25 @@
 
         jQuery('#main-menu a').each(function () {
             var that = jQuery(this);
+            // check if panel exists, we still want to allow items that lead to other pages
             //if(jQuery(that.attr('href') + '.panel-pane').length > 0)
             {
                 jQuery('body').on('click', 'a[href="' + that.attr('href') + '"]', function (evt) {
                     var that = jQuery(this);
                     jQuery('.new-award-only').removeClass('new-award-only')
                         .parents('.panel-pane').scrollintoview();
+                    // only show last open menu in mobile mode if they click on subitems
+                    that.parents('ol,ul').find('li').removeClass('last-open');
                     if(that.parent().find('ul').length > 0) // this menu has subitems
                     {
                         // cancel #hash change
                         evt.preventDefault();
-                        that.toggleClass('selected');
+                        that.toggleClass('selected').parent().addClass('last-open');
                     }
                     else
                     {
-                        jQuery('body').removeClass(footerOnly).removeClass(menuOnly).addClass(that.attr('href').substring(1) + '-only');
-                        that.parents('ol,ul').prev('a').addClass('selected');
+                        jQuery('body').removeClass(footerOnly).removeClass(menuOnly).removeClass('menu-open').addClass(that.attr('href').substring(1) + '-only');
+                        that.parents('ol,ul').prev('a').addClass('selected').parent().addClass('last-open');
                     }
                     jQuery(window).trigger('scroll');
                 });
@@ -282,11 +286,11 @@
                     menu = jQuery('#main-menu li:visible a[href="#' + that.parent().attr('id') + '"]');
                 if(menu.length == 0)
                     return;
-                if(that.offset().top < menu.offset().top +
+                if(that.offset().top <= menu.offset().top +
                                        (jQuery(window).width() <= 759
                                            ? 140
                                            : 0) &&
-                   that.offset().top + that.height() > menu.offset().top + menu.height())
+                   that.offset().top + that.height() >= menu.offset().top + menu.height())
                     menu.addClass('skrollable-between');
             });
         });
@@ -307,6 +311,7 @@
             {
                 evt.preventDefault();
                 jQuery('body').toggleClass('menu-open');
+                jQuery('#main-menu').find('li').removeClass('last-open');
                 jQuery(window).trigger('scroll');
             }
         });

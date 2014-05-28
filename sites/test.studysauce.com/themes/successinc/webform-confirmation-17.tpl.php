@@ -94,9 +94,8 @@ $submission = studysauce_render_webform_plain($node, $sid);
         <?php endif; ?>
     </div>
     <div class="grid_6 highlighted-link">
-        <a class="more" href="/buy" onclick="jQuery('#tips').removeClass('study-quiz-only');">Build my plan</a>
+        <a class="more" href="#premium" onclick="jQuery('#tips').removeClass('study-quiz-only');">Go premium</a>
     </div>
-    <p style="clear: both; margin-bottom:0px; line-height:1px;">&nbsp;</p>
+    <a href="#" onclick="jQuery('#home').removeClass('study-quiz-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
+    <p style="margin-bottom:0;line-height: 1px; clear:both;">&nbsp;</p>
 </div>
-
-<p style="clear:both;margin-bottom:0;line-height: 0px;">&nbsp;</p>

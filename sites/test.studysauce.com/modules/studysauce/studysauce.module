@@ -65,6 +65,12 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['adviser'] = array(
+        'page callback' => 'studysauce_adviser',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     $items['order/completed'] = array(
         'page callback' => 'studysauce_order_completed',
         'access callback' => true,
@@ -106,6 +112,16 @@ function studysauce_menu_alter(&$items) {
     );
 
     return $items;
+}
+
+function studysauce_adviser()
+{
+    // TODO: check if user is in advisers group
+    print json_encode(array(
+        'content' => theme('studysauce-adviser', array('account' => user_load(intval($_GET['uid'])))),
+        'styles' => drupal_get_css(),
+        'scripts' => drupal_get_js()
+    ));
 }
 
 /**
@@ -362,13 +378,17 @@ function studysauce_get_connections($include_invites = false)
     return $connections;
 }
 
-function studysauce_get_incentive()
+function studysauce_get_incentive($account = null)
 {
-    global $user;
+    if($account == null)
+    {
+        global $user;
+        $account = user_load($user->uid);
+    }
     $query = new EntityFieldQuery();
     $entities = $query->entityCondition('entity_type', 'node')
         ->propertyCondition('type', 'incentive')
-        ->propertyCondition('title', $user->mail)
+        ->propertyCondition('title', $account->mail)
         ->propertyCondition('status', 1)
         ->range(0,1)
         ->execute();
@@ -381,14 +401,18 @@ function studysauce_get_incentive()
     }
 }
 
-function studysauce_is_incentives_setup()
+function studysauce_is_incentives_setup($account = null)
 {
-    global $user;
+    if($account == null)
+    {
+        global $user;
+        $account = user_load($user->uid);
+    }
     // only load the two step process if an incentive node has not been created
     $query = new EntityFieldQuery();
     $entities = $query->entityCondition('entity_type', 'node')
         ->propertyCondition('type', 'incentive')
-        ->propertyCondition('title', $user->mail)
+        ->propertyCondition('title', $account->mail)
         ->propertyCondition('status', 1)
         ->range(0,1)
         ->execute();
@@ -399,11 +423,10 @@ function studysauce_is_incentives_setup()
     $nid = array_shift($nodes);
     $incentive = node_load($nid);
 
-    $user = user_load($user->uid);
     $any = false;
-    if(isset($user->field_invites[LANGUAGE_NONE][0]))
+    if(isset($account->field_invites[LANGUAGE_NONE][0]))
     {
-        foreach($user->field_invites[LANGUAGE_NONE] as $i => $invite)
+        foreach($account->field_invites[LANGUAGE_NONE] as $i => $invite)
         {
             $entity = entity_load('field_collection_item', array($invite['value']));
             $entity = $entity[$invite['value']];
@@ -415,15 +438,20 @@ function studysauce_is_incentives_setup()
 
     //if(!$any &&
     //    (!isset($incentive->field_invite[LANGUAGE_NONE][0]['value']) || $incentive->field_invite[LANGUAGE_NONE][0]['value'] == 0) &&
-    //    (!isset($user->field_parent_student['und'][0]['value']) || $user->field_parent_student['und'][0]['value'] == 'student'))
+    //    (!isset($account->field_parent_student['und'][0]['value']) || $account->field_parent_student['und'][0]['value'] == 'student'))
     //    return 2;
 
     return 3;
 }
 
-function _studysauce_get_incentives_hours()
+function _studysauce_get_incentives_hours($account = null)
 {
-    $incentive = studysauce_get_incentive();
+    if($account == null)
+    {
+        global $user;
+        $account = user_load($user->uid);
+    }
+    $incentive = studysauce_get_incentive($account);
     if(!isset($incentive))
         return 0;
 
@@ -1027,7 +1055,8 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
             {
                 if($item->nid == 13);
                 {
-                    if(end($item->data['attributes']) == 14)
+                    if(end($item->data['attributes']) == 14 ||
+                        (isset($item->data['attributes']['Payment Option']) && end($item->data['attributes']['Payment Option']) == 'Yearly'))
                         $form['panes']['payment']['#description'] = '<a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout">$9.99/mo</a> <a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout" class="checked">$99/year <sup>Recommended</sup></a>';
                     else
                         $form['panes']['payment']['#description'] = '<a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout" class="checked">$9.99/mo</a> <a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout">$99/year <sup>Recommended</sup></a>';
@@ -1188,6 +1217,9 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
         case 'webform_client_form_17':
             $form['actions']['#attributes']['class'][] = 'highlighted-link';
             $form['actions']['submit']['#attributes']['class'][] = 'more';
+            $form['actions']['submit']['#suffix'] = '<a href="#" onclick="jQuery(\'#home\').removeClass(\'study-quiz-only\').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
+                <p style="margin-bottom:0;line-height: 1px; clear:both;">&nbsp;</p>';
+
             break;
         case 'webform_client_form_157':
             $form['#prefix'] .= '
@@ -1434,14 +1466,18 @@ function _studysauce_user_update_form()
     return $form;
 }
 
-function _studysauce_get_schedule_classes($mail = null)
+function _studysauce_get_schedule_classes($account = null)
 {
-    global $user;
+    if($account == null)
+    {
+        global $user;
+        $account = user_load($user->uid);
+    }
     $classes = array();
     $query = new EntityFieldQuery();
     $entities = $query->entityCondition('entity_type', 'node')
         ->propertyCondition('type', 'schedule')
-        ->propertyCondition('title', isset($mail) && $mail != null ? $mail : (isset($user->mail) ? $user->mail : ''))
+        ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
         ->propertyCondition('status', 1)
         ->range(0,1)
         ->execute();
@@ -1898,8 +1934,20 @@ function studysauce_get_sds_messages()
  * TODO: should this be put in our module instead of theme directory?
  */
 function studysauce_theme_registry_alter(&$theme_registry) {
+    $theme_registry['studysauce-userlist'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/userlist',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
     $theme_registry['studysauce-strategies'] = array(
         'template' => drupal_get_path('theme', 'successinc') . '/strategies',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-adviser'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser',
         'theme path' => drupal_get_path('theme', 'successinc'),
         'type' => 'module',
         'preprocess functions' => array(),
@@ -2038,6 +2086,12 @@ function studysauce_theme_registry_alter(&$theme_registry) {
     );
     $theme_registry['studysauce-plans'] = array(
         'template' => drupal_get_path('theme', 'successinc') . '/plans',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-plan-sample'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/plans-sample',
         'theme path' => drupal_get_path('theme', 'successinc'),
         'type' => 'module',
         'preprocess functions' => array(),

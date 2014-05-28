@@ -71,6 +71,10 @@
                 setTimeout(redraw, 1);
         };
 
+        jQuery('body').on('click', 'a[href="#metrics"]', function () {
+            jQuery(window).trigger('resize');
+        });
+
         if (typeof window.initialHistory != 'undefined') {
             updateHistory(window.initialHistory);
             if (jQuery('#timeline').width() != jQuery('#timeline svg').width())

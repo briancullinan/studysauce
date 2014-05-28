@@ -68,36 +68,53 @@ function studysauce_save_dates()
         node_save($node);
     }
 
+    // save class
+    if(!isset($_POST['dates']) || !is_array($_POST['dates']))
+        $_POST['dates'] = array();
+
     if(isset($_POST['className']) && isset($_POST['assignment']) && isset($_POST['reminders']) &&
         isset($_POST['due']) && isset($_POST['percent']))
+        $_POST['dates'][] = array(
+            'eid' => isset($_POST['eid']) ? $_POST['eid'] : null,
+            'className' => $_POST['className'],
+            'assignment' => $_POST['assignment'],
+            'reminders' => $_POST['reminders'],
+            'due' => $_POST['due'],
+            'percent' => $_POST['percent']
+        );
+
+    if(count($_POST['dates']) > 0)
     {
-        // check if class entity already exists by name
-        if(isset($_POST['eid']))
-            foreach($node->field_reminders['und'] as $i => $c)
-            {
-                if($c['value'] == $_POST['eid'])
-                {
-                    $entity = entity_load('field_collection_item', array($c['value']));
-                    $entity = $entity[$c['value']];
-                    $entity->revision = 1;
-                    break;
-                }
-                unset($entity);
-            }
-        if(!isset($entity))
+        foreach($_POST['dates'] as $j => $date)
         {
-            $entity = entity_create('field_collection_item', array('field_name' => 'field_reminders'));
-            $entity->setHostEntity('node', $node);
+            // check if class entity already exists by name
+            if(isset($date['eid']))
+                foreach($node->field_reminders['und'] as $i => $c)
+                {
+                    if($c['value'] == $date['eid'])
+                    {
+                        $entity = entity_load('field_collection_item', array($c['value']));
+                        $entity = $entity[$c['value']];
+                        $entity->revision = 1;
+                        break;
+                    }
+                    unset($entity);
+                }
+            if(!isset($entity))
+            {
+                $entity = entity_create('field_collection_item', array('field_name' => 'field_reminders'));
+                $entity->setHostEntity('node', $node);
+            }
+
+            $entity->field_class_name['und'][0]['value'] = $date['className'];
+            $entity->field_assignment['und'][0]['value'] = $date['assignment'];
+            $entity->field_reminder['und'] = array_map(function ($x) { return array('value' => $x); }, explode(',', $date['reminders']));
+            $entity->field_due_date['und'][0] = array(
+                'value' => gmdate('Y-m-d H:i:s', strtotime($date['due'])));
+            $entity->field_percent['und'][0]['value'] = $date['percent'];
+
+            $entity->save();
         }
-
-        $entity->field_class_name['und'][0]['value'] = $_POST['className'];
-        $entity->field_assignment['und'][0]['value'] = $_POST['assignment'];
-        $entity->field_reminder['und'] = array_map(function ($x) { return array('value' => $x); }, explode(',', $_POST['reminders']));
-        $entity->field_due_date['und'][0] = array(
-            'value' => gmdate('Y-m-d H:i:s', strtotime($_POST['due'])));
-        $entity->field_percent['und'][0]['value'] = $_POST['percent'];
-
-        $entity->save();
     }
 
     if(isset($_POST['remove']))
@@ -111,7 +128,6 @@ function studysauce_save_dates()
         }
     }
 
-    $node = node_submit($node); // Prepare node for saving
     node_save($node);
 
     print json_encode(array(

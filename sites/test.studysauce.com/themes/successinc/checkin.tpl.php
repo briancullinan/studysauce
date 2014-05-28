@@ -135,6 +135,28 @@ if(empty($classes)):
     </div>
 <?php endif; ?>
 <h2>Check in.  Listen to Mozart.  Track your progress.</h2>
+
+<p class="grid_6 classes <?php print (empty($classes) ? 'empty' : 'not-empty'); ?>"><?php
+    if(!empty($classes)):
+        $classI = 0;
+        foreach($classes as $cid => $class)
+        {
+            print '<a href="#class' . $classI . '" class="class' . $classI . ' cid' . $cid . '"><span>&nbsp;</span>' . $class . '</a>';
+            $classI++;
+        }
+    else: ?>
+        <a href="#class0" class="class0"><span>&nbsp;</span>Hist 135</a>
+        <a href="#class1" class="class1"><span>&nbsp;</span>Chem 151</a>
+        <a href="#class2" class="class2"><span>&nbsp;</span>Math 125</a>
+        <a href="#class3" class="class3"><span>&nbsp;</span>Phys 101</a>
+        <a href="#class4" class="class4"><span>&nbsp;</span>Phys Lab</a>
+        <a href="#class5" class="class5"><span>&nbsp;</span>Econ 101</a>
+        <a href="#class6" class="class6"><span>&nbsp;</span>Soc 200</a>
+        <a href="#class7" class="class7"><span>&nbsp;</span>Law 345</a>
+        <a href="#class8" class="class8"><span>&nbsp;</span>Hist 136</a>
+    <? endif; ?>
+</p>
+
 <div class="grid_6 flip-counter clock flip-clock-wrapper">
     <h3>Take a 10 minute break in 1 hour</h3>
     <ul class="flip">
@@ -524,24 +546,4 @@ if(empty($classes)):
         <a href="#" onclick="jQuery('#checkin').removeClass('mozart-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
     </div>
 </div>
-<p class="grid_6 classes <?php print (empty($classes) ? 'empty' : 'not-empty'); ?>"><?php
-    if(!empty($classes)):
-        $classI = 0;
-        foreach($classes as $cid => $class)
-        {
-            print '<a href="#class' . $classI . '" class="class' . $classI . ' cid' . $cid . '"><span>&nbsp;</span>' . $class . '</a>';
-            $classI++;
-        }
-    else: ?>
-        <a href="#class0" class="class0"><span>&nbsp;</span>Hist 135</a>
-        <a href="#class1" class="class1"><span>&nbsp;</span>Chem 151</a>
-        <a href="#class2" class="class2"><span>&nbsp;</span>Math 125</a>
-        <a href="#class3" class="class3"><span>&nbsp;</span>Phys 101</a>
-        <a href="#class4" class="class4"><span>&nbsp;</span>Phys Lab</a>
-        <a href="#class5" class="class5"><span>&nbsp;</span>Econ 101</a>
-        <a href="#class6" class="class6"><span>&nbsp;</span>Soc 200</a>
-        <a href="#class7" class="class7"><span>&nbsp;</span>Law 345</a>
-        <a href="#class8" class="class8"><span>&nbsp;</span>Hist 136</a>
-    <? endif; ?>
-</p>
 <p style="clear: both;margin:30px 0 0 0;"><a href="#schedule"><span>Edit schedule</span></a></p>

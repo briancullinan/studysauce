@@ -44,6 +44,15 @@ jQuery(document).ready(function($) {
                            });
 
         });
+
+        // TODO: fix this invalid even when university name changes
+        if(schedule.find('.row.edit.valid').length == 0 &&
+           (schedule.find('.field-name-field-university input').val().trim() == '' ||
+            schedule.find('.field-name-field-university input').val() == schedule.find('.field-name-field-university input').prop('defaultValue')) &&
+            window.location.pathname != '/schedule')
+            schedule.removeClass('valid').addClass('invalid');
+        else
+            schedule.removeClass('invalid').addClass('valid');
     };
 
     schedule.on('click', 'a[href="#edit-class"]', function (evt) {
@@ -77,6 +86,13 @@ jQuery(document).ready(function($) {
         jQuery('.other-schedule .row').remove();
         jQuery(data.schedule).find('.other-schedule .row')
             .appendTo(jQuery('.other-schedule'));
+
+        // update profile tab
+        if(typeof $.fn.profileFunc != 'undefined')
+        {
+            jQuery('#profile .class-profile').replaceWith(jQuery(data.profile).find('.class-profile'));
+            $.fn.profileFunc();
+        }
 
         // update plan tab
         var plan = jQuery('#plan');
@@ -119,6 +135,15 @@ jQuery(document).ready(function($) {
         {
             jQuery('#checkin').addClass('empty edit-schedule');
             jQuery('#deadlines').addClass('empty');
+            jQuery('#checkin .classes').html('<a href="#class0" class="class0"><span>&nbsp;</span>Hist 135</a>' +
+                                             '<a href="#class1" class="class1"><span>&nbsp;</span>Chem 151</a>' +
+                                             '<a href="#class2" class="class2"><span>&nbsp;</span>Math 125</a>' +
+                                             '<a href="#class3" class="class3"><span>&nbsp;</span>Phys 101</a>' +
+                                             '<a href="#class4" class="class4"><span>&nbsp;</span>Phys Lab</a>' +
+                                             '<a href="#class5" class="class5"><span>&nbsp;</span>Econ 101</a>' +
+                                             '<a href="#class6" class="class6"><span>&nbsp;</span>Soc 200</a>' +
+                                             '<a href="#class7" class="class7"><span>&nbsp;</span>Law 345</a>' +
+                                             '<a href="#class8" class="class8"><span>&nbsp;</span>Hist 136</a>');
         }
 
         // fix class list on key dates tab
@@ -155,7 +180,8 @@ jQuery(document).ready(function($) {
 
     schedule.on('click', 'a[href="#add-class"]', function (evt) {
         evt.preventDefault();
-        var count = schedule.find('.row').length,
+        var examples = ['HIST 101', 'CALC 120', 'MAT 200', 'PHY 110', 'BUS 300', 'ANT 350', 'GEO 400', 'BIO 250', 'CHM 180', 'PHIL 102', 'ENG 100'],
+            count = schedule.find('.row').length,
             addClass = schedule.find('#add-class-dialog').last(),
             newClass = addClass.clone().attr('id', '').addClass('edit').insertBefore(addClass);
         newClass.find('input[type="checkbox"], input[type="radio"]').each(function () {
@@ -166,13 +192,16 @@ jQuery(document).ready(function($) {
                 that.attr('name', that.attr('name') + count);
             newClass.find('label[for="' + oldId + '"]').attr('for', oldId + count);
         });
+        newClass.find('.field-name-field-class-name input')
+            .attr('placeholder', examples[Math.floor(Math.random() * examples.length)]);
         newClass.planFunc();
         schedule.removeClass('edit-other-only').addClass('edit-class-only');
     });
 
     schedule.on('click', 'a[href="#add-other"]', function (evt) {
         evt.preventDefault();
-        var count = schedule.find('.row').length,
+        var examples = ['Work', 'Practice', 'Gym', 'Meeting'],
+            count = schedule.find('.row').length,
             addOther = schedule.find('#add-other-dialog').last(),
             newClass = addOther.clone().attr('id', '').addClass('edit').insertBefore(addOther);
         newClass.find('input[type="checkbox"], input[type="radio"]').each(function () {
@@ -183,10 +212,16 @@ jQuery(document).ready(function($) {
                 that.attr('name', that.attr('name') + count);
             newClass.find('label[for="' + oldId + '"]').attr('for', oldId + count);
         });
+        newClass.find('.field-name-field-class-name input')
+            .attr('placeholder', examples[Math.floor(Math.random() * examples.length)]);
         newClass.find('.field-name-field-recurring input[value="weekly"]').prop('checked', true);
         newClass.planFunc();
         schedule.removeClass('edit-class-only').addClass('edit-other-only');
     });
+
+    // add empty other if there aren't any
+    if(schedule.find('.other-schedule .row').not('#add-other-dialog').length == 0)
+        schedule.find('a[href="#add-other"]').first().trigger('click');
 
     schedule.on('click', 'a[href="#remove-class"]', function (evt) {
         evt.preventDefault();
@@ -215,6 +250,7 @@ jQuery(document).ready(function($) {
             else if(row.find('.field-name-field-recurring input[value="yearly"]:checked').length > 0)
                 dotw[dotw.length] = 'yearly';
             classes[classes.length] = {
+                cid: typeof row.attr('id') != 'undefined' && row.attr('id').substr(0, 4) == 'eid-' ? row.attr('id').substring(4) : null,
                 className: row.find('.field-name-field-class-name input').val(),
                 dotw: dotw.join(','),
                 start: row.find('.field-name-field-time input[name="schedule-value-date"]').val() + ' ' + row.find('.field-name-field-time input[name="schedule-value-time"]').val(),
@@ -232,18 +268,36 @@ jQuery(document).ready(function($) {
                            classes: classes
                        },
                        success: function (data) {
-                           updateTabs(data);
+                           if(window.location.pathname == '/schedule')
+                               window.location = '/customization';
+                           else
+                           {
+                               schedule.removeClass('valid').addClass('invalid');
+                               updateTabs(data);
+                           }
                        }
                    });
     });
 
-    schedule.on('keyup', '.field-name-field-class-name input', function () {
+    var checkDate = function () {
+        var row = jQuery(this).parents('.row');
+        if(row.find('.field-name-field-time input[name="schedule-value-date"]').val() == '' &&
+           row.find('.field-name-field-time input[name="schedule-value2-date"]').val() == '' &&
+           schedule.find('.row').first().find('input[name="schedule-value-date"]').val() != '' &&
+           schedule.find('.row').first().find('input[name="schedule-value2-date"]').val() != '' &&
+            row[0] != schedule.find('.row').first()[0])
+        {
+            // use first rows dates
+            row.find('.field-name-field-time input[name="schedule-value-date"]').val(schedule.find('.row').first().find('input[name="schedule-value-date"]').val());
+            row.find('.field-name-field-time input[name="schedule-value2-date"]').val(schedule.find('.row').first().find('input[name="schedule-value2-date"]').val());
+        }
+    };
+    schedule.on('change', '.field-name-field-class-name input', checkDate);
+    schedule.on('keyup', '.field-name-field-class-name input', checkDate);
+    schedule.on('keyup', '.field-name-field-class-name input, .field-name-field-time input[type="text"], .field-name-field-university input', function () {
         jQuery(this).parents('.row').planFunc();
     });
-    schedule.on('change', '.field-name-field-class-name input', function () {
-        jQuery(this).parents('.row').planFunc();
-    });
-    schedule.on('change', '.field-name-field-day-of-the-week input', function () {
+    schedule.on('change', '.field-name-field-class-name input, .field-name-field-day-of-the-week input, .field-name-field-time input[type="text"], .field-name-field-university input', function () {
         jQuery(this).parents('.row').planFunc();
     });
 
@@ -259,12 +313,6 @@ jQuery(document).ready(function($) {
 
     });
 
-    schedule.on('keyup', '.field-name-field-time input[type="text"]', function () {
-        jQuery(this).parents('.row').planFunc();
-    });
-    schedule.on('change', '.field-name-field-time input[type="text"]', function () {
-        jQuery(this).parents('.row').planFunc();
-    });
     schedule.find('.schedule .row, .other-schedule .row').not('#add-class-dialog, #add-other-dialog').planFunc();
 
 });

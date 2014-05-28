@@ -40,31 +40,37 @@ jQuery(document).ready(function($) {
 
     deadlines.on('click', 'a[href="#save-dates"]', function (evt) {
         evt.preventDefault();
-        if(!jQuery(this).parents('.row').is('.invalid'))
-        {
-            var row = jQuery(this).parents('.row'),
+        var dates = [];
+        deadlines.find('.row.edit.valid, .row.valid.edit').each(function () {
+            var row = $(this),
                 reminders = row.find('input[name*="dates-reminder-"]:checked').map(function (i, x) {return $(x).val();}).get();
+                dates[dates.length] = {
+                    eid: row.attr('id').substr(0, 4) == 'eid-' ? row.attr('id').substring(4) : null,
+                    className: row.find('.field-name-field-class-name select').val(),
+                    assignment: row.find('.field-name-field-assignment input').val(),
+                    reminders: reminders.join(','),
+                    due: row.find('.field-name-field-due-date input').val(),
+                    percent: row.find('.field-name-field-percent').is(':visible') ? row.find('.field-name-field-percent input').val() : 0
+                };
+        });
+        if(dates.length > 0)
+        {
             $.ajax({
                        url: '/node/save/key_dates',
                        type: 'POST',
                        dataType: 'json',
                        data: {
-                           eid: row.attr('id').substr(0, 4) == 'eid-' ? row.attr('id').substring(4) : null,
-                           className: row.find('.field-name-field-class-name select').val(),
-                           assignment: row.find('.field-name-field-assignment input').val(),
-                           reminders: reminders.join(','),
-                           due: row.find('.field-name-field-due-date input').val(),
-                           percent: row.find('.field-name-field-percent').is(':visible') ? row.find('.field-name-field-percent input').val() : 0
+                           dates: dates
                        },
                        success: function (data) {
                            // clear input form
-                           if(row.is('#new-dates-row'))
+                           if(deadlines.find('#new-dates-row.edit.valid'))
                            {
-                               row.find('.field-name-field-class-name select').val('_none');
-                               row.find('.field-name-field-assignment input').val('');
-                               row.find('input[name*="dates-reminder-"]').prop('checked', false);
-                               row.find('.field-name-field-due-date input').val('');
-                               row.find('.field-name-field-percent input').val(0);
+                               deadlines.find('#new-dates-row').find('.field-name-field-class-name select').val('_none');
+                               deadlines.find('#new-dates-row').find('.field-name-field-assignment input').val('');
+                               deadlines.find('#new-dates-row').find('input[name*="dates-reminder-"]').prop('checked', false);
+                               deadlines.find('#new-dates-row').find('.field-name-field-due-date input').val('');
+                               deadlines.find('#new-dates-row').find('.field-name-field-percent input').val(0);
                            }
 
                            // update key dates list
@@ -79,10 +85,10 @@ jQuery(document).ready(function($) {
 
                            // update deadline view state
                            deadlines.removeClass('edit-date-only');
-                           row.removeClass('edit').datesFunc();
+                           //row.removeClass('edit').datesFunc();
                            deadlines.find('.field-add-more-submit').show();
-                           if(jQuery(window).width() <= 759)
-                               row.scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
+                           //if(jQuery(window).width() <= 759)
+                           //    row.scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
                        }
                    });
         }
@@ -137,6 +143,10 @@ jQuery(document).ready(function($) {
                                                                      });
         });
 
+        if(deadlines.find('.row.edit.valid').length == 0)
+            deadlines.removeClass('valid').addClass('invalid');
+        else
+            deadlines.removeClass('invalid').addClass('valid');
         // don't need to limit submit because it goes back to edit mode if invalid
         /*jQuery('#deadlines input[value="Save"]').each(function () {
          var that = jQuery(this),

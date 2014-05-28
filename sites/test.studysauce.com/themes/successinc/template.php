@@ -387,14 +387,11 @@ if(drupal_is_front_page() && $user->uid != 0)
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/sauce.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/d3.v3.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/jquery.tipsy.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/metrics.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/fullcalendar/fullcalendar.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/checkin.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/plans.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/goals.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/user.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/partner.js');
     drupal_add_js(libraries_get_path('plupload') . '/js/plupload.full.js');
 
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/js/fullcalendar/fullcalendar.css');
@@ -403,13 +400,10 @@ if(drupal_is_front_page() && $user->uid != 0)
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/menu.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/home.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/checkin.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/goals.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/awards.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/deadlines.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/profile.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/metrics.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/plans.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/partner.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/invite.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/user-parent-student.css');
 }

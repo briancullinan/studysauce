@@ -52,14 +52,23 @@
     display:block;
 }
 
+.page-dashboard #deadlines .field-name-field-class-name
+{
+    width: 15%;
+    padding:0;
+}
+
 .page-dashboard #deadlines .field-name-field-class-name .read-only
 {
-    width: 130px;
-    padding:5px 0;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow:hidden;
-    height:22px;
+    overflow: hidden;
+    padding: 5px 0 5px 35px;
+}
+
+.page-dashboard #deadlines .edit .field-name-field-class-name .form-type-select
+{
+    padding:5px 0;
 }
 
 .page-dashboard #deadlines .field-name-field-assignment .read-only a
@@ -67,22 +76,39 @@
     display:block;
 }
 
-.page-dashboard #deadlines .field-name-field-assignment .read-only
+.page-dashboard #deadlines .field-name-field-assignment
 {
-    width: 320px;
+    width: 25%;
     padding:5px 0;
 }
 
-.page-dashboard #deadlines .field-name-field-percent .read-only
+.page-dashboard #deadlines .field-name-field-percent
 {
-    width:100px;
+    width:19%;
+    padding:5px 50px 5px 0;
+    margin-right:-50px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.page-dashboard #deadlines .row.edit .field-name-field-percent
+{
+    width:12%;
+    padding:5px 0 5px 0;
+    margin-right:0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.page-dashboard #deadlines .field-name-field-reminder
+{
+    width:38%;
     padding:5px 0;
 }
 
-.page-dashboard #deadlines .field-name-field-reminder .read-only
+.page-dashboard #deadlines .row.edit .field-name-field-reminder
 {
-    width:350px;
-    padding:5px 0;
+    width: 31%;
 }
 
 .page-dashboard #deadlines .field-name-field-completed .read-only
@@ -134,18 +160,7 @@
 .page-dashboard #deadlines .field-name-field-completed
 {
     display: inline-block;
-    padding: 0 5px;
     vertical-align: top;
-}
-
-.page-dashboard #deadlines .field-name-field-reminder
-{
-    padding:0;
-}
-
-.page-dashboard #deadlines .field-name-field-class-name
-{
-    padding-left:0;
 }
 
 .page-dashboard #deadlines label:not(.option)
@@ -171,12 +186,7 @@
     display:block;
 }
 
-.page-dashboard #deadlines .field-name-field-class-name .form-type-select
-{
-    width:130px;
-}
-
-.page-dashboard #deadlines .field-name-field-class-name .form-type-select select
+.page-dashboard #deadlines .field-name-field-class-name select
 {
     width:100%;
 }
@@ -191,25 +201,10 @@
     margin-top: 22px;
 }
 
-.page-dashboard #deadlines .field-name-field-assignment .form-type-textfield
+.page-dashboard #deadlines .row.edit .field-name-field-due-date
 {
-    width:320px;
-}
-
-.page-dashboard #deadlines .field-name-field-due-date .form-type-date-popup,
-.page-dashboard #deadlines .field-name-field-due-date fieldset
-{
-    width:110px;
-}
-
-.page-dashboard #deadlines .field-name-field-reminder .form-type-checkboxes
-{
-    width:250px;
-}
-
-.page-dashboard #deadlines .field-name-field-percent .form-type-textfield
-{
-    width:85px;
+    width:14%;
+    padding:5px 0;
 }
 
 .page-dashboard #deadlines .edit .field-name-field-class-name .read-only,
@@ -224,16 +219,25 @@
 .page-dashboard #deadlines .edit .field-name-field-assignment .form-type-textfield,
 .page-dashboard #deadlines .edit .field-name-field-percent .form-type-textfield,
 .page-dashboard #deadlines .edit .field-name-field-due-date .form-type-date-popup,
+.page-dashboard #deadlines .edit .field-name-field-due-date .form-type-textfield,
 .page-dashboard #deadlines .edit .field-name-field-reminder .form-type-checkboxes,
 .page-dashboard #deadlines .edit .field-name-field-reminder .form-checkboxes
 {
     display:block;
+    margin:0;
 }
 
 .page-dashboard #deadlines .row.edit .highlighted-link,
 .page-dashboard #deadlines .edit a[href="#cancel-dates"]
 {
     display:inline-block;
+}
+
+
+.page-dashboard #deadlines .highlighted-link a[href="#schedule"]
+{
+    margin-top: 30px;
+    float:left;
 }
 
 .page-dashboard #deadlines .edit .field-name-field-completed .read-only
@@ -246,7 +250,7 @@
     display:none;
 }
 
-.page-dashboard #deadlines .field-name-field-class-name .read-only span
+.page-dashboard #deadlines .field-name-field-class-name span
 {
     display:inline-block;
     height: 22px;
@@ -256,8 +260,9 @@
     text-align: center;
     font-size: 14px;
     line-height: 15px;
-    margin:-3px 10px 0 0;
+    margin:-3px 0 0 -35px;
     vertical-align: top;
+    float:left;
 }
 
 .page-dashboard #deadlines .class0
@@ -431,8 +436,12 @@
 {
     display: inline-block;
     text-align: center;
-    float:left;
-    width:50px;
+    width: 50px;
+    max-width: 20%;
+    margin: 0 -2px;
+    padding: 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .page-dashboard .big-plus
@@ -444,52 +453,21 @@
 .page-dashboard #deadlines .highlighted-link
 {
     text-align: right;
+    position: absolute;
+    bottom: 0;
+    display: block;
+    vertical-align: middle;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    left: 0;
+    margin-bottom: 0;
+    padding: 20px;
 }
 
 @media all and (min-width:980px) and (max-width: 1250px)
 {
 
-    .page-dashboard .field-name-field-reminder .read-only span
-    {
-        width:40px
-    }
-
-    .page-dashboard .field-name-field-reminder .form-type-checkbox,
-    .page-dashboard .field-name-field-reminder label.option
-    {
-        width: 40px;
-    }
-
-    .page-dashboard #deadlines .field-name-field-due-date .form-type-date-popup,
-    .page-dashboard #deadlines .field-name-field-due-date fieldset
-    {
-        width:100px;
-    }
-
-    .page-dashboard #deadlines .field-name-field-reminder .form-type-checkboxes
-    {
-        width: 200px;
-    }
-
-    .page-dashboard #deadlines .field-name-field-reminder .read-only
-    {
-        width: 230px;
-    }
-
-    .page-dashboard #deadlines .field-name-field-assignment .read-only
-    {
-        width: 180px;
-    }
-
-    .page-dashboard #deadlines .field-name-field-assignment .form-type-textfield
-    {
-        width:160px;
-    }
-
-    .page-dashboard #deadlines .field-name-field-class-name .form-type-select
-    {
-        width:100px;
-    }
 }
 
 @media all and (min-width:980px)
@@ -610,6 +588,9 @@
         padding:0;
     }
 
+    .page-dashboard #deadlines .row.edit .field-name-field-due-date,
+    .page-dashboard #deadlines .row.edit .field-name-field-reminder,
+    .page-dashboard #deadlines .row.edit .field-name-field-percent,
     .page-dashboard #deadlines .field-name-field-due-date,
     .page-dashboard #deadlines .field-name-field-reminder,
     .page-dashboard #deadlines .field-name-field-percent

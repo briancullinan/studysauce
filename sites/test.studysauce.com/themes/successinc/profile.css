@@ -18,7 +18,7 @@
     bottom:0;
     right:0;
     background: url(images/profile_background.jpg) no-repeat 50% 50% #FFFFFF;
-    background-size: 100% auto;
+    background-size: cover;
 }
 
 .field-name-field-university,
@@ -44,13 +44,12 @@
 .field-name-field-profile-question-time-management label.option,
 .field-name-field-profile-question-devices label.option
 {
-    background: url('images/menu_icons_128.png') no-repeat -54px -2854px transparent;
-    padding: 0 15px 0 25px;
+    background: url('images/menu_icons_128.png') no-repeat -54px -2853px transparent;
+    padding: 0 0 0 25px;
     margin: 0 0 0 0;
     display: inline-block;
     border-radius: 5px 5px 5px 5px;
     font-weight: bold;
-    max-width: 48%;
     vertical-align: middle;
     cursor: pointer;
     text-align: left;
@@ -60,13 +59,24 @@
     box-sizing: border-box;
 }
 
+.field-name-field-time-preference label.option
+{
+    padding: 0 15px 0 25px;
+    max-width: 16.66%;
+    margin:0 -2px;
+}
+
 .field-name-field-profile-question-study-much label.option,
 .field-name-field-profile-question-education label.option,
 .field-name-field-profile-question-devices label.option,
 .field-name-field-profile-question-time-management label.option,
 .field-name-field-profile-question-mindset label.option
 {
-    display:block;
+    display: block;
+    margin-left: 50px !important;
+    font-size: 24px;
+    font-weight: normal;
+    margin-top: 10px !important;
 }
 
 .field-name-type-of-studying input:checked + label.option,
@@ -80,7 +90,7 @@
 .field-name-field-profile-question-mindset input:checked + label,
 .field-name-field-profile-question-time-management input:checked + label
 {
-    background-position: -54px -2740px;
+    background-position: -54px -2739px;
     opacity: 1 !important;
     padding: 0 15px 0 25px;
     margin: 0 0 0 0;
@@ -184,7 +194,7 @@
 .field-name-field-profile-question-time-management input
 {
     visibility:hidden;
-    margin: 0 0 0 -20px;
+    margin: 0 0 0 -13px;
     float:left;
 }
 
@@ -209,6 +219,7 @@
     display:inline-block;
     width:39%;
     margin-right: 10%;
+    vertical-align: top;
 }
 
 .class-profile > .field-name-type-of-studying
@@ -231,6 +242,7 @@
 {
     display:inline-block;
     width:29%;
+    vertical-align: top;
 }
 
 .field-name-type-of-studying label.option,
@@ -238,6 +250,8 @@
 {
     width:30%;
     background-position: 50% -2854px;
+    color:transparent;
+    vertical-align: top;
 }
 
 .field-name-type-of-studying input:checked + label.option,
@@ -329,10 +343,40 @@
 .class-profile
 {
     display:none;
-    min-height: 400px;
 }
 
 .page-dashboard #profile .study-preferences,
+.page-dashboard #profile .field-name-field-profile-question-study-much,
+.page-dashboard #profile .field-name-field-profile-question-education,
+.page-dashboard #profile .field-name-field-profile-question-mindset,
+.page-dashboard #profile .field-name-field-profile-question-time-management,
+.page-dashboard #profile .field-name-field-profile-question-devices,
+.page-dashboard #profile .class-profile
+{
+    display:block;
+    min-height: 0;
+    clear:both;
+}
+
+.field-name-field-profile-question-study-much,
+.field-name-field-profile-question-education,
+.field-name-field-profile-question-mindset,
+.field-name-field-profile-question-time-management,
+.field-name-field-profile-question-devices
+{
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: #FFF;
+    border-radius: 10px;
+    padding-top: 20px;
+    position: relative;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-sizing: border-box;
+    padding-bottom: 60px;
+    margin-bottom: 30px;
+}
+
 .page-path-customization .study-preferences,
 .page-path-profile .field-name-field-profile-question-mindset,
 .page-path-customization2 .class-profile
@@ -355,6 +399,98 @@
 .field-name-field-profile-question-devices h2 span
 {
     float:right;
+    color:#0099BE;
+}
+
+.field-name-field-profile-question-study-much h2,
+.field-name-field-profile-question-education h2,
+.field-name-field-profile-question-mindset h2,
+.field-name-field-profile-question-time-management h2,
+.field-name-field-profile-question-devices h2
+{
+    font-weight: bold !important;
+    color:#555555 !important;
+    margin:30px 0 !important;
+}
+
+.field-name-field-profile-question-study-much h2 span,
+.field-name-field-profile-question-education h2 span,
+.field-name-field-profile-question-mindset h2 span,
+.field-name-field-profile-question-time-management h2 span,
+.field-name-field-profile-question-devices h2 span
+{
+    position:absolute;
+    top:10px;
+    right:10px;
+}
+
+.class-profile .row .mobile-only
+{
+    display:none;
+}
+
+@media all and (max-width: 760px)
+{
+
+    .class-profile .field-name-field-class-name
+    {
+        white-space: nowrap;
+    }
+
+    .class-profile > .field-name-difficulty-level,
+    .class-profile > .field-name-type-of-studying
+    {
+        display: none;
+    }
+
+    .field-name-type-of-studying label.option, .field-name-difficulty-level label.option
+    {
+        color:inherit;
+        display: block;
+    }
+
+    .class-profile .row .field-name-type-of-studying,
+    .class-profile .row .field-name-difficulty-level
+    {
+        width: auto;
+        display: block;
+    }
+
+    .field-name-type-of-studying label.option, .field-name-difficulty-level label.option
+    {
+        background-position: -54px -2854px;
+        width:auto;
+    }
+
+    .field-name-type-of-studying input:checked + label.option, .field-name-difficulty-level input:checked + label.option
+    {
+        background-position: -54px -2740px;
+    }
+
+    .class-profile .row .mobile-only
+    {
+        display:block;
+    }
+
+    .field-name-field-profile-question-study-much label.option,
+    .field-name-field-profile-question-education label.option,
+    .field-name-field-profile-question-devices label.option,
+    .field-name-field-profile-question-time-management label.option,
+    .field-name-field-profile-question-mindset label.option
+    {
+        margin-left:10px !important;
+        font-size: 20px;
+    }
+
+    .field-name-field-profile-question-study-much,
+    .field-name-field-profile-question-education,
+    .field-name-field-profile-question-mindset,
+    .field-name-field-profile-question-time-management,
+    .field-name-field-profile-question-devices
+    {
+        padding:5px;
+    }
+
 }
 
 @media all and (max-width: 760px)

@@ -26,9 +26,9 @@
 {
     line-height: 1px;
     font-size: 3px;
-    width:33%;
-    margin-right: -100px;
-    margin-left: -100px;
+    width:25%;
+    margin-right: -60px;
+    margin-left: -60px;
     z-index: 0;
     position: relative;
     border-bottom: 10px solid #555555;
@@ -52,17 +52,17 @@
 
 .guide li:nth-child(3) > span > span
 {
-    background:url("images/funnel_compressed.png") no-repeat scroll 0 -75px transparent;
+    background-position: 0 -75px;
 }
 
 .guide li:nth-child(5) > span > span
 {
-    background:url("images/funnel_compressed.png") no-repeat scroll 0 -150px transparent;
+    background-position: 0 -150px;
 }
 
 .guide li:nth-child(7) > span > span
 {
-    background:url("images/funnel_compressed.png") no-repeat scroll 0 -225px transparent;
+    background-position: 0 -225px;
 }
 
 .guide li > span,
@@ -148,12 +148,81 @@
 {
     .guide
     {
-        margin:0 10px 20px 10px;
+        margin:0 -25px 20px -25px;
+    }
+
+    .guide li
+    {
+        font-size: 12px;
+        width: 90px;
+    }
+
+    .guide li > span > span,
+    .page-title li > span > span
+    {
+        background: url("images/funnel_compressed.png") no-repeat scroll -225px 0 transparent;
+        height: 50px;
+        width: 50px;
     }
 
     .guide li.line
     {
-        margin-right: -70px;
-        margin-left: -100px;
+        margin-right: -45px;
+        margin-left: -45px;
+        width:20%;
+    }
+
+    .guide li:nth-child(3) > span > span
+    {
+        background-position: -225px -50px;
+    }
+
+    .guide li:nth-child(5) > span > span
+    {
+        background-position: -225px -100px;
+    }
+
+    .guide li:nth-child(7) > span > span
+    {
+        background-position: -225px -150px;
+    }
+
+    .page-path-profile .guide li:nth-child(3) > span > span
+    {
+        background-position:-275px -50px;
+    }
+
+    .page-cart-checkout .guide li:nth-child(1) > span > span
+    {
+        background-position:-275px 0;
+    }
+
+    .page-path-schedule .guide li:nth-child(5) > span > span
+    {
+        background-position:-275px -100px;
+    }
+
+    .page-path-customization2 .guide li:nth-child(5) > span > span,
+    .page-path-customization .guide li:nth-child(5) > span > span
+    {
+        background-position:-325px -100px;
+    }
+
+    .page-path-customization .guide li:nth-child(1) > span > span,
+    .page-path-schedule .guide li:nth-child(1) > span > span,
+    .page-path-profile .guide li:nth-child(1) > span > span
+    {
+        background-position:-325px 0;
+    }
+
+    .page-path-customization .guide li:nth-child(3) > span > span,
+    .page-path-schedule .guide li:nth-child(3) > span > span
+    {
+        background-position:-325px -50px;
+    }
+
+    .page-path-customization .guide li:nth-child(7) > span > span
+    {
+        background-position:-275px -150px;
     }
 }

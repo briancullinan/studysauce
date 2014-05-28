@@ -115,6 +115,7 @@ html,
 {
     margin-left:10%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     width: 30%;
     display: inline-block;
     vertical-align: middle;
@@ -187,6 +188,179 @@ html,
     display:block;
 }
 
+#study-quiz .webform-confirmation > .grid_6,
+#study-quiz .highlighted-link
+{
+    text-align: right;
+    margin:0;
+}
+
+#study-quiz .webform-confirmation > .grid_6
+{
+    width:50%;
+}
+
+#study-quiz .webform-confirmation > .retry-link
+{
+    text-align: left;
+}
+
+#study-quiz .webform-confirmation .mobile-only
+{
+    display:none;
+}
+
+#study-quiz a[href="#retry"]
+{
+    background:url(images/restart.png) no-repeat left top transparent;
+    display:inline-block;
+    font-size: 32px;
+    padding-left:48px;
+    min-height: 48px;
+    padding-top:10px;
+}
+
+#study-quiz .form-radios
+{
+    margin-left:40px;
+}
+
+
+.webform-confirmation .links
+{
+    display:none;
+}
+
+.webform-confirmation .grid_5.even
+{
+    float:left;
+    clear:left;
+}
+
+.webform-confirmation .grid_5.right
+{
+    float:right;
+    clear:right;
+}
+
+.webform-confirmation .grid_5
+{
+    margin: 0;
+    padding: 0;
+}
+
+.webform-confirmation .quiz-wrapper
+{
+    position:relative;
+    display:block;
+}
+
+.webform-confirmation .quiz-wrapper .grid_5.even
+{
+    border-color:#CCC;
+    clear: left;
+    float: left;
+}
+
+.webform-confirmation .quiz-wrapper .grid_5.right
+{
+    float:right;
+    clear:right;
+    background-color: #CCC;
+    border-color:#CCC;
+    box-shadow: 0 2px 2px rgba(0,0,0,.5);
+}
+
+.webform-confirmation .quiz-wrapper .grid_5.even p,
+.webform-confirmation .quiz-wrapper .grid_5.right p
+{
+    margin:0;
+    padding-left: 30px;
+}
+
+.webform-confirmation .quiz-wrapper .grid_5.even p em,
+.webform-confirmation .quiz-wrapper .grid_5.right p em
+{
+    margin-left: -30px;
+    margin-right: 8px;
+}
+
+.webform-confirmation .quiz-wrapper .grid_5.even p:last-child
+{
+    margin-left:30px;
+}
+
+.webform-confirmation .quiz-wrapper .grid_5 .correct span,
+.webform-confirmation .quiz-wrapper .grid_5 .incorrect span
+{
+    padding-left:30px;
+}
+
+.webform-confirmation .quiz-wrapper .grid_5 .correct
+{
+    background: url(correct.png) no-repeat bottom left;
+    line-height: 24px;
+    display:block;
+}
+
+.webform-confirmation .quiz-wrapper .grid_5 .incorrect
+{
+    background: url(wrong.png) no-repeat;
+    line-height: 24px;
+    display:block;
+}
+
+.webform-confirmation .quiz-wrapper .grid_5.even,
+.webform-confirmation .quiz-wrapper .grid_5.right
+{
+    min-height:80px;
+    display:inline-block;
+    padding:5px 20px;
+    border-width:0 4px;
+    border-style: solid;
+    margin:0;
+}
+
+.webform-confirmation .quiz-wrapper:nth-child(3) .grid_5.even,
+.webform-confirmation .quiz-wrapper:nth-child(3) .grid_5.right
+{
+    min-height:142px;
+}
+
+.webform-confirmation .quiz-wrapper:nth-child(5) .grid_5.right
+{
+    margin-top:-16px
+}
+.webform-confirmation .quiz-wrapper:nth-child(6) .grid_5.right
+{
+    margin-top:-21px
+}
+
+.webform-confirmation .quiz-wrapper .grid_5.first
+{
+    border-width: 4px 4px 0;
+    border-radius: 8px 8px 0 0;
+}
+
+.webform-confirmation .quiz-wrapper .grid_5.last
+{
+    border-width: 0 4px 4px;
+    border-radius: 0 0 8px 8px;
+}
+
+.webform-confirmation em strong
+{
+    font-size:24px;
+    color:#FF9900;
+    font-weight: bold;
+    margin:4px;
+}
+
+.webform-confirmation h3
+{
+    margin-bottom:20px;
+}
+
 @media all and (max-width: 1250px)
 {
     #getting-started
@@ -208,7 +382,87 @@ html,
 
 }
 
-@media all and (max-width:980px)
+@media all and (max-width: 980px)
 {
+    .webform-confirmation .quiz-wrapper
+    {
+        clear:both;
+    }
 
+    .webform-confirmation .quiz-wrapper .grid_5
+    {
+        margin-top:0 !important;
+        display:block !important;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        float:none !important;
+        width:auto !important;
+    }
+
+    #study-quiz .webform-confirmation .mobile-only
+    {
+        display:block;
+    }
+
+    #study-quiz .webform-confirmation .full-only
+    {
+        display:none;
+    }
+
+    .webform-confirmation .quiz-wrapper .grid_5.even.last,
+    .webform-confirmation .quiz-wrapper .grid_5.right.first
+    {
+        border-radius:0px;
+    }
+
+    .webform-confirmation div:first-child .grid_5.right
+    {
+        clear:both;
+    }
+
+    #study-quiz .webform-confirmation > .grid_6,
+    #study-quiz .highlighted-link
+    {
+        text-align: center;
+        width: auto;
+    }
+
+    .page-dashboard #invite h3,
+    .page-dashboard #invite .like-us
+    {
+        margin-right:0 !important;
+    }
+
+    .page-dashboard.student #home li
+    {
+        width:auto;
+        height:auto;
+        min-height: 0;
+        margin:10px 0;
+    }
+}
+
+@media all and (max-width: 759px)
+{
+    #getting-started
+    {
+        padding:0;
+    }
+
+    .page-dashboard #home #getting-started label
+    {
+        font-size: 20px;
+        line-height: 26px;
+        background-position: -54px -2851px;
+    }
+
+    .page-dashboard #home #getting-started input[type="checkbox"]:checked + label
+    {
+        background-position: -54px -2736px;
+    }
+
+    #getting-started h3
+    {
+        font-size: 22px;
+    }
 }

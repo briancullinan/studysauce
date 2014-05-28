@@ -15,6 +15,7 @@
     background:url(images/award_background.png) no-repeat 50% 0 transparent;
     border-radius: 10px;
     padding:20px;
+    min-height: 400px;
 }
 
 .page-dashboard #new-award .badge
@@ -37,7 +38,7 @@
 .page-dashboard #new-award .description
 {
     margin-top: 300px;
-    display:inline-block;
+    display:inline-block !important;
     width: 100%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;

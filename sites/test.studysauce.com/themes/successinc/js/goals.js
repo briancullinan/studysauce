@@ -24,7 +24,8 @@ function plup_resize_input(selector) {
 
 jQuery(document).ready(function() {
 
-    var $ = jQuery;
+    var $ = jQuery,
+        goals = jQuery('#goals');
 
     var uploader = new plupload.Uploader({
         alt_field: 0,
@@ -148,17 +149,14 @@ jQuery(document).ready(function() {
         });
     };
 
-    jQuery('#goals').on('change', '.row select', function () {
+    goals.on('change', '.row select, .row textarea', function () {
         jQuery(this).parents('.row').goalsFunc();
     });
-    jQuery('#goals').on('change', '.row textarea', function () {
-        jQuery(this).parents('.row').goalsFunc();
-    });
-    jQuery('#goals').on('keyup', '.row textarea', function () {
+    goals.on('keyup', '.row textarea', function () {
         jQuery(this).parents('.row').goalsFunc();
     });
 
-    jQuery('#goals').on('click', 'a[href="#edit-reward"]', function (evt) {
+    goals.on('click', 'a[href="#edit-reward"]', function (evt) {
         evt.preventDefault();
         var row = jQuery(this).parents('.row');
         row.addClass('edit').find('.field-name-field-read-only input').val(0);
@@ -166,13 +164,13 @@ jQuery(document).ready(function() {
         jQuery('#goals').addClass('edit-goal');
     });
 
-    jQuery('#goals').on('click', 'a[href="#cancel-incentive"]', function (evt) {
+    goals.on('click', 'a[href="#cancel-incentive"]', function (evt) {
         evt.preventDefault();
         jQuery(this).parents('.row').removeClass('edit');
         jQuery('#goals').removeClass('edit-goal').scrollintoview();
     });
 
-    jQuery('#goals').on('click', 'a[href="#claim"]', function (evt) {
+    goals.on('click', 'a[href="#claim"]', function (evt) {
         evt.preventDefault();
         jQuery('#goals').addClass('achievement-only');
         jQuery('#goals').scrollintoview();
@@ -181,7 +179,7 @@ jQuery(document).ready(function() {
         jQuery('#goals-brag').addClass('gid' + gid);
     });
 
-    jQuery('#goals').on('click', 'a[href="#brag-done"]', function (evt) {
+    goals.on('click', 'a[href="#brag-done"]', function (evt) {
         evt.preventDefault();
         var brag = jQuery('#goals-brag'),
             gid = (/gid([0-9]+)(\s|$)/ig).exec(brag.attr('class'))[1],
@@ -222,7 +220,7 @@ jQuery(document).ready(function() {
                });
     });
 
-    jQuery('#goals').on('click', 'a[href="#save-incentive"]', function (evt) {
+    goals.on('click', 'a[href="#save-incentive"]', function (evt) {
         evt.preventDefault();
         var row = jQuery(this).parents('.row');
         if(row.is('.valid'))
@@ -283,7 +281,7 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery('#goals .row').goalsFunc();
+    goals.find('.row').goalsFunc();
 
 });
 

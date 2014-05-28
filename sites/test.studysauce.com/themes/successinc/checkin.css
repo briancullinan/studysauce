@@ -2,6 +2,7 @@
 .page-dashboard #checkin p.classes
 {
     text-align: center;
+    max-width: 500px;
 }
 
 .page-dashboard #checkin .flight-checklist
@@ -9,10 +10,12 @@
     float: right;
 }
 
-.page-dashboard #checkin .clock
+.page-dashboard #checkin .clock,
+.page-dashboard #checkin .classes
 {
-    margin-bottom:40px;
-    float: right;
+    width: 50%;
+    display: inline-block;
+    margin: 0;
 }
 
 .page-dashboard #sds-messages > div h2
@@ -411,6 +414,12 @@
     display:none !important;
 }
 
+.page-dashboard .page #checkin p.classes.empty
+{
+    height:400px;
+    overflow: hidden;
+}
+
 @media all and (min-width: 1250px)
 {
     .page-dashboard #checkin p.classes
@@ -459,8 +468,6 @@
 
     .page-dashboard #checkin .clock
     {
-        float:left;
-        margin-bottom: 20px;
     }
 
     .page-dashboard #checkin .clock h3
@@ -471,10 +478,20 @@
 }
 @media all and (max-width: 759px)
 {
-    .page-dashboard #checkin .clock
+
+    .page-dashboard .page #checkin p.classes.empty,
+    .page-dashboard.parent .page #checkin p.classes
     {
+        height: 150px;
+        overflow: hidden;
+    }
+
+    .page-dashboard #checkin .clock,
+    .page-dashboard #checkin .classes
+    {
+        display:block;
         width:auto;
-        float:none;
+        margin: 20px auto;
     }
 }
 

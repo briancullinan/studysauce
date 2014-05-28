@@ -23,7 +23,7 @@ function studysauce_checkin()
         if(isset($_POST['touchedMusic']))
             $node->field_touched_music['und'][0]['value'] = 1;
 
-        if(isset($node->field_classes['und'][0]['value']))
+        if(isset($node->field_classes['und'][0]['value']) && isset($_POST['eid']))
         {
             foreach($node->field_classes['und'] as $i => $class)
             {
@@ -78,7 +78,7 @@ function studysauce_checkin()
         'total' => $total,
         'hours' => $hours,
         'awards' => $awards,
-        'eid' => $_POST['eid']
+        'eid' => isset($_POST['eid']) ? $_POST['eid'] : null
     ));
     drupal_exit();
 }

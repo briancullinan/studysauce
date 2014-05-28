@@ -439,13 +439,6 @@ body.page-home #scr .grid_6:nth-of-type(5)
     padding:0px;
 }
 
-.page-dashboard .page #checkin p.classes.empty,
-.page-dashboard.parent .page #checkin p.classes
-{
-    height: 150px !important;
-    overflow: hidden;
-}
-
 #fancybox-close
 {
     right: 0 !important;

@@ -17,13 +17,18 @@
 {
     position:fixed;
     list-style: none none;
-    margin: 115px 0 0;
+    margin: 76px 0 0;
     padding: 0;
     top:0;
     z-index: 99;
     overflow-y: scroll;
     overflow-x: hidden;
     max-height: 500px;
+}
+
+.page-dashboard.admin-menu #main-menu > div > ul
+{
+    margin-top:105px;
 }
 
 .page-dashboard #main-menu li
@@ -64,7 +69,10 @@
 .page-dashboard.premium-only #home,
 .page-dashboard.tips-time-only #home,
 .page-dashboard.tips-env-only #home,
-.page-dashboard.tips-strategy-only #home
+.page-dashboard.tips-strategy-only #home,
+.page-dashboard.userlist-only #home,
+.page-dashboard.account-only #userlist,
+.page-dashboard.uid-only #userlist
 {
     display:none;
 }
@@ -86,6 +94,7 @@
 .page-dashboard.tips-time-only #tips-time,
 .page-dashboard.tips-env-only #tips-env,
 .page-dashboard.tips-strategy-only #tips-strategy,
+.page-dashboard #userlist,
 
 .page-dashboard.awards-only #badges,
 .page-dashboard #checkin.checklist-only #checklist,
@@ -148,6 +157,18 @@
     width:60px;
 }
 
+.page-dashboard #main-menu ul ul span
+{
+    background: none;
+    height: auto;
+    display: inline-block;
+    margin: 0;
+    vertical-align: middle;
+    line-height: 22px;
+    overflow: visible;
+    width: auto;
+}
+
 .page-dashboard #main-menu a.skrollable-between
 {
     z-index:100;
@@ -200,8 +221,6 @@
     margin:0;
     float:none;
     max-height:0;
-    transition-property: max-height;
-    transition: all 1s ease-in-out;
     overflow: hidden;
 }
 
@@ -225,15 +244,35 @@
 {
     overflow: visible;
     max-height:500px;
-    transition-property: max-height;
-    transition: all 1s ease-in-out;
 }
 
 @media all and (max-width: 759px) {
 
+    .page-dashboard #main-menu a.skrollable-between
+    {
+        border-left: none;
+        border-bottom: 3px solid #ff9900;
+        height: 59px;
+    }
+
     .page-dashboard #main-menu ul ul li:first-child a
     {
         margin-top:0;
+    }
+
+    .page-dashboard #main-menu ul ul li
+    {
+        vertical-align: middle;
+        height: 62px;
+    }
+
+    .page-dashboard #main-menu ul ul li a
+    {
+        vertical-align: middle;
+        line-height: 60px;
+        display:block;
+        width:100%;
+        height:100%;
     }
 
     .page-dashboard #main-menu ul
@@ -250,10 +289,10 @@
         display:block;
     }
 
-    .page-dashboard.admin-menu #main-menu ul
+    .page-dashboard.admin-menu #main-menu > div > ul
     {
         padding-top: 0;
-        margin-top:79px;
+        margin-top:85px;
     }
 
     .page-dashboard.admin-menu #main-menu ul ul,
@@ -261,12 +300,37 @@
     {
         margin-top: 0;
         width: 600%;
-        margin-left: -100%;
+        margin-left: 100%;
+        position: relative;
+        display:none;
+    }
+
+    .page-dashboard #main-menu li ul
+    {
+    }
+
+    .page-dashboard #main-menu li.last-open > a
+    {
+        border-bottom: 3px solid #FF9900;
+        height: 59px;
+    }
+
+    .page-dashboard #main-menu li.last-open ul
+    {
+        z-index: 101;
+        display:block;
+        overflow: visible;
+        border-top: 1px solid #fff;
+    }
+
+    .page-dashboard #main-menu ul li:nth-child(2) ul
+    {
+        margin-left:-100%;
     }
 
     .page-dashboard #main-menu ul li:nth-child(3) ul
     {
-        margin-left: -200%;
+        margin-left:-200%;
     }
 
     .page-dashboard #main-menu ul li:nth-child(3) ul li
@@ -330,15 +394,10 @@
         font-size: 11px !important;
     }
 
-    .page-dashboard #main-menu a.skrollable-between
-    {
-        margin:0 !important;
-    }
-
     .page-dashboard #main-menu span
     {
-        width:auto !important;
-        display:block !important;
+        width:auto;
+        display:block;
     }
 
 }
@@ -346,6 +405,17 @@
 
 @media all and (max-width: 480px)
 {
+
+    .page-dashboard #main-menu li.last-open > a,
+    .page-dashboard #main-menu a.skrollable-between
+    {
+        height: 56px;
+    }
+
+    .page-dashboard #main-menu li
+    {
+        height: 59px;
+    }
     .page-dashboard #main-menu a
     {
         overflow:hidden;
@@ -360,7 +430,7 @@
 
     .page-dashboard #main-menu a[href="#home"] span
     {
-        background-position: 50% -353px;
+        background-position: 50% -352px;
     }
 
     .page-dashboard #main-menu a[href="#environment"] span
@@ -393,14 +463,9 @@
         margin-top: 41px;
     }
 
-    .page-dashboard.admin-menu #main-menu ul
+    .page-dashboard.admin-menu #main-menu > div > ul
     {
-        margin-top: 70px;
+        margin-top: 72px;
     }
 
-    .page-dashboard.admin-menu #main-menu ul ul,
-    .page-dashboard #main-menu ul ul
-    {
-        margin-top:0;
-    }
 }

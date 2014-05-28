@@ -3,10 +3,25 @@
 global $user;
 
 $lastOrder = _studysauce_orders_by_uid($user->uid);
-list($events, $node, $classes, $entities) = studysauce_get_events($lastOrder ? $lastOrder->created : null);
+//if($lastOrder)
+    list($events, $node, $classes, $entities) = studysauce_get_events($lastOrder ? $lastOrder->created : null);
+/*else
+{
+    $sample = theme('studysauce-plan-sample');
+    $encoded = preg_replace('/<\/?script>/i', '', $sample);
+    list($events, $classes, $entities) = json_decode($encoded);
+    $entities = array_map(function ($x) {
+        return (object) array('field_study_type' => array('und' => array(0 => array('value' => $x)))); }, (array)$entities);
+    $classes = (array) $classes;
+    foreach($classes as $i => $c)
+        $classes[intval($i)] = $c;
+    $events = array_map(function ($x) { return (array)$x; }, (array) $events);
+}
+*/
+
 $strategies = studysauce_get_strategies();
 
-if ($lastOrder && isset($user->field_parent_student['und'][0]['value']) && $user->field_parent_student['und'][0]['value'] == 'student'):
+if (!empty($lastOrder) && isset($user->field_parent_student['und'][0]['value']) && $user->field_parent_student['und'][0]['value'] == 'student'):
 
     // on mobile only show event between this week, hide everything else unless the user clicks View historic
     $startWeek = strtotime(date("Y-m-d", strtotime('this week', time()))) - 86400;
@@ -17,8 +32,9 @@ if ($lastOrder && isset($user->field_parent_student['und'][0]['value']) && $user
     <h2><?php print (isset($user->field_first_name['und'][0]['value']) ? ('Personalized study plan for ' . $user->field_first_name['und'][0]['value']) : 'Your personalized study plan'); ?></h2>
     <div id="calendar" class="full-only"></div>
     <script type="text/javascript">
-        window.planEvents = <?php print json_encode($events); ?>;
-        window.strategies = <?php print json_encode($strategies); ?>
+
+        window.planEvents = <?php print json_encode($events); ?>; // convert events array to object to keep track of keys better
+        window.strategies = <?php print json_encode($strategies); ?>;
     </script>
     <div class="sort-by">
         <label>Sort by: </label>
@@ -35,6 +51,8 @@ if ($lastOrder && isset($user->field_parent_student['und'][0]['value']) && $user
     $classes['f'] = 'Free study';
     foreach ($events as $eid => $event)
     {
+        if($eid == '') continue;
+
         // TODO: should we allow notes for class events?
         if(strpos($event['className'], 'class-event') !== false ||
             strpos($event['className'], 'holiday-event') !== false)
@@ -53,7 +71,7 @@ if ($lastOrder && isset($user->field_parent_student['und'][0]['value']) && $user
             $classI = $matches[1];
             $cid = array_keys($classes)[$classI];
         }
-        $session = (isset($entities[$cid]->field_study_type['und'][0]['value'])
+        $session = (isset($entities[$cid]->field_study_type['und'][0]['value']) && strpos($event['className'], 'deadline-event') === false
             ? ($entities[$cid]->field_study_type['und'][0]['value'] == 'memorization'
                 ? 'spaced'
                 : ($entities[$cid]->field_study_type['und'][0]['value'] == 'reading'
@@ -61,7 +79,7 @@ if ($lastOrder && isset($user->field_parent_student['und'][0]['value']) && $user
                     : ($entities[$cid]->field_study_type['und'][0]['value'] == 'conceptual'
                         ? 'teach'
                         : '')))
-            : ($classI == ''
+            : ($classI == '' || strpos($event['className'], 'deadline-event') !== false
                 ? 'other'
                 : ''));
 
@@ -89,7 +107,8 @@ if ($lastOrder && isset($user->field_parent_student['und'][0]['value']) && $user
         print ('cid' . $cid); ?> <?php
         print ('default-' . $session); ?>" id="eid-<?php print $eid; ?>">
             <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
-                <div class="read-only"><span class="class">&nbsp;</span><?php print htmlspecialchars($classes[$cid], ENT_QUOTES); ?></div>
+                <span class="class">&nbsp;</span>
+                <div class="read-only"><?php print htmlspecialchars($classes[$cid], ENT_QUOTES); ?></div>
             </div>
             <div class="field-type-text field-name-field-assignment field-widget-text-textfield form-wrapper">
                 <div class="read-only"><?php print htmlspecialchars($title, ENT_QUOTES); ?></div>

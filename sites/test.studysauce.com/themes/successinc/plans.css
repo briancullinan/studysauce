@@ -14,7 +14,7 @@
     bottom:0;
     right:0;
     background: url(images/plan_background.png) no-repeat 50% 50% #FFFFFF;
-    background-size: 100% auto;
+    background-size: cover;
 }
 
 .page-dashboard #plan #calendar
@@ -127,6 +127,7 @@
 .page-dashboard #plan .mini-checkin .flip-clock-wrapper
 {
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     width: auto;
 }
 
@@ -150,14 +151,16 @@
 {
     display: block;
     position: fixed;
-    left: 50%;
-    margin-left: 365px;
-    width:100px;
+    left: 100%;
+    margin-left: -250px;
+    width: 100px;
     background: url(images/arrow-up.png) no-repeat 0 0 transparent;
-    bottom:50px;
+    bottom: 50px;
     text-align: center;
-    padding-top:50px;
+    padding-top: 14px;
     z-index: 9999;
+    padding-bottom: 6px;
+    color: #ffffff;
 }
 
 .page-dashboard #plan .flip-clock-wrapper ul li a div div.inn
@@ -196,6 +199,8 @@
     display:none;
     padding-right: 165px;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    white-space: normal !important;
 }
 
 .page-dashboard #plan .selected .strategy-other
@@ -226,6 +231,7 @@
     display: inline-block;
     width: 33%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     vertical-align: top;
 }
 
@@ -239,6 +245,7 @@
 {
     width: 100%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .page-dashboard #plan .strategy-notes
@@ -246,6 +253,7 @@
     display: inline-block;
     width: 66%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     vertical-align: top;
 }
 
@@ -254,6 +262,7 @@
     display: inline-block;
     width: 66%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     vertical-align: top;
 }
 
@@ -262,6 +271,7 @@
     display: inline-block;
     width: 33%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     vertical-align: top;
 }
 
@@ -322,6 +332,7 @@
     border-radius: 5px;
     border:3px solid #555555;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .strategy-upload .drag-main
@@ -366,7 +377,7 @@
     display: none !important;
 }
 
-.page-dashboard #plan .field-name-field-class-name .read-only span,
+.page-dashboard #plan .field-name-field-class-name span,
 .page-dashboard #plan .class-name span {
     display: inline-block;
     height: 22px;
@@ -376,8 +387,9 @@
     text-align: center;
     font-size: 14px;
     line-height: 15px;
-    margin: -3px 10px 0 0;
+    margin: -3px 0 0 -35px;
     vertical-align: top;
+    float:left;
 }
 
 .page-dashboard #plan .class .class,
@@ -551,15 +563,23 @@
     clear: both;
 }
 
-.page-dashboard #plan .field-name-field-class-name
+.page-dashboard #plan .row .field-name-field-class-name
 {
-    min-width: 250px;
     position: absolute;
     width: 25%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     top:0;
-    padding-left:35px;
+    padding-left:70px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
+.page-dashboard #plan .row .field-name-field-class-name .read-only
+{
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
 }
 
 .page-dashboard #plan .field-name-field-assignment
@@ -567,6 +587,7 @@
     width: 100%;
     padding:5px 25% 5px 25%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .page-dashboard #plan .field-name-field-percent
@@ -577,6 +598,7 @@
     right:10%;
     left:auto;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     top:0;
 }
 
@@ -589,6 +611,7 @@
     right:0;
     left:auto;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     top:0;
 }
 

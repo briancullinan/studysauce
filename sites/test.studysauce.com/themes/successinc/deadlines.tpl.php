@@ -94,10 +94,6 @@
             <label class="option" for="dates-completed">Completed </label>
         </div>
     </div>
-    <a href="#cancel-dates" class="more">Cancel</a>
-    <div class="highlighted-link">
-        <a href="#save-dates" class="more">Save</a>
-    </div>
 </div>
 <?php
 global $user;
@@ -131,6 +127,7 @@ if (!empty($entities['node'])) {
         });
         $headStr = '';
         $first = true;
+        $firstVisible = true;
         foreach ($entities as $eid => $reminder)
         {
             if(!isset($reminder->field_due_date['und'][0]['value']))
@@ -146,7 +143,8 @@ if (!empty($entities['node'])) {
             $classI = array_search($reminder->field_class_name['und'][0]['value'], array_values($classes));
             ?>
             <div class="row <?php
-            print ($first && !($first = false) ? 'first' : ''); ?> <?php
+            print (($first && !($first = false)) ||
+                    ($time >= strtotime(date('Y/m/d')) - 86400 && $firstVisible && !($firstVisible = false)) ? 'first' : ''); ?> <?php
             print ($time < strtotime(date('Y/m/d')) - 86400 ? 'hide' : ''); ?>" id="eid-<?php print $eid; ?>">
                 <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
                     <div class="read-only"><span class="class<?php print $classI; ?>">&nbsp;</span><?php print htmlspecialchars($reminder->field_class_name['und'][0]['value'], ENT_QUOTES); ?></div>
@@ -247,10 +245,6 @@ if (!empty($entities['node'])) {
                         <label class="option" for="dates-completed">Completed </label>
                     </div>
                 </div>
-                <a href="#cancel-dates" class="more">Cancel</a>
-                <div class="highlighted-link">
-                    <a href="#save-dates" class="more">Save</a>
-                </div>
             </div>
         <?php
 
@@ -272,4 +266,6 @@ if (count($classes) == 0) :
         });
     </script>
 <?php endif; ?>
-<p style="clear: both;margin:0;"><a href="#schedule"><span>Edit schedule</span></a></p>
+<p style="" class="highlighted-link">
+    <a href="#schedule">Edit schedule</a><a href="#save-dates" class="more">Save</a>
+</p>

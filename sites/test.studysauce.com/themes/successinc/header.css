@@ -36,6 +36,12 @@
     background:#0099BE;
     white-space: nowrap;
     height: 56px;
+    top:0;
+}
+
+.page-dashboard.admin-menu .header-wrapper
+{
+    top:29px;
 }
 
 /* Logo - Site name*/
@@ -61,6 +67,7 @@
     clear:left;
     text-align: left;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     padding-left:20px;
     top: 0;
     left:0;
@@ -81,6 +88,7 @@
     right:0;
     left:auto;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     padding-right:30px;
     top: 0;
 }
@@ -94,6 +102,7 @@
     text-align: center;
     white-space: nowrap;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 #partner-message span

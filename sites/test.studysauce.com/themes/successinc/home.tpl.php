@@ -66,6 +66,12 @@ if (!empty($entities['node']))
 // check if goals is filled out
 list($b) = _studysauce_unsponsored_goals();
 
+if(isset($user->field_partners['und'][0]['value']))
+{
+    $partner = entity_load('field_collection_item', array($user->field_partners['und'][0]['value']));
+    $partner = $partner[$user->field_partners['und'][0]['value']];
+}
+
 ?>
 <div id="study-quiz">
     <div>
@@ -73,8 +79,6 @@ list($b) = _studysauce_unsponsored_goals();
         $quiz = node_load(17);
         webform_node_view($quiz, 'full');
         print theme_webform_view($quiz->content); ?>
-        <a href="#" onclick="jQuery('#home').removeClass('study-quiz-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
-        <p style="margin-bottom:0;line-height: 1px; clear:both;">&nbsp;</p>
     </div>
 </div>
 <div id="parent_home" class="parents_only">
@@ -117,7 +121,7 @@ list($b) = _studysauce_unsponsored_goals();
                 count($quizSubmissions) &&
                 isset($node->field_grades['und'][0]['value']) &&
                 isset($b->field_hours['und'][0]['value']) &&
-                isset($user->field_partners['und'][0]['value']) &&
+                isset($partner->field_first_name['und'][0]['value']) &&
                 isset($strategies->field_spaced_strategies['und'][0]['value']) &&
                 isset($strategies->field_active_strategies['und'][0]['value']) &&
                 isset($strategies->field_teach_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
@@ -135,10 +139,10 @@ list($b) = _studysauce_unsponsored_goals();
                 <label for="home-schedule"><a href="#schedule">Enter class schedule</a></label><br />
                 <input id="home-reminders" name="home-reminders" type="checkbox" readonly="readonly"
                     <?php print (studysauce_any_dates() ? 'checked="checked"' : ''); ?> />
-                <label for="home-reminders"><a href="#deadlines">Set up reminders for key dates</a></label><br />
+                <label for="home-reminders"><a href="#deadlines">Set up deadline reminders</a></label><br />
                 <input id="home-plan" name="home-plan" type="checkbox" readonly="readonly"
                     <?php print (!empty($lastOrder) ? 'checked="checked"' : ''); ?> />
-                <label for="home-plan"><a href="#premium">Get a personalized study plan (Premium)</a></label><br />
+                <label for="home-plan"><a href="#premium">Get a personalized study plan <sup class="premium">Premium</sup></a></label><br />
                 <input id="home-checkin" name="home-checkin" type="checkbox" readonly="readonly"
                     <?php print (count($checkins) > 0 ? 'checked="checked"' : ''); ?> />
                 <label for="home-checkin"><a href="#checkin">Check in when you study</a></label>
@@ -172,7 +176,7 @@ list($b) = _studysauce_unsponsored_goals();
                     <?php print (isset($b->field_hours['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-goals"><a href="#goals">Create your study goals</a></label><br />
                 <input id="home-partner" name="home-partner" type="checkbox" readonly="readonly"
-                    <?php print (isset($user->field_partners['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
+                    <?php print (isset($partner->field_first_name['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-partner"><a href="#partner">Invite an accountability partner</a></label><br />
                 <input id="home-spaced" name="home-spaced" type="checkbox" readonly="readonly"
                     <?php print (isset($strategies->field_spaced_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />

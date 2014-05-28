@@ -72,9 +72,10 @@
     background:url("images/menu_icons_48.png") no-repeat scroll rgba(0, 0, 0, 0);
     background-position:10px -576px;
     padding: 12px 10px 14px 68px;
-    width:23%;
+    width:27%;
     margin-top:0;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-type
@@ -185,25 +186,28 @@
 
 .page-dashboard #goals .field-name-field-hours,
 .page-dashboard #goals .field-name-field-gpa,
-.page-dashboard #goals .field-name-field-grade,
-.page-dashboard #goals .field-name-field-reward
+.page-dashboard #goals .field-name-field-grade
 {
     margin:0;
-    width:38%;
+    width:29%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .page-dashboard #goals .field-name-field-reward
 {
+    margin:0;
+    width:43%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
     padding-right:100px;
     margin-right:-100px;
 }
 
-.page-dashboard #goals .edit .field-name-field-hours,
-.page-dashboard #goals .edit .field-name-field-gpa,
-.page-dashboard #goals .edit .field-name-field-grade,
-.page-dashboard #goals .edit .field-name-field-reward
+.page-dashboard #goals .row.edit .field-name-field-reward
 {
+    padding-right:200px;
+    margin-right:-200px;
 }
 
 .page-dashboard #goals .field-name-field-type,
@@ -629,7 +633,7 @@
 .plup-list
 {
     list-style-type: none;
-    margin: 0;
+    margin: 20px;
     padding: 0;
 }
 
@@ -938,6 +942,7 @@ body.file-drag .group-achievement .plup-filelist
     margin:0;
     display:block;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 @media all and (min-width: 1250px)
@@ -1008,7 +1013,11 @@ body.file-drag .group-achievement .plup-filelist
 
 @media all and (max-width: 980px)
 {
-
+    .page-dashboard #goals .row:first-child .highlighted-link,
+    .page-dashboard #goals .row:first-child a[href="#cancel-incentive"]
+    {
+        margin-top: 20px;
+    }
 
     .page-dashboard #goals .field-name-field-reward
     {
@@ -1019,6 +1028,11 @@ body.file-drag .group-achievement .plup-filelist
     .page-dashboard #goals .row .highlighted-link
     {
         display: block;
+    }
+
+    .page-dashboard #goals .row.edit .highlighted-link
+    {
+        display: inline-block;
     }
 
     .page-dashboard #goals .row
@@ -1090,6 +1104,8 @@ body.file-drag .group-achievement .plup-filelist
     .page-dashboard #goals #read-more-incentives .grid_6
     {
         display:none;
+        width:auto;
+        padding:0;
     }
 
     .page-dashboard #goals #read-more-incentives .grid_6 h3,
@@ -1172,6 +1188,7 @@ body.file-drag .group-achievement .plup-filelist
         width: auto;
         display:block;
         box-sizing: content-box;
+        -moz-box-sizing: border-box;
     }
 
     .page-dashboard #goals .row:first-child .field-name-field-type

@@ -1,3 +1,10 @@
+.page-path-about-us .content
+{
+    overflow: hidden;
+    position: relative;
+}
+
+.page-path-about-us .content img,
 #about-us img
 {
     position: absolute;
@@ -8,9 +15,18 @@
     margin-right: -15%;
     display: block;
     max-width: 75%;
-    left:0;
+    left:auto;
 }
 
+.page-path-about-us #main
+{
+    position:relative;
+}
+
+.page-path-about-us h3:first-of-type,
+.page-path-about-us h2:nth-of-type(3),
+.page-path-about-us h2:nth-of-type(3) + *,
+.page-path-about-us h2:first-of-type,
 #about-us h3:first-of-type,
 #about-us h2:nth-of-type(3),
 #about-us h2:nth-of-type(3) + *,
@@ -20,6 +36,10 @@
     text-align: center;
 }
 
+.page-path-about-us h2:nth-of-type(3),
+.page-path-about-us h2:nth-of-type(2),
+.page-path-about-us h2:first-of-type,
+.page-path-about-us h3:first-of-type,
 #about-us h2:nth-of-type(3),
 #about-us h2:nth-of-type(2),
 #about-us h2:first-of-type,
@@ -28,6 +48,8 @@
     margin-bottom:30px;
 }
 
+.page-path-about-us p:first-of-type,
+.page-path-about-us h2:nth-of-type(2),
 #about-us p:first-of-type,
 #about-us h2:nth-of-type(2)
 {
@@ -35,11 +57,13 @@
     text-align: center;
 }
 
+.page-path-about-us p:first-of-type,
 #about-us p:first-of-type
 {
     text-align: justify;
 }
 
+.page-path-about-us .pane-content,
 #about-us .pane-content
 {
     overflow: hidden;
@@ -48,11 +72,18 @@
 @media all and (max-width:980px)
 {
 
+    .page-path-about-us .content img,
     #about-us img
     {
         display:none;
     }
 
+    .page-path-about-us p:first-of-type,
+    .page-path-about-us h2:nth-of-type(2),
+    .page-path-about-us h3:first-of-type,
+    .page-path-about-us h2:nth-of-type(3),
+    .page-path-about-us h2:nth-of-type(3) + *,
+    .page-path-about-us h2:first-of-type,
     #about-us p:first-of-type,
     #about-us h2:nth-of-type(2),
     #about-us h3:first-of-type,

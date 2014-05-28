@@ -2,13 +2,17 @@
 
 
 
-function _studysauce_unsponsored_goals()
+function _studysauce_unsponsored_goals($account = null)
 {
-    global $user;
+    if($account == null)
+    {
+        global $user;
+        $account = user_load($user->uid);
+    }
     $query = new EntityFieldQuery();
     $entities = $query->entityCondition('entity_type', 'node')
         ->propertyCondition('type', 'incentive')
-        ->propertyCondition('title', $user->mail)
+        ->propertyCondition('title', $account->mail)
         ->propertyCondition('status', 1)
         ->range(0,1)
         ->execute();
@@ -119,12 +123,6 @@ function studysauce_save_goals()
             $entity->field_gpa[LANGUAGE_NONE][0]['value'] = $_POST['value'];
         }
         $entity->save();
-
-        if(!isset($thisEid))
-        {
-            $node = node_submit($node); // Prepare node for saving
-            node_save($node);
-        }
     }
 
     if(isset($_POST['claim']) && isset($_POST['message']))
@@ -162,6 +160,8 @@ function studysauce_save_goals()
 
 
     }
+
+    node_save($node);
 
     // load parent sponsored node
     /*
@@ -256,10 +256,15 @@ function studysauce_save_goals()
     ));
 }
 
-function _studysauce_get_achievements()
+function _studysauce_get_achievements($account = null)
 {
+    if($account == null)
+    {
+        global $user;
+        $account = user_load($user->uid);
+    }
     // TODO: load from the node instead of the form?
-    $parent = studysauce_get_shared_goals();
+    $parent = studysauce_get_shared_goals($account);
     if(isset($parentIncentive) && $parentIncentive !== false)
     {
         $i = 0;
@@ -294,7 +299,7 @@ function _studysauce_get_achievements()
     }
 
     $achievements = array();
-    $goals = _studysauce_unsponsored_goals();
+    $goals = _studysauce_unsponsored_goals($account);
     $i = 0;
     foreach($goals as $i => $goal)
     {
@@ -335,20 +340,23 @@ function _studysauce_get_achievements()
     return $result . '<p style="margin:0;clear:both;line-height:0;">&nbsp;</p>';
 }
 
-function studysauce_get_shared_goals()
+function studysauce_get_shared_goals($account = null)
 {
-    global $user;
-    $user = user_load($user->uid);
-    if(!empty($user->field_invites) && !empty($user->field_invites[LANGUAGE_NONE]))
+    if($account == null)
     {
-        foreach($user->field_invites[LANGUAGE_NONE] as $i => $invite)
+        global $user;
+        $account = user_load($user->uid);
+    }
+    if(!empty($account->field_invites) && !empty($account->field_invites[LANGUAGE_NONE]))
+    {
+        foreach($account->field_invites[LANGUAGE_NONE] as $i => $invite)
         {
             $entity = entity_load('field_collection_item', array($invite['value']));
             $entity = $entity[$invite['value']];
             if(isset($entity->field_activated[LANGUAGE_NONE][0]['value']) &&
                 isset($entity->field_email[LANGUAGE_NONE][0]['value']) &&
                 $entity->field_activated[LANGUAGE_NONE][0]['value'] &&
-                $entity->field_email[LANGUAGE_NONE][0]['value'] != $user->mail)
+                $entity->field_email[LANGUAGE_NONE][0]['value'] != $account->mail)
             {
                 $query = new EntityFieldQuery();
                 $incentives = $query->entityCondition('entity_type', 'node')
@@ -370,7 +378,7 @@ function studysauce_get_shared_goals()
         $inviteQuery = new EntityFieldQuery();
         $invites = $inviteQuery->entityCondition('entity_type', 'field_collection_item')
             ->propertyCondition('field_name', 'field_invites')
-            ->fieldCondition('field_email', 'value', $user->mail)
+            ->fieldCondition('field_email', 'value', $account->mail)
             ->fieldCondition('field_activated', 'value', 1)
             ->execute();
 

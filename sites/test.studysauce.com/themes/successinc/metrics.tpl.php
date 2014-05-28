@@ -1,6 +1,15 @@
 <?php
-$classesNames = _studysauce_get_schedule_classes();
-list($times, $rows, $total, $hours) = _studysauce_get_metrics();
+drupal_add_css(drupal_get_path('theme', 'successinc') .'/metrics.css');
+drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/metrics.js');
+
+if(!isset($account))
+{
+    global $user;
+    $account = user_load($user->uid);
+}
+
+$classesNames = _studysauce_get_schedule_classes($account);
+list($times, $rows, $total, $hours) = _studysauce_get_metrics($account);
 
 if(empty($times)):
 ?>

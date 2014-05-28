@@ -473,13 +473,6 @@ body.page-home #scr .grid_6,
     margin:0 20px !important;
 }
 
-.page-dashboard .pane-content .grid_6
-{
-    width:400px !important;
-    margin-left:20px !important;
-    margin-right:20px !important;
-}
-
 .page-home #scr .grid_6 h3
 {
     margin-top:50px !important;

@@ -80,7 +80,7 @@
 .page-dashboard #goals .row > *,
 .page-dashboard #deadlines .row > *
 {
-    white-space: normal;
+    white-space: nowrap;
     vertical-align: top;
 }
 
@@ -217,16 +217,17 @@
     text-align: center;
     display: inline-block;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     width: 14.28%;
     float: left;
     padding:0;
-    margin:3px 0 0 0;
+    margin:0.4em 0 0.4em 0;
     color:transparent;
 }
 
 .field-name-field-day-of-the-week .read-only span.checked
 {
-    background-position: 50% -2741px;
+    background-position: 50% -2740px;
 }
 
 .page-path-schedule .row .read-only label,
@@ -260,6 +261,7 @@
 .page-path-schedule .row.edit .field-name-field-recurring .form-type-checkboxes
 {
     display:block;
+    margin:0;
 }
 
 .page-path-schedule .row.edit .field-name-field-time .form-type-textfield
@@ -269,6 +271,7 @@
     margin: 0 -2px;
     padding: 0 2px;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .page-path-schedule .row.edit:first-child a[href="#cancel-class"],
@@ -288,6 +291,8 @@
 .page-path-schedule .row .field-name-field-class-name .read-only
 {
     padding: 5px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
@@ -335,6 +340,7 @@
     vertical-align: top;
     padding-right: 100px;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     margin-right: -100px;
 }
 
@@ -347,7 +353,7 @@
 .page-path-schedule .field-name-field-class-name
 {
     width: 20%;
-    min-width:160px;
+    min-width:150px;
     display:inline-block;
     vertical-align: top;
 }
@@ -355,7 +361,7 @@
 .page-path-schedule .field-name-field-day-of-the-week
 {
     width: 30%;
-    min-width:260px;
+    min-width:240px;
     display:inline-block;
     vertical-align: top;
     text-align: left;
@@ -538,13 +544,13 @@
 }
 */
 
-@media all and (max-width:980px)
+@media all and (max-width:1100px)
 {
 
     .page-path-schedule .row
     {
         white-space: normal;
-        margin: 1em 0;
+        margin: 3em 0;
     }
 
     .page-path-schedule .row.edit > div > .form-item > label,
@@ -596,6 +602,8 @@
         min-width: 0;
         clear: left;
         box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        white-space: normal;
     }
 
     .page-path-schedule .row:not(.edit) .field-name-field-time
@@ -607,7 +615,7 @@
     .page-path-schedule .field-name-field-time > div:first-child,
     .page-path-schedule .field-name-field-time > div:nth-child(2),
     .page-path-schedule .field-name-field-time > div:nth-child(3),
-    .page-path-schedule .field-name-field-time > div:last-child
+    .page-path-schedule .field-name-field-time > div:nth-child(4)
     {
         width:50%;
     }
@@ -617,22 +625,20 @@
         clear:both;
     }
 
-    .page-path-schedule .field-add-more-submit span
-    {
-        position:relative;
-        float:none;
-        top:-14px;
-        margin: 0 10px -10px 10px;
-    }
 }
 
 
 @media all and (max-width:759px)
 {
+    .page-path-schedule .field-name-field-time .read-only
+    {
+        display:block;
+        width:auto;
+    }
 
     .page-path-schedule .row.edit .field-name-field-time .form-type-textfield
     {
-        width:49%;
+        width:50%;
     }
 }
 

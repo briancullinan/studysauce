@@ -1,4 +1,6 @@
 <?php
+drupal_add_css(drupal_get_path('theme', 'successinc') .'/goals.css');
+drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/goals.js');
 $studyConnections = studysauce_get_connections();
 ?>
 <div id="fb-root"></div>
@@ -12,8 +14,14 @@ $studyConnections = studysauce_get_connections();
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 </script>
-<?php global $user;
-$setup = studysauce_is_incentives_setup();
+<?php
+if(!isset($account))
+{
+    global $user;
+    $account = user_load($user->uid);
+}
+
+$setup = studysauce_is_incentives_setup($account);
 ?>
 <div
     class="step_<?php print $setup; ?> <?php print (empty($studyConnections) ? 'not-connected' : 'connected'); ?> <?php print (isset($parent) ? 'sponsored' : ''); ?>">
@@ -108,7 +116,7 @@ $setup = studysauce_is_incentives_setup();
 </div>
 
 <div id="non-sponsored">
-    <?php list($b, $m, $o) = _studysauce_unsponsored_goals(); ?>
+    <?php list($b, $m, $o) = _studysauce_unsponsored_goals($account); ?>
     <div class="row draggable odd <?php print (isset($b->item_id) ? ('gid' . $b->item_id) : ''); ?> <?php print (!isset($b->field_hours['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
         <div class="field-name-field-type"><strong>Study Hours</strong></div>
         <div class="field-type-list-integer field-name-field-hours field-widget-options-select form-wrapper">
@@ -344,7 +352,7 @@ $setup = studysauce_is_incentives_setup();
 <div id="achievements">
     <?php
     // TODO: make this a theme or something
-    print _studysauce_get_achievements();
+    print _studysauce_get_achievements($account);
     ?>
 </div>
 <div id="read-more-incentives">

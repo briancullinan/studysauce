@@ -38,7 +38,7 @@ jQuery(document).ready(function ($) {
         var row = jQuery(this).parents('.row'),
             that = row.find('select[name="strategy-select"]'),
             strategy = jQuery('#plan .strategy-' + that.val()).length == 0 // make sure this type of strategy still exists
-                ? (/default-([a-z]+)(\s|$)/ig).exec(row.attr('class'))[1]
+                ? (/default-([a-z]*)(\s|$)/ig).exec(row.attr('class'))[1]
                 : that.val(),
             eid = row.attr('id').substring(4),
             classname = row.find('.field-name-field-class-name .read-only').text().substring(1),
@@ -74,12 +74,15 @@ jQuery(document).ready(function ($) {
             }
             if(strategy == 'spaced')
             {
-                var dates = window.events[row.attr('id').substring(4)]['dates'];
-                var dateStr = dates.map(function ($d, $i) {
-                    return '<input type="checkbox" name="strategy-from-' + (604800 * $i) + '-' + eid + '" id="strategy-from-' + (604800 * $i) + '-' + eid + '" value="' + (604800 * $i) + '">' +
-                           '<label for="strategy-from-' + (604800 * $i) + '-' + eid + '">' + $d + '</label>';
-                }).join('<br />');
-                newStrategy.find('.strategy-review').append(dateStr);
+                var dates = window.planEvents[row.attr('id').substring(4)]['dates'];
+                if(typeof dates != 'undefined')
+                {
+                    var dateStr = dates.map(function ($d, $i) {
+                        return '<input type="checkbox" name="strategy-from-' + (604800 * $i) + '-' + eid + '" id="strategy-from-' + (604800 * $i) + '-' + eid + '" value="' + (604800 * $i) + '">' +
+                               '<label for="strategy-from-' + (604800 * $i) + '-' + eid + '">' + $d + '</label>';
+                    }).join('<br />');
+                    newStrategy.find('.strategy-review').append(dateStr);
+                }
                 if(typeof window.strategies != 'undefined' && typeof window.strategies[title] != 'undefined' &&
                    typeof window.strategies[title]['spaced'] != 'undefined')
                 {
@@ -357,14 +360,14 @@ jQuery(document).ready(function ($) {
                                 '.page-dashboard #plan .field-name-field-class-name,' +
                                 '.page-dashboard #plan .field-name-field-percent', function () {
         var row = $(this).parents('.row'),
-            strategy = (/default-([a-z]+)(\s|$)/ig).exec(row.attr('class'))[1],
+            strategy = (/default-([a-z]*)(\s|$)/ig).exec(row.attr('class'))[1],
             eid = row.attr('id').substring(4),
             cid = (/cid([0-9]+)(\s|$)/ig).exec(row.attr('class')),
             classname = row.find('.field-name-field-class-name .read-only').text().substring(1);
         row.toggleClass('selected');
 
         // add mini-checkin if class number is set
-        if(cid != null && row.find('.mini-checkin').length == 0)
+        if(cid != null && row.find('.mini-checkin').length == 0 && strategy != 'other')
         {
             var newMiniCheckin = jQuery('#plan .mini-checkin').first().clone();
             row.append(newMiniCheckin);
@@ -372,7 +375,8 @@ jQuery(document).ready(function ($) {
         }
 
         // add the default strategy
-        if(cid != null && row.find('.strategy-' + strategy).length == 0 && jQuery('#plan .strategy-' + strategy).length > 0)
+        if(cid != null && row.find('.strategy-' + strategy).length == 0 &&
+           jQuery('#plan .strategy-' + strategy).length > 0 && strategy != 'other')
         {
             var newStrategySelect = jQuery('#plan .field-select-strategy').first().clone();
             row.append(newStrategySelect);
@@ -387,7 +391,6 @@ jQuery(document).ready(function ($) {
         else
             row.find('.strategy-spaced:visible, .strategy-active:visible, .strategy-teach:visible, .strategy-other:visible').first().scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
     });
-
 
     var date = new Date();
     var isInitialized = false,
@@ -416,11 +419,20 @@ jQuery(document).ready(function ($) {
                         defaultView: 'agendaWeek',
                         selectable: false,
                         events: function (start, end, callback) {
-                            callback(window.planEvents.map(function (e) {
-                                e.start = new Date(e.start);
-                                e.end = new Date(e.end);
-                                return e;
-                            }));
+                            for(var eid in window.planEvents)
+                            {
+                                window.planEvents[eid].start = new Date(window.planEvents[eid].start);
+                                window.planEvents[eid].end = new Date(window.planEvents[eid].end);
+                            }
+                            callback(window.planEvents);
+                        },
+                        eventClick: function(calEvent, jsEvent, view) {
+                            var eid = window.planEvents.indexOf(calEvent);
+                            // var eid =  calEvent._id.substring(3);
+                            // change the border color just for fun
+                            if(plans.find('#eid-' + eid).length > 0)
+                                plans.find('#eid-' + eid).scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
+
                         },
                         eventDragStart: function (event, jsEvent, ui, view) {
                             var prev, next;
@@ -533,7 +545,8 @@ jQuery(document).ready(function ($) {
     else
         jQuery('body').on('click', 'a[href="#plan"]', initialize);
     jQuery('body').on('click', 'a[href="#plan"]', function () {
-        $('#calendar').fullCalendar('rerenderEvents');
+        if($('#calendar:visible').length > 0)
+            $('#calendar').fullCalendar('rerenderEvents');
     });
 });
 

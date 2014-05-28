@@ -28,6 +28,8 @@ function studysauce_save_profile()
         $node->status = 1; //(1 or 0): published or not
         $node->revision = 1;
         node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
+        $node = node_submit($node); // Prepare node for saving
+        node_save($node);
     }
 
     if(isset($_POST['devices']))
@@ -41,7 +43,13 @@ function studysauce_save_profile()
     if(isset($_POST['time-management']))
         $node->field_time_management['und'][0]['value'] = $_POST['time-management'];
 
-    $node = node_submit($node); // Prepare node for saving
     node_save($node);
 
+    list($events, $node, $classes, $entities) = studysauce_get_events();
+
+    print json_encode(array(
+        'events' => $events,
+        'plan' => '<div>' . theme('studysauce-plans') . '</div>'
+    ));
+    drupal_exit();
 }

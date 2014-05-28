@@ -7,6 +7,9 @@ drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/jquery.scrollintoview
 
 if(drupal_get_path_alias(current_path()) == 'schedule')
     print theme('studysauce-funnel');
+
+global $user;
+list($events, $node, $classes, $entities) = studysauce_get_events();
 ?>
 
 <h2>Enter your class + work schedule below</h2>
@@ -16,18 +19,19 @@ if(drupal_get_path_alias(current_path()) == 'schedule')
            size="60" maxlength="255" value="<?php print (isset($node->field_university['und'][0]['value']) ? $node->field_university['und'][0]['value'] : ''); ?>">
 </div>
 
-<?php
-global $user;
-list($events, $node, $classes, $entities) = studysauce_get_events();
-?>
-
 <div class="schedule">
     <?php
-    for($i = 0; $i < 5; $i++)
+    if(drupal_get_path_alias(current_path()) == 'schedule' ||
+        empty($classes))
     {
-        if(count($classes) < 5)
-            $classes[-$i] = '';
+        for($i = 0; $i < 5; $i++)
+        {
+            if(count($classes) < 5)
+                $classes[-$i] = '';
+        }
     }
+
+    $examples = ['HIST 101', 'CALC 120', 'MAT 200', 'PHY 110', 'BUS 300', 'ANT 350', 'GEO 400', 'BIO 250', 'CHM 180', 'PHIL 102', 'ENG 100'];
 
     foreach($classes as $eid => $c)
     {
@@ -54,7 +58,7 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <label>Class name</label>
                     <input name="schedule-class-name" value="<?php print $c; ?>"
                            class="text-full form-text jquery_placeholder-processed"
-                           type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
+                           type="text" size="60" maxlength="255" placeholder="<?php print $examples[array_rand($examples, 1)]; ?>" value="" autocomplete="off">
                 </div>
             </div>
             <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
@@ -164,98 +168,98 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
     <?php
     }
     ?>
-</div>
 
-<div id="add-class-dialog" class="row invalid">
-    <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
-        <div class="form-item form-type-textfield">
-            <label>Class name</label>
-            <input name="schedule-class-name"
-                   class="text-full form-text jquery_placeholder-processed"
-                   type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
+    <div id="add-class-dialog" class="row invalid">
+        <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+            <div class="form-item form-type-textfield">
+                <label>Class name</label>
+                <input name="schedule-class-name"
+                       class="text-full form-text jquery_placeholder-processed"
+                       type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
+            </div>
         </div>
-    </div>
-    <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
-        <div class="form-item form-type-checkboxes">
-            <label>M</label><label>Tu</label><label>W</label><label>Th</label><label>F</label><label>Sa</label><label>Su</label>
-            <div class="form-checkboxes">
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-M" class="form-checkbox"
-                           id="schedule-dotw-M" type="checkbox" value="M"> <label
-                        class="option" for="schedule-dotw-M">M </label>
+        <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
+            <div class="form-item form-type-checkboxes">
+                <label>M</label><label>Tu</label><label>W</label><label>Th</label><label>F</label><label>Sa</label><label>Su</label>
+                <div class="form-checkboxes">
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-M" class="form-checkbox"
+                               id="schedule-dotw-M" type="checkbox" value="M"> <label
+                            class="option" for="schedule-dotw-M">M </label>
 
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-Tu" class="form-checkbox"
-                           id="schedule-dotw-Tu" type="checkbox" value="Tu"> <label
-                        class="option" for="schedule-dotw-Tu">Tu </label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-Tu" class="form-checkbox"
+                               id="schedule-dotw-Tu" type="checkbox" value="Tu"> <label
+                            class="option" for="schedule-dotw-Tu">Tu </label>
 
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-W" class="form-checkbox"
-                           id="schedule-dotw-W" type="checkbox" value="W"> <label
-                        class="option" for="schedule-dotw-W">W </label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-W" class="form-checkbox"
+                               id="schedule-dotw-W" type="checkbox" value="W"> <label
+                            class="option" for="schedule-dotw-W">W </label>
 
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-Th" class="form-checkbox"
-                           id="schedule-dotw-Th" type="checkbox" value="Th"> <label
-                        class="option" for="schedule-dotw-Th">Th </label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-Th" class="form-checkbox"
+                               id="schedule-dotw-Th" type="checkbox" value="Th"> <label
+                            class="option" for="schedule-dotw-Th">Th </label>
 
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-F" class="form-checkbox"
-                           id="schedule-dotw-F" type="checkbox" value="F"> <label
-                        class="option" for="schedule-dotw-F">F </label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-F" class="form-checkbox"
+                               id="schedule-dotw-F" type="checkbox" value="F"> <label
+                            class="option" for="schedule-dotw-F">F </label>
 
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-Sa" class="form-checkbox"
-                           id="schedule-dotw-Sa" type="checkbox" value="Sa"> <label
-                        class="option" for="schedule-dotw-Sa">Sa </label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-Sa" class="form-checkbox"
+                               id="schedule-dotw-Sa" type="checkbox" value="Sa"> <label
+                            class="option" for="schedule-dotw-Sa">Sa </label>
 
-                </div>
-                <div class="form-item form-type-checkbox">
-                    <input name="schedule-dotw-Su" class="form-checkbox"
-                           id="schedule-dotw-Su" type="checkbox" value="Su"> <label
-                        class="option" for="schedule-dotw-Su">Su </label>
+                    </div>
+                    <div class="form-item form-type-checkbox">
+                        <input name="schedule-dotw-Su" class="form-checkbox"
+                               id="schedule-dotw-Su" type="checkbox" value="Su"> <label
+                            class="option" for="schedule-dotw-Su">Su </label>
 
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
+            <div class="form-item form-type-textfield">
+                <label for="schedule-value-time">Time</label>
+                <input name="schedule-value-time"
+                       class="date-clear form-text jquery_placeholder-processed"
+                       type="text" size="15" maxlength="10" placeholder="Start" value="">
+            </div>
+            <div class="form-item form-type-textfield">
+                <label>&nbsp;</label>
+                <input name="schedule-value2-time"
+                       class="date-clear form-text jquery_placeholder-processed"
+                       type="text" size="15" maxlength="10" placeholder="End" value="">
+            </div>
+            <div class="form-item form-type-textfield">
+                <label for="schedule-value-date">Date</label>
+                <input name="schedule-value-date"
+                       class="date-clear form-text jquery_placeholder-processed"
+                       type="text" size="20" maxlength="30" placeholder="First class" value="">
+            </div>
+            <div class="form-item form-type-textfield">
+                <label>&nbsp;</label>
+                <input name="schedule-value2-date"
+                       class="date-clear form-text jquery_placeholder-processed"
+                       type="text" size="20" maxlength="30" placeholder="Last class" value="">
+            </div>
+        </div>
+        <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="c" />
     </div>
-    <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
-        <div class="form-item form-type-textfield">
-            <label for="schedule-value-time">Time</label>
-            <input name="schedule-value-time"
-                   class="date-clear form-text jquery_placeholder-processed"
-                   type="text" size="15" maxlength="10" placeholder="Start" value="">
-        </div>
-        <div class="form-item form-type-textfield">
-            <label>&nbsp;</label>
-            <input name="schedule-value2-time"
-                   class="date-clear form-text jquery_placeholder-processed"
-                   type="text" size="15" maxlength="10" placeholder="End" value="">
-        </div>
-        <div class="form-item form-type-textfield">
-            <label for="schedule-value-date">Date</label>
-            <input name="schedule-value-date"
-                   class="date-clear form-text jquery_placeholder-processed"
-                   type="text" size="20" maxlength="30" placeholder="First class" value="">
-        </div>
-        <div class="form-item form-type-textfield">
-            <label>&nbsp;</label>
-            <input name="schedule-value2-date"
-                   class="date-clear form-text jquery_placeholder-processed"
-                   type="text" size="20" maxlength="30" placeholder="Last class" value="">
-        </div>
-    </div>
-    <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="c" />
 </div>
 
 <p class="class-actions">
     <a class="field-add-more-submit ajax-processed" href="#add-class">Add <span>+</span> class</a>
-    <a href="#save-class" class="highlighted-link more">Save</a>
+    <a href="#save-class" class="highlighted-link more"><?php print (drupal_get_path_alias(current_path()) == 'schedule' ? 'Next' : 'Save'); ?></a>
 </p>
 
 <?php if(drupal_get_path_alias(current_path()) == 'schedule'): ?>
@@ -273,6 +277,7 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
 
 <div class="other-schedule">
     <?php
+
     foreach($entities as $eid => $entity)
     {
         if(!isset($entity->field_event_type['und'][0]['value']) || $entity->field_event_type['und'][0]['value'] != 'o')
@@ -300,7 +305,7 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                     <label>Class name</label>
                     <input name="schedule-class-name" value="<?php print $c; ?>"
                            class="text-full form-text jquery_placeholder-processed"
-                           type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
+                           type="text" size="60" maxlength="255" placeholder="Work" value="" autocomplete="off">
                 </div>
             </div>
             <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
@@ -433,7 +438,7 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                 <label>Event title</label>
                 <input name="schedule-class-name"
                        class="text-full form-text jquery_placeholder-processed"
-                       type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
+                       type="text" size="60" maxlength="255" placeholder="Work" value="" autocomplete="off">
             </div>
         </div>
         <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
@@ -520,5 +525,7 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
 
 <p class="other-actions">
     <a class="field-add-more-submit ajax-processed" href="#add-other">Add <span>+</span> other event</a>
-    <a href="#save-class" class="highlighted-link more">Save</a>
+    <a href="#save-class" class="highlighted-link more"><?php print (drupal_get_path_alias(current_path()) == 'schedule' ? 'Next' : 'Save'); ?></a>
 </p>
+
+<p style="margin-bottom:0;clear:both;line-height: 1px">&nbsp;</p>

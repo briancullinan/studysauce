@@ -21,4 +21,12 @@ jQuery(document).ready(function($) {
                     });
     });
 
+    /*
+    jQuery('a[href^="/cart/add/"]').removeClass('checked');
+    if(jQuery('.uc-price').text() == '$9.99')
+        jQuery('a[href^="/cart/add/e-p13_q1_a4o13_s"]').addClass('checked');
+    else
+        jQuery('a[href^="/cart/add/e-p13_q1_a4o14_s"]').addClass('checked');
+        */
+
 });

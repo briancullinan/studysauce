@@ -271,6 +271,8 @@ function studysauce_save_calendar()
         $node->status = 1; //(1 or 0): published or not
         $node->revision = 1;
         node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
+        $node = node_submit($node); // Prepare node for saving
+        node_save($node);
     }
 
     // save profile
@@ -289,7 +291,6 @@ function studysauce_save_calendar()
     if(isset($_POST['9-pm-2-am']))
         $node->field_9_pm_2_am['und'][0]['value'] = $_POST['9-pm-2-am'];
 
-    $node = node_submit($node); // Prepare node for saving
     node_save($node);
 
     // save class
@@ -320,7 +321,8 @@ function studysauce_save_calendar()
                 if(isset($entity->field_class_name[LANGUAGE_NONE][0]['value']))
                 {
                     $saved[$entity->item_id] = $entity->field_class_name[LANGUAGE_NONE][0]['value'];
-                    if($entity->field_class_name[LANGUAGE_NONE][0]['value'] == $class['className'])
+                    if($entity->field_class_name[LANGUAGE_NONE][0]['value'] == $class['className'] ||
+                        isset($class['cid']) && $entity->item_id == $class['cid'])
                         $thisEid = $entity->item_id;
                 }
             }
@@ -328,7 +330,6 @@ function studysauce_save_calendar()
             {
                 $entity = entity_create('field_collection_item', array('field_name' => 'field_classes'));
                 $entity->setHostEntity('node', $node);
-                $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $class['className'];
             }
             else
             {
@@ -336,27 +337,23 @@ function studysauce_save_calendar()
                 $entity = $entity[$thisEid];
                 $entity->revision = 1;
             }
+            $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $class['className'];
             $entity->field_day_of_the_week[LANGUAGE_NONE] = array_map(function ($x) { return array('value' => $x); }, explode(',', $class['dotw']));
             $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $class['type'];
             $entity->field_time[LANGUAGE_NONE][0] = array(
                 'value' => gmdate('Y-m-d H:i:s', strtotime($class['start'])),
                 'value2' => gmdate('Y-m-d H:i:s', strtotime($class['end']))
             );
-            $entity->save(true);
-            if(!isset($thisEid))
-            {
-                $node = node_submit($node); // Prepare node for saving
-                node_save($node);
-            }
+            $entity->save();
 
             // modify later events of the same type
+            $anyAdded = false;
             if(isset($class['className']) && isset($class['type']) &&
                 ($class['type'] == 'p' || $class['type'] == 'sr' || $class['type'] == 'f'))
             {
                 $className = preg_replace('/^<h4>.*?<\/h4>|\(P\)\s*|^\(SR\)\s*|^\(F\)\s*|\s*\([0-9\/,\s-]+\)$|\s*<small>[0-9\/,\s-]+<\/small>$/i', '', $entity->field_class_name['und'][0]['value']);
                 $i = array_search($className, array_values($classes));
                 $diff = 0;
-                $anyOthersChanged = false;
                 foreach($events as $e => $evt)
                 {
                     if($evt['title'] == $class['className'])
@@ -392,9 +389,9 @@ function studysauce_save_calendar()
                             }
                             else
                             {
-                                $anyOthersChanged = true;
                                 $entity = entity_create('field_collection_item', array('field_name' => 'field_classes'));
                                 $entity->setHostEntity('node', $node);
+                                $anyAdded = true;
                                 $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $evt['title'];
                             }
                             $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $class['type'];
@@ -402,17 +399,14 @@ function studysauce_save_calendar()
                                 'value' => gmdate('Y-m-d H:i:s', strtotime($evt['start']) + $diff),
                                 'value2' => gmdate('Y-m-d H:i:s', strtotime($evt['end']) + $diff)
                             );
-                            $entity->save(true);
+                            $entity->save();
                         }
                     }
                 }
-
-                if($anyOthersChanged)
-                {
-                    $node = node_submit($node); // Prepare node for saving
-                    node_save($node);
-                }
             }
+
+            if(!isset($thisEid) || $anyAdded)
+                node_save($node);
         }
     }
     else
@@ -433,9 +427,12 @@ function studysauce_save_calendar()
                     $entity[$eid]->field_study_type['und'][0]['value'] = $settings['type'];
                     $entity[$eid]->field_study_difficulty['und'][0]['value'] = $settings['difficulty'];
                     $entity[$eid]->save(true);
+
+                    node_save($node);
                 }
             }
         }
+
     }
 
     if(isset($_POST['remove']))
@@ -445,12 +442,11 @@ function studysauce_save_calendar()
             if($c['value'] == $_POST['remove'])
             {
                 entity_delete('field_collection_item', array($c['value']));
+                node_save($node);
             }
         }
     }
 
-    //$node = node_submit($node); // Prepare node for saving
-    //node_save($node);
 
     // get event schedule
     list($events, $node, $classes, $entities) = studysauce_get_events();
@@ -465,6 +461,7 @@ function studysauce_save_calendar()
         'classes' => $classes,
         'schedule' => '<div>' . theme('studysauce-schedule') . '</div>',
         'plan' => '<div>' . theme('studysauce-plans') . '</div>',
+        'profile' => '<div>' . theme('studysauce-profile') . '</div>',
         'lastSDS' => $lastSDS,
         'awards' => $awards,
         'rows' => $rows,

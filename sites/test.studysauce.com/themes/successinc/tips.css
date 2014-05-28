@@ -7,6 +7,21 @@
     clear:right;
     width:49%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     margin:0;
     padding:0 30px
+}
+
+@media all and (max-width: 980px)
+{
+    .page-dashboard #tips-strategy .grid_6,
+    .page-dashboard #tips-env .grid_6,
+    .page-dashboard #tips-time .grid_6,
+    .page-dashboard #tips .grid_6
+    {
+        width: auto !important;
+        display:block;
+        padding:0;
+        margin:0 !important;
+    }
 }

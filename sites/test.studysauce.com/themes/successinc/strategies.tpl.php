@@ -468,7 +468,6 @@
 </div>
 <div class="strategy-other">
     <h3>Notes:</h3>
-    <label>Feel free to record any notes associated with this non-academic deadline.</label>
     <textarea name="strategy-notes"></textarea>
     <div class="highlighted-link"><a class="more" href="#save-strategy">Save</a></div>
 </div>

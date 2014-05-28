@@ -279,43 +279,46 @@ if (!empty($nodes['node']))
                     <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?>
                 </div>
             </div>
+            <label class="mobile-only">What is the primary type of studying you expect to do in this class?</label>
             <div class="form-radios field-name-type-of-studying">
                 <input type="radio" id="study-type-class-<?php print $eid; ?>-memorization"
                        name="study-type-class-<?php print $eid; ?>" value="memorization" class="form-radio"
                     <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'memorization' ? 'checked' : ''); ?> />
-                <label class="option" for="study-type-class-<?php print $eid; ?>-memorization">&nbsp;</label>
+                <label class="option" for="study-type-class-<?php print $eid; ?>-memorization">Memorization</label>
                 <input type="radio" id="study-type-class-<?php print $eid; ?>-reading"
                        name="study-type-class-<?php print $eid; ?>" value="reading" class="form-radio"
                     <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'reading' ? 'checked' : ''); ?> />
-                <label class="option" for="study-type-class-<?php print $eid; ?>-reading">&nbsp;</label>
+                <label class="option" for="study-type-class-<?php print $eid; ?>-reading">Reading/writing</label>
                 <input type="radio" id="study-type-class-<?php print $eid; ?>-conceptual"
                        name="study-type-class-<?php print $eid; ?>" value="conceptual" class="form-radio"
                     <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'conceptual' ? 'checked' : ''); ?> />
-                <label class="option" for="study-type-class-<?php print $eid; ?>-conceptual">&nbsp;</label>
+                <label class="option" for="study-type-class-<?php print $eid; ?>-conceptual">Conceptual application</label>
             </div>
+            <label class="mobile-only">How difficult will this class be?</label>
             <div class="form-radios field-name-difficulty-level">
                 <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-easy"
                        name="study-difficulty-class-<?php print $eid; ?>" value="easy" class="form-radio"
                     <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'easy' ? 'checked' : ''); ?> />
-                <label class="option" for="study-difficulty-class-<?php print $eid; ?>-easy">&nbsp;</label>
+                <label class="option" for="study-difficulty-class-<?php print $eid; ?>-easy">Easy</label>
                 <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-average"
                        name="study-difficulty-class-<?php print $eid; ?>" value="average" class="form-radio"
                     <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'average' ? 'checked' : ''); ?> />
-                <label class="option" for="study-difficulty-class-<?php print $eid; ?>-average">&nbsp;</label>
+                <label class="option" for="study-difficulty-class-<?php print $eid; ?>-average">Average</label>
                 <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-tough"
                        name="study-difficulty-class-<?php print $eid; ?>" value="tough" class="form-radio"
                     <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'tough' ? 'checked' : ''); ?> />
-                <label class="option" for="study-difficulty-class-<?php print $eid; ?>-tough">&nbsp;</label>
+                <label class="option" for="study-difficulty-class-<?php print $eid; ?>-tough">Tough</label>
             </div>
         </div>
     <?php
     }
     ?>
     <h3>Tip - you can change your answers later</h3>
+    <h3>Note: Your study sessions will change when you click save</h3>
 </div>
 
 <p style="clear:both; margin-bottom:0; text-align: right;" class="highlighted-link">
-    <a href="#save-profile" class="more"><?php print (drupal_get_path_alias(current_path()) == 'customization2' ? 'Finish' : 'Next'); ?></a></p>
+    <a href="#save-profile" class="more"><?php print (drupal_get_path_alias(current_path()) == 'customization2' ? 'Finish' : (drupal_get_path_alias(current_path()) == 'customization' || drupal_get_path_alias(current_path()) == 'profile' ? 'Next' : 'Save')); ?></a></p>
 
 <?php endif; ?>
 <?php if(!$lastOrder): ?>

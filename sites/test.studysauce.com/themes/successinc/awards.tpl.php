@@ -433,7 +433,7 @@ if(arg(1) != 'ajax' && $lastAward != null && arg(0) != 'checkin')
 
     ?>
 <script type="text/javascript">
-    window.initialAward = '<?php print $last; ?>';
+    window.initialAward = '<?php print $lastAward; ?>';
 </script>
 <?php
 }

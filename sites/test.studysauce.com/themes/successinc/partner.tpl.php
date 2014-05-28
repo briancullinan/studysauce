@@ -1,4 +1,6 @@
 <?php
+drupal_add_css(drupal_get_path('theme', 'successinc') .'/partner.css');
+drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/partner.js');
 
 global $user;
 $user = user_load($user->uid);

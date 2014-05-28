@@ -258,9 +258,11 @@ img {
 }
 
 /* Layout */
+/* TODO: make sure this doesn't ruin anything else
 .mt-grid-fix {
     padding: 0 5px;
 }
+*/
 
 .landing-home .footer
 {
@@ -363,15 +365,20 @@ img {
 
 .page-dashboard.admin-menu .page .panel-pane
 {
-    padding-top: 110px;
+    padding-top: 105px;
 }
 
 @media all and (max-width: 759px)
 {
     .page-dashboard .page .panel-pane
     {
-        margin-left:0 !important;
-        padding-top: 68px !important;
+        margin-left:0;
+        padding-top: 66px;
+    }
+
+    .page-dashboard.admin-menu .page .panel-pane
+    {
+        padding-top: 95px;
     }
 }
 
@@ -379,8 +386,13 @@ img {
 {
     .page-dashboard .page .panel-pane
     {
-        margin-left:0 !important;
-        padding-top: 56px !important;
+        margin-left:0;
+        padding-top: 56px;
+    }
+
+    .page-dashboard.admin-menu .page .panel-pane
+    {
+        padding-top: 85px;
     }
 }
 
@@ -515,13 +527,6 @@ img {
         margin:0 10px;
     }
 
-    .page-dashboard .pane-content .grid_6.classes,
-    .pane-content .grid_6.classes
-    {
-        width:460px;
-        margin:0;
-    }
-
     .page-home #scr p
     {
         font-size:18px;
@@ -535,6 +540,7 @@ img {
     display:none;
 }
 
+/*
 .page-dashboard #home .highlighted-link .more
 {
     float:right;
@@ -542,6 +548,7 @@ img {
     width: 100px;
     text-align: center;
 }
+*/
 
 @media all and (max-width: 980px)
 {
@@ -568,7 +575,8 @@ img {
 
     .page-dashboard #sds-messages > div,
     .page-dashboard #checklist > div,
-    .page-dashboard #study-quiz > div
+    .page-dashboard #study-quiz form > div,
+    .page-dashboard #study-quiz .webform-confirmation
     {
         margin:5% auto !important;
     }
@@ -1845,7 +1853,8 @@ ul.company-info li.last {
 .page-dashboard #new-award > div,
 .page-dashboard #welcome > div,
 .page-dashboard #checklist > div,
-.page-dashboard #study-quiz > div,
+.page-dashboard #study-quiz form > div,
+.page-dashboard #study-quiz .webform-confirmation,
 .page-dashboard #schedule form,
 .page-dashboard #mozart-effect > div,
 .page-dashboard #empty-schedule > a,
@@ -1870,15 +1879,23 @@ ul.company-info li.last {
 .page-dashboard #empty-dates > a,
 .page-dashboard #empty-schedule > a
 {
-    display:block;
+    display: block;
     text-align: center;
+    top: 50%;
+    margin-top: -70px;
 }
 
-.page-dashboard #plan .buy-plan > a,
-.page-dashboard #profile .buy-plan > a
+@media all and (max-width: 759px)
 {
-    top: 50%;
-    margin-top:-50px;
+
+    .page-dashboard #plan .buy-plan > a,
+    .page-dashboard #profile .buy-plan > a,
+    .page-dashboard #metrics-empty > a,
+    .page-dashboard #empty-dates > a,
+    .page-dashboard #empty-schedule > a
+    {
+        top:200px;
+    }
 }
 
 .page-dashboard #plan .buy-plan h2,
@@ -1897,9 +1914,14 @@ ul.company-info li.last {
 
 .page-dashboard #sds-messages > div,
 .page-dashboard #checklist > div,
-.page-dashboard #study-quiz > div
+.page-dashboard #study-quiz form > div
 {
     max-width: 550px;
+}
+
+.page-dashboard #study-quiz .webform-confirmation
+{
+    max-width: 900px;
 }
 
 #timer-expire a[href="#badges"]
@@ -1949,12 +1971,12 @@ input[type="reset"],
 input[type="button"]
 {
     -webkit-appearance: none;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     font-style: normal;
     line-height: 150%;
     display: inline-block;
-    padding: 8px 25px;
+    padding: 10px 15px;
     color: #1d1d1d;
     background: #FF9900;
     border: none;
@@ -1986,7 +2008,7 @@ input[type="button"]:hover {
     -webkit-appearance: none;
     margin: 0;
     text-align: left;
-    padding: 10px 25px;
+    padding: 10px 20px;
     color: #1d1d1d;
     font-weight: 800;
 /*    font-style: italic; */
@@ -1999,6 +2021,16 @@ input[type="button"]:hover {
     text-shadow: 0px 1px 2px rgba(255,255,255,.5);
 }
 
+#deadlines.invalid .highlighted-link .more,
+#deadlines.invalid .highlighted-link .more:hover,
+#schedule.invalid .class-actions .more,
+#schedule.invalid .class-actions .more:hover,
+#schedule.invalid .other-actions .more,
+#schedule.invalid .other-actions .more:hover,
+.page-path-schedule.invalid .class-actions .more,
+.page-path-schedule.invalid .class-actions .more:hover,
+.page-path-schedule.invalid .other-actions .more,
+.page-path-schedule.invalid .other-actions .more:hover,
 #partner.invalid .highlighted-link .more,
 #partner.invalid .highlighted-link .more:hover,
 #invite.invalid .highlighted-link .more,
@@ -2629,6 +2661,25 @@ ul.social-bookmarks li.linkedin a {
     z-index:100;
 }
 
+@media all and (max-width: 759px)
+{
+    .subfooter,
+    #subfooter
+    {
+        position: static;
+    }
+}
+
+.subfooter .pane-content > *,
+#subfooter .pane-content > *
+{
+    vertical-align: middle;
+}
+
+.page-path-about-us a[href*="facebook"],
+.page-path-about-us a[href*="google"],
+.page-path-about-us a[href*="twitter"],
+.page-path-about-us a[href*="contact"],
 #about-us a[href*="facebook"],
 #about-us a[href*="google"],
 #about-us a[href*="twitter"],
@@ -2644,18 +2695,21 @@ ul.social-bookmarks li.linkedin a {
     line-height: 55px;
 }
 
+.page-path-about-us a[href*="google"],
 #about-us a[href*="google"],
 #invite a[href*="google"]
 {
     background-position:0 -95px;
 }
 
+.page-path-about-us a[href*="twitter"],
 #about-us a[href*="twitter"],
 #invite a[href*="twitter"]
 {
     background-position:0 -190px;
 }
 
+.page-path-about-us a[href*="contact"],
 #about-us a[href*="contact"]
 {
     background-position:0 -381px;
@@ -2732,7 +2786,7 @@ ul.social-bookmarks li.linkedin a {
 .subfooter ul.menu,
 #subfooter ul.menu {
     margin: 0;
-    padding: 0;
+    padding: 0 10px;
     display:inline;
 }
 
@@ -4044,133 +4098,6 @@ hr
     color:#FF9900;
 }
 
-.webform-confirmation .links
-{
-    display:none;
-}
-
-.webform-confirmation .grid_5.even
-{
-    float:left;
-    clear:left;
-}
-
-.webform-confirmation .grid_5.right
-{
-    float:right;
-    clear:right;
-}
-
-.webform-confirmation .grid_5
-{
-    margin: 0;
-    padding: 0;
-}
-
-.webform-confirmation .quiz-wrapper
-{
-    position:relative;
-    display:block;
-}
-
-.webform-confirmation .quiz-wrapper .grid_5.even
-{
-    border-color:#CCC;
-    clear: left;
-    float: left;
-}
-
-.webform-confirmation .quiz-wrapper .grid_5.right
-{
-    float:right;
-    clear:right;
-    background-color: #CCC;
-    border-color:#CCC;
-    box-shadow: 0 2px 2px rgba(0,0,0,.5);
-}
-
-.webform-confirmation .quiz-wrapper .grid_5.even p,
-.webform-confirmation .quiz-wrapper .grid_5.right p
-{
-    margin:0;
-}
-
-.webform-confirmation .quiz-wrapper .grid_5.even p:last-child
-{
-    margin-left:30px;
-}
-
-.webform-confirmation .quiz-wrapper .grid_5 .correct span,
-.webform-confirmation .quiz-wrapper .grid_5 .incorrect span
-{
-    padding-left:30px;
-}
-
-.webform-confirmation .quiz-wrapper .grid_5 .correct
-{
-    background: url(correct.png) no-repeat bottom left;
-    line-height: 24px;
-    display:block;
-}
-
-.webform-confirmation .quiz-wrapper .grid_5 .incorrect
-{
-    background: url(wrong.png) no-repeat;
-    line-height: 24px;
-    display:block;
-}
-
-.webform-confirmation .quiz-wrapper .grid_5.even,
-.webform-confirmation .quiz-wrapper .grid_5.right
-{
-    min-height:80px;
-    display:inline-block;
-    padding:5px 20px;
-    border-width:0 4px;
-    border-style: solid;
-    margin:0;
-}
-
-.webform-confirmation .quiz-wrapper:nth-child(3) .grid_5.even,
-.webform-confirmation .quiz-wrapper:nth-child(3) .grid_5.right
-{
-    min-height:142px;
-}
-
-.webform-confirmation .quiz-wrapper:nth-child(5) .grid_5.right
-{
-    margin-top:-16px
-}
-.webform-confirmation .quiz-wrapper:nth-child(6) .grid_5.right
-{
-    margin-top:-21px
-}
-
-.webform-confirmation .quiz-wrapper .grid_5.first
-{
-    border-width: 4px 4px 0;
-    border-radius: 8px 8px 0 0;
-}
-
-.webform-confirmation .quiz-wrapper .grid_5.last
-{
-    border-width: 0 4px 4px;
-    border-radius: 0 0 8px 8px;
-}
-
-.webform-confirmation em strong
-{
-    font-size:24px;
-    color:#FF9900;
-    font-weight: bold;
-    margin:4px;
-}
-
-.webform-confirmation h3
-{
-    margin-bottom:20px;
-}
-
 .page-welcome #page-top
 {
 }
@@ -4382,7 +4309,7 @@ tbody
     border-bottom:3px solid #771100;
     color: #ffffff;
     background:url("images/menu_icons_32.png") no-repeat left -316px #DF4A32;
-    padding:8px 20px 8px 30px;
+    padding:5px 20px 5px 30px;
     margin-top:10px;
     margin-left:auto;
     margin-right:auto;
@@ -4430,7 +4357,7 @@ tbody
     border:0;
     border-bottom:3px solid #224477;
     background:url("images/menu_icons_32.png") no-repeat left -283px #5872A7;
-    padding:8px 20px 8px 30px;
+    padding:5px 20px 5px 30px;
     margin-top:10px;
     margin-left:auto;
     margin-right:auto;
@@ -5044,94 +4971,11 @@ tbody
     display:inline;
 }
 
-#study-quiz .webform-confirmation > .grid_6,
-#study-quiz .highlighted-link
-{
-    text-align: right;
-    margin:0;
-}
-
-#study-quiz .webform-confirmation > .retry-link
-{
-    text-align: left;
-}
-
-#study-quiz .webform-confirmation .mobile-only
-{
-    display:none;
-}
-
-@media all and (max-width: 980px)
-{
-    .webform-confirmation .quiz-wrapper
-    {
-        clear:both;
-    }
-
-    .webform-confirmation .quiz-wrapper .grid_5
-    {
-        margin-top:0 !important;
-        display:block !important;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        float:none !important;
-        width:auto !important;
-    }
-
-    #study-quiz .webform-confirmation .mobile-only
-    {
-        display:block;
-    }
-
-    #study-quiz .webform-confirmation .full-only
-    {
-        display:none;
-    }
-
-    .webform-confirmation .quiz-wrapper .grid_5.even.last,
-    .webform-confirmation .quiz-wrapper .grid_5.right.first
-    {
-        border-radius:0px;
-    }
-
-    .webform-confirmation div:first-child .grid_5.right
-    {
-        clear:both;
-    }
-
-    #study-quiz .webform-confirmation > .grid_6,
-    #study-quiz .highlighted-link
-    {
-        text-align: center;
-    }
-
-    .page-dashboard #invite h3,
-    .page-dashboard #invite .like-us
-    {
-        margin-right:0 !important;
-    }
-
-    .page-dashboard.student #home li
-    {
-        width:auto;
-        height:auto;
-    }
-}
 
 .facebook-like {
     display: inline-block;
     width: 80px;
     height: 20px;
-}
-
-#study-quiz a[href="#retry"]
-{
-    background:url(images/restart.png) no-repeat left top transparent;
-    display:inline-block;
-    font-size: 32px;
-    padding-left:48px;
-    min-height: 48px;
-    padding-top:10px;
 }
 
 .container-inline-date .form-item .form-item,

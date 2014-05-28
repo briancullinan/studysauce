@@ -1,8 +1,13 @@
 <?php
 
-function _studysauce_get_metrics()
+function _studysauce_get_metrics($account = null)
 {
-    $classesNames = _studysauce_get_schedule_classes();
+    if($account == null)
+    {
+        global $user;
+        $account = user_load($user->uid);
+    }
+    $classesNames = _studysauce_get_schedule_classes($account);
     $classes = array();
     foreach($classesNames as $eid => $c)
     {
@@ -12,7 +17,7 @@ function _studysauce_get_metrics()
 
     list($checkins, $checkouts) = studysauce_clean_checkins($classes);
 
-    $hours = _studysauce_get_incentives_hours();
+    $hours = _studysauce_get_incentives_hours($account);
     if(!isset($checkins) || !is_array($checkins) || !isset($checkouts) || !is_array($checkouts))
         return array(array(), '', '0 hours', $hours);
 
