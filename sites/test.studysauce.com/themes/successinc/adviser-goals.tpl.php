@@ -25,30 +25,7 @@ $setup = studysauce_is_incentives_setup($account);
 <div
     class="step_<?php print $setup; ?> <?php print (empty($studyConnections) ? 'not-connected' : 'connected'); ?> <?php print (isset($parent) ? 'sponsored' : ''); ?>">
 
-<div id="student_step_1">
-    <h2 class="students_only student_step_1">Set goals and rewards, then get sponsored by your parents</h2>
-
-    <h2 class="parents_only student_step_1">Set goals and reward your student's study efforts</h2>
-
-    <div class="grid_6 big-arrow">
-        <h3>The Science</h3>
-        <img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/science.png"/>
-
-        <p>According to the Incentive Theory of motivation, using rewards increases the likelihood of repeating
-            the given activity. By incorporating this powerful psychological principle into study behavior,
-            students can incentivize optimal study practices. Studies show that the sooner the reward is given,
-            the stronger the positive association with the activity.</p>
-    </div>
-    <div class="grid_6">
-        <h3 style="margin-bottom:5px;">The Application</h3>
-        <span class="site-name"><strong>Study</strong> Sauce</span>
-
-        <p>Study Sauce combines the best study practices with the incentive to change. Knowledge of the harm or
-            benefit of something doesn’t necessarily result in behavioral change (just ask someone that has
-            struggled to quit smoking). Creating meaningful study rewards dramatically increases the likelihood
-            that a student will adopt effective study habits.</p>
-    </div>
-</div>
+<h2>Study goals</h2>
 
 <?php /*
 
@@ -115,71 +92,63 @@ $setup = studysauce_is_incentives_setup($account);
 </div>
 
 <div id="non-sponsored">
-    <?php list($b, $m, $o) = _studysauce_unsponsored_goals($account); ?>
-    <div class="row draggable odd <?php print (isset($b->item_id) ? ('gid' . $b->item_id) : ''); ?> <?php print (!isset($b->field_hours['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
-        <div class="field-name-field-type"><strong>Study Hours</strong></div>
-        <div class="field-type-list-integer field-name-field-hours field-widget-options-select form-wrapper">
-            <div class="read-only"><label>Goal: </label>
-                <span><?php print (isset($b->field_hours['und'][0]['value']) ? $b->field_hours['und'][0]['value'] : 0); ?></span>
+<?php list($b, $m, $o) = _studysauce_unsponsored_goals($account); ?>
+<div class="row draggable odd <?php print (isset($b->item_id) ? ('gid' . $b->item_id) : ''); ?> <?php print (!isset($b->field_hours['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
+    <div class="field-name-field-type"><strong>Study Hours</strong></div>
+    <div class="field-type-list-integer field-name-field-hours field-widget-options-select form-wrapper">
+        <div class="read-only"><label>Goal: </label>
+            <span><?php print (isset($b->field_hours['und'][0]['value']) ? $b->field_hours['und'][0]['value'] : 0); ?></span>
 
-                <div class="description"><span>hours per week</span><span>hrs / wk</span></div>
-            </div>
-            <div class="form-item form-type-select">
-                <label>Goal: </label>
-                <select name="goal-hours" class="form-select">
-                    <option value="_none">- None -</option>
-                    <option
-                        value="30" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 30 ? 'selected="selected"' : ''); ?>>
-                        30
-                    </option>
-                    <option
-                        value="25" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 25 ? 'selected="selected"' : ''); ?>>
-                        25
-                    </option>
-                    <option
-                        value="20" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 20 ? 'selected="selected"' : ''); ?>>
-                        20
-                    </option>
-                    <option
-                        value="15" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 15 ? 'selected="selected"' : ''); ?>>
-                        15
-                    </option>
-                    <option
-                        value="10" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 10 ? 'selected="selected"' : ''); ?>>
-                        10
-                    </option>
-                    <option
-                        value="5" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 5 ? 'selected="selected"' : ''); ?>>
-                        5
-                    </option>
-                </select>
+            <div class="description"><span>hours per week</span><span>hrs / wk</span></div>
+        </div>
+        <div class="form-item form-type-select">
+            <label>Goal: </label>
+            <select name="goal-hours" class="form-select">
+                <option value="_none">- None -</option>
+                <option
+                    value="30" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 30 ? 'selected="selected"' : ''); ?>>
+                    30
+                </option>
+                <option
+                    value="25" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 25 ? 'selected="selected"' : ''); ?>>
+                    25
+                </option>
+                <option
+                    value="20" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 20 ? 'selected="selected"' : ''); ?>>
+                    20
+                </option>
+                <option
+                    value="15" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 15 ? 'selected="selected"' : ''); ?>>
+                    15
+                </option>
+                <option
+                    value="10" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 10 ? 'selected="selected"' : ''); ?>>
+                    10
+                </option>
+                <option
+                    value="5" <?php print (isset($b->field_hours['und'][0]['value']) && $b->field_hours['und'][0]['value'] == 5 ? 'selected="selected"' : ''); ?>>
+                    5
+                </option>
+            </select>
 
-                <div class="description"><span>hours per week</span><span>hrs / wk</span></div>
-            </div>
-        </div>
-        <div class="field-type-text-long field-name-field-reward field-widget-text-textarea form-wrapper">
-            <div class="read-only"><label>Reward: </label>
-                <a href="#edit-reward">&nbsp;</a>
-                <span><?php print (isset($b->field_reward['und'][0]['value']) ? $b->field_reward['und'][0]['value'] : ''); ?></span>
-            </div>
-            <div class="form-item form-type-textarea">
-                <label>Reward: </label>
-                <div class="form-textarea-wrapper resizable textarea-processed resizable-textarea">
-                    <textarea placeholder="Ex. $25 gift card"
-                              name="goal-reward" cols="60" rows="2"
-                              class="form-textarea jquery_placeholder-processed"><?php print (isset($b->field_reward['und'][0]['value']) ? $b->field_reward['und'][0]['value'] : ''); ?></textarea>
-                </div>
-            </div>
-        </div>
-        <input type="hidden" name="goal-read-only"
-               value="<?php print (isset($b->field_read_only['und'][0]['value']) ? $b->field_read_only['und'][0]['value'] : 0); ?>"/>
-        <a href="#cancel-incentive" class="more">Cancel</a>
-        <div class="highlighted-link">
-            <a href="#save-incentive" class="more">Save</a>
-            <a class="brag more read-only" href="#claim">Brag</a>
+            <div class="description"><span>hours per week</span><span>hrs / wk</span></div>
         </div>
     </div>
-    <?php if(isset($b->field_hours['und'][0]['value'])) : ?>
+    <div class="field-type-text-long field-name-field-reward field-widget-text-textarea form-wrapper">
+        <div class="read-only"><label>Reward: </label>
+            <span><?php print (isset($b->field_reward['und'][0]['value']) ? $b->field_reward['und'][0]['value'] : ''); ?></span>
+        </div>
+        <div class="form-item form-type-textarea">
+            <label>Reward: </label>
+            <div class="form-textarea-wrapper resizable textarea-processed resizable-textarea">
+                <textarea placeholder="Ex. $25 gift card"
+                          name="goal-reward" cols="60" rows="2"
+                          class="form-textarea jquery_placeholder-processed"><?php print (isset($b->field_reward['und'][0]['value']) ? $b->field_reward['und'][0]['value'] : ''); ?></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<?php if(isset($b->field_hours['und'][0]['value'])) : ?>
     <div class="row draggable even <?php print (isset($m->item_id) ? ('gid' . $m->item_id) : ''); ?> <?php print (!isset($m->field_grade['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
         <div class="field-name-field-type"><strong>Study Milestone</strong></div>
         <div class="field-type-list-text field-name-field-grade field-widget-options-select form-wrapper">
@@ -228,7 +197,6 @@ $setup = studysauce_is_incentives_setup($account);
         </div>
         <div class="field-type-text-long field-name-field-reward field-widget-text-textarea form-wrapper">
             <div class="read-only"><label>Reward: </label>
-                <a href="#edit-reward">&nbsp;</a>
                 <span><?php print (isset($m->field_reward['und'][0]['value']) ? $m->field_reward['und'][0]['value'] : ''); ?></span>
             </div>
             <div class="form-item form-type-textarea">
@@ -240,17 +208,10 @@ $setup = studysauce_is_incentives_setup($account);
                 </div>
             </div>
         </div>
-        <input type="hidden" name="goal-read-only"
-               value="<?php print (isset($m->field_read_only['und'][0]['value']) ? $m->field_read_only['und'][0]['value'] : 0); ?>"/>
-        <a href="#cancel-incentive" class="more">Cancel</a>
-        <div class="highlighted-link">
-            <a href="#save-incentive" class="more">Save</a>
-            <a class="brag more read-only" href="#claim">Brag</a>
-        </div>
     </div>
-    <?php
-    endif;
-    if(isset($m->field_grade['und'][0]['value'])) : ?>
+<?php
+endif;
+if(isset($m->field_grade['und'][0]['value'])) : ?>
     <div class="row draggable odd <?php print (isset($o->item_id) ? ('gid' . $o->item_id) : ''); ?> <?php print (!isset($o->field_gpa['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
         <div class="field-name-field-type"><strong>Study Outcome</strong></div>
         <div class="field-type-list-float field-name-field-gpa field-widget-options-select form-wrapper">
@@ -323,7 +284,6 @@ $setup = studysauce_is_incentives_setup($account);
         <div class="field-type-text-long field-name-field-reward field-widget-text-textarea form-wrapper">
             <div class="read-only">
                 <label>Reward: </label>
-                <a href="#edit-reward">&nbsp;</a>
                 <span><?php print (isset($o->field_reward['und'][0]['value']) ? $o->field_reward['und'][0]['value'] : ''); ?></span>
             </div>
             <div class="form-item form-type-textarea">
@@ -335,18 +295,8 @@ $setup = studysauce_is_incentives_setup($account);
                 </div>
             </div>
         </div>
-        <input type="hidden" name="goal-read-only"
-               value="<?php print (isset($o->field_read_only['und'][0]['value']) ? $o->field_read_only['und'][0]['value'] : 0); ?>"/>
-        <a href="#cancel-incentive" class="more">Cancel</a>
-        <div class="highlighted-link">
-            <a href="#save-incentive" class="more">Save</a>
-            <a class="brag more read-only" href="#claim">Brag</a>
-        </div>
     </div>
-    <?php endif; ?>
-    <p style="clear:both;margin:0;text-align: center;margin-top:20px;">
-        <a href="#partner" class="read-only">Now invite someone to help keep you accountable to your goals.</a>
-    </p>
+<?php endif; ?>
 </div>
 <div id="achievements">
     <?php
@@ -362,5 +312,5 @@ $setup = studysauce_is_incentives_setup($account);
        onclick="jQuery('.page-dashboard #goals #read-more-incentives .grid_6').toggle(); return false;">read
         more</a>
 </div>
-<p style="clear:both; margin:0;line-height:0;">&nbsp;</p>
 </div>
+<hr style="margin-top:20px;" />

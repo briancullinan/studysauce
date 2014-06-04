@@ -1,6 +1,7 @@
 <?php if(drupal_get_path_alias(current_path()) == 'cart/checkout' ||
     drupal_get_path_alias(current_path()) == 'profile' ||
     drupal_get_path_alias(current_path()) == 'schedule' ||
+    drupal_get_path_alias(current_path()) == 'schedule2' ||
     drupal_get_path_alias(current_path()) == 'customization' ||
     drupal_get_path_alias(current_path()) == 'customization2') : ?>
     <?php

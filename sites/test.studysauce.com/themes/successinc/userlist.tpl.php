@@ -5,10 +5,10 @@ drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/userlist.js');
 <table>
     <thead>
         <tr>
-            <td>Status</td>
-            <td>Date</td>
-            <td>Student</td>
-            <td>School</td>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Student</th>
+            <th>School</th>
         </tr>
     </thead>
     <tbody>
@@ -20,9 +20,11 @@ $result = $query->execute();
 $members = $result->fetchAll();
 foreach($members as $i => $member)
 {
-    print '<tr>';
     $m = user_load($member->etid);
-    print '<td>&nbsp;</td>';
+    print '<tr class="status_' . (!isset($m->field_adviser_status['und'][0]['value']) || $m->field_adviser_status['und'][0]['value'] == 'green'
+            ? 'green'
+            : $m->field_adviser_status['und'][0]['value']) . '">';
+    print '<td><span>&nbsp;</span></td>';
     print '<td>' . date('d-M', $m->access) . '</td>';
     print '<td><a href="#uid-' . $m->uid . '">' . $m->field_first_name['und'][0]['value'] . ' ' . $m->field_last_name['und'][0]['value'] . '</a></td>';
     $query = new EntityFieldQuery();

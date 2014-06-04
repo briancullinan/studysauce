@@ -72,9 +72,17 @@
 .page-dashboard.tips-strategy-only #home,
 .page-dashboard.userlist-only #home,
 .page-dashboard.account-only #userlist,
-.page-dashboard.uid-only #userlist
+.page-dashboard.uid-only #userlist,
+.page-dashboard.uid-only #home,
+.page-dashboard.import-only #userlist,
+.page-dashboard.import-only #home
 {
     display:none;
+}
+
+.page-dashboard.import-only .user-pane
+{
+    display:none !important;
 }
 
 .page-dashboard #home,
@@ -95,6 +103,7 @@
 .page-dashboard.tips-env-only #tips-env,
 .page-dashboard.tips-strategy-only #tips-strategy,
 .page-dashboard #userlist,
+.page-dashboard.import-only #import,
 
 .page-dashboard.awards-only #badges,
 .page-dashboard #checkin.checklist-only #checklist,
@@ -247,6 +256,11 @@
 }
 
 @media all and (max-width: 759px) {
+
+    .page-dashboard #main-menu a[href="#environment"]
+    {
+        letter-spacing: -1px;
+    }
 
     .page-dashboard #main-menu a.skrollable-between
     {

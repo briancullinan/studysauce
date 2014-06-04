@@ -42,6 +42,11 @@
     max-width: 100%;
 }
 
+.page-dashboard #metrics #timeline svg
+{
+    overflow: hidden;
+}
+
 .page-dashboard #metrics #timeline .symbol rect
 {
     shape-rendering: crispEdges;

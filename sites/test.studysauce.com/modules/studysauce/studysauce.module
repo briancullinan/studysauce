@@ -111,6 +111,13 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['group/save'] = array(
+        'title' => 'Save imported users to group',
+        'page callback' => 'studysauce_group_save',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     return $items;
 }
 
@@ -1158,62 +1165,6 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
 
             $form['actions']['submit']['#value'] = 'Sign in';
             break;
-        case 'user_profile_form':
-            if(isset($form_state['build_info']['args'][2]) && $form_state['build_info']['args'][2] == 'dashboard-profile')
-            {
-                hide($form['account']['name']);
-                hide($form['account']['status']);
-                hide($form['account']['roles']);
-
-                $form['account']['pass']['#type'] = 'password';
-                $form['account']['pass']['#title'] = 'New password';
-                $form['account']['pass']['#description'] = '';
-                $form['account']['pass']['#weight'] = 2;
-
-                $form['account']['current_pass']['#prefix'] = '<p style="margin-bottom:0;">Enter your current password to change Email or set a New Password.</p>';
-                $form['account']['current_pass']['#description'] = '';
-                $form['account']['current_pass']['#weight'] = 1;
-
-                $form['account']['mail']['#description'] = 'All emails from ' . variable_get('site_name', 'Study Sauce') . ' will be sent to this address.';
-
-                $form['field_parent_student']['und']['#type'] = 'hidden';
-                $form['field_location'][LANGUAGE_NONE][0]['save']['#default_value'] = 0;
-
-                hide($form['picture']);
-                hide($form['timezone']);
-                hide($form['field_phone_number']);
-                hide($form['metatags']);
-                hide($form['overlay_control']);
-                hide($form['field_connections']);
-                hide($form['field_invites']);
-                //hide($form['field_parent_student']);
-                /*if(empty($form['account']['mail']['#default_value']))
-                {
-                    $form['#validation'] = array();
-                    $form['account']['current_pass']['#limit_validation_errors'] = array();
-                    $form['account']['mail']['#default_value'] = $form['account']['name']['#default_value'] . '@internal.example.org';
-                }
-                // TODO: use limit validation errors instead
-                $form['account']['#limit_validation_errors'] = array();
-                $form['account']['mail']['#limit_validation_errors'] = array();
-                $form['account']['mail']['#required'] = 0;*/
-
-                $form['actions']['submit']['#id'] = 'submit-profile';
-                $form['actions']['submit']['#ajax'] = array(
-                    'callback' => '_studysauce_submit_user_ajax',
-                );
-            }
-            else
-            {
-                $form['account']['pass']['#type'] = 'password';
-                $form['account']['pass']['#title'] = 'New password';
-                $form['account']['mail']['#title'] = 'Email';
-                $form['account']['mail']['#description'] = 'All emails from Study Sauce will be sent to this address.';
-                hide($form['picture']);
-                hide($form['timezone']);
-                hide($form['field_phone_number']);
-            }
-            break;
         case 'webform_client_form_17':
             $form['actions']['#attributes']['class'][] = 'highlighted-link';
             $form['actions']['submit']['#attributes']['class'][] = 'more';
@@ -1521,42 +1472,6 @@ function _studysauce_get_touched()
         $node = node_load($nid);
         return isset($node->field_touched_music['und'][0]['value']) && $node->field_touched_music['und'][0]['value'] == 1;
     }
-}
-
-function _studysauce_submit_user_ajax($form, &$form_state)
-{
-    global $user;
-    $_POST = array('ajax_iframe_upload' => true);
-    $user = user_load($user->uid);
-    $form = _studysauce_user_update_form();
-
-    $errors = form_get_errors();
-    if(empty($errors))
-    {
-        $content = drupal_render($form);
-        $commands = array();
-        $commands[] = array('command' => 'insert', 'method' => null, 'selector' => '#user-profile form', 'data' => $content, 'settings' => null);
-        $commands[] = ajax_command_invoke('.messages', 'remove');
-        if($user->field_parent_student['und'][0]['value'] == 'student')
-        {
-            $commands[] = array('command' => 'invoke', 'method' => 'addClass', 'selector' => 'body', 'arguments' => array('student'), 'settings' => null);
-        }
-        else
-        {
-            $commands[] = array('command' => 'invoke', 'method' => 'addClass', 'selector' => 'body', 'arguments' => array('parent'), 'settings' => null);
-        }
-        $commands[] = ajax_command_invoke('.page-home.parent #parent-sponsored', 'reorderSponsorship');
-        $commands[] = ajax_command_invoke('body', 'removeClass', array('user-profile-only'));
-    }
-    else
-    {
-        $content = drupal_render($form);
-        $commands = array();
-        $commands[] = array('command' => 'insert', 'method' => null, 'selector' => '#user-profile form', 'data' => $content, 'settings' => null);
-        $commands[] = ajax_command_invoke('.messages', 'remove');
-    }
-    $commands[] = ajax_command_prepend('#user-profile .pane-content', theme('status_messages'));
-    return array('#type' => 'ajax', '#commands' => $commands);
 }
 
 function studysauce_clean_checkins($classes)
@@ -1934,6 +1849,48 @@ function studysauce_get_sds_messages()
  * TODO: should this be put in our module instead of theme directory?
  */
 function studysauce_theme_registry_alter(&$theme_registry) {
+    $theme_registry['studysauce-adviser-import'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser-import',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-adviser-uploads'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser-uploads',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-adviser-header'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser-header',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-adviser-plans'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser-plans',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-adviser-deadlines'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser-deadlines',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-adviser-metrics'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser-metrics',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-adviser-goals'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser-goals',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
     $theme_registry['studysauce-userlist'] = array(
         'template' => drupal_get_path('theme', 'successinc') . '/userlist',
         'theme path' => drupal_get_path('theme', 'successinc'),

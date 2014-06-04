@@ -323,6 +323,8 @@ if (!empty($nodes['node']))
 <?php endif; ?>
 <?php if(!$lastOrder): ?>
     <div class="buy-plan">
-        <a href="#premium"><h2>Upgrade to premium to discover your unique study profile.</h2></a>
+        <div class="middle-wrapper">
+            <a href="#premium"><h2>Upgrade to premium to discover your unique study profile.</h2></a>
+        </div>
     </div>
 <?php endif; ?>

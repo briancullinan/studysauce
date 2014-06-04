@@ -21,6 +21,22 @@
     background-size: cover;
 }
 
+.page-path-customization2 h3:nth-last-child(2)
+{
+    display:none;
+}
+
+.page-path-customization2 #page
+{
+    position:relative;
+}
+
+.page-path-customization2 h3:last-child
+{
+    position:absolute;
+    bottom:0;
+}
+
 .field-name-field-university,
 .field-name-field-grades,
 .field-name-field-weekends,
@@ -195,7 +211,6 @@
 {
     visibility:hidden;
     margin: 0 0 0 -13px;
-    float:left;
 }
 
 .class-profile .row

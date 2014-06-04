@@ -1,11 +1,16 @@
 <?php
+drupal_add_css(drupal_get_path('theme', 'successinc') .'/plans.css');
+drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/plans.js');
 // check if user has purchased a plan
-global $user;
-
-$lastOrder = _studysauce_orders_by_uid($user->uid);
-//if($lastOrder)
-    list($events, $node, $classes, $entities) = studysauce_get_events($lastOrder ? $lastOrder->created : null);
-/*else
+if(!isset($account))
+{
+    global $user;
+    $account = user_load($user->uid);
+}
+$lastOrder = _studysauce_orders_by_uid($account->uid);
+if($lastOrder)
+    list($events, $node, $classes, $entities) = studysauce_get_events($account, $lastOrder ? $lastOrder->created : null);
+else
 {
     $sample = theme('studysauce-plan-sample');
     $encoded = preg_replace('/<\/?script>/i', '', $sample);
@@ -17,11 +22,10 @@ $lastOrder = _studysauce_orders_by_uid($user->uid);
         $classes[intval($i)] = $c;
     $events = array_map(function ($x) { return (array)$x; }, (array) $events);
 }
-*/
 
-$strategies = studysauce_get_strategies();
+if(!$lastOrder): ?><div class="buy-plan"><?php endif;
 
-if (!empty($lastOrder) && isset($user->field_parent_student['und'][0]['value']) && $user->field_parent_student['und'][0]['value'] == 'student'):
+    $strategies = studysauce_get_strategies();
 
     // on mobile only show event between this week, hide everything else unless the user clicks View historic
     $startWeek = strtotime(date("Y-m-d", strtotime('this week', time()))) - 86400;
@@ -29,7 +33,7 @@ if (!empty($lastOrder) && isset($user->field_parent_student['und'][0]['value']) 
     //$dotwStr = date('l', strtotime($event['start']));
     ?>
 
-    <h2><?php print (isset($user->field_first_name['und'][0]['value']) ? ('Personalized study plan for ' . $user->field_first_name['und'][0]['value']) : 'Your personalized study plan'); ?></h2>
+    <h2><?php print (isset($account->field_first_name['und'][0]['value']) ? ('Personalized study plan for ' . $account->field_first_name['und'][0]['value']) : 'Your personalized study plan'); ?></h2>
     <div id="calendar" class="full-only"></div>
     <script type="text/javascript">
 
@@ -130,9 +134,10 @@ if (!empty($lastOrder) && isset($user->field_parent_student['und'][0]['value']) 
     <p style="clear: both; margin-bottom:0; line-height:1px;">&nbsp;</p>
     <a class="return-to-top" href="#return-to-top">Top</a>
 
-<?php else: ?>
-    <div class="buy-plan">
-        <a href="#premium"><h2>Upgrade to premium and we will build your personalized study plan.</h2></a>
+<?php if(!$lastOrder): ?>
+        <div class="middle-wrapper">
+            <a href="#premium"><h2>Upgrade to premium and we will build your personalized study plan.</h2></a>
+        </div>
     </div>
 <?php endif; ?>
 

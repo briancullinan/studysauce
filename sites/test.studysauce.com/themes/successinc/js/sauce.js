@@ -50,6 +50,13 @@
             });
         });
 
+        jQuery('#study-quiz').on('mousedown', 'input[type="submit"]', function () {
+            jQuery('#home-tasks-quiz, #home-quiz').attr('checked', 'checked');
+            if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                jQuery('#home-tasks-checklist').attr('checked', 'checked');
+            return true;
+        });
+
         jQuery('#main-menu a').each(function () {
             var that = jQuery(this);
             // check if panel exists, we still want to allow items that lead to other pages

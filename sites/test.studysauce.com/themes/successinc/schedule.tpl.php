@@ -5,7 +5,8 @@ drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/jquery.timeentry.p
 drupal_add_library('system', 'ui.datepicker');
 drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/jquery.scrollintoview.js');
 
-if(drupal_get_path_alias(current_path()) == 'schedule')
+if(drupal_get_path_alias(current_path()) == 'schedule' ||
+    drupal_get_path_alias(current_path()) == 'schedule2')
     print theme('studysauce-funnel');
 
 global $user;
@@ -21,7 +22,8 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
 
 <div class="schedule">
     <?php
-    if(drupal_get_path_alias(current_path()) == 'schedule' ||
+    if(drupal_get_path_alias(current_path()) == 'schedule2' ||
+        drupal_get_path_alias(current_path()) == 'schedule' ||
         empty($classes))
     {
         for($i = 0; $i < 5; $i++)
@@ -259,14 +261,18 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
 
 <p class="class-actions">
     <a class="field-add-more-submit ajax-processed" href="#add-class">Add <span>+</span> class</a>
-    <a href="#save-class" class="highlighted-link more"><?php print (drupal_get_path_alias(current_path()) == 'schedule' ? 'Next' : 'Save'); ?></a>
+    <a href="#save-class" class="highlighted-link more"><?php
+        print (drupal_get_path_alias(current_path()) == 'schedule' || drupal_get_path_alias(current_path()) == 'schedule2'
+            ? 'Next'
+            : 'Save'); ?></a>
 </p>
 
-<?php if(drupal_get_path_alias(current_path()) == 'schedule'): ?>
+<?php if(drupal_get_path_alias(current_path()) == 'schedule' ||
+    drupal_get_path_alias(current_path()) == 'schedule2'): ?>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            jQuery('.page-path-schedule').addClass('edit-class-only');
-            jQuery('.page-path-schedule .row').not('#add-class-dialog, #add-other-dialog').addClass('edit');
+            jQuery('.page-path-schedule, .page-path-schedule2').addClass('edit-class-only');
+            jQuery('.page-path-schedule .row:visible, .page-path-schedule2 .row:visible').not('#add-class-dialog, #add-other-dialog').addClass('edit');
         });
     </script>
 <?php endif; ?>
@@ -525,7 +531,10 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
 
 <p class="other-actions">
     <a class="field-add-more-submit ajax-processed" href="#add-other">Add <span>+</span> other event</a>
-    <a href="#save-class" class="highlighted-link more"><?php print (drupal_get_path_alias(current_path()) == 'schedule' ? 'Next' : 'Save'); ?></a>
+    <a href="#save-class" class="highlighted-link more"><?php
+        print (drupal_get_path_alias(current_path()) == 'schedule' || drupal_get_path_alias(current_path()) == 'schedule2'
+            ? 'Next'
+            : 'Save'); ?></a>
 </p>
 
 <p style="margin-bottom:0;clear:both;line-height: 1px">&nbsp;</p>

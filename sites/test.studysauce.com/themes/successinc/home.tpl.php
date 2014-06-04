@@ -103,16 +103,16 @@ if(isset($user->field_partners['und'][0]['value']))
     <div id="getting-started">
         <h3>Getting started is easy</h3>
         <p>
-            <input id="home-tasks-quiz" name="home-schedule" type="checkbox" readonly="readonly"
+            <input id="home-tasks-quiz" name="home-tasks-quiz" type="checkbox" readonly="readonly"
                 <?php print (count($quizSubmissions) ? 'checked="checked"' : ''); ?> />
             <label for="home-tasks-quiz"><a href="#study-quiz">Take the study quiz</a></label><br />
-            <input id="home-tasks-schedule" name="home-schedule" type="checkbox" readonly="readonly"
+            <input id="home-tasks-schedule" name="home-tasks-schedule" type="checkbox" readonly="readonly"
                 <?php print (count($classes) ? 'checked="checked"' : ''); ?> />
             <label for="home-tasks-schedule"><a href="#schedule">Enter your class schedule</a></label><br />
-            <input id="home-tasks-deadlines" name="home-schedule" type="checkbox" readonly="readonly"
+            <input id="home-tasks-deadlines" name="home-tasks-deadlines" type="checkbox" readonly="readonly"
                 <?php print (studysauce_any_dates() ? 'checked="checked"' : ''); ?> />
             <label for="home-tasks-deadlines"><a href="#deadlines">Set up deadline reminders</a></label><br />
-            <input id="home-tasks-checklist" name="home-schedule" type="checkbox" readonly="readonly"
+            <input id="home-tasks-checklist" name="home-tasks-checklist" type="checkbox" readonly="readonly"
                 <?php print (count($classes) &&
                 studysauce_any_dates() &&
                 !empty($lastOrder) &&

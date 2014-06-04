@@ -4,6 +4,7 @@ $user = user_load($user->uid);
 if(in_array('adviser', $user->roles)): ?>
     <ul>
         <li><a href="#userlist"><span>&nbsp;</span>Home</a></li>
+        <li><a href="#import"><span>&nbsp;</span>Invite students</a>
         <li><a href="#settings"><span>&nbsp;</span>Settings</a>
         <ul>
             <li><a href="#account">Account information</a></li>

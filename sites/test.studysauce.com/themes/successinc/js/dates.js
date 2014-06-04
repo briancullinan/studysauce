@@ -21,6 +21,23 @@ jQuery(document).ready(function($) {
         jQuery(this).parents('.row').datesFunc();
     });
 
+    deadlines.on('click', 'a[href="#add-deadline"]', function (evt) {
+        evt.preventDefault();
+        var count = deadlines.find('.row').length,
+            addDeadline = deadlines.find('#new-dates-row').last(),
+            newDeadline = addDeadline.clone().attr('id', '').addClass('edit').insertBefore(addDeadline);
+        newDeadline.find('input[type="checkbox"], input[type="radio"]').each(function () {
+            var that = jQuery(this),
+                oldId = that.attr('id');
+            that.attr('id', oldId + count);
+            if(that.is('[type="radio"]'))
+                that.attr('name', that.attr('name') + count);
+            newDeadline.find('label[for="' + oldId + '"]').attr('for', oldId + count);
+        });
+        newDeadline.datesFunc();
+        deadlines.addClass('edit-date-only').scrollintoview();
+    });
+
     deadlines.on('click', 'a[href="#remove-reminder"]', function (evt) {
         evt.preventDefault();
         var row = jQuery(this).parents('.row');
@@ -32,8 +49,11 @@ jQuery(document).ready(function($) {
                        remove: row.attr('id').substr(0, 4) == 'eid-' ? row.attr('id').substring(4) : null
                    },
                    success: function (data) {
-                       deadlines.find('#new-dates-row ~ .row, #new-dates-row ~ .head')
-                           .replaceWith(jQuery(data.reminders).find('#new-dates-row ~ .row, #new-dates-row ~ .head'));
+                       deadlines.find('.row, .head, a[href="#add-deadline"]')
+                           .replaceWith(jQuery(data.reminders).find('.row, .head, a[href="#add-deadline"]'));
+
+                       if(deadlines.find('.row').not('#new-dates-row').length == 0)
+                           deadlines.find('a[href="#add-deadline"]').first().trigger('click');
                    }
                });
     });
@@ -45,7 +65,7 @@ jQuery(document).ready(function($) {
             var row = $(this),
                 reminders = row.find('input[name*="dates-reminder-"]:checked').map(function (i, x) {return $(x).val();}).get();
                 dates[dates.length] = {
-                    eid: row.attr('id').substr(0, 4) == 'eid-' ? row.attr('id').substring(4) : null,
+                    eid: typeof row.attr('id') != 'undefined' && row.attr('id').substr(0, 4) == 'eid-' ? row.attr('id').substring(4) : null,
                     className: row.find('.field-name-field-class-name select').val(),
                     assignment: row.find('.field-name-field-assignment input').val(),
                     reminders: reminders.join(','),
@@ -74,8 +94,8 @@ jQuery(document).ready(function($) {
                            }
 
                            // update key dates list
-                           deadlines.find('#new-dates-row ~ .row, #new-dates-row ~ .head')
-                               .replaceWith(jQuery(data.reminders).find('#new-dates-row ~ .row, #new-dates-row ~ .head'));
+                           deadlines.find('.row, .head, a[href="#add-deadline"]')
+                               .replaceWith(jQuery(data.reminders).find('.row, .head, a[href="#add-deadline"]'));
 
                            // update plan tab
                            var plan = jQuery('#plan');
@@ -85,10 +105,13 @@ jQuery(document).ready(function($) {
 
                            // update deadline view state
                            deadlines.removeClass('edit-date-only');
-                           //row.removeClass('edit').datesFunc();
+                           deadlines.find('.row').datesFunc();
                            deadlines.find('.field-add-more-submit').show();
                            //if(jQuery(window).width() <= 759)
                            //    row.scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
+                           jQuery('#home-reminders').attr('checked', 'checked');
+                           if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                               jQuery('#home-tasks-checklist').attr('checked', 'checked');
                        }
                    });
         }
@@ -112,16 +135,11 @@ jQuery(document).ready(function($) {
                 error = true;
             if(that.find('.field-name-field-due-date input').val().trim() == '')
                 error = true;
+
             if(error)
-            {
                 that.removeClass('valid').addClass('invalid');
-                that.parents('form').removeClass('valid').addClass('invalid');
-            }
             else
-            {
                 that.removeClass('invalid').addClass('valid');
-                that.parents('form').removeClass('invalid').addClass('valid');
-            }
 
             if(that.find('.field-name-field-class-name select').val() == 'Nonacademic')
                 that.find('.field-name-field-percent').hide();
@@ -159,6 +177,9 @@ jQuery(document).ready(function($) {
          });*/
     };
 
-    deadlines.find('.row').datesFunc();
+    if(deadlines.find('.row').not('#new-dates-row').length == 0)
+        deadlines.find('a[href="#add-deadline"]').first().trigger('click');
+    else
+        deadlines.find('.row').not('#new-dates-row').datesFunc();
 });
 

@@ -105,6 +105,10 @@ function checkinCallback(pos, eid, checkedIn) {
                         // update metrics
                         jQuery('#metrics .row:not(.heading)').remove();
                         jQuery('#checkins-list').append(data.rows);
+                        if(data.rows.length > 1)
+                            jQuery('#home-tips').attr('checked', 'checked');
+                        if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                            jQuery('#home-tasks-checklist').attr('checked', 'checked');
                         jQuery('#metrics').updateMetrics(data.times);
                         if (data.times.length == 0)
                             jQuery('#metrics').addClass('empty');
@@ -219,6 +223,9 @@ jQuery(document).ready(function ($) {
                                 touchedMusic: true
                             }
                         });
+        jQuery('#home-music').attr('checked', 'checked');
+        if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+            jQuery('#home-tasks-checklist').attr('checked', 'checked');
     });
 
     sessionStart = new Date().getTime() / 1000;

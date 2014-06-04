@@ -74,6 +74,7 @@ jQuery(document).ready(function($) {
             $.ajax({
                        url: '/node/save/profile',
                        type: 'POST',
+                       dataType: 'json',
                        data: profileData,
                        success: function (data) {
                            if(window.location.pathname == '/profile')
@@ -91,9 +92,6 @@ jQuery(document).ready(function($) {
                            {
                                // update calendar events
                                window.planEvents = data.events;
-                               if(calendar != null && typeof calendar.fullCalendar != 'undefined')
-                                   calendar.fullCalendar('refetchEvents');
-
 
                                // update plan tab
                                var plan = jQuery('#plan');
@@ -140,6 +138,7 @@ jQuery(document).ready(function($) {
         $.ajax({
                    url: '/node/save/schedule',
                    type: 'POST',
+                   dataType: 'json',
                    data: scheduleData,
                    success: function (data) {
 
@@ -151,9 +150,6 @@ jQuery(document).ready(function($) {
                        {
                            // update calendar events
                            window.planEvents = data.events;
-                           if(calendar != null && typeof calendar.fullCalendar != 'undefined')
-                               calendar.fullCalendar('refetchEvents');
-
 
                            // update plan tab
                            var plan = jQuery('#plan');

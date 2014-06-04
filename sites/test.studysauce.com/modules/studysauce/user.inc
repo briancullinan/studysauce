@@ -1,5 +1,11 @@
 <?php
 
+function studysauce_group_save()
+{
+
+}
+
+
 function studysauce_save_user($user = null, &$edit = array())
 {
     if(!isset($edit))

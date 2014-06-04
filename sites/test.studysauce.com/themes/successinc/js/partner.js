@@ -18,6 +18,10 @@ jQuery(document).ready(function($) {
 
     partner.on('change', 'input[name="partner-first"],input[name="partner-last"],input[name="partner-email"]', partnerFunc);
     partner.on('keyup', 'input[name="partner-first"],input[name="partner-last"],input[name="partner-email"]', partnerFunc);
+    partner.on('change', '.partner-permissions input', function () {
+        partnerFunc();
+        partner.find('a[href="#partner-save"]').first().trigger('click');
+    });
     partnerFunc();
 
     var partnerUpload = $('#partner-plupload');
@@ -89,6 +93,7 @@ jQuery(document).ready(function($) {
     // Event after a file has been uploaded from queue
     uploader.bind('FileUploaded', function(up, file, response) {
         // Respone is object with response parameter so 2x repsone
+        partnerUpload.find('.plup-list li').remove();
         var fileSaved = jQuery.parseJSON(response.response);
         var delta = partnerUpload.find('.plup-list li').length;
         var name = 'partner-plupload[' + delta + ']';
@@ -121,6 +126,10 @@ jQuery(document).ready(function($) {
         plup_resize_input(text_element);
         // Tell Drupal that form has been updated
         new_element.trigger('formUpdated');
+
+        // trigger save
+        partnerFunc();
+        partner.find('a[href="#partner-save"]').first().trigger('click');
     });
 
     // All fiels from queue has been uploaded
@@ -160,8 +169,16 @@ jQuery(document).ready(function($) {
                        permissions: permissions.join(','),
                        uploads: uploads
                    },
-                   success: function () {
+                   success: function (fileSaved) {
                        partner.removeClass('valid').addClass('invalid');
+                       jQuery('#home-partner').attr('checked', 'checked');
+                       if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                           jQuery('#home-tasks-checklist').attr('checked', 'checked');
+
+                       // update masthead
+                       jQuery('#partner-message a[href="#partner"], #partner-message span').replaceWith('<span>' + partner.find('input[name="partner-first"]').val() + ' ' + partner.find('input[name="partner-last"]').val() + '</span>');
+                       // update masthead picture
+                       jQuery('#partner-message img').replaceWith('<img src="'+ fileSaved.uri + '" height="48" width="48" alt="Partner" />')
                    }
                });
 

@@ -31,11 +31,6 @@
     display:none;
 }
 
-.page-dashboard #deadlines.edit-date-only .field-add-more-submit
-{
-    display:none;
-}
-
 .page-dashboard #deadlines.edit-date-only .row.edit,
 .page-dashboard #deadlines.edit-date-only #new-dates-row.edit
 {
@@ -170,7 +165,7 @@
 
 .page-dashboard #deadlines .head:nth-child(2)
 {
-    margin-top:0;
+    margin-top:30px;
 }
 
 .page-dashboard #deadlines .row.edit label:not(.option)

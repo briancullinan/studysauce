@@ -389,8 +389,6 @@ if(drupal_is_front_page() && $user->uid != 0)
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/jquery.tipsy.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/fullcalendar/fullcalendar.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/checkin.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/plans.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/user.js');
     drupal_add_js(libraries_get_path('plupload') . '/js/plupload.full.js');
 
@@ -401,9 +399,7 @@ if(drupal_is_front_page() && $user->uid != 0)
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/home.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/checkin.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/awards.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/deadlines.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/profile.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/plans.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/invite.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') .'/user-parent-student.css');
 }
@@ -491,7 +487,7 @@ drupal_add_html_head(array(
     '#tag' => 'meta',
     '#attributes' => array(
         'name' =>  'description',
-        'content' => 'Study Sauce teaches you the most effective study methods by automatically detecting your good and bad study behaviors.',
+        'content' => 'Study Sauce teaches you the most effective study methods and provides you the tools to make the most of your study time.',
     )), 'facebook_description_meta');
 
 drupal_add_html_head(array(

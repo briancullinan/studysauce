@@ -225,6 +225,29 @@ html,
     margin-left:40px;
 }
 
+#study-quiz .form-radios input
+{
+    margin: 0 0 0 -13px;
+    visibility: hidden;
+}
+
+#study-quiz .form-radios label.option
+{
+    display: inline;
+    position: relative;
+    z-index: 10;
+    padding-left: 30px;
+    background: url('images/menu_icons_128.png') no-repeat -54px -2851px transparent;
+    line-height: 26px;
+    font-size: 20px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+#study-quiz .form-radios input:checked + label.option
+{
+    background-position: -54px -2737px;
+}
 
 .webform-confirmation .links
 {
@@ -319,21 +342,31 @@ html,
     border-width:0 4px;
     border-style: solid;
     margin:0;
+    min-height: 85px;
 }
 
 .webform-confirmation .quiz-wrapper:nth-child(3) .grid_5.even,
 .webform-confirmation .quiz-wrapper:nth-child(3) .grid_5.right
 {
-    min-height:142px;
+    min-height:170px;
 }
 
+.webform-confirmation .quiz-wrapper:nth-child(4) .grid_5.even,
+.webform-confirmation .quiz-wrapper:nth-child(4) .grid_5.right
+{
+    min-height:105px;
+}
+
+.webform-confirmation .quiz-wrapper:nth-child(5) .grid_5.even,
 .webform-confirmation .quiz-wrapper:nth-child(5) .grid_5.right
 {
-    margin-top:-16px
+    min-height:120px;
 }
+
+.webform-confirmation .quiz-wrapper:nth-child(6) .grid_5.even,
 .webform-confirmation .quiz-wrapper:nth-child(6) .grid_5.right
 {
-    margin-top:-21px
+    min-height:130px;
 }
 
 .webform-confirmation .quiz-wrapper .grid_5.first

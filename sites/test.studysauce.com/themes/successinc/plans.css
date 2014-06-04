@@ -13,8 +13,7 @@
     height:100%;
     bottom:0;
     right:0;
-    background: url(images/plan_background.png) no-repeat 50% 50% #FFFFFF;
-    background-size: cover;
+    overflow: hidden;
 }
 
 .page-dashboard #plan #calendar
@@ -27,6 +26,13 @@
 {
     border:none;
     background-color: #eeeeee;
+}
+
+.page-dashboard #plan .fc-event-title
+{
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
 }
 
 .page-dashboard #plan .fc-event-title h4
@@ -75,6 +81,21 @@
 .page-dashboard #plan .fc-event-title small
 {
     display:none;
+}
+
+.page-dashboard #plan .row
+{
+    clear: both;
+    display: block;
+    vertical-align: top;
+    position: relative;
+    white-space: nowrap;
+}
+
+.page-dashboard #plan .row > *
+{
+    white-space: nowrap;
+    vertical-align: top;
 }
 
 .page-dashboard #plan .row.deadline
@@ -235,6 +256,54 @@
     vertical-align: top;
 }
 
+
+.strategy-upload .plup-filelist
+{
+    border-top:0;
+}
+
+.strategy-upload .plup-list
+{
+    list-style-type: none;
+    margin: 20px;
+    padding: 0;
+}
+
+.strategy-upload .plup-list li
+{
+    display:none;
+    padding:0;
+    margin:0;
+    border:0;
+}
+
+.strategy-upload .plup-list li:last-child
+{
+    display:block;
+}
+
+.strategy-upload .plup-thumb-wrapper
+{
+    text-align: center;
+}
+
+.strategy-upload .plup-thumb-wrapper img
+{
+    margin:0 auto;
+}
+
+.strategy-upload .plup-select
+{
+    position:absolute;
+    top:0;
+    height:100%;
+    width:100%;
+    left:0;
+    line-height: 0;
+    color:transparent;
+    font-size: 0;
+}
+
 .page-dashboard #plan .strategy-spaced-notes textarea,
 .page-dashboard #plan .strategy-notes textarea
 {
@@ -393,7 +462,6 @@
 }
 
 .page-dashboard #plan .class .class,
-.page-path-schedule .class,
 .page-dashboard #plan .class-event.fc-event
 {
     border: 3px solid #555555;
@@ -512,7 +580,7 @@
 .page-dashboard #plan .sort-by input
 {
     visibility: hidden;
-    margin: 0;
+    margin: 0 0 0 -13px;
 }
 
 .page-dashboard #plan .sort-by label
@@ -526,7 +594,6 @@
     background: url('images/menu_icons_128.png') no-repeat -54px -2848px transparent;
     padding-left: 25px;
     display:inline-block;
-    margin-left:-12px;
 }
 
 .page-dashboard #plan .sort-by input:checked + label:not(:last-child)
@@ -617,9 +684,7 @@
 
 .page-dashboard #plan .field-name-field-completed input[type="checkbox"]
 {
-    position: relative;
-    z-index: 1;
-    margin-left: 10px;
+    margin: 0 0 0 -13px;
     visibility: hidden;
 }
 
@@ -628,7 +693,7 @@
     display: inline-block;
     position: relative;
     z-index: 10;
-    background: url('images/menu_icons_128.png') no-repeat -54px -2853px transparent;
+    background: url('images/menu_icons_128.png') no-repeat 50% -2853px transparent;
     font-size: 28px;
     min-width: 24px;
     cursor: pointer;
@@ -636,7 +701,7 @@
 
 .page-dashboard #plan .field-name-field-completed input[type="checkbox"]:checked + label
 {
-    background-position: -54px -2739px;
+    background-position: 50% -2739px;
 }
 
 @media all and (max-width:980px)
@@ -717,6 +782,7 @@
         float:none;
     }
 
+    .page-dashboard #plan .field-select-strategy,
     .page-dashboard #plan .strategy-teach,
     .page-dashboard #plan .strategy-active,
     .page-dashboard #plan .strategy-spaced,
@@ -728,12 +794,28 @@
 
     .page-dashboard #plan .selected .mini-checkin
     {
-        display:inline-block;
+        display: block;
         position: static;
-        margin-left: 0;
+        margin-left: auto;
         left: 0;
+        text-align: center;
+        float: none;
+        margin-right: auto;
     }
 
+    .page-dashboard #plan .return-to-top
+    {
+        left: 50%;
+        margin-left:-50px;
+        bottom:20px;
+    }
+
+    .page-dashboard #plan .sort-by label:last-child
+    {
+        float:none !important;
+        clear:both;
+        display:block;
+    }
 }
 
 

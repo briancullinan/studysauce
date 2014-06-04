@@ -38,6 +38,9 @@ global $user;
     <input type="password" name="pass" size="25" maxlength="128" class="form-text">
 </div>
 <br />
+<div class="highlighted-link form-actions form-wrapper">
+    <!--<a href="#cancel-account">Delete your account</a> --><a class="more form-submit ajax-processed" href="#save-account">Save</a>
+</div>
 <?php
 $lastOrder = _studysauce_orders_by_uid($user->uid);
 ?>
@@ -63,10 +66,6 @@ $lastOrder = _studysauce_orders_by_uid($user->uid);
             : 'N/A'); ?></label>
 </div>
 <br />
-<div class="highlighted-link form-actions form-wrapper">
-<!--<a href="#cancel-account">Delete your account</a> --><a class="more form-submit ajax-processed" href="#save-account">Save</a>
-    <a href="/buy" class="more">Upgrade</a>
-
-</div>
+<div class="highlighted-link form-actions form-wrapper"><a href="/buy" class="more">Upgrade</a></div>
 
 

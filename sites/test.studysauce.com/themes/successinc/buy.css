@@ -41,6 +41,7 @@
     text-align: center;
 }
 
+.page-path-schedule2 #page-top,
 .page-path-schedule #page-top,
 .page-path-profile #page-top,
 .page-path-customization2 #page-top,
@@ -49,6 +50,7 @@
     display:none;
 }
 
+.page-path-schedule2 .container_12,
 .page-path-schedule .container_12,
 .page-path-profile .container_12,
 .page-path-customization2 .container_12,
@@ -56,6 +58,7 @@
 .page-cart-checkout .container_12,
 .page-node-89 .container_12,
 .page-node-13 .container_12,
+.page-path-schedule2 .container_12 .grid_12,
 .page-path-schedule .container_12 .grid_12,
 .page-path-profile .container_12 .grid_12,
 .page-path-customization2 .container_12 .grid_12,
@@ -69,6 +72,7 @@
     float:none;
 }
 
+.page-path-schedule2 #subfooter,
 .page-path-schedule #subfooter,
 .page-path-profile #subfooter,
 .page-path-customization2 #subfooter,
@@ -88,6 +92,7 @@
     height: 28px;
 }
 
+.page-path-schedule2 h2,
 .page-path-schedule h2,
 .page-path-profile h2,
 .page-path-customization2 h2,
@@ -100,6 +105,7 @@
     color:#555555;
 }
 
+.page-path-schedule2 #page,
 .page-path-schedule #page,
 .page-path-profile #page,
 .page-path-customization2 #page,
@@ -117,6 +123,7 @@
     padding-right:20px;
 }
 
+.page-path-schedule2,
 .page-path-schedule,
 .page-path-profile,
 .page-path-customization2,
@@ -407,7 +414,8 @@
 @media all and (max-width:1442px)
 {
 
-    .page-path-schedule #page,
+    .page-path-schedule2 #page,
+.page-path-schedule #page,
     .page-path-profile #page,
     .page-path-customization2 #page,
     .page-path-customization #page,
@@ -422,6 +430,7 @@
 
 @media all and (max-width:1080px)
 {
+    .page-path-schedule2 #page,
     .page-path-schedule #page,
     .page-path-profile #page,
     .page-path-customization2 #page,
@@ -437,6 +446,19 @@
 
 @media all and (max-width:760px)
 {
+
+    .page-path-schedule2 #subfooter,
+    .page-path-schedule #subfooter,
+    .page-path-profile #subfooter,
+    .page-path-customization2 #subfooter,
+    .page-path-customization #subfooter,
+    .page-cart-checkout #subfooter,
+    .page-node-89 #subfooter,
+    .page-node-13 #subfooter
+    {
+        position: static;
+    }
+
     .page-cart-checkout fieldset
     {
         width: auto;

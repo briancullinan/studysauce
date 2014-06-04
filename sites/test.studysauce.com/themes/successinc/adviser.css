@@ -1,0 +1,55 @@
+.user-pane ul
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    display:inline-block;
+}
+
+.user-pane .user-name
+{
+    position: fixed;
+    top: 105px;
+    z-index: 98;
+    width: 100%;
+    left: 0;
+    box-sizing: border-box;
+    padding: 0 30px 0 230px;
+}
+
+.user-pane .user-name h2
+{
+    display:inline-block;
+}
+
+.user-pane .user-name > div
+{
+    background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+    border-bottom: 2px solid #555555;
+    padding-top:5px;
+}
+
+.user-pane ul li
+{
+    list-style: none;
+    margin: 0;
+    padding: 0 20px;
+    display:inline-block;
+}
+
+.user-pane > div > #goals,
+.user-pane > div > #metrics,
+.user-pane > div > #deadlines,
+.user-pane > div > #uploads,
+.user-pane > div > #plan
+{
+    padding-top:145px;
+    min-height: 145px;
+    margin-top:-145px;
+}
+
+.user-pane > div > #goals
+{
+    margin-top:-125px;
+}

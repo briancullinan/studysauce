@@ -1,0 +1,90 @@
+
+#import .field-add-more-submit
+{
+    position: relative;
+    z-index: 0;
+    padding: 10px 0;
+    text-shadow: 0 1px 2px rgba(255,255,255,.5);
+    background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+    border-bottom: 0;
+    color: #555555;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    display: inline-block;
+    float:left;
+}
+
+#import .field-add-more-submit span
+{
+    margin: 0 10px 0 0;
+    line-height: 30px;
+    border-radius: 100%;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    top: -8px;
+    float: left;
+    font-size: 50px;
+    vertical-align: middle;
+}
+
+#import .row
+{
+    clear: both;
+    display: block;
+    vertical-align: top;
+    position: relative;
+    white-space: nowrap;
+}
+
+#import .row label
+{
+    display:none;
+}
+
+#import .row.first label
+{
+    display:block;
+}
+
+#import #add-user-row
+{
+    display:none;
+}
+
+#import .row > *
+{
+    white-space: nowrap;
+    vertical-align: top;
+}
+
+#import .row .field-name-field-first-name
+{
+    display: inline-block;
+    width:33%;
+}
+
+#import .row .field-name-field-last-name
+{
+    display: inline-block;
+    width:33%;
+}
+
+#import .row .field-name-field-email
+{
+    display: inline-block;
+    width:33%;
+}
+
+#import fieldset
+{
+    border:2px solid #555555;
+    border-radius: 5px;
+}
+
+#import .highlighted-link
+{
+    text-align: right;
+    margin-top:30px;
+}

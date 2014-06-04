@@ -1,7 +1,7 @@
 
 jQuery(document).ready(function($) {
 
-    var schedule = $('#schedule, .page-path-schedule').first();
+    var schedule = $('#schedule, .page-path-schedule, .page-path-schedule2').first();
 
     $.fn.planFunc = function () {
         jQuery(this).each(function () {
@@ -49,7 +49,7 @@ jQuery(document).ready(function($) {
         if(schedule.find('.row.edit.valid').length == 0 &&
            (schedule.find('.field-name-field-university input').val().trim() == '' ||
             schedule.find('.field-name-field-university input').val() == schedule.find('.field-name-field-university input').prop('defaultValue')) &&
-            window.location.pathname != '/schedule')
+            window.location.pathname != '/schedule' && window.location.pathname != '/schedule2')
             schedule.removeClass('valid').addClass('invalid');
         else
             schedule.removeClass('invalid').addClass('valid');
@@ -73,8 +73,6 @@ jQuery(document).ready(function($) {
     {
         // update calendar events
         window.planEvents = data.events;
-        if(calendar != null && typeof calendar.fullCalendar != 'undefined')
-            calendar.fullCalendar('refetchEvents');
 
         // reset edit mode
         schedule.removeClass('edit-class-only edit-other-only');
@@ -123,13 +121,14 @@ jQuery(document).ready(function($) {
             checkedIn = jQuery('#checkin .classes a.checked-in').length > 0 ? jQuery('#checkin .classes a.checked-in').attr('id').substring(5) : '';
         for(var eid in data.classes)
         {
-            jQuery('#checkin .classes').append('<a href="#class' + c + '" class="class' + c + ' cid' + eid + ' ' + (checkedIn == eid ? 'checked-in' : '') + '"><span>&nbsp;</span>' + data.classes[eid] + '</a>');
+            jQuery('#checkin .classes').append('<a href="#class' + c + '" class="class' + c + ' cid' + eid + ' ' + (checkedIn == eid ? 'checked-in' : '') + '"><span>&nbsp;</span>' + (data.classes[eid].length > 20 ? (data.classes[eid] + '...') : data.classes[eid]) + '</a>');
             c++;
         }
         if(c > 0)
         {
             jQuery('#checkin').removeClass('empty edit-schedule');
             jQuery('#deadlines').removeClass('empty');
+            jQuery('#home-schedule').attr('checked', 'checked');
         }
         else
         {
@@ -242,7 +241,7 @@ jQuery(document).ready(function($) {
     schedule.on('click', 'a[href="#save-class"]', function (evt) {
         evt.preventDefault();
         var classes = [];
-        schedule.find('.row.edit.valid, .row.valid.edit').each(function () {
+        schedule.find('.row.edit.valid:visible, .row.valid.edit:visible').each(function () {
             var row = $(this),
                 dotw = row.find('.field-name-field-day-of-the-week input[name*="schedule-dotw-"]:checked').map(function (i, x) {return $(x).val();}).get();
             if(row.find('.field-name-field-recurring input[value="monthly"]:checked').length > 0)
@@ -269,6 +268,8 @@ jQuery(document).ready(function($) {
                        },
                        success: function (data) {
                            if(window.location.pathname == '/schedule')
+                               window.location = '/schedule2';
+                           else if(window.location.pathname == '/schedule2')
                                window.location = '/customization';
                            else
                            {

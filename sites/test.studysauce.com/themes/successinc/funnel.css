@@ -81,6 +81,7 @@
     background-position:-75px 0;
 }
 
+.page-path-schedule2 .guide li:nth-child(5) > span > span,
 .page-path-schedule .guide li:nth-child(5) > span > span
 {
     background-position:-75px -150px;
@@ -98,7 +99,9 @@
 .page-path-customization .guide li:nth-child(2),
 .page-path-customization .guide li:nth-child(4),
 .page-path-customization .guide li:nth-child(6),
+.page-path-schedule2 .guide li:nth-child(4),
 .page-path-schedule .guide li:nth-child(4),
+.page-path-schedule2 .guide li:nth-child(2),
 .page-path-schedule .guide li:nth-child(2),
 .page-path-profile .guide li:nth-child(2)
 {
@@ -106,6 +109,7 @@
 }
 
 .page-path-customization .guide li:nth-child(1) > span > span,
+.page-path-schedule2 .guide li:nth-child(1) > span > span,
 .page-path-schedule .guide li:nth-child(1) > span > span,
 .page-path-profile .guide li:nth-child(1) > span > span
 {
@@ -113,6 +117,7 @@
 }
 
 .page-path-customization .guide li:nth-child(3) > span > span,
+.page-path-schedule2 .guide li:nth-child(3) > span > span,
 .page-path-schedule .guide li:nth-child(3) > span > span
 {
     background-position:-150px -75px;
@@ -124,7 +129,9 @@
 }
 
 .page-path-profile .guide li:nth-child(1) span,
+.page-path-schedule2 .guide li:nth-child(1) span,
 .page-path-schedule .guide li:nth-child(1) span,
+.page-path-schedule2 .guide li:nth-child(3) span,
 .page-path-schedule .guide li:nth-child(3) span,
 .page-path-customization .guide li:nth-child(1) span,
 .page-path-customization .guide li:nth-child(3) span,
@@ -139,6 +146,7 @@
 .page-path-profile .guide li:nth-child(3),
 .page-path-customization2 .guide li:nth-child(7),
 .page-path-customization .guide li:nth-child(7),
+.page-path-schedule2 .guide li:nth-child(5),
 .page-path-schedule .guide li:nth-child(5)
 {
     font-weight: bold;
@@ -197,6 +205,7 @@
         background-position:-275px 0;
     }
 
+    .page-path-schedule2 .guide li:nth-child(5) > span > span,
     .page-path-schedule .guide li:nth-child(5) > span > span
     {
         background-position:-275px -100px;
@@ -209,6 +218,7 @@
     }
 
     .page-path-customization .guide li:nth-child(1) > span > span,
+    .page-path-schedule2 .guide li:nth-child(1) > span > span,
     .page-path-schedule .guide li:nth-child(1) > span > span,
     .page-path-profile .guide li:nth-child(1) > span > span
     {
@@ -216,6 +226,7 @@
     }
 
     .page-path-customization .guide li:nth-child(3) > span > span,
+    .page-path-schedule2 .guide li:nth-child(3) > span > span,
     .page-path-schedule .guide li:nth-child(3) > span > span
     {
         background-position:-325px -50px;
@@ -224,5 +235,34 @@
     .page-path-customization .guide li:nth-child(7) > span > span
     {
         background-position:-275px -150px;
+    }
+}
+
+@media all and (max-width:480px)
+{
+
+    .guide li.line
+    {
+        margin-top:-35px;
+    }
+
+    .page-path-profile .guide li:nth-child(1)
+    {
+        margin-bottom:20px;
+    }
+
+    .page-path-profile .guide li:nth-child(3) > span > span
+    {
+        margin-bottom:20px;
+    }
+
+    .page-path-profile .guide li:nth-child(5)
+    {
+        margin-bottom:20px;
+    }
+
+    .page-path-profile .guide li:nth-child(7) > span > span
+    {
+        margin-bottom:20px;
     }
 }

@@ -1,5 +1,20 @@
 
-.page-path-schedule .field-name-field-class-name span {
+body.page-path-schedule2 .guide ~ *, body.page-path-schedule2 .guide,
+body.page-path-schedule2 .class-actions ~ script,
+body.page-path-schedule2 .class-actions ~ hr,
+body.page-path-schedule .class-actions ~ *
+{
+    display:none;
+}
+
+body.page-path-schedule2 .class-actions ~ *
+{
+    display:block;
+}
+
+.page-path-schedule2 .field-name-field-class-name span,
+.page-path-schedule .field-name-field-class-name span
+{
     display: inline-block;
     height: 22px;
     width: 22px;
@@ -12,58 +27,68 @@
     vertical-align: top;
 }
 
+.page-path-schedule2 .class,
 .page-path-schedule .class
 {
     border: 3px solid #555555;
     color:#555555;
 }
 
+.page-path-schedule2 .class0,
 .page-path-schedule .class0
 {
     background-color:#FF1100;
 }
 
+.page-path-schedule2 .class1,
 .page-path-schedule .class1
 {
     background-color:#FF9900;
 }
 
+.page-path-schedule2 .class2,
 .page-path-schedule .class2
 {
     background-color:#FFDD00;
 }
 
+.page-path-schedule2 .class3,
 .page-path-schedule .class3
 {
     background-color:#BBEE00;
 }
 
+.page-path-schedule2 .class4,
 .page-path-schedule .class4
 {
     background-color:#33DD00;
 }
 
+.page-path-schedule2 .class5,
 .page-path-schedule .class5
 {
     background-color:#009999;
 }
 
+.page-path-schedule2 .class6,
 .page-path-schedule .class6
 {
     background-color:#1133AA;
 }
 
+.page-path-schedule2 .class7,
 .page-path-schedule .class7
 {
     background-color:#6611AA;
 }
 
+.page-path-schedule2 .class8,
 .page-path-schedule .class8
 {
     background-color:#BB0088;
 }
 
-.page-dashboard #plan .row,
+.page-path-schedule2 .row,
 .page-path-schedule .row,
 .page-dashboard #goals .row,
 .page-dashboard #deadlines .row
@@ -75,7 +100,7 @@
     white-space: nowrap;
 }
 
-.page-dashboard #plan .row > *,
+.page-path-schedule2 .row > *,
 .page-path-schedule .row > *,
 .page-dashboard #goals .row > *,
 .page-dashboard #deadlines .row > *
@@ -84,13 +109,16 @@
     vertical-align: top;
 }
 
-.page-path-schedule a[href="#edit-class"] {
+.page-path-schedule2 a[href="#edit-class"],
+.page-path-schedule a[href="#edit-class"]
+{
     display: inline-block;
     height: 24px;
     width: 24px;
     background: url(images/edit.png) no-repeat 50% 50% transparent;
 }
 
+.page-path-schedule2 a[href="#remove-class"],
 .page-path-schedule a[href="#remove-class"]
 {
     display:inline-block;
@@ -99,11 +127,13 @@
     background: url(images/trash.png) no-repeat 50% 50% transparent;
 }
 
+.page-path-schedule2 .ui-resizable-handle,
 .page-path-schedule .ui-resizable-handle
 {
     display:none !important;
 }
 
+.page-path-schedule2 .field-add-more-submit,
 .page-path-schedule .field-add-more-submit
 {
     position: relative;
@@ -118,12 +148,14 @@
     display:inline-block;
 }
 
+.page-path-schedule2 .field-add-more-submit:active,
 .page-path-schedule .field-add-more-submit:active
 {
     /*margin-top: 2px;*/
     box-shadow: none;
 }
 
+.page-path-schedule2 .field-add-more-submit span,
 .page-path-schedule .field-add-more-submit span
 {
     margin: 0 10px 0 0;
@@ -138,21 +170,25 @@
     vertical-align: middle;
 }
 
+.page-path-schedule2 .field-add-more-submit:active span,
 .page-path-schedule .field-add-more-submit:active span
 {
     border-bottom-width:1px;
 }
 
+.page-path-schedule2 .field-name-field-class-name input.form-text,
 .page-path-schedule .field-name-field-class-name input.form-text
 {
     width:100%;
 }
 
+.page-path-schedule2 .field-name-field-class-name,
 .page-path-schedule .field-name-field-class-name
 {
     text-align:left;
 }
 
+.page-path-schedule2 .field-name-field-class-name .form-checkboxes input,
 .page-path-schedule .field-name-field-class-name .form-checkboxes input
 {
     opacity: 0;
@@ -160,6 +196,7 @@
     margin:0;
 }
 
+.page-path-schedule2 .field-name-field-class-name .form-checkboxes label,
 .page-path-schedule .field-name-field-class-name .form-checkboxes label
 {
     margin: 3px 0 0 -12px;
@@ -178,6 +215,7 @@
     overflow: hidden;
 }
 
+.page-path-schedule2 .field-name-field-class-name .form-checkboxes input:checked + label,
 .page-path-schedule .field-name-field-class-name .form-checkboxes input:checked + label
 {
     background: none repeat scroll 0 0 #CCCCCC;
@@ -186,12 +224,16 @@
     transition: none 0s ease 0s;
 }
 
+.page-path-schedule2.edit-other-only .field-add-more-submit,
 .page-path-schedule.edit-other-only .field-add-more-submit,
+.page-path-schedule2.edit-class-only .field-add-more-submit,
 .page-path-schedule.edit-class-only .field-add-more-submit
 {
 }
 
+.page-path-schedule2 .row .field-name-field-class-name .read-only span,
 .page-path-schedule .row .field-name-field-class-name .read-only span,
+.page-path-schedule2 .row .class-name span,
 .page-path-schedule .row .class-name span
 {
     display: inline-block;
@@ -230,40 +272,62 @@
     background-position: 50% -2740px;
 }
 
+.page-path-schedule2 .row .read-only label,
 .page-path-schedule .row .read-only label,
+.page-path-schedule2 .row.edit > div > .form-item > label,
 .page-path-schedule .row.edit > div > .form-item > label,
+.page-path-schedule2 .row.edit .field-name-field-class-name .read-only,
 .page-path-schedule .row.edit .field-name-field-class-name .read-only,
+.page-path-schedule2 .row.edit .field-name-field-day-of-the-week .read-only,
 .page-path-schedule .row.edit .field-name-field-day-of-the-week .read-only,
+.page-path-schedule2 .row.edit .field-name-field-recurring .read-only,
 .page-path-schedule .row.edit .field-name-field-recurring .read-only,
+.page-path-schedule2 .row.edit .field-name-field-time .read-only,
 .page-path-schedule .row.edit .field-name-field-time .read-only,
+.page-path-schedule2 .row .field-name-field-class-name .form-type-textfield,
 .page-path-schedule .row .field-name-field-class-name .form-type-textfield,
+.page-path-schedule2 .row .field-name-field-day-of-the-week .form-type-checkboxes,
 .page-path-schedule .row .field-name-field-day-of-the-week .form-type-checkboxes,
+.page-path-schedule2 .row .field-name-field-recurring .form-type-checkbox,
 .page-path-schedule .row .field-name-field-recurring .form-type-checkbox,
+.page-path-schedule2 .row .field-name-field-time .form-type-textfield,
 .page-path-schedule .row .field-name-field-time .form-type-textfield,
+.page-path-schedule2 .row .highlighted-link a[href="#save-class"],
 .page-path-schedule .row .highlighted-link a[href="#save-class"],
+.page-path-schedule2 .row.edit > .read-only,
 .page-path-schedule .row.edit > .read-only,
+.page-path-schedule2 .row a[href="#cancel-class"],
 .page-path-schedule .row a[href="#cancel-class"]
 {
     display:none;
 }
 
+.page-path-schedule2 .row.edit a[href="#cancel-class"],
 .page-path-schedule .row.edit a[href="#cancel-class"],
+.page-path-schedule2 .row > .read-only,
 .page-path-schedule .row > .read-only,
+.page-path-schedule2 .row.edit .highlighted-link a[href="#save-class"],
 .page-path-schedule .row.edit .highlighted-link a[href="#save-class"]
 {
     display: inline-block;
 }
 
+.page-path-schedule2 .row.edit:first-child .form-item > label,
 .page-path-schedule .row.edit:first-child .form-item > label,
+.page-path-schedule2 .row:first-child .read-only label,
 .page-path-schedule .row:first-child .read-only label,
+.page-path-schedule2 .row.edit .field-name-field-class-name .form-type-textfield,
 .page-path-schedule .row.edit .field-name-field-class-name .form-type-textfield,
+.page-path-schedule2 .row.edit .field-name-field-day-of-the-week .form-type-checkboxes,
 .page-path-schedule .row.edit .field-name-field-day-of-the-week .form-type-checkboxes,
+.page-path-schedule2 .row.edit .field-name-field-recurring .form-type-checkboxes,
 .page-path-schedule .row.edit .field-name-field-recurring .form-type-checkboxes
 {
     display:block;
     margin:0;
 }
 
+.page-path-schedule2 .row.edit .field-name-field-time .form-type-textfield,
 .page-path-schedule .row.edit .field-name-field-time .form-type-textfield
 {
     width: 25%;
@@ -274,13 +338,17 @@
     -moz-box-sizing: border-box;
 }
 
+.page-path-schedule2 .row.edit:first-child a[href="#cancel-class"],
 .page-path-schedule .row.edit:first-child a[href="#cancel-class"],
+.page-path-schedule2 .row.edit:first-child a[href="#save-class"],
 .page-path-schedule .row.edit:first-child a[href="#save-class"]
 {
     margin-top: 22px;
 }
 
+.page-path-schedule2 .row.edit:first-child .field-name-field-day-of-the-week > .form-item > label,
 .page-path-schedule .row.edit:first-child .field-name-field-day-of-the-week > .form-item > label,
+.page-path-schedule2 .row:first-child .field-name-field-day-of-the-week > .read-only > label,
 .page-path-schedule .row:first-child .field-name-field-day-of-the-week > .read-only > label
 {
     width:14.28%;
@@ -288,6 +356,7 @@
     text-align: center;
 }
 
+.page-path-schedule2 .row .field-name-field-class-name .read-only,
 .page-path-schedule .row .field-name-field-class-name .read-only
 {
     padding: 5px 0;
@@ -297,6 +366,7 @@
 
 
 /*
+.page-path-schedule2 .field-name-field-class-name,
 .page-path-schedule .field-name-field-class-name
 {
     width:25%;
@@ -304,6 +374,7 @@
     float:left;
 }
 
+.page-path-schedule2 .field-name-field-day-of-the-week,
 .page-path-schedule .field-name-field-day-of-the-week
 {
     width:24%;
@@ -311,6 +382,7 @@
     float:left;
 }
 
+.page-path-schedule2 .field-name-field-time,
 .page-path-schedule .field-name-field-time
 {
     width:50%;
@@ -320,18 +392,23 @@
 }
 */
 
+.page-path-schedule2 .form-submit,
 .page-path-schedule .form-submit,
+.page-path-schedule2 .field-name-field-time .description,
 .page-path-schedule .field-name-field-time .description,
+.page-path-schedule2 .field-name-field-holidays .description,
 .page-path-schedule .field-name-field-holidays .description
 {
     display:none;
 }
 
+.page-path-schedule2 .field-name-field-time .date-padding div input,
 .page-path-schedule .field-name-field-time .date-padding div input
 {
     width:97%;
 }
 
+.page-path-schedule2 .field-name-field-time,
 .page-path-schedule .field-name-field-time
 {
     width: 50%;
@@ -344,12 +421,14 @@
     margin-right: -100px;
 }
 
+.page-path-schedule2 .row.edit .field-name-field-time,
 .page-path-schedule .row.edit .field-name-field-time
 {
     padding-right: 0;
     margin-right: 0;
 }
 
+.page-path-schedule2 .field-name-field-class-name,
 .page-path-schedule .field-name-field-class-name
 {
     width: 20%;
@@ -358,15 +437,17 @@
     vertical-align: top;
 }
 
+.page-path-schedule2 .field-name-field-day-of-the-week,
 .page-path-schedule .field-name-field-day-of-the-week
 {
     width: 30%;
-    min-width:240px;
+    min-width:250px;
     display:inline-block;
     vertical-align: top;
     text-align: left;
 }
 
+.page-path-schedule2 .field-name-field-recurring,
 .page-path-schedule .field-name-field-recurring
 {
     vertical-align: top;
@@ -374,6 +455,7 @@
     text-align: center;
 }
 
+.page-path-schedule2 .field-name-field-day-of-the-week .form-checkboxes .form-item,
 .page-path-schedule .field-name-field-day-of-the-week .form-checkboxes .form-item
 {
     display: inline-block;
@@ -404,6 +486,7 @@
     white-space:normal !important;
 }
 
+.page-path-schedule2 .field-name-field-time .read-only,
 .page-path-schedule .field-name-field-time .read-only
 {
     width: 49%;
@@ -460,17 +543,20 @@
     background-position: -53px -2740px;
 }
 
+.page-path-schedule2 .field-name-field-time input[type="checkbox"] + label,
 .page-path-schedule .field-name-field-time input[type="checkbox"] + label
 {
     margin-top:-10px;
 }
 
+.page-path-schedule2 .field-name-field-time .start-date-wrapper > .form-item .form-item:first-child,
 .page-path-schedule .field-name-field-time .start-date-wrapper > .form-item .form-item:first-child
 {
     position:absolute;
     left:40%;
 }
 
+.page-path-schedule2 .field-name-field-time .end-date-wrapper > .form-item .form-item:first-child,
 .page-path-schedule .field-name-field-time .end-date-wrapper > .form-item .form-item:first-child
 {
     position:absolute;
@@ -478,6 +564,7 @@
     top:0;
 }
 
+.page-path-schedule2 .field-name-field-time .end-date-wrapper > .form-item .form-item:last-child,
 .page-path-schedule .field-name-field-time .end-date-wrapper > .form-item .form-item:last-child
 {
     position:absolute;
@@ -485,12 +572,14 @@
     top:0;
 }
 
+.page-path-schedule2 .field-name-field-time .start-date-wrapper > .form-item .form-item:last-child,
 .page-path-schedule .field-name-field-time .start-date-wrapper > .form-item .form-item:last-child
 {
     position:absolute;
     left:0;
 }
 
+.page-path-schedule2 .row > .read-only,
 .page-path-schedule .row > .read-only
 {
     clear: both;
@@ -500,19 +589,24 @@
     display:inline-block;
 }
 
+.page-path-schedule2 .other-actions,
 .page-path-schedule .other-actions,
+.page-path-schedule2 .class-actions,
 .page-path-schedule .class-actions
 {
     vertical-align: top;
     clear:both;
 }
 
+.page-path-schedule2 .other-actions > *,
 .page-path-schedule .other-actions > *,
+.page-path-schedule2 .class-actions > *,
 .page-path-schedule .class-actions > *
 {
     vertical-align: top;
 }
 
+.page-path-schedule2 a[href="#save-class"],
 .page-path-schedule a[href="#save-class"]
 {
     display:inline-block;
@@ -522,22 +616,26 @@
 /*
 @media all and (max-width: 1350px)
 {
-    .page-path-schedule .row
+    .page-path-schedule2 .row,
+.page-path-schedule .row
     {
         white-space: normal;
     }
 
-    .page-path-schedule .field-name-field-class-name
+    .page-path-schedule2 .field-name-field-class-name,
+.page-path-schedule .field-name-field-class-name
     {
         width: 51%;
     }
 
-    .page-path-schedule .field-name-field-day-of-the-week
+    .page-path-schedule2 .field-name-field-day-of-the-week,
+.page-path-schedule .field-name-field-day-of-the-week
     {
         width:51%;
     }
 
-    .page-path-schedule .field-name-field-time
+    .page-path-schedule2 .field-name-field-time,
+.page-path-schedule .field-name-field-time
     {
         width: 51%;
     }
@@ -547,28 +645,35 @@
 @media all and (max-width:1100px)
 {
 
-    .page-path-schedule .row
+    .page-path-schedule2 .row,
+.page-path-schedule .row
     {
         white-space: normal;
         margin: 3em 0;
     }
 
-    .page-path-schedule .row.edit > div > .form-item > label,
-    .page-path-schedule .row.edit .form-item > label,
-    .page-path-schedule .row .read-only label
+    .page-path-schedule2 .row.edit > div > .form-item > label,
+.page-path-schedule .row.edit > div > .form-item > label,
+    .page-path-schedule2 .row.edit .form-item > label,
+.page-path-schedule .row.edit .form-item > label,
+    .page-path-schedule2 .row .read-only label,
+.page-path-schedule .row .read-only label
     {
         display:block;
     }
 
-    .page-path-schedule .row.edit .field-name-field-day-of-the-week > .form-item > label,
-    .page-path-schedule .row .field-name-field-day-of-the-week > .read-only > label
+    .page-path-schedule2 .row.edit .field-name-field-day-of-the-week > .form-item > label,
+.page-path-schedule .row.edit .field-name-field-day-of-the-week > .form-item > label,
+    .page-path-schedule2 .row .field-name-field-day-of-the-week > .read-only > label,
+.page-path-schedule .row .field-name-field-day-of-the-week > .read-only > label
     {
         width: 14.28%;
         display: inline-block;
         text-align: center;
     }
 
-    .page-path-schedule .row > .read-only
+    .page-path-schedule2 .row > .read-only,
+.page-path-schedule .row > .read-only
     {
         position: relative;
         text-align: right;
@@ -581,14 +686,17 @@
         white-space: normal;
     }
 
-    .page-path-schedule .field-add-more-submit
+    .page-path-schedule2 .field-add-more-submit,
+.page-path-schedule .field-add-more-submit
     {
         clear:both;
         margin-bottom:0;
     }
 
-    .page-path-schedule .field-name-field-class-name,
-    .page-path-schedule .field-name-field-day-of-the-week
+    .page-path-schedule2 .field-name-field-class-name,
+.page-path-schedule .field-name-field-class-name,
+    .page-path-schedule2 .field-name-field-day-of-the-week,
+.page-path-schedule .field-name-field-day-of-the-week
     {
         width:auto;
         display:block;
@@ -596,7 +704,8 @@
         clear:both;
     }
 
-    .page-path-schedule .field-name-field-time
+    .page-path-schedule2 .field-name-field-time,
+.page-path-schedule .field-name-field-time
     {
         width: 100%;
         min-width: 0;
@@ -606,21 +715,27 @@
         white-space: normal;
     }
 
-    .page-path-schedule .row:not(.edit) .field-name-field-time
+    .page-path-schedule2 .row:not(.edit) .field-name-field-time,
+.page-path-schedule .row:not(.edit) .field-name-field-time
     {
         padding-right: 100px;
         margin-right: -100px;
     }
 
-    .page-path-schedule .field-name-field-time > div:first-child,
-    .page-path-schedule .field-name-field-time > div:nth-child(2),
-    .page-path-schedule .field-name-field-time > div:nth-child(3),
-    .page-path-schedule .field-name-field-time > div:nth-child(4)
+    .page-path-schedule2 .field-name-field-time > div:first-child,
+.page-path-schedule .field-name-field-time > div:first-child,
+    .page-path-schedule2 .field-name-field-time > div:nth-child(2),
+.page-path-schedule .field-name-field-time > div:nth-child(2),
+    .page-path-schedule2 .field-name-field-time > div:nth-child(3),
+.page-path-schedule .field-name-field-time > div:nth-child(3),
+    .page-path-schedule2 .field-name-field-time > div:nth-child(4),
+.page-path-schedule .field-name-field-time > div:nth-child(4)
     {
         width:50%;
     }
 
-    .page-path-schedule .field-name-field-time > div:nth-child(3)
+    .page-path-schedule2 .field-name-field-time > div:nth-child(3),
+.page-path-schedule .field-name-field-time > div:nth-child(3)
     {
         clear:both;
     }
@@ -630,13 +745,15 @@
 
 @media all and (max-width:759px)
 {
-    .page-path-schedule .field-name-field-time .read-only
+    .page-path-schedule2 .field-name-field-time .read-only,
+.page-path-schedule .field-name-field-time .read-only
     {
         display:block;
         width:auto;
     }
 
-    .page-path-schedule .row.edit .field-name-field-time .form-type-textfield
+    .page-path-schedule2 .row.edit .field-name-field-time .form-type-textfield,
+.page-path-schedule .row.edit .field-name-field-time .form-type-textfield
     {
         width:50%;
     }

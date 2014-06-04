@@ -625,19 +625,19 @@
     float:left;
 }
 
-.plup-filelist
+.group-achievement .plup-filelist
 {
     border-top:0;
 }
 
-.plup-list
+.group-achievement .plup-list
 {
     list-style-type: none;
     margin: 20px;
     padding: 0;
 }
 
-.plup-list li
+.group-achievement .plup-list li
 {
     padding:0;
     margin:0;
@@ -645,42 +645,37 @@
     background:none;
 }
 
-.plup-bar
+.group-achievement .plup-bar
 {
     padding:0;
     height:auto;
     background:none;
 }
 
-.strategy-upload .plup-list li,
 #partner-plupload .plup-list li,
 .group-achievement .plup-list li
 {
     display:none;
 }
 
-.strategy-upload .plup-list li:last-child,
 #partner-plupload .plup-list li:last-child,
 .group-achievement .plup-list li:last-child
 {
     display:block;
 }
 
-.strategy-upload .plup-thumb-wrapper,
 #partner-plupload .plup-thumb-wrapper,
 .group-achievement .plup-thumb-wrapper
 {
     text-align: center;
 }
 
-.strategy-upload .plup-thumb-wrapper img,
 #partner-plupload .plup-thumb-wrapper img,
 .group-achievement .plup-thumb-wrapper img
 {
     margin:0 auto;
 }
 
-.strategy-upload .plup-select,
 #partner-plupload .plup-select,
 .group-achievement .plup-select
 {

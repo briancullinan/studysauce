@@ -119,7 +119,9 @@
     </div>
 </div>
 <div id="empty-schedule">
-    <a href="#schedule"><h2>Click here to set up your class schedule and get started.</h2><small>Then checkin whenever you study using the Check in tab.</small></a>
+    <div class="middle-wrapper">
+        <a href="#schedule"><h2>Click here to set up your class schedule and get started.</h2><small>Then checkin whenever you study using the Check in tab.</small></a>
+    </div>
 </div>
 <?php
 $classes = _studysauce_get_schedule_classes();
@@ -141,7 +143,7 @@ if(empty($classes)):
         $classI = 0;
         foreach($classes as $cid => $class)
         {
-            print '<a href="#class' . $classI . '" class="class' . $classI . ' cid' . $cid . '"><span>&nbsp;</span>' . $class . '</a>';
+            print '<a href="#class' . $classI . '" class="class' . $classI . ' cid' . $cid . '"><span>&nbsp;</span>' . (strlen($class) > 20 ? (substr($class, 0, 20) . '...') : $class) . '</a>';
             $classI++;
         }
     else: ?>

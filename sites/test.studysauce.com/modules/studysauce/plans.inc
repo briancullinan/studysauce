@@ -83,10 +83,9 @@ function studysauce_save_strategies()
                     }
                     else
                     {
-
+                        $existing->revision = 1;
                     }
 
-                    $existing->revision = 1;
                     if(isset($_POST['default']) && $_POST['default'] == $strategy['type'])
                         $existing->field_default['und'][0]['value'] = 1;
                     else
@@ -136,15 +135,19 @@ function studysauce_save_strategies()
     }
 }
 
-function studysauce_get_strategies()
+function studysauce_get_strategies($account = null)
 {
-    global $user;
+    if(!isset($account))
+    {
+        global $user;
+        $account = user_load($user->uid);
+    }
     $result = array();
 
     $query = new EntityFieldQuery();
     $nodes = $query->entityCondition('entity_type', 'node')
         ->propertyCondition('type', 'strategies')
-        ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+        ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
         ->propertyCondition('status', 1)
         ->range(0, 1)
         ->execute();
@@ -472,13 +475,16 @@ function studysauce_save_calendar()
     drupal_exit();
 }
 
-function studysauce_get_events($lastOrderTime = null)
+function studysauce_get_events($account = null, $lastOrderTime = null)
 {
-    global $user;
-
+    if(!isset($account))
+    {
+        global $user;
+        $account = user_load($user->uid);
+    }
     if(!isset($lastOrderTime) || empty($lastOrderTime))
     {
-        $lastOrder = _studysauce_orders_by_uid($user->uid);
+        $lastOrder = _studysauce_orders_by_uid($account->uid);
         if(isset($lastOrder) && isset($lastOrder->created))
             $lastOrderTime = $lastOrder->created;
     }
@@ -487,7 +493,7 @@ function studysauce_get_events($lastOrderTime = null)
     $query = new EntityFieldQuery();
     $nodes = $query->entityCondition('entity_type', 'node')
         ->propertyCondition('type', 'schedule')
-        ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+        ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
         ->propertyCondition('status', 1)
         ->range(0, 1)
         ->execute();
@@ -920,7 +926,7 @@ function studysauce_get_events($lastOrderTime = null)
         $query = new EntityFieldQuery();
         $dates = $query->entityCondition('entity_type', 'node')
             ->propertyCondition('type', 'key_dates')
-            ->propertyCondition('title', $user->mail)
+            ->propertyCondition('title', $account->mail)
             ->propertyCondition('status', 1)
             ->range(0, 1)
             ->execute();

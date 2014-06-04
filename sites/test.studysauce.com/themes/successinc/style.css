@@ -1845,8 +1845,8 @@ ul.company-info li.last {
     text-align: right;
 }
 
-.page-dashboard #plan .buy-plan > a,
-.page-dashboard #profile .buy-plan > a,
+.page-dashboard #plan .buy-plan a,
+.page-dashboard #profile .buy-plan a,
 .page-dashboard .group-achievement > div,
 .page-dashboard #invite-sent > h2,
 .page-dashboard #sds-messages > div,
@@ -1855,11 +1855,10 @@ ul.company-info li.last {
 .page-dashboard #checklist > div,
 .page-dashboard #study-quiz form > div,
 .page-dashboard #study-quiz .webform-confirmation,
-.page-dashboard #schedule form,
 .page-dashboard #mozart-effect > div,
-.page-dashboard #empty-schedule > a,
-.page-dashboard #empty-dates > a,
-.page-dashboard #metrics-empty > a,
+.page-dashboard #empty-schedule a,
+.page-dashboard #empty-dates a,
+.page-dashboard #metrics-empty a,
 .page-dashboard #timer-expire > div,
 .page-dashboard #deadlines .field-name-field-class-names > div
 {
@@ -1873,32 +1872,36 @@ ul.company-info li.last {
     text-align:left;
 }
 
-.page-dashboard #plan .buy-plan > a,
-.page-dashboard #profile .buy-plan > a,
-.page-dashboard #metrics-empty > a,
-.page-dashboard #empty-dates > a,
-.page-dashboard #empty-schedule > a
+.page-dashboard .middle-wrapper
+{
+    position:absolute;
+    top:50%;
+    left:0;
+    width:100%;
+}
+
+.page-dashboard #plan .buy-plan a,
+.page-dashboard #profile .buy-plan a,
+.page-dashboard #metrics-empty a,
+.page-dashboard #empty-dates a,
+.page-dashboard #empty-schedule a
 {
     display: block;
     text-align: center;
-    top: 50%;
     margin-top: -70px;
+    z-index: 50;
 }
 
 @media all and (max-width: 759px)
 {
 
-    .page-dashboard #plan .buy-plan > a,
-    .page-dashboard #profile .buy-plan > a,
-    .page-dashboard #metrics-empty > a,
-    .page-dashboard #empty-dates > a,
-    .page-dashboard #empty-schedule > a
+    .page-dashboard .page .pane-content
     {
-        top:200px;
+        min-height: 300px;
     }
 }
 
-.page-dashboard #plan .buy-plan h2,
+.page-dashboard #plan .middle-wrapper h2,
 .page-dashboard #profile .buy-plan h2,
 .page-dashboard #metrics-empty h2,
 .page-dashboard #empty-dates h2,
@@ -1951,8 +1954,7 @@ ul.company-info li.last {
     margin-bottom:0;
 }
 
-.page-dashboard #deadlines .field-name-field-class-names h3,
-.page-dashboard #schedule form h3
+.page-dashboard #deadlines .field-name-field-class-names h3
 {
     margin-top:0;
     margin-bottom:1em;
@@ -2027,6 +2029,10 @@ input[type="button"]:hover {
 #schedule.invalid .class-actions .more:hover,
 #schedule.invalid .other-actions .more,
 #schedule.invalid .other-actions .more:hover,
+.page-path-schedule2.invalid .class-actions .more,
+.page-path-schedule2.invalid .class-actions .more:hover,
+.page-path-schedule2.invalid .other-actions .more,
+.page-path-schedule2.invalid .other-actions .more:hover,
 .page-path-schedule.invalid .class-actions .more,
 .page-path-schedule.invalid .class-actions .more:hover,
 .page-path-schedule.invalid .other-actions .more,
@@ -4717,6 +4723,7 @@ tbody
 .page-dashboard.parent #checkin .parents_only:before,
 .page-dashboard #study-quiz:before,
 .page-dashboard #schedule:before,
+.page-dashboard #plan .buy-plan:before,
 .page-dashboard #metrics-empty:before,
 .page-dashboard #empty-schedule:before,
 .page-dashboard #empty-dates:before,
@@ -4739,6 +4746,12 @@ tbody
     left:0;
     background-color:rgba(255,255,255,.75);
     z-index:-1;
+}
+
+.page-dashboard #plan .buy-plan:before
+{
+    background-color:transparent;
+    z-index: 40;
 }
 
 .page-dashboard #profile .buy-plan:before

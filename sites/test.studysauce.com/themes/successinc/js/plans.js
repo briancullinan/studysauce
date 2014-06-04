@@ -41,7 +41,7 @@ jQuery(document).ready(function ($) {
                 ? (/default-([a-z]*)(\s|$)/ig).exec(row.attr('class'))[1]
                 : that.val(),
             eid = row.attr('id').substring(4),
-            classname = row.find('.field-name-field-class-name .read-only').text().substring(1),
+            classname = row.find('.field-name-field-class-name .read-only').text(),
             title = row.find('input[name="plan-title"]').val();
 
         // add strategy if they haven't used it before
@@ -161,6 +161,7 @@ jQuery(document).ready(function ($) {
 
                 // Event after a file has been uploaded from queue
                 uploader.bind('FileUploaded', function(up, file, response) {
+                    $('#plan-' + eid + '-plupload').find('.plup-list li').remove();
                     // Respone is object with response parameter so 2x repsone
                     var fileSaved = jQuery.parseJSON(response.response);
                     var delta = $('#plan-' + eid + '-plupload').find('.plup-list li').length;
@@ -210,24 +211,28 @@ jQuery(document).ready(function ($) {
                     newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[title]['teach'].notes);
                     var delta = $('#plan-' + eid + '-plupload').find('.plup-list li').length;
                     var name = 'plan-plupload[' + delta + ']';
-                    var thumb = '<img src="' + window.strategies[title]['teach'].uploads[0].uri + '" title="teaching" />';
-                    if(typeof window.strategies[title]['teach'].uploads[0].play != 'undefined')
+                    if(typeof window.strategies[title]['teach'].uploads != 'undefined' &&
+                        typeof window.strategies[title]['teach'].uploads[0] != 'undefined')
                     {
-                        thumb = '<video width="190" height="190" preload="auto" controls="controls" poster="' + window.strategies[title]['teach'].uploads[0].uri + '">' +
-                                '<source src="' + window.strategies[title]['teach'].uploads[0].play + '" type="video/webm" />';
-                        $('#plan-' + eid + '-plupload').find('.plup-select, .plup-filelist').remove();
-                    }
+                        var thumb = '<img src="' + window.strategies[title]['teach'].uploads[0].uri + '" title="teaching" />';
+                        if(typeof window.strategies[title]['teach'].uploads[0].play != 'undefined')
+                        {
+                            thumb = '<video width="190" height="190" preload="auto" controls="controls" poster="' + window.strategies[title]['teach'].uploads[0].uri + '">' +
+                                    '<source src="' + window.strategies[title]['teach'].uploads[0].play + '" type="video/webm" />';
+                            $('#plan-' + eid + '-plupload').find('.plup-select, .plup-filelist').remove();
+                        }
+                        $('#plan-' + eid + '-plupload').find('img[src*="empty-play.png"]').remove();
 
-                    $('#plan-' + eid + '-plupload').find('.plup-list').append(
-                        '<li class="ui-state-default">' +
-                            //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
-                        '<div class="plup-thumb-wrapper">' + thumb + '</div>' +
-                        '<a class="plup-remove-item"></a>' +
-                        '<input type="hidden" name="' + name + '[fid]" value="' + window.strategies[title]['teach'].uploads[0].fid + '" />' +
-                        '<input type="hidden" name="' + name + '[thumbnail]" value="' + window.strategies[title]['teach'].uploads[0].thumbnail + '" />' +
-                        '</li>');
-                    // Bind remove functionality to uploaded file
-                    $('#plan-' + eid + '-plupload').find('img[src*="empty-play.png"]').remove();
+                        $('#plan-' + eid + '-plupload').find('.plup-list').append(
+                            '<li class="ui-state-default">' +
+                                //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
+                                '<div class="plup-thumb-wrapper">' + thumb + '</div>' +
+                                '<a class="plup-remove-item"></a>' +
+                                '<input type="hidden" name="' + name + '[fid]" value="' + window.strategies[title]['teach'].uploads[0].fid + '" />' +
+                                '<input type="hidden" name="' + name + '[thumbnail]" value="' + window.strategies[title]['teach'].uploads[0].thumbnail + '" />' +
+                                '</li>');
+                        // Bind remove functionality to uploaded file
+                    }
                 }
 
             }
@@ -270,6 +275,9 @@ jQuery(document).ready(function ($) {
                     remove:true
                 };
                 strategies[strategies.length] = strategy;
+                jQuery('#home-active').attr('checked', 'checked');
+                if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                    jQuery('#home-tasks-checklist').attr('checked', 'checked');
             }
             else if(that.is('.strategy-teach'))
             {
@@ -299,6 +307,9 @@ jQuery(document).ready(function ($) {
                         remove: true
                     };
                 strategies[strategies.length] = strategy;
+                jQuery('#home-teach').attr('checked', 'checked');
+                if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                    jQuery('#home-tasks-checklist').attr('checked', 'checked');
             }
             else if(that.is('.strategy-spaced'))
             {
@@ -320,6 +331,9 @@ jQuery(document).ready(function ($) {
                         remove:true
                     };
                 strategies[strategies.length] = strategy;
+                jQuery('#home-spaced').attr('checked', 'checked');
+                if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                    jQuery('#home-tasks-checklist').attr('checked', 'checked');
             }
             else if(that.is('.strategy-other'))
             {
@@ -363,7 +377,7 @@ jQuery(document).ready(function ($) {
             strategy = (/default-([a-z]*)(\s|$)/ig).exec(row.attr('class'))[1],
             eid = row.attr('id').substring(4),
             cid = (/cid([0-9]+)(\s|$)/ig).exec(row.attr('class')),
-            classname = row.find('.field-name-field-class-name .read-only').text().substring(1);
+            classname = row.find('.field-name-field-class-name .read-only').text();
         row.toggleClass('selected');
 
         // add mini-checkin if class number is set
@@ -543,10 +557,10 @@ jQuery(document).ready(function ($) {
     if(jQuery('#plan:visible').length > 0)
         setTimeout(initialize, 100);
     else
-        jQuery('body').on('click', 'a[href="#plan"]', initialize);
-    jQuery('body').on('click', 'a[href="#plan"]', function () {
-        if($('#calendar:visible').length > 0)
-            $('#calendar').fullCalendar('rerenderEvents');
-    });
+        jQuery('body').on('click', 'a[href="#plan"]', function () {
+            initialize();
+            if($('#calendar:visible').length > 0)
+                $('#calendar').fullCalendar('refetchEvents');
+        });
 });
 

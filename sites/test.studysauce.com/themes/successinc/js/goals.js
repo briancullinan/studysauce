@@ -91,6 +91,7 @@ jQuery(document).ready(function() {
     // Event after a file has been uploaded from queue
     uploader.bind('FileUploaded', function(up, file, response) {
         // Respone is object with response parameter so 2x repsone
+        $('#goals-plupload').find('.plup-list li').remove();
         var fileSaved = jQuery.parseJSON(response.response);
         var delta = $('#goals-plupload').find('.plup-list li').length;
         var name = 'goals-plupload[' + delta + ']';
@@ -252,6 +253,9 @@ jQuery(document).ready(function() {
                            jQuery('#achievements > *').remove();
                            jQuery(data.achievements).find('> *')
                                .appendTo(jQuery('#achievements'));
+                           jQuery('#home-goals').attr('checked', 'checked');
+                           if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                               jQuery('#home-tasks-checklist').attr('checked', 'checked');
 
                            // update awards such as pulse detected for setting up a class
                            if (typeof data.awards != 'undefined') {
