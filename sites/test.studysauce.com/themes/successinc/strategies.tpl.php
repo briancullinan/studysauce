@@ -380,6 +380,7 @@
             <option value="teach">Teach</option>
             <option value="spaced">Spaced repetition</option>
             <option value="active">Active reading</option>
+            <option value="prework">Prework</option>
         </select>
     </div>
 </div>
@@ -435,7 +436,7 @@
         <label>Notes:</label>
         <textarea type="text" name="strategy-notes"></textarea>
     </div>
-    <div class="highlighted-link"><a class="more" href="#save-strategy">Save</a></div>
+    <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
 <div class="strategy-active">
     <h3>Active reading - Follow the guide below to better retain what you are reading.</h3>
@@ -452,7 +453,7 @@
     <textarea name="strategy-summarize"></textarea>
     <label>What possible exam questions will result from this reading?</label>
     <textarea name="strategy-exam"></textarea>
-    <div class="highlighted-link"><a class="more" href="#save-strategy">Save</a></div>
+    <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
 <div class="strategy-spaced">
     <h3>Spaced repetition - Commit information to your long term memory by revisiting past work.</h3>
@@ -464,11 +465,26 @@
         <label>Write down any notes below:</label>
         <textarea type="text" name="strategy-notes"></textarea>
     </div>
-    <div class="highlighted-link"><a class="more" href="#save-strategy">Save</a></div>
+    <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
 <div class="strategy-other">
     <h3>Notes:</h3>
-    <textarea name="strategy-notes"></textarea>
-    <div class="highlighted-link"><a class="more" href="#save-strategy">Save</a></div>
+    <textarea name="strategy-notes" placeholder="Write any notes here."></textarea>
+    <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
+<div class="strategy-prework">
+    <h3>Prework - Get prepared for your class tomorrow.</h3>
+    <input type="checkbox" name="strategy-topics" id="strategy-topics" value="topics">
+    <label for="strategy-topics">Look at your syllabus to see what topics will be covered.</label><br />
+    <input type="checkbox" name="strategy-reading" id="strategy-reading" value="reading">
+    <label for="strategy-reading">Ensure you have completed the assigned reading.</label><br />
+    <input type="checkbox" name="strategy-confusion" id="strategy-confusion" value="confusion">
+    <label for="strategy-confusion">Identify areas of confusion.  This will help you focus during the class on areas of need.</label><br />
+    <input type="checkbox" name="strategy-questions" id="strategy-questions" value="questions">
+    <label for="strategy-questions">Prepare questions that you would like answered during class.</label><br />
+    <h3>Notes:</h3>
+    <textarea name="strategy-notes"></textarea>
+    <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
+</div>
+
 

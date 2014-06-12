@@ -172,7 +172,7 @@ jQuery(document).ready(function($) {
                    success: function (fileSaved) {
                        partner.removeClass('valid').addClass('invalid');
                        jQuery('#home-partner').attr('checked', 'checked');
-                       if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                       if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
                            jQuery('#home-tasks-checklist').attr('checked', 'checked');
 
                        // update masthead
@@ -184,5 +184,59 @@ jQuery(document).ready(function($) {
 
     });
 
+    partner.on('click', 'a[href^="#uid-"]', function (evt) {
+        evt.preventDefault();
+        var uid = jQuery(this).attr('href').substring(5);
+        jQuery('.user-pane').remove();
+        var pane = jQuery('#uid-' + uid + '.panel-pane');
+        if(pane.length == 0)
+        {
+            pane = jQuery('<div id="uid-' + uid + '" class="panel-pane user-pane"><div class="pane-content" /></div>')
+                .appendTo(jQuery('.page .grid_12 > div'));
+        }
+
+        jQuery('body').removeClass(footerOnly).removeClass(menuOnly).removeClass('menu-open').addClass('uid-only');
+        window.location.hash = '#uid-' + uid;
+
+        pane.find('.pane-content').addClass('loading');
+        jQuery.ajax({
+            url: '/partner?uid=' + uid,
+            dataType: 'json',
+            type: 'GET',
+            success: function (response) {
+                pane.find('.pane-content').html(response.content);
+
+                jQuery(response.styles).each(function () {
+                    var url = jQuery(this).attr('href');
+                    if(typeof url != 'undefined' && jQuery('link[href="' + url + '"]').length == 0)
+                        $('head').append('<link href="' + url + '" type="text/css" rel="stylesheet" />');
+                    else
+                    {
+                        var re = (/url\("(.*?)"\)/ig),
+                            match,
+                            media = jQuery(this).attr('media');
+                        while (match = re.exec(jQuery(this).html())) {
+                            if(jQuery('link[href="' + match[1] + '"]').length == 0 &&
+                                jQuery('style:contains("' + match[1] + '")').length == 0)
+                            {
+                                if(typeof media == 'undefined' || media == 'all')
+                                    $('head').append('<link href="' + match[1] + '" type="text/css" rel="stylesheet" />');
+                                else
+                                    $('head').append('<style media="' + media + '">@import url("' + match[1] + '");');
+                            }
+                        }
+                    }
+                });
+
+                jQuery(response.scripts).each(function () {
+                    var url = jQuery(this).attr('src');
+                    if(typeof url != 'undefined' && jQuery('script[src="' + url + '"]').length == 0)
+                        jQuery.getScript(url);
+                });
+
+                pane.find('.pane-content').removeClass('loading');
+            }
+        });
+    });
 });
 

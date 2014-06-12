@@ -75,17 +75,31 @@ if(!$lastOrder): ?><div class="buy-plan"><?php endif;
             $classI = $matches[1];
             $cid = array_keys($classes)[$classI];
         }
-        $session = (isset($entities[$cid]->field_study_type['und'][0]['value']) && strpos($event['className'], 'deadline-event') === false
-            ? ($entities[$cid]->field_study_type['und'][0]['value'] == 'memorization'
-                ? 'spaced'
-                : ($entities[$cid]->field_study_type['und'][0]['value'] == 'reading'
-                    ? 'active'
-                    : ($entities[$cid]->field_study_type['und'][0]['value'] == 'conceptual'
-                        ? 'teach'
-                        : '')))
-            : ($classI == '' || strpos($event['className'], 'deadline-event') !== false
-                ? 'other'
-                : ''));
+        $session = isset($strategies[$event['title']]) &&
+            array_search(true, array_map(function ($x) { return $x['default']; }, $strategies[$event['title']])) !== false
+        // check if the strategy default is saved
+            ? array_search(true, array_map(function ($x) { return $x['default']; }, $strategies[$event['title']]))
+            // Is this a deadline row, the default is always other
+            : (isset($entities[$cid]->field_study_type['und'][0]['value']) &&
+                strpos($event['className'], 'deadline-event') === false
+                // convert memorization answer to spaced
+                ? (strpos($event['className'], 'p-event') !== false
+                    ? 'prework'
+                    : ($entities[$cid]->field_study_type['und'][0]['value'] == 'memorization'
+                        ? 'spaced'
+                        // convert reading answer to active
+                        : ($entities[$cid]->field_study_type['und'][0]['value'] == 'reading'
+                            ? 'active'
+                            // convert conceptual answer to teach
+                            : ($entities[$cid]->field_study_type['und'][0]['value'] == 'conceptual'
+                                ? 'teach'
+                                // if nothing is selected nothing shows up
+                                : ''))))
+                // if this is a deadline or not a class event, show notes box
+                : ($classI == '' || strpos($event['className'], 'deadline-event') !== false
+                    ? 'other'
+                    // if no strategy is supplied nothing appears here
+                    : ''));
 
         if(strpos($event['className'], 'deadline-event') !== false)
             $title = 'Deadline' . preg_replace(array('/' . preg_quote($classes[$cid]) . '\s*/'), array(''), $event['title']);

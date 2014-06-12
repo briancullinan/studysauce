@@ -37,6 +37,48 @@ global $user;
     <label>New password:</label>
     <input type="password" name="pass" size="25" maxlength="128" class="form-text">
 </div>
+<div class="plupload" id="account-plupload">
+    <div class="plup-list-wrapper">
+        <ul class="plup-list clearfix ui-sortable">
+            <?php if(isset($user->picture) && !empty($user->picture)):
+                $file = $user->picture;
+                ?>
+                <li class="ui-state-default">
+                    <div class="plup-thumb-wrapper">
+                        <img src="<?php print image_style_url('achievement', $file->uri); ?>" title="">
+                    </div>
+                    <a class="plup-remove-item"></a>
+                    <input type="hidden" name="account-plupload[0][fid]" value="<?php print $file->fid; ?>">
+                    <input type="hidden" name="account-plupload[0][weight]" value="0">
+                    <input type="hidden" name="account-plupload[0][rename]" value="<?php print $file->filename; ?>">
+                </li>
+            <?php else: ?>
+                <img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/empty-photo.png" height="200" width="200" alt="Upload" />
+            <?php endif; ?>
+        </ul>
+    </div>
+    <div class="plup-filelist" id="account-plupload-filelist">
+        <table>
+            <tbody>
+            <tr class="plup-drag-info">
+                <td>
+                    <div class="drag-main">Upload photo of yourself</div>
+                    <div class="drag-more">
+                        <div>You can upload up to <strong>1</strong> files.</div>
+                        <div>Allowed files types: <strong>png gif jpg jpeg</strong>.</div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="plup-bar clearfix">
+        <input type="hidden" id="account-upload-path" value="<?php print url('user/plup', array('query' => array('plupload_token' => drupal_get_token('plupload-handle-uploads')))); ?>" />
+        <a href="#account-select" class="plup-select" id="account-plupload-select">Add</a>
+        <a hre="#account-upload" class="plup-upload" id="account-plupload-upload">Upload</a>
+        <div class="plup-progress"></div>
+    </div>
+</div>
 <br />
 <div class="highlighted-link form-actions form-wrapper">
     <!--<a href="#cancel-account">Delete your account</a> --><a class="more form-submit ajax-processed" href="#save-account">Save</a>

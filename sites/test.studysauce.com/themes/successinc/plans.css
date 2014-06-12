@@ -209,6 +209,7 @@
     left:2px;
 }
 
+.page-dashboard #plan .strategy-prework,
 .page-dashboard #plan .strategy-teach,
 .page-dashboard #plan .strategy-active,
 .page-dashboard #plan .strategy-spaced,
@@ -247,6 +248,7 @@
     text-align: right;
 }
 
+.page-dashboard #plan .strategy-teach iframe,
 .page-dashboard #plan .strategy-upload
 {
     display: inline-block;
@@ -254,8 +256,41 @@
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     vertical-align: top;
+    padding:10px;
+    position: relative;
 }
 
+.page-dashboard #plan a[href="#expand"]
+{
+    float:left;
+    display:block;
+    padding-left:40px;
+    height:32px;
+    line-height: 30px;
+    margin:10px 0;
+    background: url(images/menu_icons_32.png) no-repeat 0 -1344px transparent;
+}
+
+.page-dashboard #plan .row.expanded a[href="#expand"]
+{
+    background: url(images/menu_icons_32.png) no-repeat 0 -1376px transparent;
+}
+
+.page-dashboard #plan .row.expanded .strategy-prework,
+.page-dashboard #plan .row.expanded .strategy-teach,
+.page-dashboard #plan .row.expanded .strategy-active,
+.page-dashboard #plan .row.expanded .strategy-spaced,
+.page-dashboard #plan .row.expanded .strategy-other
+{
+    max-width: none;
+}
+
+.page-dashboard #plan .selected.expanded .mini-checkin
+{
+    left:auto;
+    right:0;
+    margin-left:0;
+}
 
 .strategy-upload .plup-filelist
 {
@@ -265,8 +300,12 @@
 .strategy-upload .plup-list
 {
     list-style-type: none;
-    margin: 20px;
+    margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: block;
+
 }
 
 .strategy-upload .plup-list li
@@ -304,6 +343,76 @@
     font-size: 0;
 }
 
+body.file-drag .strategy-upload .plup-filelist
+{
+    z-index: 2000;
+}
+
+.strategy-upload .plup-remove-file,
+.strategy-upload .plup-remove-item
+{
+    z-index: 100;
+}
+
+.strategy-upload .drag-main
+{
+    position:absolute;
+    top:50%;
+    left:0;
+    width:100%;
+    padding:0;
+    margin-top:-10px;
+    color:#333333;
+    text-shadow: 0 1px 4px rgba(255,255,255,1);
+    text-align: center;
+}
+
+.strategy-upload .drag-more,
+.strategy-upload .plup-filelist-size,
+.strategy-upload .plup-filelist-message,
+.strategy-upload .plup-filelist-remove,
+.strategy-upload .plup-select div
+{
+    display:none;
+}
+
+.strategy-upload .plup-select
+{
+    border-radius: 5px;
+    border:3px solid #555555;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.strategy-upload .plup-bar .plup-upload
+{
+    display:none !important;
+}
+
+.strategy-upload .plupload,
+.strategy-upload .plupload-container
+{
+    min-height:200px;
+}
+
+.strategy-upload .plup-filelist-file
+{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.strategy-upload .plup-filelist,
+.strategy-upload .plupload.html5
+{
+    height: 100% !important;
+    width: 100% !important;
+    top:0 !important;
+    left:0 !important;
+    position:absolute !important;
+    background:none;
+    max-height: none !important;
+}
 .page-dashboard #plan .strategy-spaced-notes textarea,
 .page-dashboard #plan .strategy-notes textarea
 {
@@ -362,6 +471,13 @@
     visibility: hidden;
 }
 
+.page-dashboard #plan .strategy-prework input
+{
+    visibility: hidden;
+    margin: 0 0 0 -13px;
+}
+
+.page-dashboard #plan .strategy-prework label,
 .page-dashboard #plan .strategy-review label:not(:first-child)
 {
     display: inline;
@@ -374,15 +490,10 @@
     cursor: pointer;
 }
 
+.page-dashboard #plan .strategy-prework input:checked + label,
 .page-dashboard #plan .strategy-review input:checked + label
 {
     background-position: -54px -2734px;
-}
-
-.page-dashboard #plan .strategy-upload
-{
-    padding:10px;
-    position: relative;
 }
 
 .page-dashboard #plan a[href="#strategy-upload"] span
@@ -394,14 +505,6 @@
     text-align: center;
     width: 100%;
     margin-left:-10px;
-}
-
-.strategy-upload .plup-select
-{
-    border-radius: 5px;
-    border:3px solid #555555;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
 }
 
 .strategy-upload .drag-main
@@ -783,6 +886,7 @@
     }
 
     .page-dashboard #plan .field-select-strategy,
+    .page-dashboard #plan .strategy-prework,
     .page-dashboard #plan .strategy-teach,
     .page-dashboard #plan .strategy-active,
     .page-dashboard #plan .strategy-spaced,

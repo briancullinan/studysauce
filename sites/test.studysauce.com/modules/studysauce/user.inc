@@ -5,6 +5,28 @@ function studysauce_group_save()
 
 }
 
+function studysauce_save_status()
+{
+    $groups = og_get_groups_by_user();
+    if(isset($groups['node']) && isset($_POST['uid']) && isset($_POST['status']))
+    {
+        $query = db_select("og_membership", "ogm");
+        $query->condition("ogm.gid", array_keys($groups['node']), "=");
+        $query->fields("ogm", array("entity_type", "etid"));
+        $result = $query->execute();
+        $members = $result->fetchAll();
+        foreach($members as $i => $member)
+        {
+            if($member->etid == $_POST['uid'])
+            {
+                $m = user_load($member->etid);
+                $changes = array('field_adviser_status' => array('und' => array(array('value' => $_POST['status']))));
+                user_save($m, $changes);
+            }
+        }
+    }
+}
+
 
 function studysauce_save_user($user = null, &$edit = array())
 {
@@ -26,11 +48,51 @@ function studysauce_save_user($user = null, &$edit = array())
 
     if(isset($_POST['first']) && isset($_POST['last']) && isset($_POST['email']))
     {
+        $oldEmail = false;
         $edit['field_first_name']['und'][0]['value'] = $_POST['first'];
         $edit['field_last_name']['und'][0]['value'] = $_POST['last'];
-        $edit['mail'] = $_POST['email'];
+        if(strcmp($user->mail, $_POST['email']) <> 0)
+        {
+            $edit['mail'] = $_POST['email'];
+            $oldEmail = $user->mail;
+        }
         if(isset($_POST['pass']) && !empty($_POST['pass']))
             $edit['pass'] = $_POST['pass'];
+
+        user_save($user, $edit);
+
+        if($oldEmail)
+        {
+            // find nodes whose title matches the old e-mail
+            $nodes = db_select('node', 'n')
+                ->fields('n', array('nid'))
+                ->condition('title', $oldEmail, '=')
+                ->condition(db_or()->condition('uid', $user->uid, '='))
+                ->execute()
+                ->fetchAllAssoc('nid');
+            foreach($nodes as $nid => $n)
+            {
+                $node = node_load($nid);
+                $node->title = $edit['mail'];
+                node_save($node);
+            }
+
+            // change accountability partner emails
+        }
+    }
+
+    if(isset($_POST['picture'][0]))
+    {
+        $file = file_load($_POST['picture'][0]['fid']);
+        $fileName = isset($_POST['picture'][0]['rename']) ? $_POST['picture'][0]['rename'] : $file->filename;
+        $location = 'public:///';
+        $filePath = $location . $fileName;
+        if ($file->uri !== $filePath) {
+            file_prepare_directory($location, FILE_CREATE_DIRECTORY);
+            file_move($file, $filePath);
+        }
+        $edit = array();
+        $edit['picture'] = $file;
 
         user_save($user, $edit);
     }
@@ -40,21 +102,21 @@ function studysauce_save_user($user = null, &$edit = array())
         if(isset($_POST['parent-student']) && $_POST['parent-student'] == 'student')
         {
             $msg = <<< EOHTML
-Congratulations on taking the first step to becoming a great studier.  To get the most out of Study Sauce, we recommend a few key things to do.
+Congratulations on taking the first step to improving your study effectiveness!  To get the most out of Study Sauce, we recommend a few key things to do.
 
 1. Enter your important deadlines and we will send you reminders to stay on track.
 
 2. Check in when you study and we will guide you through the best study techniques.
 
-3. Set up study goals and rewards. Parents are often happy to sponsor them.
+3. Set up study goals and rewards.
 
-As always, we are happy to help with any questions that you might have. Just email us at admin@studysauce.com.
+As always, we are happy to help with any questions that you might have.  Just email us at admin@studysauce.com.
 EOHTML;
 
             $body = theme('studysauce-email', array(
                 'message' => implode('<br />', explode("\n", $msg)),
-                'greeting' => 'Dear ' . (isset($user->field_first_name[LANGUAGE_NONE][0]['value']) && isset($user->field_last_name[LANGUAGE_NONE][0]['value'])
-                        ? $user->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $user->field_last_name[LANGUAGE_NONE][0]['value']
+                'greeting' => 'Dear ' . (isset($user->field_first_name[LANGUAGE_NONE][0]['value'])
+                        ? $user->field_first_name[LANGUAGE_NONE][0]['value']
                         : 'student') . ','));
 
             $new_message = drupal_mail('studysauce', 'welcome', $user->mail, language_default(), array(), variable_get('site_mail', ''), FALSE);

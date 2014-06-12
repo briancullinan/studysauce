@@ -1,4 +1,152 @@
 
+.page-dashboard #tips-strategy h4,
+.page-dashboard #tips-env h4,
+.page-dashboard #tips-time h4,
+.page-dashboard #tips h4
+{
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 72px;
+    margin-bottom: -42px;
+    padding-bottom:50px;
+    margin-left:-72px;
+    padding-left:72px;
+    background: url(images/tips_icons_64.png) no-repeat left top transparent;
+}
+
+.page-dashboard #tips-time .grid_6:nth-of-type(1) div:nth-of-type(2) h4
+{
+    background-position: left -60px;
+}
+
+.page-dashboard #tips-time .grid_6:nth-of-type(1) div:nth-of-type(3) h4
+{
+    background-position: left -124px;
+}
+
+.page-dashboard #tips-time .grid_6:nth-of-type(1) div:nth-of-type(4) h4
+{
+    background-position: left -188px;
+}
+
+.page-dashboard #tips-time .grid_6:nth-of-type(2) div:nth-of-type(1) h4
+{
+    background-position: left -252px;
+}
+
+.page-dashboard #tips-time .grid_6:nth-of-type(2) div:nth-of-type(2) h4
+{
+    background-position: left -316px;
+}
+
+.page-dashboard #tips-time .grid_6:nth-of-type(2) div:nth-of-type(3) h4
+{
+    background-position: left -384px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(1) div:nth-of-type(1) h4
+{
+    background-position: left -444px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(1) div:nth-of-type(2) h4
+{
+    background-position: left -508px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(1) div:nth-of-type(3) h4
+{
+    background-position: left -572px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(1) div:nth-of-type(4) h4
+{
+    background-position: left -636px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(1) div:nth-of-type(5) h4
+{
+    background-position: left -700px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(1) div:nth-of-type(6) h4
+{
+    background-position: left -764px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(2) div:nth-of-type(1) h4
+{
+    background-position: left -828px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(2) div:nth-of-type(2) h4
+{
+    background-position: left -892px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(2) div:nth-of-type(3) h4
+{
+    background-position: left -956px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(2) div:nth-of-type(4) h4
+{
+    background-position: left -1020px;
+}
+
+.page-dashboard #tips-env .grid_6:nth-of-type(2) div:nth-of-type(5) h4
+{
+    background-position: left -1084px;
+}
+
+.page-dashboard #tips-strategy .grid_6:nth-of-type(1) div:nth-of-type(1) h4
+{
+    background-position: left -1148px;
+}
+
+.page-dashboard #tips-strategy .grid_6:nth-of-type(1) div:nth-of-type(2) h4
+{
+    background-position: left -1212px;
+}
+
+.page-dashboard #tips-strategy .grid_6:nth-of-type(1) div:nth-of-type(3) h4
+{
+    background-position: left -1276px;
+}
+
+.page-dashboard #tips-strategy .grid_6:nth-of-type(1) div:nth-of-type(4) h4
+{
+    background-position: left -1340px;
+}
+
+.page-dashboard #tips-strategy .grid_6:nth-of-type(2) div:nth-of-type(1) h4
+{
+    background-position: left -1404px;
+}
+
+.page-dashboard #tips-strategy .grid_6:nth-of-type(2) div:nth-of-type(2) h4
+{
+    background-position: left -1468px;
+}
+
+.page-dashboard #tips-strategy .grid_6:nth-of-type(2) div:nth-of-type(3) h4
+{
+    background-position: left -1532px;
+}
+
+.page-dashboard #tips-strategy .grid_6:nth-of-type(2) div:nth-of-type(4) h4
+{
+    background-position: left -1596px;
+}
+
+.page-dashboard #tips-strategy img,
+.page-dashboard #tips-env img,
+.page-dashboard #tips-time img,
+.page-dashboard #tips img
+{
+    display:none;
+}
+
 .page-dashboard #tips-strategy .grid_6,
 .page-dashboard #tips-env .grid_6,
 .page-dashboard #tips-time .grid_6,
@@ -23,5 +171,15 @@
         display:block;
         padding:0;
         margin:0 !important;
+    }
+
+
+    .page-dashboard #tips-strategy h4,
+    .page-dashboard #tips-env h4,
+    .page-dashboard #tips-time h4,
+    .page-dashboard #tips h4
+    {
+        margin-left:0;
+        margin-bottom: 0;
     }
 }

@@ -1,10 +1,10 @@
+var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
+    footerOnly = footerLinks.join('-only ') + '-only' + ' user-profile-only awards-only uid-only',
+    menuOnly;
 
 (function($) {
 
-    var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
-        footerOnly = footerLinks.join('-only ') + '-only' + ' user-profile-only awards-only',
-        menuOnly,
-        selectedAward = null,
+    var selectedAward = null,
         isClosing = false;
 
     function bubbleResize() {
@@ -22,7 +22,7 @@
         jQuery('#home input[type="checkbox"]').each(function () {
             jQuery(this).data('origState', jQuery(this).prop('checked'));
         });
-        jQuery('#home').on('change', 'input', function (evt) {
+        jQuery('#home').on('change', 'input[type="checkbox"]', function (evt) {
             evt.preventDefault();
             if(jQuery(this).prop('checked') != jQuery(this).data('origState'))
                 jQuery(this).prop('checked', jQuery(this).data('origState'));
@@ -52,7 +52,7 @@
 
         jQuery('#study-quiz').on('mousedown', 'input[type="submit"]', function () {
             jQuery('#home-tasks-quiz, #home-quiz').attr('checked', 'checked');
-            if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+            if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
                 jQuery('#home-tasks-checklist').attr('checked', 'checked');
             return true;
         });

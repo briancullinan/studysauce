@@ -1,4 +1,41 @@
-var calendar = null;
+var calendar = null,
+    youtubeReady = false,
+    uploads = [];
+
+function initPlayer(id)
+{
+    uploads[uploads.length] = id;
+    if(youtubeReady)
+        onYouTubeIframeAPIReady();
+}
+
+function onYouTubeIframeAPIReady() {
+    var player, widget, uploads = window.uploads;
+    window.uploads = [];
+    youtubeReady = true;
+    for(var i in uploads)
+    {
+        widget = new YT.UploadWidget(uploads[i], {
+            width: 210,
+            events: {
+                //'onUploadSuccess': onUploadSuccess,
+                'onProcessingComplete': function (event) {
+                    player = new YT.Player('player', {
+                        height: 210,
+                        width: 210,
+                        videoId: event.data.videoId,
+                        events: {}
+                    });
+                }
+            }
+        });
+    }
+}
+
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 jQuery(document).ready(function ($) {
 
@@ -87,13 +124,41 @@ jQuery(document).ready(function ($) {
                    typeof window.strategies[title]['spaced'] != 'undefined')
                 {
                     newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[title]['spaced'].notes);
-                    window.strategies[title]['spaced'].review.split(',').each(function (i, x) {
-                        newStrategy.find('input[value="' + x + '"]').prop('checked', true);
-                    });
+                    if(window.strategies[title]['spaced'].review != '')
+                        window.strategies[title]['spaced'].review.split(',').forEach(function (x, i) {
+                            newStrategy.find('input[value="' + x + '"]').prop('checked', true);
+                        });
+                }
+            }
+            if(strategy == 'prework')
+            {
+                newStrategy.find('input[type="checkbox"], input[type="radio"]').each(function () {
+                    var that = jQuery(this),
+                        oldId = that.attr('id');
+                    that.attr('id', oldId + eid);
+                    if(that.is('[type="radio"]'))
+                        that.attr('name', that.attr('name') + eid);
+                    newStrategy.find('label[for="' + oldId + '"]').attr('for', oldId + eid);
+                });
+                if(typeof window.strategies != 'undefined' && typeof window.strategies[title] != 'undefined' &&
+                    typeof window.strategies[title]['prework'] != 'undefined')
+                {
+                    newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[title]['prework'].notes);
+                    if(window.strategies[title]['prework'].prepared != '')
+                        window.strategies[title]['prework'].prepared.split(',').forEach(function (x, i) {
+                            newStrategy.find('input[value="' + x + '"]').prop('checked', true);
+                        });
                 }
             }
             if(strategy == 'teach')
             {
+                /*$('#plan-' + eid + '-plupload').replaceWith('<iframe id="widget' + eid + '" type="text/html" width="210" height="210" ' +
+                    'src="https://www.youtube.com/upload_embed" frameborder="0"></iframe>' +
+                    '<script>' +
+                    'jQuery(document).ready(function () { initPlayer("widget' + eid + '"); });' +
+                    '</script>');
+                */
+
                 var uploader = new plupload.Uploader({
                                                          alt_field: 0,
                                                          browse_button: 'plan-' + eid + '-select',
@@ -195,6 +260,7 @@ jQuery(document).ready(function ($) {
                     plup_resize_input(text_element);
                     // Tell Drupal that form has been updated
                     new_element.trigger('formUpdated');
+                    newStrategy.find('a[href="#save-strategy"]').first().trigger('click');
                 });
 
                 // All fiels from queue has been uploaded
@@ -202,7 +268,6 @@ jQuery(document).ready(function ($) {
                     $('#plan-' + eid + '-plupload').find('.plup-list').sortable('refresh'); // Refresh sortable
                     $('#plan-' + eid + '-plupload').find('.plup-drag-info').show(); // Show info
                 });
-
 
                 if(typeof window.strategies != 'undefined' && typeof window.strategies[title] != 'undefined' &&
                    typeof window.strategies[title]['teach'] != 'undefined')
@@ -238,7 +303,7 @@ jQuery(document).ready(function ($) {
             }
         }
 
-        row.find('.strategy-spaced, .strategy-active, .strategy-teach, .strategy-other').hide();
+        row.find('.strategy-spaced, .strategy-active, .strategy-teach, .strategy-other, .strategy-prework').hide();
         row.find('.strategy-' + strategy).show();
 
         // TODO: save selected strategy per event
@@ -246,12 +311,18 @@ jQuery(document).ready(function ($) {
 
     plans.on('change', 'select[name="strategy-select"]', renderStrategy);
 
+    plans.on('click', 'a[href="#expand"]', function (evt) {
+        evt.preventDefault();
+        var row = jQuery(this).parents('.row');
+        row.toggleClass('expanded').scrollintoview();
+    });
+
     plans.on('click', 'a[href="#save-strategy"]', function (evt) {
         evt.preventDefault();
         var that = jQuery(this),
             row = that.parents('.row'),
             strategies = [];
-        row.find('.strategy-active, .strategy-spaced, .strategy-teach, .strategy-other').each(function () {
+        row.find('.strategy-active, .strategy-spaced, .strategy-teach, .strategy-other, .strategy-prework').each(function () {
             var that = jQuery(this);
             if(that.is('.strategy-active'))
             {
@@ -276,7 +347,7 @@ jQuery(document).ready(function ($) {
                 };
                 strategies[strategies.length] = strategy;
                 jQuery('#home-active').attr('checked', 'checked');
-                if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
                     jQuery('#home-tasks-checklist').attr('checked', 'checked');
             }
             else if(that.is('.strategy-teach'))
@@ -308,7 +379,7 @@ jQuery(document).ready(function ($) {
                     };
                 strategies[strategies.length] = strategy;
                 jQuery('#home-teach').attr('checked', 'checked');
-                if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
                     jQuery('#home-tasks-checklist').attr('checked', 'checked');
             }
             else if(that.is('.strategy-spaced'))
@@ -332,21 +403,42 @@ jQuery(document).ready(function ($) {
                     };
                 strategies[strategies.length] = strategy;
                 jQuery('#home-spaced').attr('checked', 'checked');
-                if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
                     jQuery('#home-tasks-checklist').attr('checked', 'checked');
             }
             else if(that.is('.strategy-other'))
             {
                 var strategy = {
-                    type: 'other',
-                    name:      row.find('input[name="plan-title"]').val(),
-                    notes:      that.find('textarea[name="strategy-notes"]').val() || ''
+                    type:  'other',
+                    name:  row.find('input[name="plan-title"]').val(),
+                    notes: that.find('textarea[name="strategy-notes"]').val() || ''
                 };
                 if(strategy.notes.trim() == '')
                     strategy = {
-                        type: 'other',
-                        name:row.find('input[name="plan-title"]').val(),
-                        remove:true
+                        type:   'other',
+                        name:   row.find('input[name="plan-title"]').val(),
+                        remove: true
+                    };
+                strategies[strategies.length] = strategy;
+            }
+            else if(that.is('.strategy-prework'))
+            {
+                var prepare = [];
+                that.find('input[name^="strategy-"]:checked').each(function () {
+                    prepare[prepare.length] = jQuery(this).val();
+                });
+                var strategy = {
+                    type:   'prework',
+                    name:    row.find('input[name="plan-title"]').val(),
+                    notes:   that.find('textarea[name="strategy-notes"]').val() || '',
+                    prepared: prepare.join(',') || ''
+                };
+                if(strategy.notes.trim() == '' &&
+                    strategy.prepare.trim() == '')
+                    strategy = {
+                        type:   'prework',
+                        name:   row.find('input[name="plan-title"]').val(),
+                        remove: true
                     };
                 strategies[strategies.length] = strategy;
             }
@@ -381,7 +473,8 @@ jQuery(document).ready(function ($) {
         row.toggleClass('selected');
 
         // add mini-checkin if class number is set
-        if(cid != null && row.find('.mini-checkin').length == 0 && strategy != 'other')
+        if(cid != null && row.find('.mini-checkin').length == 0 && strategy != 'other' &&
+            jQuery('#plan .mini-checkin').length > 0)
         {
             var newMiniCheckin = jQuery('#plan .mini-checkin').first().clone();
             row.append(newMiniCheckin);
@@ -401,9 +494,9 @@ jQuery(document).ready(function ($) {
 
         //
         if(!row.is('.selected'))
-            row.find('.strategy-spaced, .strategy-active, .strategy-teach, .strategy-other').hide();
+            row.find('.strategy-spaced, .strategy-active, .strategy-teach, .strategy-other, .strategy-prework').hide();
         else
-            row.find('.strategy-spaced:visible, .strategy-active:visible, .strategy-teach:visible, .strategy-other:visible').first().scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
+            row.find('.strategy-spaced:visible, .strategy-active:visible, .strategy-teach:visible, .strategy-other:visible, .strategy-prework:visible').first().scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
     });
 
     var date = new Date();

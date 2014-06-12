@@ -107,7 +107,7 @@ function checkinCallback(pos, eid, checkedIn) {
                         jQuery('#checkins-list').append(data.rows);
                         if(data.rows.length > 1)
                             jQuery('#home-tips').attr('checked', 'checked');
-                        if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                        if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
                             jQuery('#home-tasks-checklist').attr('checked', 'checked');
                         jQuery('#metrics').updateMetrics(data.times);
                         if (data.times.length == 0)
@@ -224,7 +224,7 @@ jQuery(document).ready(function ($) {
                             }
                         });
         jQuery('#home-music').attr('checked', 'checked');
-        if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+        if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
             jQuery('#home-tasks-checklist').attr('checked', 'checked');
     });
 

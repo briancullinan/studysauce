@@ -1,37 +1,73 @@
 
 jQuery(document).ready(function($) {
 
-    jQuery('body').on('click', 'a[href="#userlist"]', function (evt) {
-        jQuery('body').removeClass('uid-only');
-        jQuery('.user-pane').remove();
-    });
+    var userlist = jQuery('#userlist');
 
     var status = ['- Status -'];
-    jQuery('#userlist').find('td:nth-child(1)').each(function () {
+    userlist.find('td:nth-child(1)').each(function () {
         if(status.indexOf(jQuery(this).text()) == -1)
             status[status.length] = jQuery(this).text();
     });
-    jQuery('#userlist').find('th:nth-child(1)').html('<select><option>' + status.join("</option><option>") + '</option></select>')
+    userlist.find('th:nth-child(1)').html('<select><option>' + status.join("</option><option>") + '</option></select>')
     var dates = ['- Date -'];
-    jQuery('#userlist').find('td:nth-child(2)').each(function () {
+    userlist.find('td:nth-child(2)').each(function () {
         if(dates.indexOf(jQuery(this).text()) == -1)
             dates[dates.length] = jQuery(this).text();
     });
-    jQuery('#userlist').find('th:nth-child(2)').html('<select><option>' + dates.join("</option><option>") + '</option></select>')
+    userlist.find('th:nth-child(2)').html('<select><option>' + dates.join("</option><option>") + '</option></select>')
     var students = ['- Student -'];
-    jQuery('#userlist').find('td:nth-child(3)').each(function () {
+    userlist.find('td:nth-child(3)').each(function () {
         if(students.indexOf(jQuery(this).text()) == -1)
             students[students.length] = jQuery(this).text();
     });
-    jQuery('#userlist').find('th:nth-child(3)').html('<select><option>' + students.join("</option><option>") + '</option></select>')
+    userlist.find('th:nth-child(3)').html('<select><option>' + students.join("</option><option>") + '</option></select>')
     var schools = ['- School -'];
-    jQuery('#userlist').find('td:nth-child(4)').each(function () {
+    userlist.find('td:nth-child(4)').each(function () {
         if(schools.indexOf(jQuery(this).text()) == -1)
             schools[schools.length] = jQuery(this).text();
     });
-    jQuery('#userlist').find('th:nth-child(4)').html('<select><option>' + schools.join("</option><option>") + '</option></select>')
+    userlist.find('th:nth-child(4)').html('<select><option>' + schools.join("</option><option>") + '</option></select>')
 
-    jQuery('#userlist').on('change', 'select', function () {
+    userlist.on('click', 'a[href="#change-status"]', function (evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        var row = jQuery(this).parents('tr'),
+            selectStatus = jQuery('#select-status');
+        if(selectStatus.is(':visible'))
+        {
+            selectStatus.hide();
+            return;
+        }
+        selectStatus.css('top', row.position().top);
+        selectStatus.off();
+        selectStatus.on('click', 'a', function (evt) {
+            evt.preventDefault();
+            var status = jQuery(this).attr('href').substring(1),
+                uid = (/uid([0-9]+)(\s|$)/ig).exec(row.attr('class'));
+            row.removeClass('status_green status_yellow status_red');
+            row.addClass('status_' + status);
+            jQuery.ajax({
+                url: '/user/save/status',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    uid: uid[1],
+                    status: status
+                },
+                success: function () {
+                    userlist.find('tr.uid' + uid[1]).removeClass('status_green status_yellow status_red')
+                        .addClass('status_' + status);
+                }
+            })
+        });
+        selectStatus.show();
+    });
+
+    userlist.on('click', function (evt) {
+        jQuery('#select-status').hide();
+    });
+
+    userlist.on('change', 'select', function () {
         jQuery('tr').show();
         if(jQuery(this).val() != '- Status -' &&
             jQuery(this).val() != '- Date -' &&
@@ -47,10 +83,11 @@ jQuery(document).ready(function($) {
         }
     });
 
-    jQuery('#userlist').on('click', 'a[href^="#uid-"]', function (evt) {
+    userlist.on('click', 'a[href^="#uid-"]', function (evt) {
         evt.preventDefault();
         var uid = jQuery(this).attr('href').substring(5);
-        var pane = jQuery('#' + uid + '.panel-pane');
+        jQuery('.user-pane').remove();
+        var pane = jQuery('#uid-' + uid + '.panel-pane');
         if(pane.length == 0)
         {
             pane = jQuery('<div id="uid-' + uid + '" class="panel-pane user-pane"><div class="pane-content" /></div>')
@@ -60,7 +97,7 @@ jQuery(document).ready(function($) {
         jQuery('body').removeClass('home-only,userlist-only').addClass('uid-only');
         window.location.hash = '#uid-' + uid;
 
-        pane.show().find('.pane-content').addClass('loading');
+        pane.find('.pane-content').addClass('loading');
         jQuery.ajax({
             url: '/adviser?uid=' + uid,
             dataType: 'json',

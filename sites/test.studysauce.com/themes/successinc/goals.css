@@ -76,6 +76,7 @@
     margin-top:0;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
+    height:48px;
 }
 
 .page-dashboard.student .sponsored #non-sponsored tr:first-child .field-name-field-type
@@ -652,31 +653,26 @@
     background:none;
 }
 
-#partner-plupload .plup-list li,
 .group-achievement .plup-list li
 {
     display:none;
 }
 
-#partner-plupload .plup-list li:last-child,
 .group-achievement .plup-list li:last-child
 {
     display:block;
 }
 
-#partner-plupload .plup-thumb-wrapper,
 .group-achievement .plup-thumb-wrapper
 {
     text-align: center;
 }
 
-#partner-plupload .plup-thumb-wrapper img,
 .group-achievement .plup-thumb-wrapper img
 {
     margin:0 auto;
 }
 
-#partner-plupload .plup-select,
 .group-achievement .plup-select
 {
     position:absolute;
@@ -689,30 +685,17 @@
     font-size: 0;
 }
 
-#partner-plupload .plup-select
-{
-    top:-50px;
-    padding-top:50px;
-}
-
-body.file-drag .strategy-upload .plup-filelist
-body.file-drag #partner-plupload .plup-filelist
 body.file-drag .group-achievement .plup-filelist
 {
     z-index: 2000;
 }
 
-.strategy-upload .plup-remove-file,
-.strategy-upload .plup-remove-item,
-#partner-plupload .plup-remove-file,
-#partner-plupload .plup-remove-item,
 .group-achievement .plup-remove-file,
 .group-achievement .plup-remove-item
 {
     z-index: 100;
 }
 
-.strategy-upload .drag-main,
 .group-achievement .drag-main
 {
     position:absolute;
@@ -726,16 +709,6 @@ body.file-drag .group-achievement .plup-filelist
     text-align: center;
 }
 
-.strategy-upload .drag-more,
-.strategy-upload .plup-filelist-size,
-.strategy-upload .plup-filelist-message,
-.strategy-upload .plup-filelist-remove,
-.strategy-upload .plup-select div,
-#partner-plupload .drag-more,
-#partner-plupload .plup-filelist-size,
-#partner-plupload .plup-filelist-message,
-#partner-plupload .plup-filelist-remove,
-#partner-plupload .plup-select div,
 .group-achievement .drag-more,
 .group-achievement .plup-filelist-size,
 .group-achievement .plup-filelist-message,
@@ -745,25 +718,17 @@ body.file-drag .group-achievement .plup-filelist
     display:none;
 }
 
-.strategy-upload .plup-bar .plup-upload,
-#partner-plupload .plup-bar .plup-upload,
 .group-achievement .plup-bar .plup-upload
 {
     display:none !important;
 }
 
-.strategy-upload .plupload,
-.strategy-upload .plupload-container,
-#partner-plupload .plupload,
-#partner-plupload .plupload-container,
 .group-achievement .plupload,
 .group-achievement .plupload-container
 {
     min-height:200px;
 }
 
-.strategy-upload .plup-filelist-file,
-#partner-plupload .plup-filelist-file,
 .group-achievement .plup-filelist-file
 {
     text-overflow: ellipsis;
@@ -771,10 +736,6 @@ body.file-drag .group-achievement .plup-filelist
     overflow: hidden;
 }
 
-.strategy-upload .plup-filelist,
-.strategy-upload .plupload.html5,
-#partner-plupload .plup-filelist,
-#partner-plupload .plupload.html5,
 .group-achievement .plup-filelist,
 .group-achievement .plupload.html5
 {
@@ -1008,6 +969,12 @@ body.file-drag .group-achievement .plup-filelist
 
 @media all and (max-width: 980px)
 {
+    .page-dashboard #goals .step_2 .edit .field-name-field-reward .form-item,
+    .page-dashboard #goals .step_3 .edit .field-name-field-reward .form-item
+    {
+        display:block;
+    }
+
     .page-dashboard #goals .row:first-child .highlighted-link,
     .page-dashboard #goals .row:first-child a[href="#cancel-incentive"]
     {
@@ -1159,6 +1126,12 @@ body.file-drag .group-achievement .plup-filelist
 
 @media all and (max-width: 980px)
 {
+    .page-dashboard #goals .row.edit .field-name-field-reward
+    {
+        margin-right:0;
+        padding-right:0;
+    }
+
     .page-dashboard #goals #achievements .grid_6
     {
         width:auto;

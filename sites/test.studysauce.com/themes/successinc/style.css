@@ -2231,7 +2231,7 @@ label {
 .chatboxtextarea, input.form-text, textarea {
     color: #838383;
     font-size: 16px;
-    font-style: italic;
+    font-style: normal;
     line-height: 25px;
     padding: 5px;
     width: 100%;

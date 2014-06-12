@@ -110,7 +110,7 @@ jQuery(document).ready(function($) {
                            //if(jQuery(window).width() <= 759)
                            //    row.scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
                            jQuery('#home-reminders').attr('checked', 'checked');
-                           if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                           if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
                                jQuery('#home-tasks-checklist').attr('checked', 'checked');
                        }
                    });

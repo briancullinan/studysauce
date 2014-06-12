@@ -71,6 +71,12 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['partner'] = array(
+        'page callback' => 'studysauce_partner',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     $items['order/completed'] = array(
         'page callback' => 'studysauce_order_completed',
         'access callback' => true,
@@ -98,6 +104,13 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['user/plup'] = array(
+        'title' => 'Plupload upload page',
+        'page callback' => 'studysauce_upload_page',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     $items['node/save/strategies'] = array(
         'page callback' => 'studysauce_save_strategies',
         'access callback' => true,
@@ -118,7 +131,45 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['user/save/status'] = array(
+        'title' => 'Save user status set by an adviser',
+        'page callback' => 'studysauce_save_status',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     return $items;
+}
+
+function studysauce_partner()
+{
+    global $user;
+    // check if user is partnered up
+    $partnerQuery = new EntityFieldQuery();
+    $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+        ->propertyCondition('field_name', 'field_partners')
+        ->fieldCondition('field_email', 'value', $user->mail)
+        ->execute();
+    if(isset($partners['field_collection_item']) && !empty($partners['field_collection_item']))
+    {
+        $partners = array_keys($partners['field_collection_item']);
+        foreach($partners as $p)
+        {
+            $partner = entity_load('field_collection_item', array($p));
+            $host = $partner[$p]->hostEntity();
+            $perm = array_map(function ($x) {return $x['value']; }, $partner[$p]->field_permissions['und']);
+            if($host->uid == $_GET['uid'])
+            {
+                print json_encode(array(
+                    'content' => theme('studysauce-partner-info', array(
+                        'account' => user_load(intval($_GET['uid'])),
+                        'permissions' => $perm)),
+                    'styles' => drupal_get_css(),
+                    'scripts' => drupal_get_js()
+                ));
+            }
+        }
+    }
 }
 
 function studysauce_adviser()
@@ -261,6 +312,7 @@ function studysauce_upload_page() {
                 $thumbnails[0]->secure_uri = str_replace('system/temporary', variable_get('file_public_path', 'sites/default/files'), $thumbnails[0]->secure_uri);
                 $thumbnails[0]->thumbnail = $thumbnails[0]->fid;
                 $thumbnails[0]->fid = $file->fid;
+
                 $return = $thumbnails[0];
             }
         }
@@ -335,6 +387,22 @@ function studysauce_get_connections($include_invites = false)
     // get a list of users you invited to connect
     global $user;
     $user = user_load($user->uid);
+    $partnerQuery = new EntityFieldQuery();
+    $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+        ->propertyCondition('field_name', 'field_partners')
+        ->fieldCondition('field_email', 'value', $user->mail)
+        ->execute();
+    if(isset($partners['field_collection_item']) && !empty($partners['field_collection_item']))
+    {
+        $partners = array_keys($partners['field_collection_item']);
+        foreach($partners as $p)
+        {
+            $partner = entity_load('field_collection_item', array($p));
+            $host = $partner[$p]->hostEntity();
+            if($host)
+                $connections[] = $host;
+        }
+    }
     if(!empty($user->field_invites) && !empty($user->field_invites[LANGUAGE_NONE]))
     {
         foreach($user->field_invites[LANGUAGE_NONE] as $i => $invite)
@@ -700,6 +768,7 @@ function studysauce_init()
         module_load_include('inc', 'user', 'user.pages');
         module_load_include('inc', 'node', 'node.pages');
     }
+    /*
     $conn = studysauce_get_connections();
     $user = user_load($user->uid);
     if(isset($conn[0]->field_parent_student['und'][0]['value']) && (
@@ -720,6 +789,7 @@ function studysauce_init()
         }
 
     }
+    */
 }
 
 function studysauce_render_webform_plain($webform, $sid)
@@ -1058,17 +1128,19 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
 
             // add product buttons to checkout page
             $items = uc_cart_get_contents();
+            $form['panes']['payment']['#description'] = '<div>';
             foreach ($items as $item)
             {
                 if($item->nid == 13);
                 {
                     if(end($item->data['attributes']) == 14 ||
                         (isset($item->data['attributes']['Payment Option']) && end($item->data['attributes']['Payment Option']) == 'Yearly'))
-                        $form['panes']['payment']['#description'] = '<a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout">$9.99/mo</a> <a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout" class="checked">$99/year <sup>Recommended</sup></a>';
+                        $form['panes']['payment']['#description'] .= '<a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout">$9.99/mo</a> <a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout" class="checked">$99/year <sup>Recommended</sup></a>';
                     else
-                        $form['panes']['payment']['#description'] = '<a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout" class="checked">$9.99/mo</a> <a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout">$99/year <sup>Recommended</sup></a>';
+                        $form['panes']['payment']['#description'] .= '<a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout" class="checked">$9.99/mo</a> <a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout">$99/year <sup>Recommended</sup></a>';
                 }
             }
+            $form['panes']['payment']['#description'] .= '</div><img src="/' . drupal_get_path('theme', 'successinc') .'/images/money_back_compressed.png" />';
 
             if(isset($_SESSION['studysauce']['email']))
                 $form['panes']['customer']['primary_email']['#default_value'] = $_SESSION['studysauce']['email'];
@@ -1849,6 +1921,18 @@ function studysauce_get_sds_messages()
  * TODO: should this be put in our module instead of theme directory?
  */
 function studysauce_theme_registry_alter(&$theme_registry) {
+    $theme_registry['studysauce-adviser-strategies'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser-strategies',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-adviser-account'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser-account',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
     $theme_registry['studysauce-adviser-import'] = array(
         'template' => drupal_get_path('theme', 'successinc') . '/adviser-import',
         'theme path' => drupal_get_path('theme', 'successinc'),
@@ -1891,8 +1975,8 @@ function studysauce_theme_registry_alter(&$theme_registry) {
         'type' => 'module',
         'preprocess functions' => array(),
     );
-    $theme_registry['studysauce-userlist'] = array(
-        'template' => drupal_get_path('theme', 'successinc') . '/userlist',
+    $theme_registry['studysauce-adviser-userlist'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/adviser-userlist',
         'theme path' => drupal_get_path('theme', 'successinc'),
         'type' => 'module',
         'preprocess functions' => array(),
@@ -2067,6 +2151,12 @@ function studysauce_theme_registry_alter(&$theme_registry) {
     );
     $theme_registry['studysauce-partner'] = array(
         'template' => drupal_get_path('theme', 'successinc') . '/partner',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-partner-info'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/partner-info',
         'theme path' => drupal_get_path('theme', 'successinc'),
         'type' => 'module',
         'preprocess functions' => array(),

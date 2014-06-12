@@ -29,7 +29,7 @@ if (!empty($nodes['node']))
     $nodes = array_keys($nodes['node']);
     $nid = array_shift($nodes);
     $node = node_load($nid);
-    foreach(array('active', 'other', 'spaced', 'teach') as $i => $strategy)
+    foreach(array('active', 'other', 'spaced', 'teach', 'prework') as $i => $strategy)
     {
         $field = 'field_' . $strategy . '_strategies';
         $strategies = $node->$field;
@@ -44,6 +44,8 @@ if (!empty($nodes['node']))
                 $entity = $entity[$eid];
                 if(!isset($entity->field_class_name['und'][0]['value']))
                     continue;
+
+                $name = $entity->field_class_name['und'][0]['value'];
 
                 // get date of last revision
                 $rev = db_select('field_revision_field_' . $strategy . '_strategies', 's')
@@ -69,8 +71,6 @@ if (!empty($nodes['node']))
                     $dates[$node->created] = array($strategy, $name);
                 }
 
-
-                $name = $entity->field_class_name['und'][0]['value'];
                 if($strategy == 'active')
                 {
                     $result[$name][$strategy]['skim'] = isset($entity->field_skim['und'][0]['value'])
@@ -132,9 +132,16 @@ if (!empty($nodes['node']))
                         ? $entity->field_notes['und'][0]['value']
                         : '';
                     $result[$name][$strategy]['review'] = isset($entity->field_review['und'][0]['value'])
-                        ? implode(',', array_map(function ($x) {
-                            return $x['value'];
-                        }, $entity->field_review['und']))
+                        ? implode(',', array_map(function ($x) { return $x['value']; }, $entity->field_review['und']))
+                        : '';
+                }
+                elseif($strategy == 'prework')
+                {
+                    $result[$name][$strategy]['notes'] = isset($entity->field_notes['und'][0]['value'])
+                        ? $entity->field_notes['und'][0]['value']
+                        : '';
+                    $result[$name][$strategy]['prepared'] = isset($entity->field_prepared['und'][0]['value'])
+                        ? implode(',', array_map(function ($x) { return $x['value']; }, $entity->field_prepared['und']))
                         : '';
                 }
             }
@@ -176,7 +183,7 @@ if (!empty($nodes['node']))
                         <?php if(isset($result[$name][$strategy]['uploads'][0]['uri'])): ?>
                             <li class="ui-state-default">
                                 <div class="plup-thumb-wrapper">
-                                    <img src="<?php print image_style_url('achievement', $result[$name][$strategy]['uploads'][0]['uri']); ?>" title="">
+                                    <img src="<?php print $result[$name][$strategy]['uploads'][0]['uri']; ?>" title="">
                                 </div>
                             </li>
                         <?php else: ?>

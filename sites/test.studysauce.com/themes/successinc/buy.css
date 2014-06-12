@@ -321,6 +321,22 @@
     margin-bottom: 10px;
 }
 
+#payment-pane .fieldset-description div
+{
+    margin-right: -100px;
+    padding-right: 100px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#payment-pane .fieldset-description img
+{
+    vertical-align: middle;
+}
+
 #payment-pane .fieldset-description sup
 {
     margin: -10px 0;

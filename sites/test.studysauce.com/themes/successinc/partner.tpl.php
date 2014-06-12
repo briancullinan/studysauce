@@ -2,15 +2,41 @@
 drupal_add_css(drupal_get_path('theme', 'successinc') .'/partner.css');
 drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/partner.js');
 
-global $user;
-$user = user_load($user->uid);
-if(isset($user->field_partners['und'][0]['value']))
+if(!isset($account))
 {
-    $partner = entity_load('field_collection_item', array($user->field_partners['und'][0]['value']));
-    $partner = $partner[$user->field_partners['und'][0]['value']];
+    global $user;
+    $account = user_load($user->uid);
+}
+if(isset($account->field_partners['und'][0]['value']))
+{
+    $partner = entity_load('field_collection_item', array($account->field_partners['und'][0]['value']));
+    $partner = $partner[$account->field_partners['und'][0]['value']];
     $permissions = isset($partner->field_permissions['und']) && is_array($partner->field_permissions['und'])
         ? array_map(function ($x) { return $x['value']; }, $partner->field_permissions['und'])
         : array();
+}
+
+// check if we are being advised by another user in a group
+$groups = og_get_groups_by_user();
+$readonly = false;
+if(isset($groups['node']))
+{
+    // get group adviser
+    $query = db_select("og_membership", "ogm");
+    $query->condition("ogm.gid", array_keys($groups['node']), "=");
+    $query->fields("ogm", array("entity_type", "etid"));
+    $result = $query->execute();
+    $members = $result->fetchAll();
+    foreach($members as $i => $member)
+    {
+        $m = user_load($member->etid);
+        if(array_search('adviser', $m->roles) !== false)
+        {
+            $partner = $m;
+            $permissions = array('goals', 'metrics', 'deadlines', 'uploads', 'plan', 'profile');
+            $readonly = true;
+        }
+    }
 }
 
 ?>
@@ -39,48 +65,52 @@ if(isset($user->field_partners['und'][0]['value']))
                 <?php endif; ?>
             </ul>
         </div>
-        <div class="plup-filelist" id="partner-plupload-filelist">
-            <table>
-                <tbody>
-                <tr class="plup-drag-info">
-                    <td>
-                        <div class="drag-main">Upload photo of your partner</div>
-                        <div class="drag-more">
-                            <div>You can upload up to <strong>1</strong> files.</div>
-                            <div>Allowed files types: <strong>png gif jpg jpeg</strong>.</div>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="plup-bar clearfix">
-            <input type="hidden" id="partner-upload-path" value="<?php print url('node/plup/partner', array('query' => array('plupload_token' => drupal_get_token('plupload-handle-uploads')))); ?>" />
-            <a href="#partner-select" class="plup-select" id="partner-plupload-select">Add</a>
-            <a hre="#partner-upload" class="plup-upload" id="partner-plupload-upload">Upload</a>
-            <div class="plup-progress"></div>
-        </div>
+        <?php if(!$readonly): ?>
+            <div class="plup-filelist" id="partner-plupload-filelist">
+                <table>
+                    <tbody>
+                    <tr class="plup-drag-info">
+                        <td>
+                            <div class="drag-main">Upload photo of your partner</div>
+                            <div class="drag-more">
+                                <div>You can upload up to <strong>1</strong> files.</div>
+                                <div>Allowed files types: <strong>png gif jpg jpeg</strong>.</div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="plup-bar clearfix">
+                <input type="hidden" id="partner-upload-path" value="<?php print url('node/plup/partner', array('query' => array('plupload_token' => drupal_get_token('plupload-handle-uploads')))); ?>" />
+                <a href="#partner-select" class="plup-select" id="partner-plupload-select">Add</a>
+                <a hre="#partner-upload" class="plup-upload" id="partner-plupload-upload">Upload</a>
+                <div class="plup-progress"></div>
+            </div>
+        <?php endif; ?>
     </div>
 
     <div class="partner-invite">
         <div
             class="form-item webform-component webform-component-textfield">
-            <input type="text" id="partner-first" name="partner-first"
+            <input type="text" id="partner-first" name="partner-first" <?php print ($readonly ? ' readonly="readonly" ' : ''); ?>
                    value="<?php print (isset($partner->field_first_name['und'][0]['value']) ? $partner->field_first_name['und'][0]['value'] : ''); ?>" size="60" maxlength="128" class="form-text required" placeholder="First name">
         </div>
         <div
             class="form-item webform-component webform-component-textfield">
-            <input type="text" id="partner-last" name="partner-last"
+            <input type="text" id="partner-last" name="partner-last" <?php print ($readonly ? ' readonly="readonly" ' : ''); ?>
                    value="<?php print (isset($partner->field_last_name['und'][0]['value']) ? $partner->field_last_name['und'][0]['value'] : ''); ?>"
                    size="60" maxlength="128" class="form-text required" placeholder="Last name">
         </div>
         <div class="form-item webform-component webform-component-email">
-            <input class="email form-text form-email required" type="email" id="partner-email"
-                   value="<?php print (isset($partner->field_email['und'][0]['value']) ? $partner->field_email['und'][0]['value'] : ''); ?>"
+            <input class="email form-text form-email required" type="email" id="partner-email" <?php print ($readonly ? ' readonly="readonly" ' : ''); ?>
+                   value="<?php print (isset($partner->field_email['und'][0]['value']) ? $partner->field_email['und'][0]['value'] : (isset($partner->mail) ? $partner->mail : '')); ?>"
                    name="partner-email" size="60" placeholder="Email address">
         </div>
-        <div class="highlighted-link form-actions">
-            <a href="#partner-save" class="webform-submit button-primary more form-submit ajax-processed">Save</a></div>
+        <?php if(!$readonly): ?>
+            <div class="highlighted-link form-actions">
+                <a href="#partner-save" class="webform-submit button-primary more form-submit ajax-processed">Save</a></div>
+        <?php endif; ?>
     </div>
 
     <h3>My partner is allowed to see:</h3>
@@ -104,6 +134,20 @@ if(isset($user->field_partners['und'][0]['value']))
                 <?php print (isset($permissions) && in_array('profile', $permissions) ? 'checked' : 'unchecked'); ?> />
             <label for="partner-profile">My study profiles <sup class="premium">Premium</sup></label></li>
     </ul>
+    <?php if($readonly): ?>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                jQuery('#partner input[type="checkbox"]').each(function () {
+                    jQuery(this).data('origState', jQuery(this).prop('checked'));
+                });
+                jQuery('#partner').on('change', 'input[type="checkbox"]', function (evt) {
+                    evt.preventDefault();
+                    if(jQuery(this).prop('checked') != jQuery(this).data('origState'))
+                        jQuery(this).prop('checked', jQuery(this).data('origState'));
+                });
+            });
+        </script>
+    <?php endif; ?>
 </div>
 <div class="partner-faqs">
     <h3>FAQs:</h3>
@@ -127,3 +171,44 @@ if(isset($user->field_partners['und'][0]['value']))
     <h4>Can I change my accountability partner in Study Sauce?</h4>
     <p>Sure you can.  You can change your accountability partner or what they can see at any time.  Just use the edit function next to the photograph on the Accountability partner tab.</p>
 </div>
+<?php
+// find people we are accountable to by searching partners field
+$partnerQuery = new EntityFieldQuery();
+$partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+    ->propertyCondition('field_name', 'field_partners')
+    ->fieldCondition('field_email', 'value', $account->mail)
+    ->execute();
+if(isset($partners['field_collection_item']) && !empty($partners['field_collection_item']))
+{
+    ?><h2>You are accountable for the following students:</h2><?php
+    $partners = array_keys($partners['field_collection_item']);
+    foreach($partners as $p)
+    {
+        $partner = entity_load('field_collection_item', array($p));
+        $host = $partner[$p]->hostEntity();
+        $query = new EntityFieldQuery();
+        $nodes = $query->entityCondition('entity_type', 'node')
+            ->propertyCondition('type', 'schedule')
+            ->propertyCondition('title', isset($host->mail) ? $host->mail : '')
+            ->propertyCondition('status', 1)
+            ->range(0, 1)
+            ->execute();
+        if (!empty($nodes['node']))
+        {
+            $nodes = array_keys($nodes['node']);
+            $nid = array_shift($nodes);
+            $node = node_load($nid);
+        }
+
+        ?><div class="row">
+            <label style="display:inline;">Last accessed: </label>
+            <?php print date('d-M', $host->access); ?>
+            <label style="display:inline;">Name: </label>
+            <a href="#uid-<?php print $host->uid; ?>"><?php print $host->field_first_name['und'][0]['value']; ?> <?php print $host->field_last_name['und'][0]['value']; ?></a>
+            <label style="display:inline;">School: </label>
+            <?php print (!empty($nodes['node']) && isset($node->field_university['und'][0]['value']) && !empty($node->field_university['und'][0]['value']) ? $node->field_university['und'][0]['value'] : 'Not set'); ?>
+        </div><?php
+    }
+}
+
+?>

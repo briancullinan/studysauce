@@ -46,7 +46,7 @@ $endWeek = $startWeek + 604800 - 86400;
     <input type="checkbox" id="schedule-historic"><label for="schedule-historic">View historical</label>
 </div>
 <?php
-print theme('studysauce-strategies');
+print theme('studysauce-adviser-strategies');
 
 $first = true;
 $headStr = '';

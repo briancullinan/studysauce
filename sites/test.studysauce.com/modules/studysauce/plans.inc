@@ -106,9 +106,32 @@ function studysauce_save_strategies()
                         $existing->field_title['und'][0]['value'] = $strategy['title'];
                     if(isset($strategy['notes']))
                         $existing->field_notes['und'][0]['value'] = $strategy['notes'];
+                    if(isset($strategy['uploads'][0]['thumbnail']))
+                        $existing->field_teaching['und'][0]['thumbnail'] = $strategy['uploads'][0]['thumbnail'];
+                    if(isset($strategy['uploads'][0]['fid']))
+                        $existing->field_teaching['und'][0]['fid'] = $strategy['uploads'][0]['fid'];
+                    if(isset($strategy['review']))
+                    {
+                        if(!empty($strategy['review']))
+                            $existing->field_review['und'] = array_map(function ($x) { return array('value'=> $x); },
+                                explode(',', $strategy['review']));
+                        else
+                            $existing->field_review['und'] = array();
+                    }
+                    if(isset($strategy['prepared']))
+                    {
+                        if(!empty($strategy['prepared']))
+                            $existing->field_prepared['und'] = array_map(function ($x) { return array('value'=> $x); },
+                                explode(',', $strategy['prepared']));
+                        else
+                            $existing->field_prepared['und'] = array();
+                    }
+
+
+                    $existing->save();
+
                     if(isset($strategy['uploads'][0]['fid']))
                     {
-                        $existing->field_teaching['und'][0]['fid'] = $strategy['uploads'][0]['fid'];
                         $file = file_load($strategy['uploads'][0]['fid']);
                         $fileName = isset($strategy['uploads'][0]['rename']) ? $strategy['uploads'][0]['rename'] : $file->filename;
                         $location = 'public:///';
@@ -117,16 +140,22 @@ function studysauce_save_strategies()
                             file_prepare_directory($location, FILE_CREATE_DIRECTORY);
                             file_move($file, $filePath);
                         }
+                        $video = video_jobs::load($file->fid);
+                        if (!$video) {
+                            list($entity_id, $entity_vid, $bundle) = entity_extract_ids('field_collection_item', $existing);
+                            // @todo get the default dimension when not available in $item
+                            if (!video_jobs::create($file->fid, '320x180', $entity_id, 'field_collection_item', 'field_teaching', 'und', 0)) {
+                                drupal_set_message(t('Something went wrong with your video job creation. Please check your recent log entries for further debugging.'), 'error');
+                                return;
+                            }
+                            // Load a fresh copy of the job
+                            $video = video_jobs::load($file->fid);
+                        }
+                        $video->video_status = VIDEO_RENDERING_PENDING;
+                        $video->statusupdated = time();
+                        $video->dimensions = '320x180';
+                        video_jobs::update($video);
                     }
-                    if(isset($strategy['uploads'][0]['thumbnail']))
-                        $existing->field_teaching['und'][0]['thumbnail'] = $strategy['uploads'][0]['thumbnail'];
-                    if(isset($strategy['review']))
-                        $existing->field_review['und'] = array_map(function ($x) {
-                            return array('value'=> $x);
-                        }, explode(',', $strategy['review']));
-
-
-                    $existing->save();
 
                     node_save($node);
                 }
@@ -156,7 +185,7 @@ function studysauce_get_strategies($account = null)
         $nodes = array_keys($nodes['node']);
         $nid = array_shift($nodes);
         $node = node_load($nid);
-        foreach(array('active', 'other', 'spaced', 'teach') as $i => $strategy)
+        foreach(array('active', 'other', 'spaced', 'teach', 'prework') as $i => $strategy)
         {
             $field = 'field_' . $strategy . '_strategies';
             $strategies = $node->$field;
@@ -173,6 +202,9 @@ function studysauce_get_strategies($account = null)
                         continue;
 
                     $name = $entity->field_class_name['und'][0]['value'];
+                    $result[$name][$strategy]['default'] = isset($entity->field_default['und'][0]['value'])
+                        ? $entity->field_default['und'][0]['value']
+                        : false;
                     if($strategy == 'active')
                     {
                         $result[$name][$strategy]['skim'] = isset($entity->field_skim['und'][0]['value'])
@@ -190,11 +222,8 @@ function studysauce_get_strategies($account = null)
                         $result[$name][$strategy]['exam'] = isset($entity->field_exam['und'][0]['value'])
                             ? $entity->field_exam['und'][0]['value']
                             : '';
-                        $result[$name][$strategy]['default'] = isset($entity->field_default['und'][0]['value'])
-                            ? $entity->field_default['und'][0]['value']
-                            : false;
                     }
-                    if($strategy == 'other')
+                    elseif($strategy == 'other')
                     {
                         $result[$name][$strategy]['notes'] = isset($entity->field_notes['und'][0]['value'])
                             ? $entity->field_notes['und'][0]['value']
@@ -220,11 +249,27 @@ function studysauce_get_strategies($account = null)
                                 ->condition('vo.original_fid', array($entity->field_teaching['und'][0]['fid']), 'IN')
                                 ->execute()->fetchAllAssoc('output_fid');
                             foreach ($outputs as $outputfid => $output) {
-                                if ($output->original_fid == $entity->field_teaching['und'][0]['fid']) {
-                                    $file = file_load($output->output_fid);
-                                    if($file->filesize > 0)
-                                        $result[$name][$strategy]['uploads'][0]['play'] = check_plain(file_create_url($file->uri));
+                                $file = file_load($output->output_fid);
+                                if($file->filesize > 0)
+                                    $result[$name][$strategy]['uploads'][0]['play'] = check_plain(file_create_url($file->uri));
+                            }
+                            if(empty($outputs))
+                            {
+                                $video = video_jobs::load($entity->field_teaching['und'][0]['fid']);
+                                if (!$video) {
+                                    list($entity_id, $entity_vid, $bundle) = entity_extract_ids('field_collection_item', $entity);
+                                    // @todo get the default dimension when not available in $item
+                                    if (!video_jobs::create($file->fid, '320x180', $entity_id, 'field_collection_item', 'field_teaching', 'und', 0)) {
+                                        drupal_set_message(t('Something went wrong with your video job creation. Please check your recent log entries for further debugging.'), 'error');
+                                        return;
+                                    }
+                                    // Load a fresh copy of the job
+                                    $video = video_jobs::load($file->fid);
                                 }
+                                $video->video_status = VIDEO_RENDERING_PENDING;
+                                $video->statusupdated = time();
+                                $video->dimensions = '320x180';
+                                video_jobs::update($video);
                             }
                         }
                     }
@@ -234,9 +279,16 @@ function studysauce_get_strategies($account = null)
                             ? $entity->field_notes['und'][0]['value']
                             : '';
                         $result[$name][$strategy]['review'] = isset($entity->field_review['und'][0]['value'])
-                            ? implode(',', array_map(function ($x) {
-                                return $x['value'];
-                            }, $entity->field_review['und']))
+                            ? implode(',', array_map(function ($x) { return $x['value']; }, $entity->field_review['und']))
+                            : '';
+                    }
+                    elseif($strategy == 'prework')
+                    {
+                        $result[$name][$strategy]['notes'] = isset($entity->field_notes['und'][0]['value'])
+                            ? $entity->field_notes['und'][0]['value']
+                            : '';
+                        $result[$name][$strategy]['prepared'] = isset($entity->field_prepared['und'][0]['value'])
+                            ? implode(',', array_map(function ($x) { return $x['value']; }, $entity->field_prepared['und']))
                             : '';
                     }
                 }

@@ -1,24 +1,30 @@
 
-// Bind removing of file to selector elements
-function plup_remove_item(selector) {
-    jQuery(selector).bind('click', function(event) {
-        var parent = jQuery(this).parent();
-        var parentsParent = parent.parent();
-        parent.remove();
-        parentsParent.trigger('formUpdated');
-    });
+if(typeof plup_remove_item == 'undefined')
+{
+    // Bind removing of file to selector elements
+    function plup_remove_item(selector) {
+        jQuery(selector).bind('click', function(event) {
+            var parent = jQuery(this).parent();
+            var parentsParent = parent.parent();
+            parent.remove();
+            parentsParent.trigger('formUpdated');
+        });
+    }
 }
 
-// Bind resize effect on title and alt fields on focus
-function plup_resize_input(selector) {
-    var w = jQuery(selector).outerWidth();
-    if (w < 300) {
-        jQuery(selector).bind('focus', function(event) {
-            jQuery(this).css('z-index', 10).animate({'width': '300px'}, 300);
-        });
-        jQuery(selector).bind('blur', function(event) {
-            jQuery(this).removeAttr('style');
-        });
+if(typeof plup_resize_input == 'undefined')
+{
+    // Bind resize effect on title and alt fields on focus
+    function plup_resize_input(selector) {
+        var w = jQuery(selector).outerWidth();
+        if (w < 300) {
+            jQuery(selector).bind('focus', function(event) {
+                jQuery(this).css('z-index', 10).animate({'width': '300px'}, 300);
+            });
+            jQuery(selector).bind('blur', function(event) {
+                jQuery(this).removeAttr('style');
+            });
+        }
     }
 }
 
@@ -254,7 +260,7 @@ jQuery(document).ready(function() {
                            jQuery(data.achievements).find('> *')
                                .appendTo(jQuery('#achievements'));
                            jQuery('#home-goals').attr('checked', 'checked');
-                           if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length)
+                           if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
                                jQuery('#home-tasks-checklist').attr('checked', 'checked');
 
                            // update awards such as pulse detected for setting up a class
