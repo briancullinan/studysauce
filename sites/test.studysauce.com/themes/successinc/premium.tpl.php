@@ -9,7 +9,7 @@ drupal_add_css(drupal_get_path('theme', 'successinc') .'/premium.css');
 </div>
 <h2>Get better grades <span>&amp;</span> Unlock your potential</h2>
 <p class="highlighted-link"><a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout" class="more">Go Premium</a></p>
-<img class="money-back-stamp" src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/money_back_compressed.png" />
+<img class="money-back-stamp" src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/money_back_large.png" />
 <div class="three-step-process">
     <ol>
         <li>

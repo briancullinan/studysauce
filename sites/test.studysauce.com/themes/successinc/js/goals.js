@@ -112,7 +112,7 @@ jQuery(document).ready(function() {
         $('#goals-plupload').find('.plup-filelist #' + file.id).remove(); // Remove uploaded file from queue
         // Add image thumbnail into list of uploaded items
         $('#goals-plupload').find('.plup-list').append(
-            '<li class="ui-state-default">' +
+            '<li>' +
                 //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
             '<div class="plup-thumb-wrapper"><img src="'+ fileSaved.secure_uri + '" title="'+ Drupal.checkPlain(file.target_name) +'" /></div>' +
             '<a class="plup-remove-item"></a>' +
@@ -280,8 +280,6 @@ jQuery(document).ready(function() {
                                    jQuery('#badges').relocateAward(lastAward, '#goals > .pane-content');
                                else if (lastAward != null)
                                    jQuery('#badges').relocateAward(lastAward, '#badges > .pane-content');
-                               else
-                                   jQuery('#badges').relocateAward('');
                            }
                        }
                    });

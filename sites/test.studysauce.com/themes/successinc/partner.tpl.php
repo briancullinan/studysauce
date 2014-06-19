@@ -14,6 +14,12 @@ if(isset($account->field_partners['und'][0]['value']))
     $permissions = isset($partner->field_permissions['und']) && is_array($partner->field_permissions['und'])
         ? array_map(function ($x) { return $x['value']; }, $partner->field_permissions['und'])
         : array();
+    if(isset($partner->field_email['und'][0]['value']))
+    {
+        $partnerUser = user_load_by_mail($partner->field_email['und'][0]['value']);
+        if($partnerUser)
+            $partner = $partnerUser;
+    }
 }
 
 // check if we are being advised by another user in a group
@@ -48,10 +54,11 @@ if(isset($groups['node']))
     <div class="plupload" id="partner-plupload">
         <div class="plup-list-wrapper">
             <ul class="plup-list clearfix ui-sortable">
-                <?php if(isset($partner->field_partner_photo['und'][0]['fid'])):
-                    $file = file_load($partner->field_partner_photo['und'][0]['fid']);
+                <?php if(isset($partner->field_partner_photo['und'][0]['fid']) ||
+                    isset($partner->picture)):
+                    $file = isset($partner->field_partner_photo['und'][0]['fid']) ? file_load($partner->field_partner_photo['und'][0]['fid']) : $partner->picture;
                     ?>
-                    <li class="ui-state-default">
+                    <li>
                         <div class="plup-thumb-wrapper">
                             <img src="<?php print image_style_url('achievement', $file->uri); ?>" title="">
                         </div>
@@ -172,6 +179,7 @@ if(isset($groups['node']))
     <p>Sure you can.  You can change your accountability partner or what they can see at any time.  Just use the edit function next to the photograph on the Accountability partner tab.</p>
 </div>
 <?php
+/*
 // find people we are accountable to by searching partners field
 $partnerQuery = new EntityFieldQuery();
 $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
@@ -211,4 +219,4 @@ if(isset($partners['field_collection_item']) && !empty($partners['field_collecti
     }
 }
 
-?>
+*/

@@ -310,10 +310,11 @@
 
 .page-dashboard #checkin .minplayer-default-play
 {
-    background:url(images/menu_icons_64.png) no-repeat 0 -2432px transparent;
+    background:url(images/menu_icons_64.png) no-repeat 0 -2431px transparent;
     height:64px;
     width:64px;
     border:0;
+    transition:none;
 }
 
 .page-dashboard #checkin .minplayer-default-pause
@@ -322,6 +323,7 @@
     height:64px;
     width:64px;
     border:0;
+    transition:none;
 }
 
 .page-dashboard #checkin .minplayer-default-controls

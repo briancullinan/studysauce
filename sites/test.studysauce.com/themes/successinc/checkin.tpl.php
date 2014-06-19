@@ -531,7 +531,30 @@ if(empty($classes)):
             </a></li>
     </ul>
     <input name="touchedMusic" type="hidden" value="<?php print (_studysauce_get_touched() ? '1' : '0'); ?>" />
-    <?php print views_embed_view('music_player', 'block_1'); ?>
+    <div class="view view-music-player view-id-music_player view-display-id-block_1 view-dom-id-f009bb8f0cf162ede10141f63716e5af jquery-once-1-processed">
+        <div class="view-content">
+            <div class="osmplayer-default player-ui mediafront-processed minplayer-player-html5" style="width: 100%; height: 256px;">
+                <div class="minplayer-default player-ui" style="right: 0px;">
+                    <div class="minplayer-default-loader-wrapper">
+                        <div class="minplayer-default-big-play ui-state-default"><span></span></div>
+                        <div class="minplayer-default-loader" style="display: none;">&nbsp;</div>
+                        <div class="minplayer-default-preview ui-widget-content no-image" style="display: block;"></div>
+                    </div>
+                    <div class="minplayer-default-controls ui-widget-header minplayer-controls-volume-horizontal"
+                          style="display: block;">
+                        <div class="minplayer-default-controls-left">
+                            <a class="minplayer-default-play minplayer-default-button ui-state-default ui-corner-all" title="Play">
+                                <span class="ui-icon ui-icon-play"></span>
+                            </a>
+                            <a class="minplayer-default-pause minplayer-default-button ui-state-default ui-corner-all" title="Pause">
+                                <span class="ui-icon ui-icon-pause"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <h4 style="text-align:center;"><a href="#" onclick="jQuery('#checkin').addClass('mozart-only').scrollintoview(); return false;" style="color:#0099be;">The Mozart Effect&reg;</a></h4>
 </div>

@@ -46,10 +46,9 @@ jQuery(document).ready(function($) {
         });
 
         // TODO: fix this invalid even when university name changes
-        if(schedule.find('.row.edit.valid').length == 0 &&
+        if(window.location.pathname != '/schedule2' && (schedule.find('.row.edit.valid').length == 0 &&
            (schedule.find('.field-name-field-university input').val().trim() == '' ||
-            schedule.find('.field-name-field-university input').val() == schedule.find('.field-name-field-university input').prop('defaultValue')) &&
-            window.location.pathname != '/schedule' && window.location.pathname != '/schedule2')
+            schedule.find('.field-name-field-university input').val() == schedule.find('.field-name-field-university input').prop('defaultValue'))))
             schedule.removeClass('valid').addClass('invalid');
         else
             schedule.removeClass('invalid').addClass('valid');
@@ -170,8 +169,6 @@ jQuery(document).ready(function($) {
                 jQuery('#badges').relocateAward(lastAward, '#schedule > .pane-content');
             else if (lastAward != null)
                 jQuery('#badges').relocateAward(lastAward, '#badges > .pane-content');
-            else
-                jQuery('#badges').relocateAward('');
         }
 
         // scroll back to tab they clicked edit on
@@ -257,27 +254,26 @@ jQuery(document).ready(function($) {
                 type: row.find('input[name="schedule-type"]').val()
             };
         });
-        if(classes.length > 0)
-            $.ajax({
-                       url: '/node/save/schedule',
-                       type: 'POST',
-                       dataType: 'json',
-                       data: {
-                           university: schedule.find('.field-name-field-university input').val(),
-                           classes: classes
-                       },
-                       success: function (data) {
-                           if(window.location.pathname == '/schedule')
-                               window.location = '/schedule2';
-                           else if(window.location.pathname == '/schedule2')
-                               window.location = '/customization';
-                           else
-                           {
-                               schedule.removeClass('valid').addClass('invalid');
-                               updateTabs(data);
-                           }
+        $.ajax({
+                   url: '/node/save/schedule',
+                   type: 'POST',
+                   dataType: 'json',
+                   data: {
+                       university: schedule.find('.field-name-field-university input').val(),
+                       classes: classes
+                   },
+                   success: function (data) {
+                       if(window.location.pathname == '/schedule')
+                           window.location = '/schedule2';
+                       else if(window.location.pathname == '/schedule2')
+                           window.location = '/customization';
+                       else
+                       {
+                           schedule.removeClass('valid').addClass('invalid');
+                           updateTabs(data);
                        }
-                   });
+                   }
+               });
     });
 
     var checkDate = function () {

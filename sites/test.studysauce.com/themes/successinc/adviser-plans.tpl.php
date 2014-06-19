@@ -7,21 +7,8 @@ if(!isset($account))
     global $user;
     $account = user_load($user->uid);
 }
-$lastOrder = _studysauce_orders_by_uid($account->uid);
-if($lastOrder)
-    list($events, $node, $classes, $entities) = studysauce_get_events($account, $lastOrder ? $lastOrder->created : null);
-else
-{
-    $sample = theme('studysauce-plan-sample');
-    $encoded = preg_replace('/<\/?script>/i', '', $sample);
-    list($events, $classes, $entities) = json_decode($encoded);
-    $entities = array_map(function ($x) {
-        return (object) array('field_study_type' => array('und' => array(0 => array('value' => $x)))); }, (array)$entities);
-    $classes = (array) $classes;
-    foreach($classes as $i => $c)
-        $classes[intval($i)] = $c;
-    $events = array_map(function ($x) { return (array)$x; }, (array) $events);
-}
+
+list($events, $node, $classes, $entities) = studysauce_get_events($account, $lastOrder ? $lastOrder->created : null);
 
 $strategies = studysauce_get_strategies($account);
 
@@ -33,6 +20,7 @@ $endWeek = $startWeek + 604800 - 86400;
 ?>
 
 <h2>Study schedule</h2>
+<?php if(count($classes)): ?>
 <div id="calendar" class="full-only"></div>
 <script type="text/javascript">
 
@@ -130,4 +118,8 @@ foreach ($events as $eid => $event)
 <?php
 }
 ?>
+<?php endif;
+if(!count($classes)): ?>
+    <h3>Your student has not completed this section yet.</h3>
+<?php endif; ?>
 <p style="clear: both; margin-bottom:0; line-height:1px;">&nbsp;</p>

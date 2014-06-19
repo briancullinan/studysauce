@@ -21,7 +21,7 @@
     background-size: cover;
 }
 
-.page-path-customization2 h3:nth-last-child(2)
+.page-dashboard h3:last-child
 {
     display:none;
 }
@@ -108,8 +108,6 @@
 {
     background-position: -54px -2739px;
     opacity: 1 !important;
-    padding: 0 15px 0 25px;
-    margin: 0 0 0 0;
     z-index: 2;
 }
 
@@ -224,24 +222,28 @@
     display:inline-block;
 }
 
+.class-profile .field-name-type-of-studying > label,
+.class-profile .field-name-difficulty-level > label
+{
+    width: 20%;
+    display:inline-block;
+    text-align: center;
+}
+
+.class-profile .field-name-type-of-studying > label:first-of-type,
+.class-profile .field-name-difficulty-level > label:first-of-type
+{
+    margin-left: 38%;
+}
+
+.class-profile .form-radios
+{
+    width:60%;
+}
+
 .class-profile .field-name-field-class-name
 {
-    width:20%;
-}
-
-.class-profile .field-name-type-of-studying
-{
-    display:inline-block;
-    width:39%;
-    margin-right: 10%;
-    vertical-align: top;
-}
-
-.class-profile > .field-name-type-of-studying
-{
-    margin-left:20%;
-    vertical-align: bottom;
-    margin-right:10%;
+    width:38%;
 }
 
 .class-profile > .field-name-difficulty-level:not(:nth-of-type(2)) label,
@@ -251,13 +253,6 @@
     display:inline-block;
     position: relative;
     text-align: center;
-}
-
-.class-profile .field-name-difficulty-level
-{
-    display:inline-block;
-    width:29%;
-    vertical-align: top;
 }
 
 .field-name-type-of-studying label.option,
@@ -273,6 +268,14 @@
 .field-name-difficulty-level input:checked + label.option
 {
     background-position: 50% -2740px;
+}
+
+.page-path-customization hr,
+.page-path-customization2 hr,
+.page-path-profile2 hr,
+.page-path-profile hr
+{
+    display:none;
 }
 
 .page-path-customization2 .field-name-field-class-name span,
@@ -373,6 +376,11 @@
     clear:both;
 }
 
+.field-name-type-of-studying,
+.field-name-difficulty-level,
+.field-name-field-grades,
+.field-name-field-weekends,
+.field-name-field-time-preference,
 .field-name-field-profile-question-study-much,
 .field-name-field-profile-question-education,
 .field-name-field-profile-question-mindset,
@@ -417,6 +425,11 @@
     color:#0099BE;
 }
 
+.field-name-type-of-studying h2,
+.field-name-difficulty-level h2,
+.field-name-field-grades h2,
+.field-name-field-weekends h2,
+.field-name-field-time-preference h2,
 .field-name-field-profile-question-study-much h2,
 .field-name-field-profile-question-education h2,
 .field-name-field-profile-question-mindset h2,

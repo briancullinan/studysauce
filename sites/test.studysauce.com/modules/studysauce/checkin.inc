@@ -43,6 +43,7 @@ function studysauce_checkin()
                         $last = key($entity->field_utc_checkin['und']);
                         $entity->field_utc_checkin['und'][$last]['value2'] = date('Y-m-d H:i:s', time());
                         $entity->save();
+                        list($awards) = studysauce_get_awards();
                     }
                     else
                     {
@@ -69,7 +70,6 @@ function studysauce_checkin()
     $lastSDS = end($newSDS);
 
     list($times, $rows, $total, $hours) = _studysauce_get_metrics();
-    list($awards) = studysauce_get_awards();
 
     print json_encode(array(
         'lastSDS' => $lastSDS,

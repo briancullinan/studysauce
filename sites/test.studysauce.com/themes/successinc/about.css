@@ -1,26 +1,16 @@
-.page-path-about-us .content
-{
-    overflow: hidden;
-    position: relative;
-}
 
 .page-path-about-us .content img,
 #about-us img
 {
     position: absolute;
     top: 0;
-    right: 50%;
+    right: 40%;
     width: auto;
     height: 100%;
     margin-right: -15%;
     display: block;
-    max-width: 75%;
+    max-width: none;
     left:auto;
-}
-
-.page-path-about-us #main
-{
-    position:relative;
 }
 
 .page-path-about-us h3:first-of-type,
@@ -67,6 +57,17 @@
 #about-us .pane-content
 {
     overflow: hidden;
+}
+
+
+@media all and (max-width:1442px)
+{
+
+    .page-path-about-us .content img,
+    #about-us img
+    {
+        right:50%;
+    }
 }
 
 @media all and (max-width:980px)

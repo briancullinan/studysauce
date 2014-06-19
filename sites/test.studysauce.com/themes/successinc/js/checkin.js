@@ -133,11 +133,9 @@ function checkinCallback(pos, eid, checkedIn) {
                                 lastAward == 'intermediate-breaker' || lastAward == 'intermediate-cured' || lastAward == 'beginner-checklist' ||
                                 lastAward == 'advanced-magellan' || lastAward == 'advanced-bo' || lastAward == 'advanced-comber' ||
                                 lastAward == 'advanced-nocram')
-                                jQuery('#badges').relocateAward(lastAward, '#checkin > .pane-content');
+                                jQuery('#badges').relocateAward(lastAward, '#metrics > .pane-content');
                             else if (lastAward != null)
                                 jQuery('#badges').relocateAward(lastAward, '#badges > .pane-content');
-                            else
-                                jQuery('#badges').relocateAward('');
                         }
                     }
                 });
@@ -194,6 +192,16 @@ function checkinClick(evt)
 
 jQuery(document).ready(function ($) {
 
+    if(typeof minplayer != 'undefined')
+    {
+        minplayer.get(function (plugin) {
+            if(plugin.name == 'player')
+                plugin.media.player.addEventListener('playing', function() {
+                    plugin.media.hasFocus = false;
+                });
+        });
+    }
+
     // perform ajax call when clicked
     jQuery('#checkin').on('click', '.classes a', checkinClick);
     jQuery('#plan').on('click', '.mini-checkin > a', checkinClick);
@@ -214,6 +222,8 @@ jQuery(document).ready(function ($) {
     });
 
     jQuery('#checkin').on('click', 'a[title="Play"], a[title="Pause"]', function () {
+        jQuery('.header-wrapper a[title="' + jQuery(this).attr('title') + '"]').trigger('click');
+        jQuery('#checkin').find('a[title="Play"], a[title="Pause"]').hide().not('a[title="' + jQuery(this).attr('title') + '"]').css('display', 'block');
         if(jQuery('#checkin').find('input[name="touchedMusic"]').val() == 0)
             jQuery.ajax({
                             url: '/checkin',

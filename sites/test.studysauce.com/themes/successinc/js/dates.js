@@ -94,8 +94,10 @@ jQuery(document).ready(function($) {
                            }
 
                            // update key dates list
+                           var invalids = deadlines.find('#new-dates-row').prevAll('.row.invalid').detach();
                            deadlines.find('.row, .head, a[href="#add-deadline"]')
                                .replaceWith(jQuery(data.reminders).find('.row, .head, a[href="#add-deadline"]'));
+                           invalids.insertBefore(deadlines.find('#new-dates-row'));
 
                            // update plan tab
                            var plan = jQuery('#plan');
@@ -105,7 +107,7 @@ jQuery(document).ready(function($) {
 
                            // update deadline view state
                            deadlines.removeClass('edit-date-only');
-                           deadlines.find('.row').datesFunc();
+                           deadlines.find('.row').not('#new-dates-row').datesFunc();
                            deadlines.find('.field-add-more-submit').show();
                            //if(jQuery(window).width() <= 759)
                            //    row.scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});

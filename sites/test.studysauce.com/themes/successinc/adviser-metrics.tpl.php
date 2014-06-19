@@ -1,5 +1,6 @@
 <?php
 drupal_add_css(drupal_get_path('theme', 'successinc') .'/metrics.css');
+drupal_add_css(drupal_get_path('theme', 'successinc') .'/adviser-metrics.css');
 drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/metrics.js');
 
 if(!isset($account))
@@ -11,6 +12,8 @@ if(!isset($account))
 $classesNames = _studysauce_get_schedule_classes($account);
 list($times, $rows, $total, $hours) = _studysauce_get_metrics($account);
 
+?><h2>Study metrics</h2><?php
+
 if(empty($times)):
     ?>
     <script type="text/javascript">
@@ -18,14 +21,10 @@ if(empty($times)):
             jQuery('#metrics').addClass('empty');
         });
     </script>
-<? endif; ?>
-<div id="metrics-empty">
-    <img src="<?php print drupal_get_path('theme', 'successinc'); ?>/images/metrics-sample.png" width="100%" />
-    <div class="middle-wrapper">
-        <a href="#checkin" onclick="jQuery('#checkin').scrollintoview();"><h2>Check in to start tracking your study hours</h2></a>
-    </div>
-</div>
-<h2>Study metrics</h2>
+    <h3>Your student has not completed this section yet.</h3>
+<? endif;
+if(!empty($times)):
+?>
 <div class="centrify">
     <div id="timeline">
         <h3>Study hours by week</h3>
@@ -35,6 +34,14 @@ if(empty($times)):
         <h3>Study hours by class</h3>
         <h4 style="margin:5px 0; color:#555;">Total study hours: <strong id="study-total"><?php print $total; ?></strong></h4>
     </div>
+    <ol>
+        <?php
+        foreach($classesNames as $cid => $c)
+        {
+            ?><li><span class="class<?php print array_search($cid, array_keys($classesNames)); ?>">&nbsp;</span><?php print $c; ?></li><?php
+        }
+        ?>
+    </ol>
 </div>
 <hr/>
 <script type="text/javascript">
@@ -49,4 +56,6 @@ if(empty($times)):
     </div>
     <?php print $rows; ?>
 </div>
+<?php endif; ?>
+
 <hr/>

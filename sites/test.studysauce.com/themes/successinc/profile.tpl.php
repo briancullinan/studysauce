@@ -22,7 +22,8 @@ if (!empty($nodes['node'])) {
 }
 
 if(drupal_get_path_alias(current_path()) == 'profile' ||
-    drupal_get_path_alias(current_path()) == 'customization')
+    drupal_get_path_alias(current_path()) == 'customization' ||
+    drupal_get_path_alias(current_path()) == 'customization2')
     print theme('studysauce-funnel');
 ?>
 <div class="study-preferences">
@@ -33,7 +34,7 @@ if(drupal_get_path_alias(current_path()) == 'profile' ||
                size="60" maxlength="255" value="<?php print (isset($node->field_university['und'][0]['value']) ? $node->field_university['und'][0]['value'] : ''); ?>">
     </div> */ ?>
     <div class="field-type-list-text field-name-field-grades field-widget-options-buttons form-wrapper">
-        <label>What kind of grades do you want?</label>
+        <h2>What kind of grades do you want?</h2>
         <input type="radio" id="schedule-grades-as-only" name="field_grades" value="as_only" class="form-radio"
             <?php print (isset($node->field_grades['und'][0]['value']) && $node->field_grades['und'][0]['value'] == 'as_only' ? 'checked="checked"' : ''); ?>>
         <label class="option" for="schedule-grades-as-only">Nothing but As </label>
@@ -43,7 +44,7 @@ if(drupal_get_path_alias(current_path()) == 'profile' ||
             library </label>
     </div>
     <div class="field-type-list-text field-name-field-weekends field-widget-options-buttons form-wrapper">
-        <label>How do your manage your weekends?</label>
+        <h2>How do your manage your weekends?</h2>
         <input type="radio" id="schedule-weekends-hit-hard" name="field_weekends" value="hit_hard" class="form-radio"
             <?php print (isset($node->field_weekends['und'][0]['value']) && $node->field_weekends['und'][0]['value'] == 'hit_hard' ? 'checked="checked"' : ''); ?>>
         <label class="option" for="schedule-weekends-hit-hard">Hit hard, keep weeks open </label>
@@ -52,8 +53,8 @@ if(drupal_get_path_alias(current_path()) == 'profile' ||
         <label class="option" for="schedule-weekends-light-work">Light work, focus during the week </label>
     </div>
     <div class="field-name-field-time-preference">
-        <label>On a scale of 0-5 (5 being the best), rate how mentally sharp you feel during the following time
-            periods:</label>
+        <h2>On a scale of 0-5 (5 being the best), rate how mentally sharp you feel during the following time
+            periods:</h2>
 
         <div class="field-type-list-integer field-name-field-6-am-11-am field-widget-options-buttons form-wrapper">
             <label>6 AM - 11 AM</label>
@@ -153,6 +154,86 @@ if(drupal_get_path_alias(current_path()) == 'profile' ||
         </div>
     </div>
 </div>
+    <hr />
+    <div class="class-profile">
+        <h2>Tell us a little more about your classes <span>2/2</span></h2>
+        <div class="field-name-type-of-studying">
+            <h2>What is the primary type of studying you expect to do in this class?</h2>
+            <label>Memorization</label>
+            <label>Reading/writing</label>
+            <label>Conceptual application</label>
+            <?php
+            $classes = _studysauce_get_schedule_classes();
+            foreach($classes as $eid => $c)
+            {
+                $classI = array_search($eid, array_keys($classes));
+                $entity = entity_load('field_collection_item', array($eid));
+
+                ?>
+                <div class="row cid-<?php print $eid; ?>">
+                    <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+                        <div class="read-only">
+                            <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?>
+                        </div>
+                    </div>
+                    <label class="mobile-only">What is the primary type of studying you expect to do in this class?</label>
+                    <div class="form-radios">
+                        <input type="radio" id="study-type-class-<?php print $eid; ?>-memorization"
+                               name="study-type-class-<?php print $eid; ?>" value="memorization" class="form-radio"
+                            <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'memorization' ? 'checked' : ''); ?> />
+                        <label class="option" for="study-type-class-<?php print $eid; ?>-memorization">Memorization</label>
+                        <input type="radio" id="study-type-class-<?php print $eid; ?>-reading"
+                               name="study-type-class-<?php print $eid; ?>" value="reading" class="form-radio"
+                            <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'reading' ? 'checked' : ''); ?> />
+                        <label class="option" for="study-type-class-<?php print $eid; ?>-reading">Reading/writing</label>
+                        <input type="radio" id="study-type-class-<?php print $eid; ?>-conceptual"
+                               name="study-type-class-<?php print $eid; ?>" value="conceptual" class="form-radio"
+                            <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'conceptual' ? 'checked' : ''); ?> />
+                        <label class="option" for="study-type-class-<?php print $eid; ?>-conceptual">Conceptual application</label>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+        <div class="field-name-difficulty-level">
+            <h2>How difficult will this class be?</h2>
+            <label>Easy</label>
+            <label>Average</label>
+            <label>Tough</label>
+            <?php
+            $classes = _studysauce_get_schedule_classes();
+            foreach($classes as $eid => $c)
+            {
+                $classI = array_search($eid, array_keys($classes));
+                $entity = entity_load('field_collection_item', array($eid));
+
+                ?>
+                <div class="row cid-<?php print $eid; ?>">
+                    <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+                        <div class="read-only">
+                            <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?>
+                        </div>
+                    </div>
+                    <label class="mobile-only">How difficult will this class be?</label>
+                    <div class="form-radios">
+                        <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-easy"
+                               name="study-difficulty-class-<?php print $eid; ?>" value="easy" class="form-radio"
+                            <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'easy' ? 'checked' : ''); ?> />
+                        <label class="option" for="study-difficulty-class-<?php print $eid; ?>-easy">Easy</label>
+                        <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-average"
+                               name="study-difficulty-class-<?php print $eid; ?>" value="average" class="form-radio"
+                            <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'average' ? 'checked' : ''); ?> />
+                        <label class="option" for="study-difficulty-class-<?php print $eid; ?>-average">Average</label>
+                        <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-tough"
+                               name="study-difficulty-class-<?php print $eid; ?>" value="tough" class="form-radio"
+                            <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'tough' ? 'checked' : ''); ?> />
+                        <label class="option" for="study-difficulty-class-<?php print $eid; ?>-tough">Tough</label>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+        <h3>Tip - you can change your answers later</h3>
+    </div>
+    <hr />
 <?php
 global $user;
 
@@ -247,75 +328,7 @@ if (!empty($nodes['node']))
         <?php print (isset($node->field_study_much['und'][0]['value']) && $node->field_study_much['und'][0]['value'] == 'more' ? 'checked="checked"': ''); ?>>
     <label class="option" for="profile-question-study-much-answer-4">4+ hours</label>
 </div>
-<div class="class-profile">
-    <h2>Tell us a little more about your classes <span>2/2</span></h2>
-    <div class="field-name-type-of-studying">
-        <label>What is the primary type of studying you expect to do in this class?</label>
-    </div>
-    <div class="field-name-difficulty-level">
-        <label>How difficult will this class be?</label>
-    </div>
-    <div class="field-name-type-of-studying">
-        <label>Memorization</label>
-        <label>Reading/writing</label>
-        <label>Conceptual application</label>
-    </div>
-    <div class="field-name-difficulty-level">
-        <label>Easy</label>
-        <label>Average</label>
-        <label>Tough</label>
-    </div>
-    <?php
-    $classes = _studysauce_get_schedule_classes();
-    foreach($classes as $eid => $c)
-    {
-        $classI = array_search($eid, array_keys($classes));
-        $entity = entity_load('field_collection_item', array($eid));
 
-        ?>
-        <div class="row" id="eid-<?php print $eid; ?>">
-            <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
-                <div class="read-only">
-                    <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?>
-                </div>
-            </div>
-            <label class="mobile-only">What is the primary type of studying you expect to do in this class?</label>
-            <div class="form-radios field-name-type-of-studying">
-                <input type="radio" id="study-type-class-<?php print $eid; ?>-memorization"
-                       name="study-type-class-<?php print $eid; ?>" value="memorization" class="form-radio"
-                    <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'memorization' ? 'checked' : ''); ?> />
-                <label class="option" for="study-type-class-<?php print $eid; ?>-memorization">Memorization</label>
-                <input type="radio" id="study-type-class-<?php print $eid; ?>-reading"
-                       name="study-type-class-<?php print $eid; ?>" value="reading" class="form-radio"
-                    <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'reading' ? 'checked' : ''); ?> />
-                <label class="option" for="study-type-class-<?php print $eid; ?>-reading">Reading/writing</label>
-                <input type="radio" id="study-type-class-<?php print $eid; ?>-conceptual"
-                       name="study-type-class-<?php print $eid; ?>" value="conceptual" class="form-radio"
-                    <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'conceptual' ? 'checked' : ''); ?> />
-                <label class="option" for="study-type-class-<?php print $eid; ?>-conceptual">Conceptual application</label>
-            </div>
-            <label class="mobile-only">How difficult will this class be?</label>
-            <div class="form-radios field-name-difficulty-level">
-                <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-easy"
-                       name="study-difficulty-class-<?php print $eid; ?>" value="easy" class="form-radio"
-                    <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'easy' ? 'checked' : ''); ?> />
-                <label class="option" for="study-difficulty-class-<?php print $eid; ?>-easy">Easy</label>
-                <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-average"
-                       name="study-difficulty-class-<?php print $eid; ?>" value="average" class="form-radio"
-                    <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'average' ? 'checked' : ''); ?> />
-                <label class="option" for="study-difficulty-class-<?php print $eid; ?>-average">Average</label>
-                <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-tough"
-                       name="study-difficulty-class-<?php print $eid; ?>" value="tough" class="form-radio"
-                    <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'tough' ? 'checked' : ''); ?> />
-                <label class="option" for="study-difficulty-class-<?php print $eid; ?>-tough">Tough</label>
-            </div>
-        </div>
-    <?php
-    }
-    ?>
-    <h3>Tip - you can change your answers later</h3>
-    <h3>Note: Your study sessions will change when you click save</h3>
-</div>
 
 <p style="clear:both; margin-bottom:0; text-align: right;" class="highlighted-link">
     <a href="#save-profile" class="more"><?php print (drupal_get_path_alias(current_path()) == 'customization2' ? 'Finish' : (drupal_get_path_alias(current_path()) == 'customization' || drupal_get_path_alias(current_path()) == 'profile' ? 'Next' : 'Save')); ?></a></p>

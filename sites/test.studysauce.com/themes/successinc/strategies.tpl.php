@@ -384,9 +384,9 @@
         </select>
     </div>
 </div>
-<div class="strategy-teach">
+<div class="strategy-teach saved">
     <h3>Teach - Upload a 1 min video explaining your assignment</h3>
-    <div class="strategy-upload plupload" id="plan-{eid}-plupload">
+    <div class="plupload" id="plan-{eid}-plupload">
         <div class="plup-list-wrapper">
             <ul class="plup-list clearfix ui-sortable">
                 <?php
@@ -395,7 +395,7 @@
                 if(isset($partner->field_partner_photo['und'][0]['fid'])):
                     $file = file_load($partner->field_partner_photo['und'][0]['fid']);
                     ?>
-                    <li class="ui-state-default">
+                    <li>
                         <div class="plup-thumb-wrapper">
                             <img src="<?php print image_style_url('achievement', $file->uri); ?>" title="">
                         </div>
@@ -432,13 +432,13 @@
     </div>
     <div class="strategy-notes">
         <label>Title:</label>
-        <input type="text" name="strategy-title" />
+        <input type="text" class="form-text" name="strategy-title" />
         <label>Notes:</label>
         <textarea type="text" name="strategy-notes"></textarea>
     </div>
     <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
-<div class="strategy-active">
+<div class="strategy-active saved">
     <h3>Active reading - Follow the guide below to better retain what you are reading.</h3>
     <h4>Before reading:</h4>
     <label>Take no more than 2 minutes to skim the reading. What is the topic?</label>
@@ -455,7 +455,7 @@
     <textarea name="strategy-exam"></textarea>
     <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
-<div class="strategy-spaced">
+<div class="strategy-spaced saved">
     <h3>Spaced repetition - Commit information to your long term memory by revisiting past work.</h3>
     <h4>Instructions - We highly recommend flashcards.  Online flashcard maker Quizlet is our favorite.  Read more about spaced repetition here.</h4>
     <div class="strategy-review">
@@ -467,21 +467,23 @@
     </div>
     <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
-<div class="strategy-other">
+<div class="strategy-other saved">
     <h3>Notes:</h3>
     <textarea name="strategy-notes" placeholder="Write any notes here."></textarea>
     <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
-<div class="strategy-prework">
+<div class="strategy-prework saved">
     <h3>Prework - Get prepared for your class tomorrow.</h3>
-    <input type="checkbox" name="strategy-topics" id="strategy-topics" value="topics">
-    <label for="strategy-topics">Look at your syllabus to see what topics will be covered.</label><br />
-    <input type="checkbox" name="strategy-reading" id="strategy-reading" value="reading">
-    <label for="strategy-reading">Ensure you have completed the assigned reading.</label><br />
-    <input type="checkbox" name="strategy-confusion" id="strategy-confusion" value="confusion">
-    <label for="strategy-confusion">Identify areas of confusion.  This will help you focus during the class on areas of need.</label><br />
-    <input type="checkbox" name="strategy-questions" id="strategy-questions" value="questions">
-    <label for="strategy-questions">Prepare questions that you would like answered during class.</label><br />
+    <div style="margin-left:30px; text-align: left;">
+        <input type="checkbox" name="strategy-topics" id="strategy-topics" value="topics">
+        <label for="strategy-topics"><span>Look at your syllabus to see what topics will be covered.</span></label><br />
+        <input type="checkbox" name="strategy-reading" id="strategy-reading" value="reading">
+        <label for="strategy-reading"><span>Ensure you have completed the assigned reading.</span></label><br />
+        <input type="checkbox" name="strategy-confusion" id="strategy-confusion" value="confusion">
+        <label for="strategy-confusion"><span>Identify areas of confusion.  This will help you focus during the class on areas of need.</span></label><br />
+        <input type="checkbox" name="strategy-questions" id="strategy-questions" value="questions">
+        <label for="strategy-questions"><span>Prepare questions that you would like answered during class.</span></label><br />
+    </div>
     <h3>Notes:</h3>
     <textarea name="strategy-notes"></textarea>
     <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>

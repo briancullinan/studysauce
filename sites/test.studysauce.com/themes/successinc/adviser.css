@@ -1,21 +1,39 @@
-.user-pane ul
+hr
+{
+    margin-top:20px;
+}
+
+.user-pane .user-name ul
 {
     list-style: none;
     margin: 0;
     padding: 0;
     font-size: 16px;
     display:inline-block;
+    float:right;
+}
+
+.user-pane .user-name span
+{
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 10px;
 }
 
 .user-pane .user-name
 {
     position: fixed;
-    top: 105px;
+    top: 66px;
     z-index: 98;
     width: 100%;
     left: 0;
     box-sizing: border-box;
     padding: 0 30px 0 230px;
+}
+
+.admin-menu .user-pane .user-name
+{
+    top:95px;
 }
 
 .user-pane .user-name h2
@@ -44,12 +62,22 @@
 .user-pane > div > #uploads,
 .user-pane > div > #plan
 {
-    padding-top:145px;
-    min-height: 145px;
-    margin-top:-145px;
+    padding-top:150px;
+    min-height: 150px;
+    margin-top:-150px;
 }
 
-.user-pane > div > #goals
+.user-pane > div > #metrics
 {
-    margin-top:-125px;
+    margin-top:-90px;
 }
+
+.user-pane > div > #goals h2,
+.user-pane > div > #metrics h2,
+.user-pane > div > #deadlines h2,
+.user-pane > div > #uploads h2,
+.user-pane > div > #plan h2
+{
+    color:#555;
+}
+

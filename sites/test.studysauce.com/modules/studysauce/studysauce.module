@@ -310,6 +310,7 @@ function studysauce_upload_page() {
                 $thumbnails[0]->secure_uri = image_style_url('achievement', $thumbnails[0]->uri);
                 // We build it as a temp but will deliver it as a public.
                 $thumbnails[0]->secure_uri = str_replace('system/temporary', variable_get('file_public_path', 'sites/default/files'), $thumbnails[0]->secure_uri);
+                $thumbnails[0]->uri = check_plain(file_create_url($file->uri));
                 $thumbnails[0]->thumbnail = $thumbnails[0]->fid;
                 $thumbnails[0]->fid = $file->fid;
 
@@ -403,7 +404,7 @@ function studysauce_get_connections($include_invites = false)
                 $connections[] = $host;
         }
     }
-    if(!empty($user->field_invites) && !empty($user->field_invites[LANGUAGE_NONE]))
+    /*if(!empty($user->field_invites) && !empty($user->field_invites[LANGUAGE_NONE]))
     {
         foreach($user->field_invites[LANGUAGE_NONE] as $i => $invite)
         {
@@ -450,6 +451,7 @@ function studysauce_get_connections($include_invites = false)
         $invite = $invite[$eid];
         $connections[] = studysauce_get_inviting_user($invite);
     }
+    */
     return $connections;
 }
 
@@ -767,6 +769,13 @@ function studysauce_init()
     {
         module_load_include('inc', 'user', 'user.pages');
         module_load_include('inc', 'node', 'node.pages');
+    }
+
+    if(drupal_get_path_alias(current_path()) == 'home')
+    {
+        studysauce_user_login();
+        if(isset($GLOBALS['studysauce-goto']) && $GLOBALS['studysauce-goto'] != '<front>')
+            drupal_goto('<front>'); // should get overriden by path we just set up
     }
     /*
     $conn = studysauce_get_connections();
@@ -1921,6 +1930,18 @@ function studysauce_get_sds_messages()
  * TODO: should this be put in our module instead of theme directory?
  */
 function studysauce_theme_registry_alter(&$theme_registry) {
+    $theme_registry['studysauce-partner-instructions'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/partner-instructions',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
+    $theme_registry['studysauce-metrics-sample'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/metrics-sample',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
     $theme_registry['studysauce-adviser-strategies'] = array(
         'template' => drupal_get_path('theme', 'successinc') . '/adviser-strategies',
         'theme path' => drupal_get_path('theme', 'successinc'),

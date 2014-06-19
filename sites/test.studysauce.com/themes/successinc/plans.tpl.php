@@ -42,8 +42,8 @@ if(!$lastOrder): ?><div class="buy-plan"><?php endif;
     </script>
     <div class="sort-by">
         <label>Sort by: </label>
-        <input type="radio" id="schedule-by-date" name="schedule-by" checked="checked"><label for="schedule-by-date">Date</label>&nbsp;
-        <input type="radio" id="schedule-by-class" name="schedule-by"><label for="schedule-by-class">Class</label>
+        <input type="radio" id="schedule-by-date" name="schedule-by" value="date" checked="checked"><label for="schedule-by-date">Date</label>&nbsp;
+        <input type="radio" id="schedule-by-class" name="schedule-by" value="class"><label for="schedule-by-class">Class</label>
         <input type="checkbox" id="schedule-historic"><label for="schedule-historic">View historical</label>
     </div>
     <?php
@@ -77,15 +77,16 @@ if(!$lastOrder): ?><div class="buy-plan"><?php endif;
         }
         $session = isset($strategies[$event['title']]) &&
             array_search(true, array_map(function ($x) { return $x['default']; }, $strategies[$event['title']])) !== false
-        // check if the strategy default is saved
+            // check if the strategy default is saved
             ? array_search(true, array_map(function ($x) { return $x['default']; }, $strategies[$event['title']]))
-            // Is this a deadline row, the default is always other
-            : (isset($entities[$cid]->field_study_type['und'][0]['value']) &&
-                strpos($event['className'], 'deadline-event') === false
-                // convert memorization answer to spaced
-                ? (strpos($event['className'], 'p-event') !== false
+            // if this is a deadline or not a class event, show notes box
+            : (strpos($event['className'], 'deadline-event') !== false || $classI == ''
+                ? 'other'
+                : (strpos($event['className'], 'p-event') !== false
                     ? 'prework'
-                    : ($entities[$cid]->field_study_type['und'][0]['value'] == 'memorization'
+                    // if no strategy default to sr
+                    // convert memorization answer to spaced
+                    : (!isset($entities[$cid]->field_study_type['und'][0]['value']) || $entities[$cid]->field_study_type['und'][0]['value'] == 'memorization'
                         ? 'spaced'
                         // convert reading answer to active
                         : ($entities[$cid]->field_study_type['und'][0]['value'] == 'reading'
@@ -94,12 +95,7 @@ if(!$lastOrder): ?><div class="buy-plan"><?php endif;
                             : ($entities[$cid]->field_study_type['und'][0]['value'] == 'conceptual'
                                 ? 'teach'
                                 // if nothing is selected nothing shows up
-                                : ''))))
-                // if this is a deadline or not a class event, show notes box
-                : ($classI == '' || strpos($event['className'], 'deadline-event') !== false
-                    ? 'other'
-                    // if no strategy is supplied nothing appears here
-                    : ''));
+                                : '')))));
 
         if(strpos($event['className'], 'deadline-event') !== false)
             $title = 'Deadline' . preg_replace(array('/' . preg_quote($classes[$cid]) . '\s*/'), array(''), $event['title']);
@@ -118,7 +114,7 @@ if(!$lastOrder): ?><div class="buy-plan"><?php endif;
         ?>
         <div class="row <?php
         print ($first && !($first = false) ? 'first' : ''); ?> <?php
-        print ((strpos($event['className'], 'deadline-event') !== false && isset($event['percent']) && !empty($event['percent']) && intval($event['percent']) > 0) ? 'deadline' : ''); ?> <?php
+        print ((strpos($event['className'], 'deadline-event') !== false) ? 'deadline' : ''); ?> <?php
         print ($time < strtotime(date('Y/m/d')) - 86400 ? 'hide' : ''); ?> <?php
         print (strtotime($event['start']) >= $startWeek && strtotime($event['start']) <= $endWeek ? 'mobile' : ''); ?> <?php
         print ('class' . $classI); ?> <?php

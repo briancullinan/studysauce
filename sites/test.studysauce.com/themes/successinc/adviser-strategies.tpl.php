@@ -13,7 +13,7 @@
 </div>
 <div class="strategy-teach">
     <h3>Teach - Upload a 1 min video explaining your assignment</h3>
-    <div class="strategy-upload plupload" id="plan-{eid}-plupload">
+    <div class="plupload" id="plan-{eid}-plupload">
         <div class="plup-list-wrapper">
             <ul class="plup-list clearfix ui-sortable">
                 <?php
@@ -22,7 +22,7 @@
                 if(isset($partner->field_partner_photo['und'][0]['fid'])):
                     $file = file_load($partner->field_partner_photo['und'][0]['fid']);
                     ?>
-                    <li class="ui-state-default">
+                    <li>
                         <div class="plup-thumb-wrapper">
                             <img src="<?php print image_style_url('achievement', $file->uri); ?>" title="">
                         </div>
@@ -59,7 +59,7 @@
     </div>
     <div class="strategy-notes">
         <label>Title:</label>
-        <input type="text" name="strategy-title" />
+        <input type="text" class="form-text" name="strategy-title" />
         <label>Notes:</label>
         <textarea type="text" name="strategy-notes"></textarea>
     </div>

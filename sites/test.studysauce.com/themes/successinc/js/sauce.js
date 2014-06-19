@@ -64,8 +64,7 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
             {
                 jQuery('body').on('click', 'a[href="' + that.attr('href') + '"]', function (evt) {
                     var that = jQuery(this);
-                    jQuery('.new-award-only').removeClass('new-award-only')
-                        .parents('.panel-pane').scrollintoview();
+                    jQuery('.new-award-only').filter(':visible').removeClass('new-award-only');
                     // only show last open menu in mobile mode if they click on subitems
                     that.parents('ol,ul').find('li').removeClass('last-open');
                     if(that.parent().find('ul').length > 0) // this menu has subitems

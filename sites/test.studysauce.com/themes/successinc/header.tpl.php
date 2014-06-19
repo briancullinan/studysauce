@@ -8,6 +8,34 @@ if(isset($user->field_partners['und'][0]['value']))
     if(!isset($partner->field_permissions['und']) || !is_array($partner->field_permissions['und']))
         $partner->field_permissions['und'] = array();
     $permissions = array_map(function ($x) { return $x['value']; }, $partner->field_permissions['und']);
+    if(isset($partner->field_email['und'][0]['value']))
+    {
+        $partnerUser = user_load_by_mail($partner->field_email['und'][0]['value']);
+        if($partnerUser)
+            $partner = $partnerUser;
+    }
+}
+
+
+// check if we are being advised by another user in a group
+$groups = og_get_groups_by_user();
+$readonly = false;
+if(isset($groups['node']))
+{
+    // get group adviser
+    $query = db_select("og_membership", "ogm");
+    $query->condition("ogm.gid", array_keys($groups['node']), "=");
+    $query->fields("ogm", array("entity_type", "etid"));
+    $result = $query->execute();
+    $members = $result->fetchAll();
+    foreach($members as $i => $member)
+    {
+        $m = user_load($member->etid);
+        if(array_search('adviser', $m->roles) !== false)
+        {
+            $partner = $m;
+        }
+    }
 }
 
 ?>
@@ -18,8 +46,9 @@ if(isset($user->field_partners['und'][0]['value']))
         <div id="site-slogan">Discover the secret sauce to studying</div>
     </div>
     <div id="partner-message">
-        <?php if(isset($partner->field_partner_photo['und'][0]['fid'])):
-            $file = file_load($partner->field_partner_photo['und'][0]['fid']); ?>
+        <?php if(isset($partner->field_partner_photo['und'][0]['fid']) ||
+            isset($partner->picture)):
+            $file = isset($partner->field_partner_photo['und'][0]['fid']) ? file_load($partner->field_partner_photo['und'][0]['fid']) : $partner->picture; ?>
             <img src="<?php print image_style_url('achievement', $file->uri); ?>" height="48" width="48" alt="Partner" />
         <?php else: ?>
             <img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/empty-photo.png" height="48" width="48" alt="Partner" />
@@ -32,6 +61,7 @@ if(isset($user->field_partners['und'][0]['value']))
             <?php endif; ?>
         </div>
     </div>
+    <?php print views_embed_view('music_player', 'block_1'); ?>
     <div id="welcome-message">Welcome <strong><?php
             if ($user->uid > 0)
             {

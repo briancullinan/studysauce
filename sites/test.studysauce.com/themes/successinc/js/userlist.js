@@ -3,25 +3,22 @@ jQuery(document).ready(function($) {
 
     var userlist = jQuery('#userlist');
 
-    var status = ['- Status -'];
-    userlist.find('td:nth-child(1)').each(function () {
-        if(status.indexOf(jQuery(this).text()) == -1)
-            status[status.length] = jQuery(this).text();
-    });
+    var status = ['Status', 'Ascending', 'Descending', 'Red', 'Yellow', 'Green'];
     userlist.find('th:nth-child(1)').html('<select><option>' + status.join("</option><option>") + '</option></select>')
-    var dates = ['- Date -'];
+
+    var dates = ['Date', 'Ascending (A-Z)', 'Descending (Z-A)'];
     userlist.find('td:nth-child(2)').each(function () {
         if(dates.indexOf(jQuery(this).text()) == -1)
             dates[dates.length] = jQuery(this).text();
     });
     userlist.find('th:nth-child(2)').html('<select><option>' + dates.join("</option><option>") + '</option></select>')
-    var students = ['- Student -'];
+    var students = ['Student', 'Ascending (A-Z)', 'Descending (Z-A)'];
     userlist.find('td:nth-child(3)').each(function () {
         if(students.indexOf(jQuery(this).text()) == -1)
             students[students.length] = jQuery(this).text();
     });
     userlist.find('th:nth-child(3)').html('<select><option>' + students.join("</option><option>") + '</option></select>')
-    var schools = ['- School -'];
+    var schools = ['School', 'Ascending (A-Z)', 'Descending (Z-A)'];
     userlist.find('td:nth-child(4)').each(function () {
         if(schools.indexOf(jQuery(this).text()) == -1)
             schools[schools.length] = jQuery(this).text();
@@ -69,18 +66,32 @@ jQuery(document).ready(function($) {
 
     userlist.on('change', 'select', function () {
         jQuery('tr').show();
-        if(jQuery(this).val() != '- Status -' &&
-            jQuery(this).val() != '- Date -' &&
-            jQuery(this).val() != '- Student -' &&
-            jQuery(this).val() != '- School -')
-        {
-            var i = jQuery(this).parents('th').index() + 1,
-                filter = jQuery(this).val();
-            jQuery('td:nth-child(' + i + ')').each(function () {
-                if(jQuery(this).text() != filter)
-                    jQuery(this).parents('tr').hide();
-            });
-        }
+        userlist.find('select').each(function () {
+            if(jQuery(this).val() != 'Status' &&
+                jQuery(this).val() != 'Date' &&
+                jQuery(this).val() != 'Student' &&
+                jQuery(this).val() != 'School')
+            {
+                jQuery(this).removeClass('unfiltered').addClass('filtered');
+                var i = jQuery(this).parents('th').index() + 1,
+                    filter = jQuery(this).val();
+                // if we are changing the status, select rows by class name
+                if(i == 1)
+                {
+                    userlist.find('tbody tr').hide();
+                    userlist.find('tr.status_' + filter.toLowerCase()).show();
+                }
+                else
+                {
+                    userlist.find('td:nth-child(' + i + ')').each(function () {
+                        if(jQuery(this).text() != filter)
+                            jQuery(this).parents('tr').hide();
+                    });
+                }
+            }
+            else
+                jQuery(this).removeClass('filtered').addClass('unfiltered');
+        });
     });
 
     userlist.on('click', 'a[href^="#uid-"]', function (evt) {

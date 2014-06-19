@@ -244,17 +244,19 @@ function studysauce_get_strategies($account = null)
                             $result[$name][$strategy]['uploads'][0]['uri'] = image_style_url('achievement', $entity->field_teaching['und'][0]['thumbnailfile']->uri);
 
                             // Load the derived files
+                            $file = file_load($entity->field_teaching['und'][0]['fid']);
                             $outputs = db_select('video_output', 'vo')
                                 ->fields('vo')
                                 ->condition('vo.original_fid', array($entity->field_teaching['und'][0]['fid']), 'IN')
                                 ->execute()->fetchAllAssoc('output_fid');
                             foreach ($outputs as $outputfid => $output) {
-                                $file = file_load($output->output_fid);
-                                if($file->filesize > 0)
-                                    $result[$name][$strategy]['uploads'][0]['play'] = check_plain(file_create_url($file->uri));
+                                $trans = file_load($output->output_fid);
+                                if($trans->filesize > 0)
+                                    $result[$name][$strategy]['uploads'][0]['play'] = check_plain(file_create_url($trans->uri));
                             }
                             if(empty($outputs))
                             {
+                                $result[$name][$strategy]['uploads'][0]['play'] = check_plain(file_create_url($file->uri));
                                 $video = video_jobs::load($entity->field_teaching['und'][0]['fid']);
                                 if (!$video) {
                                     list($entity_id, $entity_vid, $bundle) = entity_extract_ids('field_collection_item', $entity);
@@ -690,13 +692,10 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
                             $spT->setTimezone(new DateTimeZone('UTC'));
                             $spT->add(new DateInterval('PT2H'));
                             $sessionLength = 3600;
-                            if(isset($entity->field_study_difficulty['und'][0]['value']))
-                            {
-                                if($entity->field_study_difficulty['und'][0]['value'] == 'easy')
-                                    $sessionLength = 2700;
-                                elseif($entity->field_study_difficulty['und'][0]['value'] == 'average')
-                                    $sessionLength = 3060;
-                            }
+                            if(!isset($entity->field_study_difficulty['und'][0]['value']) || $entity->field_study_difficulty['und'][0]['value'] == 'average')
+                                $sessionLength = 3060;
+                            elseif($entity->field_study_difficulty['und'][0]['value'] == 'easy')
+                                $sessionLength = 2700;
                             $studyLength += $sessionLength; // study hours automatically taken up by this week
                             $events[] = array(
                                 'title' => $srTitle,
@@ -723,13 +722,10 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
 
                             // TODO: adjust length of session based on class difficulty, can we do more here?
                             $sessionLength = 3600;
-                            if(isset($entity->field_study_difficulty['und'][0]['value']))
-                            {
-                                if($entity->field_study_difficulty['und'][0]['value'] == 'easy')
-                                    $sessionLength = 2700;
-                                elseif($entity->field_study_difficulty['und'][0]['value'] == 'average')
-                                    $sessionLength = 3060;
-                            }
+                            if(!isset($entity->field_study_difficulty['und'][0]['value']) || $entity->field_study_difficulty['und'][0]['value'] == 'average')
+                                $sessionLength = 3060;
+                            elseif($entity->field_study_difficulty['und'][0]['value'] == 'easy')
+                                $sessionLength = 2700;
                             $studyLength += $sessionLength; // study hours automatically taken up by this week
                             //if((date('l', $preT) == 'Sunday' || date('l', $preT) == 'Saturday') &&
                             //    isset($node->field_weekends['und'][0]['value']) && $node->field_weekends['und'][0]['value'] == 'hit_hard')

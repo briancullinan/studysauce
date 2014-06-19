@@ -141,7 +141,7 @@ jQuery(document).ready(function() {
             accountUpload.find('.plup-filelist #' + file.id).remove(); // Remove uploaded file from queue
             // Add image thumbnail into list of uploaded items
             accountUpload.find('.plup-list').append(
-                '<li class="ui-state-default">' +
+                '<li>' +
                     //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
                     '<div class="plup-thumb-wrapper"><img src="'+ fileSaved.secure_uri + '" title="'+ Drupal.checkPlain(file.target_name) +'" /></div>' +
                     '<a class="plup-remove-item"></a>' +

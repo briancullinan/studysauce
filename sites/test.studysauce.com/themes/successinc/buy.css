@@ -121,6 +121,7 @@
     background: url("images/noise_gray.png") repeat scroll 0 0 #EEEEEE;
     padding-left:20px;
     padding-right:20px;
+    margin-bottom:20px;
 }
 
 .page-path-schedule2,
@@ -323,8 +324,8 @@
 
 #payment-pane .fieldset-description div
 {
-    margin-right: -100px;
-    padding-right: 100px;
+    margin-right: -170px;
+    padding-right: 170px;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     width: 100%;
@@ -431,7 +432,7 @@
 {
 
     .page-path-schedule2 #page,
-.page-path-schedule #page,
+    .page-path-schedule #page,
     .page-path-profile #page,
     .page-path-customization2 #page,
     .page-path-customization #page,

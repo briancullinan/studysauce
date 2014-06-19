@@ -5,21 +5,23 @@ jQuery(document).ready(function($) {
 
     $.fn.profileFunc = function () {
         var valid = true,
-            classProfile = jQuery('.class-profile'),
-            studyPreferences = jQuery('.study-preferences');
+            classProfile = profile.find('.class-profile'),
+            studyPreferences = profile.find('.study-preferences');
         if(classProfile.is(':visible'))
         {
-            classProfile.find('.row').each(function () {
-                if(jQuery(this).find('.field-name-type-of-studying input:checked').length == 0 ||
-                    jQuery(this).find('.field-name-difficulty-level input:checked').length == 0)
+            classProfile.find('.field-name-type-of-studying .row').each(function () {
+                var row = jQuery(this),
+                    cid = (/cid-([0-9]+)(\s|$)/ig).exec(row.attr('class'))[1];
+                if(classProfile.find('.field-name-type-of-studying .row.cid-' + cid + ' input:checked').length == 0 ||
+                    classProfile.find('.field-name-difficulty-level .row.cid-' + cid + ' input:checked').length == 0)
                     valid = false;
             });
         }
 
         // check profile questions for completeness
-        if(studyPreferences.nextUntil(classProfile).filter(':visible').length > 0)
+        if(profile.find('div[class*="profile-question"]').filter(':visible').length > 0)
         {
-            studyPreferences.nextUntil(classProfile).filter(':visible').each(function () {
+            profile.find('div[class*="profile-question"]').filter(':visible').each(function () {
                 if(jQuery(this).find('input:checked').length == 0)
                     valid = false;
             });
@@ -49,22 +51,36 @@ jQuery(document).ready(function($) {
     profile.on('change', '.field-name-field-11-am-4-pm input', $.fn.profileFunc);
     profile.on('change', '.field-name-field-4-pm-9-pm input', $.fn.profileFunc);
     profile.on('change', '.field-name-field-9-pm-2-am input', $.fn.profileFunc);
-    jQuery('.study-preferences').nextUntil('.class-profile').find('input').on('change', $.fn.profileFunc);
+    profile.on('change', 'div[class*="profile-question"] input', $.fn.profileFunc);
     profile.on('change', '.field-name-type-of-studying input', $.fn.profileFunc);
     profile.on('change', '.field-name-difficulty-level input', $.fn.profileFunc);
     $.fn.profileFunc();
+
+    if(window.location.pathname == '/profile')
+    {
+        // make the next unanswered question visible
+        var questions = profile.find('div[class*="profile-question"]');
+        questions.each(function () {
+            if(jQuery(this).find('input:checked').length == 0)
+            {
+                questions.hide();
+                jQuery(this).show();
+                return false;
+            }
+        });
+    }
 
     profile.on('click', 'a[href="#save-profile"]', function (evt) {
         evt.preventDefault();
         if(profile.is('.invalid'))
             return;
 
-        var classProfile = jQuery('.class-profile'),
-            studyPreferences = jQuery('.study-preferences');
-        if(studyPreferences.nextUntil(classProfile).filter(':visible').length > 0)
+        var classProfile = profile.find('.class-profile'),
+            studyPreferences = profile.find('.study-preferences');
+        if(profile.find('div[class*="profile-question"]').filter(':visible').length > 0)
         {
             var profileData = { },
-                questions = studyPreferences.nextUntil(classProfile).filter(':visible');
+                questions = profile.find('div[class*="profile-question"]').filter(':visible');
             questions.each(function () {
                 var that = jQuery(this),
                     k = that.find('input:checked').attr('name').replace('profile-question-', '');
@@ -80,7 +96,7 @@ jQuery(document).ready(function($) {
                            if(window.location.pathname == '/profile')
                            {
                                // TODO: we have reached the last question?
-                               if(questions.is(jQuery('.class-profile').prev()))
+                               if(questions.is(profile.find('div[class*="profile-question"]').last()))
                                    window.location.pathname = '/schedule';
                                else
                                {
@@ -115,12 +131,12 @@ jQuery(document).ready(function($) {
 
         if(classProfile.is(':visible'))
         {
-            jQuery('.class-profile .row').each(function () {
+            classProfile.find('.field-name-type-of-studying .row').each(function () {
                 var row = jQuery(this),
-                    eid = row.attr('id').substring(4);
-                scheduleData[eid] = {
-                    type: row.find('.field-name-type-of-studying input:checked').val(),
-                    difficulty: row.find('.field-name-difficulty-level input:checked').val()};
+                    cid = (/cid-([0-9]+)(\s|$)/ig).exec(row.attr('class'))[1];
+                scheduleData[cid] = {
+                    type: classProfile.find('.field-name-type-of-studying .row.cid-' + cid + ' input:checked').val(),
+                    difficulty: classProfile.find('.field-name-difficulty-level .row.cid-' + cid + ' input:checked').val()};
             });
         }
 

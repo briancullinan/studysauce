@@ -249,15 +249,18 @@
 }
 
 .page-dashboard #plan .strategy-teach iframe,
-.page-dashboard #plan .strategy-upload
+.page-dashboard #plan .plupload
 {
     display: inline-block;
     width: 33%;
     box-sizing: border-box;
-    -moz-box-sizing: border-box;
     vertical-align: top;
     padding:10px;
     position: relative;
+    border-radius: 5px;
+    border:3px solid #555555;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .page-dashboard #plan a[href="#expand"]
@@ -285,6 +288,16 @@
     max-width: none;
 }
 
+.page-dashboard #plan .row textarea
+{
+    min-height: 150px;
+}
+
+.page-dashboard #plan .row.expanded textarea
+{
+    min-height: 250px;
+}
+
 .page-dashboard #plan .selected.expanded .mini-checkin
 {
     left:auto;
@@ -292,12 +305,12 @@
     margin-left:0;
 }
 
-.strategy-upload .plup-filelist
+.page-dashboard #plan .plupload .plup-filelist
 {
     border-top:0;
 }
 
-.strategy-upload .plup-list
+.page-dashboard #plan .plupload .plup-list
 {
     list-style-type: none;
     margin: 0;
@@ -308,7 +321,7 @@
 
 }
 
-.strategy-upload .plup-list li
+.page-dashboard #plan .plupload .plup-list li
 {
     display:none;
     padding:0;
@@ -316,22 +329,22 @@
     border:0;
 }
 
-.strategy-upload .plup-list li:last-child
+.page-dashboard #plan .plupload .plup-list li:last-child
 {
     display:block;
 }
 
-.strategy-upload .plup-thumb-wrapper
+.page-dashboard #plan .plupload .plup-thumb-wrapper
 {
     text-align: center;
 }
 
-.strategy-upload .plup-thumb-wrapper img
+.page-dashboard #plan .plupload .plup-thumb-wrapper img
 {
     margin:0 auto;
 }
 
-.strategy-upload .plup-select
+.page-dashboard #plan .plupload .plup-select
 {
     position:absolute;
     top:0;
@@ -343,18 +356,23 @@
     font-size: 0;
 }
 
-body.file-drag .strategy-upload .plup-filelist
+.page-dashboard #plan .plupload.uploaded .plup-select
+{
+    height:40px;
+}
+
+body.page-dashboard.file-drag  #plan .plupload .plup-filelist
 {
     z-index: 2000;
 }
 
-.strategy-upload .plup-remove-file,
-.strategy-upload .plup-remove-item
+.page-dashboard #plan .plupload .plup-remove-file,
+.page-dashboard #plan .plupload .plup-remove-item
 {
     z-index: 100;
 }
 
-.strategy-upload .drag-main
+.page-dashboard #plan .plupload .drag-main
 {
     position:absolute;
     top:50%;
@@ -367,43 +385,35 @@ body.file-drag .strategy-upload .plup-filelist
     text-align: center;
 }
 
-.strategy-upload .drag-more,
-.strategy-upload .plup-filelist-size,
-.strategy-upload .plup-filelist-message,
-.strategy-upload .plup-filelist-remove,
-.strategy-upload .plup-select div
+.page-dashboard #plan .plupload .drag-more,
+.page-dashboard #plan .plupload .plup-filelist-size,
+.page-dashboard #plan .plupload .plup-filelist-message,
+.page-dashboard #plan .plupload .plup-filelist-remove,
+.page-dashboard #plan .plupload .plup-select div
 {
     display:none;
 }
 
-.strategy-upload .plup-select
-{
-    border-radius: 5px;
-    border:3px solid #555555;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-}
-
-.strategy-upload .plup-bar .plup-upload
+.page-dashboard #plan .plupload .plup-bar .plup-upload
 {
     display:none !important;
 }
 
-.strategy-upload .plupload,
-.strategy-upload .plupload-container
+.page-dashboard #plan .plupload .plupload,
+.page-dashboard #plan .plupload .plupload-container
 {
     min-height:200px;
 }
 
-.strategy-upload .plup-filelist-file
+.page-dashboard #plan .plupload .plup-filelist-file
 {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
 
-.strategy-upload .plup-filelist,
-.strategy-upload .plupload.html5
+.page-dashboard #plan .plupload .plup-filelist,
+.page-dashboard #plan .plupload .plupload.html5
 {
     height: 100% !important;
     width: 100% !important;
@@ -413,6 +423,13 @@ body.file-drag .strategy-upload .plup-filelist
     background:none;
     max-height: none !important;
 }
+
+.page-dashboard #plan .plupload.uploaded .plup-filelist,
+.page-dashboard #plan .plupload.uploaded .plupload.html5
+{
+    height: 40px !important;
+}
+
 .page-dashboard #plan .strategy-spaced-notes textarea,
 .page-dashboard #plan .strategy-notes textarea
 {
@@ -490,6 +507,11 @@ body.file-drag .strategy-upload .plup-filelist
     cursor: pointer;
 }
 
+.page-dashboard #plan .strategy-prework label
+{
+    margin-left:-30px;
+}
+
 .page-dashboard #plan .strategy-prework input:checked + label,
 .page-dashboard #plan .strategy-review input:checked + label
 {
@@ -507,12 +529,12 @@ body.file-drag .strategy-upload .plup-filelist
     margin-left:-10px;
 }
 
-.strategy-upload .drag-main
+.page-dashboard #plan .plupload .drag-main
 {
     top:15px;
 }
 
-.strategy-upload:hover .drag-main
+.page-dashboard #plan .plupload:hover .drag-main
 {
     color:#02CEE8;
 }
@@ -697,6 +719,7 @@ body.file-drag .strategy-upload .plup-filelist
     background: url('images/menu_icons_128.png') no-repeat -54px -2848px transparent;
     padding-left: 25px;
     display:inline-block;
+    cursor: pointer;
 }
 
 .page-dashboard #plan .sort-by input:checked + label:not(:last-child)
@@ -872,10 +895,10 @@ body.file-drag .strategy-upload .plup-filelist
     .page-dashboard #plan .selected .mini-checkin
     {
         left: 100%;
-        margin-left:-200px;
+        margin-left:-165px;
     }
 
-    .page-dashboard #plan .strategy-upload
+    .page-dashboard #plan .plupload
     {
         width:80%;
     }

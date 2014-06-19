@@ -177,11 +177,11 @@ if (!empty($nodes['node']))
         {
             ?>
             <h3>Teach - Upload a 1 min video explaining your assignment</h3>
-            <div class="strategy-upload">
+            <div class="plupload">
                 <div class="plup-list-wrapper">
                     <ul class="plup-list clearfix ui-sortable">
                         <?php if(isset($result[$name][$strategy]['uploads'][0]['uri'])): ?>
-                            <li class="ui-state-default">
+                            <li>
                                 <div class="plup-thumb-wrapper">
                                     <img src="<?php print $result[$name][$strategy]['uploads'][0]['uri']; ?>" title="">
                                 </div>
@@ -194,7 +194,7 @@ if (!empty($nodes['node']))
             </div>
             <div class="strategy-notes">
                 <label>Title:</label>
-                <input type="text" name="strategy-title" value="<?php print htmlspecialchars($result[$name][$strategy]['title'], ENT_QUOTES); ?>" />
+                <input type="text" class="form-text" name="strategy-title" value="<?php print htmlspecialchars($result[$name][$strategy]['title'], ENT_QUOTES); ?>" />
                 <label>Notes:</label>
                 <textarea type="text" name="strategy-notes"><?php print htmlspecialchars($result[$name][$strategy]['notes'], ENT_QUOTES); ?></textarea>
             </div>
@@ -223,6 +223,9 @@ if (!empty($nodes['node']))
         }
     }
 }
+else
+{
+    ?><h3>Your student has not completed this section yet.</h3><?php
+}
 ?>
-
 <hr style="margin-bottom:30px;" />

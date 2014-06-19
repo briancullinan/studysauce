@@ -26,6 +26,7 @@ global $user;
            class="form-text required">
     <div class="description">All emails from Study Sauce will be sent to this address.</div>
 </div>
+<br />
 <p style="margin-bottom:0;">Enter your current password to change Email or set a New Password.</p>
 
 <div class="form-item form-type-password form-item-current-pass">

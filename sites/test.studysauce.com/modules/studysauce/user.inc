@@ -5,6 +5,118 @@ function studysauce_group_save()
 
 }
 
+function studysauce_form_user_login_alter(&$form, &$form_state)
+{
+    $form['#validate'][] = 'studysauce_user_login';
+}
+
+function studysauce_form_user_register_form_alter(&$form, &$form_state)
+{
+    $form['#validate'][] = 'studysauce_user_login';
+}
+
+function studysauce_user_login()
+{
+    global $user;
+    if(isset($user->mail))
+    {
+        $partnerQuery = new EntityFieldQuery();
+        $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+            ->propertyCondition('field_name', 'field_partners')
+            ->fieldCondition('field_email', 'value', $user->mail)
+            ->execute();
+    }
+
+    if(!in_array('adviser', $user->roles) && (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])))
+    {
+
+        // check if they are a customer
+        $lastOrder = _studysauce_orders_by_uid($user->uid);
+        $groups = og_get_groups_by_user();
+        if(isset($groups['node']) || $lastOrder)
+        {
+            // check if buy funnel is complete
+            $query = new EntityFieldQuery();
+            $nodes = $query->entityCondition('entity_type', 'node')
+                ->propertyCondition('type', 'profile')
+                ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+                ->propertyCondition('status', 1)
+                ->range(0, 1)
+                ->execute();
+            if (empty($nodes['node']))
+                $GLOBALS['studysauce-goto'] = 'profile';
+            else
+            {
+                // check if questions are answered and return to exact step
+                $nodes = array_keys($nodes['node']);
+                $nid = array_shift($nodes);
+                $node = node_load($nid);
+                if(!isset($node->field_mindset['und'][0]['value']) || !isset($node->field_time_management['und'][0]['value']) ||
+                    !isset($node->field_devices['und'][0]['value']) || !isset($node->field_education['und'][0]['value']) ||
+                    !isset($node->field_study_much['und'][0]['value']))
+                    $GLOBALS['studysauce-goto'] = 'profile';
+            }
+
+            if(!isset($GLOBALS['studysauce-goto']))
+            {
+                // check if schedule exists
+                $query = new EntityFieldQuery();
+                $nodes = $query->entityCondition('entity_type', 'node')
+                    ->propertyCondition('type', 'schedule')
+                    ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+                    ->propertyCondition('status', 1)
+                    ->range(0, 1)
+                    ->execute();
+                if (empty($nodes['node']))
+                    $GLOBALS['studysauce-goto'] = 'schedule';
+                else
+                {
+                    // check if we need to visit customization pages
+                    $nodes = array_keys($nodes['node']);
+                    $nid = array_shift($nodes);
+                    $node = node_load($nid);
+                    if(!isset($node->field_weekends['und'][0]['value']))
+                        $GLOBALS['studysauce-goto'] = 'customization';
+                    elseif(!isset($node->field_classes['und'][0]['value']))
+                        $GLOBALS['studysauce-goto'] = 'schedule';
+                    else
+                    {
+                        $cid = $node->field_classes['und'][0]['value'];
+                        $c = entity_load('field_collection_item', array($cid));
+                        if(isset($c[$cid]) && !isset($c[$cid]->field_study_difficulty['und'][0]['value']))
+                        {
+                            $GLOBALS['studysauce-goto'] = 'customization2';
+                        }
+                    }
+                }
+            }
+
+            // TODO: change this when we need to check for different versions of the profile form
+        }
+    }
+
+    if(!isset($GLOBALS['studysauce-goto']))
+        $GLOBALS['studysauce-goto'] = '<front>';
+}
+
+function studysauce_drupal_goto_alter(&$path, &$options, &$http_response_code)
+{
+    if(isset($GLOBALS['studysauce-goto']))
+    {
+        // alter drupal_goto
+        if (is_array($GLOBALS['studysauce-goto'])) {
+            $path = $GLOBALS['studysauce-goto'][0];
+            $options = array();
+            if (count($GLOBALS['studysauce-goto']) > 1) {
+                $options = $GLOBALS['studysauce-goto'][1];
+            }
+        }
+        else {
+            $path = $GLOBALS['studysauce-goto'];
+        }
+    }
+}
+
 function studysauce_save_status()
 {
     $groups = og_get_groups_by_user();
@@ -27,22 +139,57 @@ function studysauce_save_status()
     }
 }
 
+function studysauce_connector_action_alter(&$actions)
+{
+    $actions['default']['login callback'] = 'studysauce_connector_login';
+}
 
-function studysauce_save_user($user = null, &$edit = array())
+function studysauce_connector_login($connector_name, $cid = NULL, $consumer = NULL, $access_token = NULL, $request_token = NULL)
+{
+    $connector = _connector_get_connectors($connector_name);
+    $authname = $connector_name . '__' . $cid;
+    if ($connector) {
+
+        // check if email address already exists
+        $info = array();
+        if (!empty($connector['information callback']) && is_callable($connector['information callback'])) {
+            $info = $connector['information callback']($connector, $cid, array(), $access_token);
+
+            if(isset($info['email']['value']) && !empty($info['email']['value']))
+            {
+                $account = user_external_load($authname);
+                // Check if the external id already connected to someone
+                if (!$account)
+                {
+                    $account = user_load_by_mail($info['email']['value']);
+                    if($account)
+                    {
+                        // add authmap connection before we attempt to login the natural way
+                        _connector_add_connection($connector_name, $cid, $account->uid);
+                    }
+                }
+            }
+        }
+    }
+
+    return _connector_log_in($connector_name, $cid, $consumer, $access_token, $request_token);
+}
+
+function studysauce_save_user($account = null, &$edit = array())
 {
     if(!isset($edit))
         $edit = array();
 
-    if($user == null)
+    if($account == null)
     {
         global $user;
-        $user = user_load($user->uid);
+        $account = user_load($user->uid);
     }
 
     if(isset($_POST['cancel']))
     {
         $edit = array('user_cancel_notify' => false);
-        user_cancel($edit, $user->uid, 'user_cancel_block');
+        user_cancel($edit, $account->uid, 'user_cancel_block');
         return;
     }
 
@@ -51,15 +198,15 @@ function studysauce_save_user($user = null, &$edit = array())
         $oldEmail = false;
         $edit['field_first_name']['und'][0]['value'] = $_POST['first'];
         $edit['field_last_name']['und'][0]['value'] = $_POST['last'];
-        if(strcmp($user->mail, $_POST['email']) <> 0)
+        if(strcmp($account->mail, $_POST['email']) <> 0)
         {
             $edit['mail'] = $_POST['email'];
-            $oldEmail = $user->mail;
+            $oldEmail = $account->mail;
         }
         if(isset($_POST['pass']) && !empty($_POST['pass']))
             $edit['pass'] = $_POST['pass'];
 
-        user_save($user, $edit);
+        user_save($account, $edit);
 
         if($oldEmail)
         {
@@ -67,7 +214,7 @@ function studysauce_save_user($user = null, &$edit = array())
             $nodes = db_select('node', 'n')
                 ->fields('n', array('nid'))
                 ->condition('title', $oldEmail, '=')
-                ->condition(db_or()->condition('uid', $user->uid, '='))
+                ->condition(db_or()->condition('uid', $account->uid, '='))
                 ->execute()
                 ->fetchAllAssoc('nid');
             foreach($nodes as $nid => $n)
@@ -78,6 +225,21 @@ function studysauce_save_user($user = null, &$edit = array())
             }
 
             // change accountability partner emails
+            $partnerQuery = new EntityFieldQuery();
+            $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+                ->propertyCondition('field_name', 'field_partners')
+                ->fieldCondition('field_email', 'value', $oldEmail)
+                ->execute();
+            if(isset($partners['field_collection_item']) && !empty($partners['field_collection_item']))
+            {
+                $partners = array_keys($partners['field_collection_item']);
+                foreach($partners as $p)
+                {
+                    $partner = entity_load('field_collection_item', array($p));
+                    $partner[$p]->field_email['und'][0]['value'] = $edit['mail'];
+                    $partner[$p]->save();
+                }
+            }
         }
     }
 
@@ -94,11 +256,11 @@ function studysauce_save_user($user = null, &$edit = array())
         $edit = array();
         $edit['picture'] = $file;
 
-        user_save($user, $edit);
+        user_save($account, $edit);
     }
 
     // if parent selected jump down below, everything else assume student
-    if(substr($user->mail, -strlen('@internal.example.org')) != '@internal.example.org')
+    if(substr($account->mail, -strlen('@internal.example.org')) != '@internal.example.org')
         if(isset($_POST['parent-student']) && $_POST['parent-student'] == 'student')
         {
             $msg = <<< EOHTML
@@ -115,11 +277,11 @@ EOHTML;
 
             $body = theme('studysauce-email', array(
                 'message' => implode('<br />', explode("\n", $msg)),
-                'greeting' => 'Dear ' . (isset($user->field_first_name[LANGUAGE_NONE][0]['value'])
-                        ? $user->field_first_name[LANGUAGE_NONE][0]['value']
+                'greeting' => 'Dear ' . (isset($account->field_first_name[LANGUAGE_NONE][0]['value'])
+                        ? $account->field_first_name[LANGUAGE_NONE][0]['value']
                         : 'student') . ','));
 
-            $new_message = drupal_mail('studysauce', 'welcome', $user->mail, language_default(), array(), variable_get('site_mail', ''), FALSE);
+            $new_message = drupal_mail('studysauce', 'welcome', $account->mail, language_default(), array(), variable_get('site_mail', ''), FALSE);
 
             $new_message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
             $new_message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('welcome-student'))));
@@ -146,11 +308,11 @@ EOHTML;
 
             $body = theme('studysauce-email', array(
                 'message' => implode('<br />', explode("\n", $msg)),
-                'greeting' => 'Dear ' . (isset($user->field_first_name[LANGUAGE_NONE][0]['value']) && isset($user->field_last_name[LANGUAGE_NONE][0]['value'])
-                        ? $user->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $user->field_last_name[LANGUAGE_NONE][0]['value']
+                'greeting' => 'Dear ' . (isset($account->field_first_name[LANGUAGE_NONE][0]['value']) && isset($account->field_last_name[LANGUAGE_NONE][0]['value'])
+                        ? $account->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $account->field_last_name[LANGUAGE_NONE][0]['value']
                         : 'parent') . ','));
 
-            $new_message = drupal_mail('studysauce', 'welcome', $user->mail, language_default(), array(), variable_get('site_mail', ''), FALSE);
+            $new_message = drupal_mail('studysauce', 'welcome', $account->mail, language_default(), array(), variable_get('site_mail', ''), FALSE);
 
             $new_message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
             $new_message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('welcome-parent'))));

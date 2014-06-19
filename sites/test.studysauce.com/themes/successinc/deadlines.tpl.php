@@ -79,7 +79,6 @@ drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
                     <input class="date-clear form-text jquery_placeholder-processed"
                            placeholder="Enter date"
                            type="text"
-                           id="dates-due"
                            name="dates-due" value=""
                            size="20" maxlength="30">
                 </div>

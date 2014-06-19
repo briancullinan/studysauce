@@ -13,5 +13,5 @@ drupal_add_css(drupal_get_path('theme', 'successinc') .'/about.css');
     <a target="_blank" href="https://www.facebook.com/pages/Study-Sauce/519825501425670?ref=stream">&nbsp;</a>
     <a href="https://plus.google.com/115129369224575413617/about">&nbsp;</a>
     <a href="https://twitter.com/StudySauce">&nbsp;</a>
-    <a href="#contact">&nbsp;</a>
+    <a href="/contact">&nbsp;</a>
 </div>

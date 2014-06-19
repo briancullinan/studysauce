@@ -1,6 +1,13 @@
 <?php
 global $user;
 $user = user_load($user->uid);
+// find people we are accountable to by searching partners field
+$partnerQuery = new EntityFieldQuery();
+$partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+    ->propertyCondition('field_name', 'field_partners')
+    ->fieldCondition('field_email', 'value', $user->mail)
+    ->execute();
+
 if(in_array('adviser', $user->roles)): ?>
     <ul>
         <li><a href="#userlist"><span>&nbsp;</span>Home</a></li>
@@ -9,6 +16,14 @@ if(in_array('adviser', $user->roles)): ?>
         <ul>
             <li><a href="#account">Account information</a></li>
         </ul>
+    </ul>
+<?php elseif(isset($partners['field_collection_item']) && !empty($partners['field_collection_item'])): ?>
+    <ul>
+        <li><a href="#userlist"><span>&nbsp;</span>Home</a></li>
+        <li><a href="#settings"><span>&nbsp;</span>Settings</a>
+            <ul>
+                <li><a href="#account">Account information</a></li>
+            </ul>
     </ul>
 <?php else: ?>
 <ul>

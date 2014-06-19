@@ -162,6 +162,10 @@ if (!empty($entities['node'])) {
         }
     }
 }
+else
+{
+    ?><h3>Your student has not completed this section yet.</h3><?php
+}
 ?>
 <hr style="margin-top:20px;" />
 

@@ -628,7 +628,7 @@ img {
 }
 
 .page-dashboard .header-wrapper a[href="#invite"],
-.page-dashboard a[href="/user/logout"],
+.page-dashboard .header-wrapper a[href="/user/logout"],
 .page-dashboard a.user-account,
 .page-dashboard a[href="#mail"],
 .page-dashboard .header-wrapper a[href="#badges"]
@@ -666,7 +666,7 @@ img {
     background-position: left -224px;
 }
 
-.page-dashboard a[href="/user/logout"]
+.page-dashboard .header-wrapper a[href="/user/logout"]
 {
     background-position: left -257px;
 }
@@ -745,6 +745,90 @@ img {
 #page {
     padding: 25px 0;
     background: url("images/noise_white.png") repeat scroll 0 0 #ffffff;
+}
+
+.page-path-refund #page,
+.page-path-contact #page,
+.page-path-privacy #page,
+.page-path-terms #page,
+.page-path-about-us #page
+{
+    margin-left:20%;
+    margin-right:20%;
+    margin-top:10px;
+    padding-top: 10px;
+    background: url("images/noise_gray.png") repeat scroll 0 0 #EEEEEE;
+    padding-left:20px;
+    padding-right:20px;
+    position:relative;
+    overflow: hidden;
+    margin-bottom:20px;
+}
+
+@media all and (max-width:1442px)
+{
+    .page-path-refund #page,
+    .page-path-contact #page,
+    .page-path-privacy #page,
+    .page-path-terms #page,
+    .page-path-about-us #page
+    {
+        margin-left:10%;
+        margin-right:10%;
+    }
+}
+
+@media all and (max-width:1080px)
+{
+    .page-path-refund #page,
+    .page-path-contact #page,
+    .page-path-privacy #page,
+    .page-path-terms #page,
+    .page-path-about-us #page
+    {
+        margin-left:10px;
+        margin-right:10px;
+    }
+}
+
+.page-dashboard sup.premium
+{
+    margin: -10px 0;
+    line-height: 0;
+    color: #FF0000;
+    font-size: 10px;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 1px 3px;
+    border: 1px solid #FF0000;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.page-path-refund,
+.page-path-contact,
+.page-path-privacy,
+.page-path-terms,
+.page-path-about-us
+{
+    background: url(images/grunge.png) repeat fixed 0 0 #CCCCCC;
+}
+
+.page-path-refund .container_12,
+.page-path-refund .container_12 .grid_12,
+.page-path-contact .container_12,
+.page-path-contact .container_12 .grid_12,
+.page-path-privacy .container_12,
+.page-path-privacy .container_12 .grid_12,
+.page-path-terms .container_12,
+.page-path-terms .container_12 .grid_12,
+.page-path-about-us .container_12,
+.page-path-about-us .container_12 .grid_12
+{
+    width:auto;
+    display: block;
+    float:none;
 }
 
 .front #page {
@@ -1857,6 +1941,7 @@ ul.company-info li.last {
 .page-dashboard #study-quiz .webform-confirmation,
 .page-dashboard #mozart-effect > div,
 .page-dashboard #empty-schedule a,
+.page-dashboard .first-time-message,
 .page-dashboard #empty-dates a,
 .page-dashboard #metrics-empty a,
 .page-dashboard #timer-expire > div,
@@ -2023,6 +2108,8 @@ input[type="button"]:hover {
     text-shadow: 0px 1px 2px rgba(255,255,255,.5);
 }
 
+#plan .saved .highlighted-link .more,
+#plan .saved .highlighted-link .more:hover,
 #deadlines.invalid .highlighted-link .more,
 #deadlines.invalid .highlighted-link .more:hover,
 #schedule.invalid .class-actions .more,
@@ -2682,10 +2769,14 @@ ul.social-bookmarks li.linkedin a {
     vertical-align: middle;
 }
 
-.page-path-about-us a[href*="facebook"],
-.page-path-about-us a[href*="google"],
-.page-path-about-us a[href*="twitter"],
-.page-path-about-us a[href*="contact"],
+.page-path-about-us #page a[href*="facebook"],
+.page-path-about-us #page a[href*="google"],
+.page-path-about-us #page a[href*="twitter"],
+.page-path-about-us #page a[href*="contact"],
+.page-path-about-us .panel-content a[href*="facebook"],
+.page-path-about-us .panel-content a[href*="google"],
+.page-path-about-us .panel-content a[href*="twitter"],
+.page-path-about-us .panel-content a[href*="contact"],
 #about-us a[href*="facebook"],
 #about-us a[href*="google"],
 #about-us a[href*="twitter"],
@@ -2701,21 +2792,24 @@ ul.social-bookmarks li.linkedin a {
     line-height: 55px;
 }
 
-.page-path-about-us a[href*="google"],
+.page-path-about-us #page a[href*="google"],
+.page-path-about-us .panel-content a[href*="google"],
 #about-us a[href*="google"],
 #invite a[href*="google"]
 {
     background-position:0 -95px;
 }
 
-.page-path-about-us a[href*="twitter"],
+.page-path-about-us #page a[href*="twitter"],
+.page-path-about-us .panel-content a[href*="twitter"],
 #about-us a[href*="twitter"],
 #invite a[href*="twitter"]
 {
     background-position:0 -190px;
 }
 
-.page-path-about-us a[href*="contact"],
+.page-path-about-us #page a[href*="contact"],
+.page-path-about-us .panel-content a[href*="contact"],
 #about-us a[href*="contact"]
 {
     background-position:0 -381px;
@@ -4735,7 +4829,8 @@ tbody
 .page-dashboard #invite-sent:before,
 .page-dashboard #welcome:before,
 .page-dashboard .group-achievement:before,
-.page-dashboard #timer-expire:before
+.page-dashboard #timer-expire:before,
+.page-dashboard #first-time-messages:before
 {
     height: 100%;
     width: 100%;
@@ -4803,6 +4898,7 @@ tbody
 .page-dashboard #invite-sent,
 .page-dashboard .group-achievement,
 .page-dashboard #timer-expire,
+.page-dashboard #first-time-messages,
 .page-dashboard #deadlines .field-name-field-class-names
 {
     position:absolute;

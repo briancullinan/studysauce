@@ -58,7 +58,7 @@
     height:150px;
     width:150px;
     position:relative;
-    margin: 30px 10px;
+    margin: 30px 5px;
     vertical-align: bottom;
     color:#666666;
     padding:10px;
@@ -112,20 +112,6 @@
 .page-dashboard .awards .description a:hover span
 {
     text-decoration: underline;
-}
-
-.page-dashboard .awards > a:nth-of-type(5n+1),
-.page-dashboard .awards > a:first-of-type
-{
-    margin-left:0;
-    clear:left;
-}
-
-.page-dashboard .awards > a:nth-of-type(5n),
-.page-dashboard .awards > a:last-of-type
-{
-    margin-right:0;
-    clear:right;
 }
 
 .page-dashboard .awards > a > span
@@ -349,19 +335,6 @@
     left:0;
     position: absolute;
     z-index: 10;
-}
-
-@media all and (min-width: 980px) and (max-width: 1250px)
-{
-
-    .page-dashboard .awards > a:nth-of-type(5n),
-    .page-dashboard .awards > a:nth-of-type(5n+1),
-    .page-dashboard .awards > a
-    {
-        margin-left: 5px;
-        margin-right: 5px;
-    }
-
 }
 
 @media all and (max-width: 980px)

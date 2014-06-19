@@ -108,6 +108,7 @@
     border-bottom: 10px solid #22DD00;
 }
 
+.page-path-customization2 .guide li:nth-child(1) > span > span,
 .page-path-customization .guide li:nth-child(1) > span > span,
 .page-path-schedule2 .guide li:nth-child(1) > span > span,
 .page-path-schedule .guide li:nth-child(1) > span > span,
@@ -116,6 +117,7 @@
     background-position:-150px 0;
 }
 
+.page-path-customization2 .guide li:nth-child(3) > span > span,
 .page-path-customization .guide li:nth-child(3) > span > span,
 .page-path-schedule2 .guide li:nth-child(3) > span > span,
 .page-path-schedule .guide li:nth-child(3) > span > span
@@ -123,6 +125,7 @@
     background-position:-150px -75px;
 }
 
+.page-path-customization2 .guide li:nth-child(7) > span > span,
 .page-path-customization .guide li:nth-child(7) > span > span
 {
     background-position:-75px -225px;
@@ -217,6 +220,7 @@
         background-position:-325px -100px;
     }
 
+    .page-path-customization2 .guide li:nth-child(1) > span > span,
     .page-path-customization .guide li:nth-child(1) > span > span,
     .page-path-schedule2 .guide li:nth-child(1) > span > span,
     .page-path-schedule .guide li:nth-child(1) > span > span,
@@ -225,6 +229,7 @@
         background-position:-325px 0;
     }
 
+    .page-path-customization2 .guide li:nth-child(3) > span > span,
     .page-path-customization .guide li:nth-child(3) > span > span,
     .page-path-schedule2 .guide li:nth-child(3) > span > span,
     .page-path-schedule .guide li:nth-child(3) > span > span
@@ -232,6 +237,7 @@
         background-position:-325px -50px;
     }
 
+    .page-path-customization2 .guide li:nth-child(7) > span > span,
     .page-path-customization .guide li:nth-child(7) > span > span
     {
         background-position:-275px -150px;

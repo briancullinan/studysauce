@@ -1,3 +1,40 @@
+.page-dashboard .page .panel-pane
+{
+    padding-top:66px !important;
+}
+
+.page-dashboard.admin-menu .page .panel-pane
+{
+    padding-top:95px !important;
+}
+
+#site-name a strong
+{
+    color:#FF9900;
+}
+
+.page-dashboard .header-wrapper
+{
+    background-color:#555;
+}
+
+#site-name img
+{
+    width:48px;
+    margin-top:-10px;
+}
+
+#site-name a
+{
+    margin-top:15px;
+    font-size: 32px;
+}
+
+#welcome-message
+{
+    margin-top:15px;
+}
+
 #select-status span,
 #userlist tr td:first-child span
 {
@@ -25,6 +62,71 @@
 #userlist tr.status_yellow td:first-child span
 {
     background-color:#FFDD00;
+}
+
+#userlist th select
+{
+    border:2px solid #555;
+    background:transparent;
+    width:100%;
+    padding:5px;
+    appearance:none;
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    background: url(images/menu_icons_32.png) no-repeat right -1442px transparent;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+    outline: none;
+}
+
+#first-time-messages .highlighted-link
+{
+    text-align: right;
+}
+
+#userlist th select.filtered
+{
+    border:3px solid #FF9900;
+    margin:-1px;
+}
+
+#userlist table th,
+#userlist table td,
+#userlist th select
+{
+    font-size:18px;
+}
+
+#userlist td
+{
+    padding: 10px 30px
+}
+
+#userlist table th
+{
+    background:transparent;
+}
+
+#userlist th:nth-child(2),
+#userlist td:nth-child(2),
+#userlist th:nth-child(1),
+#userlist td:nth-child(1)
+{
+    width:100px;
+    text-align: center;
+}
+
+#userlist th:nth-child(4),
+#userlist td:nth-child(4)
+{
+    width:400px;
+}
+
+#userlist th:nth-child(3),
+#userlist td:nth-child(3)
+{
+    width: 300px;
 }
 
 #select-status a[href="#red"] span,

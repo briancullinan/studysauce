@@ -245,20 +245,6 @@ body.file-drag #partner-plupload .plup-filelist
     cursor: pointer;
 }
 
-.page-dashboard sup.premium
-{
-    margin: -10px 0;
-    line-height: 0;
-    color: #FF0000;
-    font-size: 10px;
-    letter-spacing: 0;
-    text-transform: uppercase;
-    font-weight: bold;
-    padding: 1px 3px;
-    border: 1px solid #FF0000;
-    border-radius: 5px;
-}
-
 .page-dashboard #partner ul input[type="checkbox"]:checked + label {
     background-position: -54px -2737px;
 }

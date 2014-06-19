@@ -41,9 +41,9 @@ global $user;
     <div class="plup-list-wrapper">
         <ul class="plup-list clearfix ui-sortable">
             <?php if(isset($user->picture) && !empty($user->picture)):
-                $file = $user->picture;
+                $file = !is_object($user->picture) ? ($user->picture = file_load($user->picture)) : $user->picture;
                 ?>
-                <li class="ui-state-default">
+                <li>
                     <div class="plup-thumb-wrapper">
                         <img src="<?php print image_style_url('achievement', $file->uri); ?>" title="">
                     </div>

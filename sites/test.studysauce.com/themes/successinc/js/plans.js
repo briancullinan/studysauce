@@ -49,6 +49,29 @@ jQuery(document).ready(function ($) {
         }
     };
 
+    plans.on('change', '.sort-by input', function (evt) {
+        var headings = {};
+        jQuery('#plan .head').each(function () {
+            var head = jQuery(this);
+            head.nextUntil('.head,p:last-of-type').each(function () {
+                var row = jQuery(this),
+                    that = row.find('.field-name-field-class-name .read-only');
+                if(typeof headings[that.text()] == 'undefined')
+                    headings[that.text()] = row;
+                else
+                    headings[that.text()] = jQuery.merge(headings[that.text()], row);
+                that.text(head.text());
+            });
+        });
+        var rows = [];
+        for(var h in headings)
+        {
+            var hidden = headings[h].filter('.row:not(.hide)').length == 0;
+            rows = jQuery.merge(rows, jQuery.merge(jQuery('<div class="head ' + (hidden ? 'hide' : '') + '">' + h + '</div>'), headings[h].detach()));
+        }
+        plans.find('.head, .row').replaceWith(rows);
+    });
+
     plans.on('click', 'a.return-to-top', function (evt) {
         evt.preventDefault();
         jQuery(this).parent().find('.row:visible').first().scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
@@ -240,11 +263,15 @@ jQuery(document).ready(function ($) {
                     }
 
                     $('#plan-' + eid + '-plupload').find('.plup-filelist #' + file.id).remove(); // Remove uploaded file from queue
+                    var thumb = '<video width="184" height="184" preload="auto" controls="controls" poster="' + fileSaved.secure_uri + '">' +
+                        '<source src="' + fileSaved.uri + '" type="video/webm" />';
+                    $('#plan-' + eid + '-plupload').addClass('uploaded');
+                    $('#plan-' + eid + '-plupload').find('.plup-progress').hide();
                     // Add image thumbnail into list of uploaded items
                     $('#plan-' + eid + '-plupload').find('.plup-list').append(
-                        '<li class="ui-state-default">' +
+                        '<li>' +
                             //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
-                        '<div class="plup-thumb-wrapper"><img src="'+ fileSaved.secure_uri + '" title="'+ Drupal.checkPlain(file.target_name) +'" /></div>' +
+                        '<div class="plup-thumb-wrapper">' + thumb + '</div>' +
                         '<a class="plup-remove-item"></a>' +
                         '<input type="hidden" name="' + name + '[fid]" value="' + fileSaved.fid + '" />' +
                         '<input type="hidden" name="' + name + '[thumbnail]" value="' + fileSaved.thumbnail + '" />' +
@@ -282,14 +309,14 @@ jQuery(document).ready(function ($) {
                         var thumb = '<img src="' + window.strategies[title]['teach'].uploads[0].uri + '" title="teaching" />';
                         if(typeof window.strategies[title]['teach'].uploads[0].play != 'undefined')
                         {
-                            thumb = '<video width="190" height="190" preload="auto" controls="controls" poster="' + window.strategies[title]['teach'].uploads[0].uri + '">' +
+                            thumb = '<video width="184" height="184" preload="auto" controls="controls" poster="' + window.strategies[title]['teach'].uploads[0].uri + '">' +
                                     '<source src="' + window.strategies[title]['teach'].uploads[0].play + '" type="video/webm" />';
-                            $('#plan-' + eid + '-plupload').find('.plup-select, .plup-filelist').remove();
+                            $('#plan-' + eid + '-plupload').addClass('uploaded');
                         }
                         $('#plan-' + eid + '-plupload').find('img[src*="empty-play.png"]').remove();
 
                         $('#plan-' + eid + '-plupload').find('.plup-list').append(
-                            '<li class="ui-state-default">' +
+                            '<li>' +
                                 //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
                                 '<div class="plup-thumb-wrapper">' + thumb + '</div>' +
                                 '<a class="plup-remove-item"></a>' +
@@ -456,10 +483,17 @@ jQuery(document).ready(function ($) {
                        strategies: strategies
                    },
                    success: function (data) {
-
+                       row.find('div[class^="strategy"]').removeClass('saved').addClass('unsaved');
                    }
                });
 
+    });
+
+    plans.on('keyup', 'div[class^="strategy"] input[type="text"], div[class^="strategy"] textarea', function () {
+        jQuery(this).parents('div[class^="strategy"]').removeClass('saved').addClass('unsaved');
+    });
+    plans.on('change', 'div[class^="strategy"] input[type="checkbox"], div[class^="strategy"] input[type="radio"], div[class^="strategy"] input[type="text"], div[class^="strategy"] textarea', function () {
+        jQuery(this).parents('div[class^="strategy"]').removeClass('saved').addClass('unsaved');
     });
 
     plans.on('click', '.page-dashboard #plan .field-name-field-assignment,' +
@@ -483,7 +517,7 @@ jQuery(document).ready(function ($) {
 
         // add the default strategy
         if(cid != null && row.find('.strategy-' + strategy).length == 0 &&
-           jQuery('#plan .strategy-' + strategy).length > 0 && strategy != 'other')
+           jQuery('#plan .strategy-' + strategy).length > 0 && strategy != 'other' && strategy != 'prework')
         {
             var newStrategySelect = jQuery('#plan .field-select-strategy').first().clone();
             row.append(newStrategySelect);
@@ -649,11 +683,10 @@ jQuery(document).ready(function ($) {
     //   it triggers the menu clicking
     if(jQuery('#plan:visible').length > 0)
         setTimeout(initialize, 100);
-    else
-        jQuery('body').on('click', 'a[href="#plan"]', function () {
-            initialize();
-            if($('#calendar:visible').length > 0)
-                $('#calendar').fullCalendar('refetchEvents');
-        });
+    jQuery('body').on('click', 'a[href="#plan"]', function () {
+        initialize();
+        if($('#calendar:visible').length > 0)
+            $('#calendar').fullCalendar('refetchEvents');
+    });
 });
 

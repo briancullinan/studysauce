@@ -105,13 +105,13 @@ if(isset($user->field_partners['und'][0]['value']))
         <p>
             <input id="home-tasks-quiz" name="home-tasks-quiz" type="checkbox" readonly="readonly"
                 <?php print (count($quizSubmissions) ? 'checked="checked"' : ''); ?> />
-            <label for="home-tasks-quiz"><a href="#study-quiz">Take the study quiz</a></label><br />
+            <label for="home-tasks-quiz"><a href="#study-quiz"><span>Take the study quiz</span></a></label><br />
             <input id="home-tasks-schedule" name="home-tasks-schedule" type="checkbox" readonly="readonly"
                 <?php print (count($classes) ? 'checked="checked"' : ''); ?> />
-            <label for="home-tasks-schedule"><a href="#schedule">Enter your class schedule</a></label><br />
+            <label for="home-tasks-schedule"><a href="#schedule"><span>Enter your class schedule</span></a></label><br />
             <input id="home-tasks-deadlines" name="home-tasks-deadlines" type="checkbox" readonly="readonly"
                 <?php print (studysauce_any_dates() ? 'checked="checked"' : ''); ?> />
-            <label for="home-tasks-deadlines"><a href="#deadlines">Set up deadline reminders</a></label><br />
+            <label for="home-tasks-deadlines"><a href="#deadlines"><span>Set up deadline reminders</span></a></label><br />
             <input id="home-tasks-checklist" name="home-tasks-checklist" type="checkbox" readonly="readonly"
                 <?php print (count($classes) &&
                 studysauce_any_dates() &&
@@ -125,7 +125,7 @@ if(isset($user->field_partners['und'][0]['value']))
                 isset($strategies->field_spaced_strategies['und'][0]['value']) &&
                 isset($strategies->field_active_strategies['und'][0]['value']) &&
                 isset($strategies->field_teach_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-            <label for="home-tasks-checklist">Complete checklists below</label>
+            <label for="home-tasks-checklist"><span>Complete checklists below</span></label>
         </p>
     </div>
     <p style="clear:both;">&nbsp;<br />&nbsp;</p>
@@ -136,16 +136,16 @@ if(isset($user->field_partners['und'][0]['value']))
             <p>
                 <input id="home-schedule" name="home-schedule" type="checkbox" readonly="readonly"
                     <?php print (count($classes) ? 'checked="checked"' : ''); ?> />
-                <label for="home-schedule"><a href="#schedule">Enter class schedule</a></label><br />
+                <label for="home-schedule"><a href="#schedule"><span>Enter class schedule</span></a></label><br />
                 <input id="home-reminders" name="home-reminders" type="checkbox" readonly="readonly"
                     <?php print (studysauce_any_dates() ? 'checked="checked"' : ''); ?> />
-                <label for="home-reminders"><a href="#deadlines">Set up deadline reminders</a></label><br />
+                <label for="home-reminders"><a href="#deadlines"><span>Set up deadline reminders</span></a></label><br />
                 <input id="home-plan" name="home-plan" type="checkbox" readonly="readonly"
                     <?php print (!empty($lastOrder) ? 'checked="checked"' : ''); ?> />
-                <label for="home-plan"><a href="#premium">Get a personalized study plan <sup class="premium">Premium</sup></a></label><br />
+                <label for="home-plan"><a href="#premium"><span>Get a personalized study plan</span> <sup class="premium">Premium</sup></a></label><br />
                 <input id="home-checkin" name="home-checkin" type="checkbox" readonly="readonly"
                     <?php print (count($checkins) > 0 ? 'checked="checked"' : ''); ?> />
-                <label for="home-checkin"><a href="#checkin">Check in when you study</a></label>
+                <label for="home-checkin"><a href="#checkin"><span>Check in when you study</span></a></label>
             </p>
         </li>
         <li>
@@ -155,13 +155,13 @@ if(isset($user->field_partners['und'][0]['value']))
             <p>
                 <input id="home-quiz" name="home-quiz" type="checkbox" readonly="readonly"
                     <?php print (count($quizSubmissions) ? 'checked="checked"' : ''); ?> />
-                <label for="home-quiz"><a href="#study-quiz">Take the study quiz to test your knowledge</a></label><br />
+                <label for="home-quiz"><a href="#study-quiz"><span>Take the study quiz to test your knowledge</span></a></label><br />
                 <input id="home-tips" name="home-tips" type="checkbox" readonly="readonly"
                     <?php print (count($checkins) > 1 ? 'checked="checked"' : ''); ?> />
-                <label for="home-tips"><a href="#checkin">Get personalized study tips when you check in</a></label><br />
+                <label for="home-tips"><a href="#checkin"><span>Get personalized study tips when you check in</span></a></label><br />
                 <input id="home-music" name="home-music" type="checkbox" readonly="readonly"
                     <?php print (isset($node->field_touched_music['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-music"><a href="#checkin">Experiment with classical music to see if it helps you focus</a></label>
+                <label for="home-music"><a href="#checkin"><span>Experiment with classical music to see if it helps you focus</span></a></label>
             </p>
         </li>
         <li>
@@ -171,22 +171,22 @@ if(isset($user->field_partners['und'][0]['value']))
             <p>
                 <input id="home-profile" name="home-profile" type="checkbox" readonly="readonly"
                     <?php print (isset($node->field_grades['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-profile"><a href="#profile">Take the learning diagnostic <sup class="premium">Premium</sup></a></label><br />
+                <label for="home-profile"><a href="#profile"><span>Take the learning diagnostic</span> <sup class="premium">Premium</sup></a></label><br />
                 <input id="home-goals" name="home-goals" type="checkbox" readonly="readonly"
                     <?php print (isset($b->field_hours['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-goals"><a href="#goals">Create your study goals</a></label><br />
+                <label for="home-goals"><a href="#goals"><span>Create your study goals</span></a></label><br />
                 <input id="home-partner" name="home-partner" type="checkbox" readonly="readonly"
                     <?php print (isset($partner->field_first_name['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-partner"><a href="#partner">Invite an accountability partner</a></label><br />
+                <label for="home-partner"><a href="#partner"><span>Invite an accountability partner</span></a></label><br />
                 <input id="home-spaced" name="home-spaced" type="checkbox" readonly="readonly"
                     <?php print (isset($strategies->field_spaced_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-spaced"><a href="#plan">Complete a spaced repetition study session <sup class="premium">Premium</sup></a></label><br />
+                <label for="home-spaced"><a href="#plan"><span>Complete a spaced repetition study session</span> <sup class="premium">Premium</sup></a></label><br />
                 <input id="home-active" name="home-active" type="checkbox" readonly="readonly"
                     <?php print (isset($strategies->field_active_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-active">Complete an active recall exercise <sup class="premium">Premium</sup></label><br />
+                <label for="home-active"><span>Complete an active recall exercise</span> <sup class="premium">Premium</sup></label><br />
                 <input id="home-teach" name="home-teach" type="checkbox" readonly="readonly"
                     <?php print (isset($strategies->field_teach_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-teach">Complete a teaching video <sup class="premium">Premium</sup></label><br />
+                <label for="home-teach"><span>Complete a teaching video</span> <sup class="premium">Premium</sup></label><br />
                 <?php /* <input id="home-friend" name="home-friend" type="checkbox" readonly="readonly"
                     />
                 <label for="home-friend">Ask a friend a question <sup class="premium">Premium</sup></label> */ ?>

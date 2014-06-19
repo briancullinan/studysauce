@@ -105,6 +105,13 @@
     -moz-box-sizing: border-box;
 }
 
+.header-wrapper .view-music-player
+{
+    height: 1px;
+    width: 1px;
+    overflow:hidden;
+}
+
 #partner-message span
 {
     font-size: 22px;

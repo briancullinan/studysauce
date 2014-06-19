@@ -14,8 +14,7 @@ if(isset($user->field_partners['und'][0]['value']))
 <div class="header-wrapper header">
     <div id="site-name">
         <a title="Home" href="/">
-            <img width="48" height="48" alt="" src="/<?php print drupal_get_path('theme', 'successinc'); ?>/logo 4 trans 2.png"><strong>Study</strong> Sauce</a>
-        <div id="site-slogan">Discover the secret sauce to studying</div>
+            <img width="48" height="48" alt="" src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/Study Sauce Logo.png"><strong>Study</strong> Sauce</a>
     </div>
     <div id="welcome-message">Welcome <strong>
         <?php
