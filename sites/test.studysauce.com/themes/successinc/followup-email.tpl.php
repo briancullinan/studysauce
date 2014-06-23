@@ -1,3 +1,7 @@
+<?php
+$email_base = url(drupal_get_path('theme', 'successinc'), array('absolute' => true, 'https' => false));
+$email_base = 'https://www.studysauce.com/sites/studysauce.com/themes/successinc';
+?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -82,9 +86,9 @@
                                                                                     style="word-wrap:break-word;line-height:140%;text-align:left;">
                                                                                     <h1 style="width:100%;font-size:42px;line-height:120%;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-align:center;font-family:Arial,sans-serif;">
                                                                                         <span
-                                                                                            style="font-size:36px;"><span
+                                                                                            style="font-size:28px;"><span
                                                                                                 style="color:#ff9900;"><span
-                                                                                                    style="font-weight: bold;">Improve your grades with <strong>Study</strong></span></span><span
+                                                                                                    style="font-weight: bold;">Improve your grades with <strong>Study</strong></span></span> <span
                                                                                                 style="color:#ffffff;"><span
                                                                                                     style="font-weight: bold;">Sauce</span></span></span>
                                                                                     </h1>
@@ -114,7 +118,7 @@
                                                                                 <div><img
                                                                                         style="border:medium none;width:600px;height:223px;resize:none;position:relative;display:block;top:0px;left:0px;"
                                                                                         width="600" height="223"
-                                                                                        src="https://studysauce.com/sites/studysauce.com/themes/successinc/images/studysauce_banner.jpg">
+                                                                                        src="<?php print $email_base; ?>/images/studysauce_banner.jpg">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
@@ -185,7 +189,7 @@
                                                                                 <div><img
                                                                                         style="border:medium none;width:150px;height:81px;resize:none;position:relative;display:block;top:0px;left:0px;"
                                                                                         width="150" height="81"
-                                                                                        src="http://studysauce.com/sites/studysauce.com/themes/successinc/images/badges.png">
+                                                                                        src="<?php print $email_base; ?>/images/checkin.png">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
@@ -216,11 +220,11 @@
                                                                                     <h3 style="width:100%;font-size:18px;line-height:170%;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-align:left;font-family:Arial,sans-serif;">
                                                                                         <span
                                                                                             style="color:#ff8c00;"><span
-                                                                                                style="font-weight: bold;">Study Badges</span></span>
+                                                                                                style="font-weight: bold;">Learn how to study:</span></span>
                                                                                     </h3>
 
                                                                                     <p style="color:#808080;font-family:Arial,sans-serif;font-size:14px;line-height:150%;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-align:left;">
-                                                                                        <span style="color:#ffffff;">Make studying fun by earning virtual badges for completing effective study sessions.</span>
+                                                                                        <span style="color:#ffffff;">Check in when you study.  We can automatically detect your study behavior and guide you through the leading scientific research on effective study techniques.</span>
                                                                                     </p>
                                                                                 </div>
                                                                             </td>
@@ -259,11 +263,11 @@
                                                                                     <h3 style="width:100%;font-size:18px;line-height:170%;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-align:left;font-family:Arial,sans-serif;">
                                                                                         <span
                                                                                             style="color:#ff8c00;"><span
-                                                                                                style="font-weight: bold;">Study Goals &amp; Rewards</span></span>
+                                                                                                style="font-weight: bold;">Get organized:</span></span>
                                                                                     </h3>
 
                                                                                     <p style="font-family: Arial, sans-serif; font-size: 14px; line-height: 150%; margin: 0px; text-align: left;">
-                                                                                        <font color="#ffffff">Create study goals and decide how to reward yourself for reaching them. &nbsp;Alternatively, ask your parents to sponsor your goals and earn rewards.</font></p>
+                                                                                        <font color="#ffffff">Stop having that nightmare of being late to a final.  Kill procrastination by setting up alerts for your deadlines and by building a personalized study plan.</font></p>
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
@@ -293,7 +297,7 @@
                                                                                 <div><img
                                                                                         style="border:medium none;width:150px;height:89px;resize:none;position:relative;display:block;top:0px;left:0px;"
                                                                                         width="150" height="89"
-                                                                                        src="http://studysauce.com/sites/studysauce.com/themes/successinc/images/incentives.png">
+                                                                                        src="<?php print $email_base; ?>/images/plan.png">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
@@ -330,7 +334,7 @@
                                                                                 <div><img
                                                                                         style="border:medium none;width:150px;height:81px;resize:none;position:relative;display:block;top:0px;left:0px;"
                                                                                         width="150" height="81"
-                                                                                        src="https://studysauce.com/sites/studysauce.com/themes/successinc/images/metrics_bg2_compressed.jpg">
+                                                                                        src="<?php print $email_base; ?>/images/metrics.png">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
@@ -361,11 +365,11 @@
                                                                                     <h3 style="width:100%;font-size:18px;line-height:170%;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-align:left;font-family:Arial,sans-serif;">
                                                                                         <span
                                                                                             style="color:#ff8c00;"><span
-                                                                                                style="font-weight: bold;">Study Metrics</span></span>
+                                                                                                style="font-weight: bold;">Track your progress:</span></span>
                                                                                     </h3>
 
                                                                                     <p style="color:#808080;font-family:Arial,sans-serif;font-size:14px;line-height:150%;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-align:left;">
-                                                                                        <span style="color:#ffffff;">Track how much time you are spending studying for each class. &nbsp;Then watch your hard work turn into great grades.</span>
+                                                                                        <span style="color:#ffffff;">Track how much time you are spending studying for each class.  Then watch your hard work turn into great grades.</span>
                                                                                     </p>
                                                                                 </div>
                                                                             </td>
@@ -408,13 +412,13 @@
                                                                                         <br>
                                                                                         <br>
                                                                                         <a href="https://www.facebook.com/pages/Study-Sauce/519825501425670?ref=stream"
-                                                                                           style="background:url(https://www.studysauce.com/sites/studysauce.com/themes/successinc/images/social_sprites_v2.png) no-repeat 0 0 transparent;height: 45px;width: 45px;display: inline-block;color:transparent;">
+                                                                                           style="background:url(<?php print $email_base; ?>/images/social_sprites_v2.png) no-repeat 0 0 transparent;height: 45px;width: 45px;display: inline-block;color:transparent;">
                                                                                             &nbsp;</a> <a
                                                                                             href="https://plus.google.com/115129369224575413617/about"
-                                                                                            style="background:url(https://www.studysauce.com/sites/studysauce.com/themes/successinc/images/social_sprites_v2.png) no-repeat 0 -95px transparent;height: 45px;width: 45px;display: inline-block;color:transparent;">
+                                                                                            style="background:url(<?php print $email_base; ?>/images/social_sprites_v2.png) no-repeat 0 -95px transparent;height: 45px;width: 45px;display: inline-block;color:transparent;">
                                                                                             &nbsp;</a> <a
                                                                                             href="https://twitter.com/StudySauce"
-                                                                                            style="background:url(https://www.studysauce.com/sites/studysauce.com/themes/successinc/images/social_sprites_v2.png) no-repeat 0 -190px transparent;height: 45px;width: 45px;display: inline-block;color:transparent;">
+                                                                                            style="background:url(<?php print $email_base; ?>/images/social_sprites_v2.png) no-repeat 0 -190px transparent;height: 45px;width: 45px;display: inline-block;color:transparent;">
                                                                                             &nbsp;</a></p>
                                                                                 </div>
                                                                             </td>

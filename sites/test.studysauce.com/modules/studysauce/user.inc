@@ -2,6 +2,51 @@
 
 function studysauce_group_save()
 {
+    // add user invites to adviser account
+    global $user;
+    $changes = array();
+    $account = user_load($user->uid);
+
+    // TODO: check if we have sent an invite already today, field_sent and field_3_day_reminder
+
+    if(isset($_POST['users']))
+    {
+        foreach($_POST['users'] as $i => $u)
+        {
+            $entity = entity_create('field_collection_item', array('field_name' => 'field_invites'));
+            $entity->setHostEntity('user', $account);
+            $entity->field_first_name['und'][0]['value'] = $u['first'];
+            $entity->field_last_name['und'][0]['value'] = $u['last'];
+            $entity->field_email['und'][0]['value'] = $u['email'];
+            $entity->field_code['und'][0]['value'] = md5(microtime());
+
+            // send counselor invite email
+            $message = drupal_mail('studysauce', 'invite', $entity->field_email['und'][0]['value'], language_default(), array(), $account->mail, FALSE);
+
+            $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+            $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('counselor-invite'))));
+            $message['subject'] = 'Welcome to Study Sauce!';
+            $sentMessage = array();
+            $sentMessage[] = 'Hello ' . $u['first'] . ',';
+            $sentMessage[] = '';
+            $sentMessage[] = 'You have been invited to Study Sauce by ' . $account->field_first_name['und'][0]['value'] . ' ' . $account->field_last_name['und'][0]['value'] . '.  Your account has been prepaid.  Please click the link below to activate your account.';
+            $message['body'] = theme('studysauce-email', array(
+                'message' => implode('<br />', $sentMessage),
+                'greeting' => 'Hello ' . $entity->field_first_name['und'][0]['value'] . ' ' . $entity->field_last_name['und'][0]['value'] . ',',
+                'link' => l('Set up my Study Sauce account.', '/students', array(
+                    'query' => array('invite_code' => $entity->field_code['und'][0]['value'], 'destination' => '#goals'),
+                    'absolute' => true,
+                    'attributes' => array('style' => '-webkit-appearance: none; margin: 0; text-decoration:none; text-align: left; padding: 10px 25px; color: #1d1d1d; font-weight: 800; font-size: 18px; line-height: 150%; border-radius: 4px; -webkit-border-radius: 4px; background: #FF9900; border-bottom: 3px solid #993300; text-shadow: 0px 1px 2px rgba(255,255,255,0.5);')))));
+
+            $system = drupal_mail_system('studysauce', 'invite');
+            $message['result'] = $system->mail($message);
+
+            $entity->field_sent['und'][0]['value'] = date('Y-m-d H:i:s', time());
+
+            $entity->save();
+        }
+    }
+
 
 }
 
@@ -18,6 +63,7 @@ function studysauce_form_user_register_form_alter(&$form, &$form_state)
 function studysauce_user_login()
 {
     global $user;
+    // do not enter by funnel if the user was invited as an accountability partner
     if(isset($user->mail))
     {
         $partnerQuery = new EntityFieldQuery();
@@ -26,13 +72,72 @@ function studysauce_user_login()
             ->fieldCondition('field_email', 'value', $user->mail)
             ->execute();
     }
+    // TODO: check for partner code in session
+
 
     if(!in_array('adviser', $user->roles) && (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])))
     {
 
+        // check if the user was invited by an adviser and put the user in that group
+        $isBeingAdvised = array();
+        if(isset($user->mail))
+        {
+            $partnerQuery = new EntityFieldQuery();
+            $invites = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+                ->propertyCondition('field_name', 'field_invites')
+                ->fieldCondition('field_email', 'value', $user->mail)
+                ->execute();
+
+            // check for invite code in session
+            if(!isset($invites['field_collection_item']) && isset($_SESSION['studysauce']['invite_code']))
+            {
+                $invites = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+                    ->propertyCondition('field_name', 'field_invites')
+                    ->fieldCondition('field_code', 'value', $_SESSION['studysauce']['invite_code'])
+                    ->execute();
+            }
+
+            // get if host entity is an adviser
+            if(isset($invites['field_collection_item']))
+            {
+                foreach($invites['field_collection_item'] as $i => $inv)
+                {
+                    $inviteEntity = entity_load('field_collection_item', array($i));
+                    $adviserUser = $inviteEntity[$i]->hostEntity();
+                    $account = user_load($adviserUser->uid);
+                    if(in_array('adviser', $account->roles))
+                    {
+                        $isBeingAdvised[] = $account;
+                    }
+                }
+            }
+        }
+
         // check if they are a customer
         $lastOrder = _studysauce_orders_by_uid($user->uid);
         $groups = og_get_groups_by_user();
+
+        // if the user is being advised but hasn't been added to the group
+        if(count($isBeingAdvised) && !isset($groups['node']))
+        {
+            foreach($isBeingAdvised as $j => $a)
+            {
+                // get the adviser group
+                $groups = og_get_groups_by_user($a);
+                $groups = array_keys($groups['node']);
+                $gid = end($groups);
+                $group = node_load($gid);
+
+                // Add the user to the group
+                og_group('node', $gid, array(
+                    'entity type'       => 'user',
+                    'entity'        => $user
+                ));
+            }
+
+            $groups = og_get_groups_by_user();
+        }
+
         if(isset($groups['node']) || $lastOrder)
         {
             // check if buy funnel is complete

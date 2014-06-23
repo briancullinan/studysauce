@@ -263,40 +263,6 @@ function _studysauce_get_achievements($account = null)
         global $user;
         $account = user_load($user->uid);
     }
-    // TODO: load from the node instead of the form?
-    $parent = studysauce_get_shared_goals($account);
-    if(isset($parentIncentive) && $parentIncentive !== false)
-    {
-        $i = 0;
-        do
-        {
-            $goal = $parent->field_goals[LANGUAGE_NONE][$i];
-            if(isset($goal->field_achievements[LANGUAGE_NONE][0]))
-                foreach($goal->field_achievements[LANGUAGE_NONE] as $j => $achievement)
-                {
-                    $entity = entity_load('field_collection_item', array($achievement['value']));
-                    $achievement = $entity[$achievement['value']];
-                    $time = $achievement->field_time_achieved[LANGUAGE_NONE][0]['value'];
-                    $achievements[$time]['code'] = $achievement->field_code[LANGUAGE_NONE][0]['value'];
-                    $achievements[$time]['activated'] = $achievement->field_activated[LANGUAGE_NONE][0]['value'];
-                    $image = '';
-                    $message = '';
-                    if(isset($achievement->field_photo_evidence[LANGUAGE_NONE][0]['filename']))
-                    {
-                        $uri = $achievement->field_photo_evidence[LANGUAGE_NONE][0]['uri'];
-                        $image =  '<img src="' . image_style_url('achievement', $uri) . '" />';
-                    }
-                    if(isset($achievement->field_message[LANGUAGE_NONE][0]['value']) &&
-                        isset($achievement->field_time_achieved[LANGUAGE_NONE][0]['value']))
-                    {
-                        $message = '<p>' . $achievement->field_message[LANGUAGE_NONE][0]['value'] . '</p>';
-                    }
-                    $achievements[$time]['content'] = '<div class="grid_' . (!empty($image) && !empty($message) ? 6 : 3) .
-                        (isset($_SESSION['studysauce']['achievement']) && $_SESSION['studysauce']['achievement'] == $achievements[$time]['code'] ? ' highlighted' : '') . '"><strong>' .
-                        date('F jS, Y', $time) . '</strong>' . $image . $message . '</div>';
-                }
-        } while (isset($parent['field_goals'][LANGUAGE_NONE][++$i]));
-    }
 
     $achievements = array();
     $goals = _studysauce_unsponsored_goals($account);

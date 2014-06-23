@@ -4,8 +4,9 @@ drupal_add_css(drupal_get_path('theme', 'successinc') .'/profile.css');
 
 global $user;
 $lastOrder = _studysauce_orders_by_uid($user->uid);
+$groups = og_get_groups_by_user();
 
-if($lastOrder):
+if($lastOrder || !empty($groups['node'])):
 
 $query = new EntityFieldQuery();
 $nodes = $query->entityCondition('entity_type', 'node')

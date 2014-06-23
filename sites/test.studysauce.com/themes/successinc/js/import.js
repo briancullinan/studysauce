@@ -10,7 +10,8 @@ jQuery(document).ready(function($) {
 
             if(that.find('.field-name-field-first-name input').val().trim() == '' ||
                 that.find('.field-name-field-last-name input').val().trim() == '' ||
-                that.find('.field-name-field-email input').val().trim() == '')
+                that.find('.field-name-field-email input').val().trim() == '' ||
+                !(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}\b/i).test(that.find('.field-name-field-email input').val()))
                 isValid = false;
 
             if(isValid)
@@ -23,6 +24,12 @@ jQuery(document).ready(function($) {
         else
             importTab.removeClass('invalid').addClass('valid');
     };
+    importTab.on('change', '.field-name-field-first-name input, .field-name-field-last-name input, .field-name-field-email input', function () {
+        jQuery(this).parents('.row').importFunc();
+    });
+    importTab.on('keyup', '.field-name-field-first-name input, .field-name-field-last-name input, .field-name-field-email input', function () {
+        jQuery(this).parents('.row').importFunc();
+    });
 
     var rowImport = function (append)
         {
@@ -144,6 +151,9 @@ jQuery(document).ready(function($) {
             {
                 // clear rows
                 importTab.find('.row').not('#add-user-row').remove();
+
+                // always show at least two rows
+                importTab.find('a[href="#add-user"]').first().trigger('click').trigger('click');
             }
         });
     });

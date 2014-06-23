@@ -8,7 +8,8 @@ if(!isset($account))
     $account = user_load($user->uid);
 }
 $lastOrder = _studysauce_orders_by_uid($account->uid);
-if($lastOrder)
+$groups = og_get_groups_by_user();
+if($lastOrder || !empty($groups['node']))
     list($events, $node, $classes, $entities) = studysauce_get_events($account, $lastOrder ? $lastOrder->created : null);
 else
 {
@@ -23,7 +24,7 @@ else
     $events = array_map(function ($x) { return (array)$x; }, (array) $events);
 }
 
-if(!$lastOrder): ?><div class="buy-plan"><?php endif;
+if(!$lastOrder && empty($groups['node'])): ?><div class="buy-plan"><?php endif;
 
     $strategies = studysauce_get_strategies();
 

@@ -55,16 +55,16 @@ function studysauce_save_partner()
             $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('partner-invite'))));
             $message['subject'] = (isset($user->field_first_name[LANGUAGE_NONE][0]['value'])
                     ? ($user->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $user->field_last_name[LANGUAGE_NONE][0]['value'])
-                    : 'A fellow student') . ' needs your help with academic accountability';
+                    : 'A fellow student') . ' needs your help with school';
             $sentMessage = array();
             $sentMessage[] = $user->field_first_name[LANGUAGE_NONE][0]['value'] . ' wants to invite you to become an accountability partner.';
             $sentMessage[] = '';
             $sentMessage[] = 'Research shows that simply writing down goals makes them more likely to be achieved. Having an accountability partner greatly increases the probability of achievement. All students have ups and downs in school and finding someone to help motivate and challenge them along the way can be invaluable.';
-            $sentMessage[] = 'You can work out the specific expectations with ' . $user->field_first_name[LANGUAGE_NONE][0]['value'] . ', but a good accountability partner tends to have the following attributes:<ul>';
-            $sentMessage[] = '<li>Will challenge a student (needs more than just encouragement)</li>';
+            $sentMessage[] = 'You can work out the specific expectations with ' . $user->field_first_name[LANGUAGE_NONE][0]['value'] . ', but a good accountability partner tends to have the following attributes:';
+            $sentMessage[] = '<ul style="font-family: \'Ubuntu\',Helvetica Neue,Arial,sans-serif; font-size: 16px; color: #555555;"><li>Will challenge a student (needs more than just encouragement)</li>';
             $sentMessage[] = '<li>Will celebrate student successes</li>';
             $sentMessage[] = '<li>Is emotionally invested in the student\'s education</li>';
-            $sentMessage[] = '<li>Commits to regular communication about academics</li></ol>';
+            $sentMessage[] = '<li>Commits to regular communication about academics</li></ul>';
             $message['body'] = theme('studysauce-email', array(
                 'message' => implode('<br />', $sentMessage),
                 'greeting' => 'Hello ' . $entity->field_first_name['und'][0]['value'] . ' ' . $entity->field_last_name['und'][0]['value'] . ',',
@@ -73,29 +73,12 @@ function studysauce_save_partner()
                     'absolute' => true,
                     'attributes' => array('style' => 'color:#FF9900;')))));
 
-            $system = drupal_mail_system('studysauce', 'achievement');
+            $system = drupal_mail_system('studysauce', 'partner');
             $message['result'] = $system->mail($message);
             $entity->field_sent['und'][0]['value'] = date('Y-m-d H:i:s', time());
         }
 
-        $entity->save();
-
-        // only store this current entity even though the field is set to handle multiples
-        $changes = array();
-        $changes['field_partners']['und'][0]['value'] = $entity->item_id;
-        $changes['field_partners']['und'][0]['revision_id'] = $entity->revision_id;
-        $changes['field_partners']['und'] = array();
-        foreach($user->field_partners['und'] as $i => $c)
-        {
-            if($c['value'] == $entity->item_id)
-            {
-                $changes['field_partners']['und'][0] = $user->field_partners['und'][$i];
-                continue;
-            }
-            entity_delete('field_collection_item', array($c['value']));
-        }
-
-        user_save($user, $changes);
+        $entity->save(true);
     }
 
     print json_encode($result);

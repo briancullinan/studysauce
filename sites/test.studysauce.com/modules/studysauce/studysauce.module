@@ -644,6 +644,7 @@ function studysauce_init()
     module_load_include('inc', 'studysauce', 'badges');
     module_load_include('inc', 'studysauce', 'invite');
     module_load_include('inc', 'studysauce', 'profile');
+    module_load_include('inc', 'studysauce', 'emails');
 
     global $user;
     if(isset($_GET['invite_parent']))
@@ -827,34 +828,14 @@ function studysauce_render_webform_plain($webform, $sid)
 
 function studysauce_mail_alter(&$message){
     global $user;
-    $user = user_load($user->uid);
+    $account = user_load($user->uid);
     watchdog('mail', $message['id'] . $message['to']);
-    if($message['id'] == 'rules_rules_action_mail_rules_send_3_day_marketing_to_students_5')
-    {
-        $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('3-day-marketing-students'))));
-    }
-    if($message['id'] == 'rules_rules_action_mail_rules_send_3_day_marketing_to_parents_5')
-    {
-        $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('3-day-marketing-parents'))));
-    }
-    if($message['id'] == 'rules_rules_action_mail_rules_invite_parents_check_5')
-    {
-        $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('3-day-invite-parents'))));
-    }
-    if($message['id'] == 'rules_rules_action_mail_rules_invite_students_5')
-    {
-        $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('3-day-invite-students'))));
-    }
-    if($message['id'] == 'rules_rules_action_mail_rules_send_out_reminder_9')
-    {
-        $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('reminders'))));
-    }
     if($message['id'] == 'user_password_reset')
     {
         $body = theme('studysauce-email', array(
             'message' => implode('<br />', explode("\n", $message['body'][0])),
-            'greeting' => 'Dear ' . (isset($user->field_first_name[LANGUAGE_NONE][0]['value']) && isset($user->field_last_name[LANGUAGE_NONE][0]['value'])
-                    ? $user->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $user->field_last_name[LANGUAGE_NONE][0]['value']
+            'greeting' => 'Dear ' . (isset($account->field_first_name[LANGUAGE_NONE][0]['value']) && isset($account->field_last_name[LANGUAGE_NONE][0]['value'])
+                    ? $account->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $account->field_last_name[LANGUAGE_NONE][0]['value']
                     : 'student') . ','));
 
         $new_message = drupal_mail('studysauce', 'password-reset', $message['to'], language_default(), array(), $message['from'], FALSE);
@@ -882,7 +863,7 @@ function studysauce_mail_alter(&$message){
     {
         $invite = db_select('webform_submissions', 's')
             ->fields('s', array('sid', 'submitted'))
-            ->condition('uid', $user->uid, '=')
+            ->condition('uid', $account->uid, '=')
             ->condition('nid', $message['params']['node']->nid, '=')
             ->orderBy('sid', 'DESC')
             ->range(1,2)
@@ -955,93 +936,7 @@ function studysauce_mail_alter(&$message){
         $message['send'] = FALSE;
         $message['to'] = 'junk@studysauce.com';
     }
-    if($message['id'] == 'webform_submission' && $message['params']['node']->nid == 250)
-    {
-        $invite = db_select('webform_submissions', 's')
-            ->fields('s', array('sid', 'submitted'))
-            ->condition('uid', $user->uid, '=')
-            ->condition('nid', 250, '=')
-            ->orderBy('sid', 'DESC')
-            ->range(1,2)
-            ->execute();
-        $already_sent_today = false;
-        while(($sub = $invite->fetchAssoc()) && isset($sub['sid']))
-        {
-            if(time() - intval($sub['submitted']) < 86400)
-            {
-                $already_sent_today = true;
-                break;
-            }
-        }
 
-        if(!$already_sent_today)
-        {
-            $new_message = drupal_mail('studysauce', 'invite-students', $message['to'], language_default(), array(), $message['from'], FALSE);
-
-            $new_message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
-            $new_message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('invite-student'))));
-            $new_message['subject'] = $message['subject'];
-            $new_message['body'] = theme('studysauce-email', array(
-                'message' => implode('<br />', explode("\n", $message['body'][0])),
-                'greeting' => 'Dear ' . (isset($message['params']['submission']->data[1][0]) && isset($message['params']['submission']->data[2][0])
-                        ? $message['params']['submission']->data[1][0] . ' ' . $message['params']['submission']->data[2][0]
-                        : 'student') . ',',
-                'link' => l('Go to Study Sauce', 'students', array(
-                    'query' => array('invite_code' => $message['params']['submission']->data[4][0]),
-                    'absolute' => true,
-                    'attributes' => array('style' => 'color:#FF9900;')))));
-
-            $system = drupal_mail_system('studysauce', 'invite-students');
-            $new_message['result'] = $system->mail($new_message);
-        }
-
-        $message['send'] = FALSE;
-        $message['to'] = 'junk@studysauce.com';
-
-    }
-    if($message['id'] == 'webform_submission' && $message['params']['node']->nid == 157)
-    {
-        $invite = db_select('webform_submissions', 's')
-            ->fields('s', array('sid', 'submitted'))
-            ->condition('uid', $user->uid, '=')
-            ->condition('nid', 157, '=')
-            ->orderBy('sid', 'DESC')
-            ->range(1,2)
-            ->execute();
-        $already_sent_today = false;
-        while(($sub = $invite->fetchAssoc()) && isset($sub['sid']))
-        {
-            if(time() - intval($sub['submitted']) < 86400)
-            {
-                $already_sent_today = true;
-                break;
-            }
-        }
-
-        if(!$already_sent_today)
-        {
-            $new_message = drupal_mail('studysauce', 'invite-parents', $message['to'], language_default(), array(), $message['from'], FALSE);
-
-            $new_message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
-            $new_message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('invite-parent'))));
-            $new_message['subject'] = $message['subject'];
-            $new_message['body'] = theme('studysauce-email', array(
-                'message' => implode('<br />', explode("\n", $message['body'][0])),
-                'greeting' => 'Dear ' . (isset($message['params']['submission']->data[1][0]) && isset($message['params']['submission']->data[2][0])
-                        ? $message['params']['submission']->data[1][0] . ' ' . $message['params']['submission']->data[2][0]
-                        : 'parent') . ',',
-                'link' => l('Go to Study Sauce', 'parents', array(
-                    'query' => array('invite_code' => $message['params']['submission']->data[4][0]),
-                    'absolute' => true,
-                    'attributes' => array('style' => 'color:#FF9900;')))));
-
-            $system = drupal_mail_system('studysauce', 'invite-parents');
-            $new_message['result'] = $system->mail($new_message);
-        }
-
-        $message['send'] = FALSE;
-        $message['to'] = 'junk@studysauce.com';
-    }
 }
 
 function studysauce_get_invite_entity()
@@ -1113,6 +1008,148 @@ function studysauce_user_presave(&$edit, $account, $category) {
         isset($account->field_first_name['und'][0]['value']))) {
         $_POST['parent-student'] = 'student';
         studysauce_save_user((object)((array)$account + $edit), $edit);
+    }
+}
+
+function _studysauce_get_short_class_name($className)
+{
+    $classNameParts = explode(' ', $className);
+    if(count($classNameParts) == 1 && strlen($classNameParts[0]) <= 6)
+        $classPart = $classNameParts[0];
+    else
+        $classPart = substr(strtoupper($classNameParts[0]), 0, 3) . (strpos(strtolower($className), 'lab') !== false ? 'L' : '') . '<br />' . substr(strtoupper(end($classNameParts)), -3, 3);
+    return $classPart;
+}
+
+function studysauce_cron()
+{
+    // find partners who haven't set up their account to send invites to
+    $query = db_select('field_data_field_invites', 'inv');
+    $query->fields('inv', array('field_invites_value'));
+    $query->fields('ac', array('field_activated_value'));
+    $query->fields('em', array('field_email_value'));
+    $query->fields('re', array('field_3_day_reminder_value'));
+
+    // only send invite reminders to people who haven't clicked the email link
+    $query->leftJoin('field_data_field_activated', 'ac', 'ac.entity_id = inv.field_invites_value');
+    $aOr = db_or();
+    $aOr->condition('ac.field_activated_value', NULL, 'IS');
+    $aOr->condition('ac.field_activated_value', 0, '=');
+    $query->condition($aOr);
+
+    // make sure there is a valid email address
+    $query->join('field_data_field_email', 'em', 'em.entity_id = inv.field_invites_value');
+    $query->condition('em.field_email_value', '', '!=');
+    $query->condition('em.field_email_value', NULL, 'IS NOT');
+
+    // only send e-mail to invitees from 3 to 4 days ago
+    $query->join('field_data_field_sent', 'se', 'se.entity_id = inv.field_invites_value');
+    $query->condition('se.field_sent_value', date('Y-m-d H:i:s', time() - 3600*24*4), '>=');
+    $query->condition('se.field_sent_value', date('Y-m-d H:i:s', time() - 3600*24*3), '<=');
+
+    // only send 3 days reminder e-mails once
+    $query->leftJoin('field_data_field_3_day_reminder', 're', 're.entity_id = inv.field_invites_value');
+    $rOr = db_or();
+    $rOr->condition('re.field_3_day_reminder_value', NULL, 'IS');
+    $rOr->condition('re.field_3_day_reminder_value', 0, '=');
+    $query->condition($rOr);
+
+    // get entities and send e-mails
+    $entities = $query->execute()->fetchAllAssoc('field_invites_value');
+    if (!empty($entities))
+    {
+        foreach($entities as $eid => $inv)
+        {
+            $invite_entity = entity_load('field_collection_item', array($eid));
+            if(isset($invite_entity[$eid]))
+            {
+                $invite_user = $invite_entity[$eid]->hostEntity();
+                studysauce_3_day_invite($invite_user, $invite_entity[$eid]);
+            }
+        }
+    }
+
+    // TODO: something very similar to the above for accountability partners
+
+    // check for activated users
+    $query = db_select('users', 'u');
+    $query->fields('u', array('uid', 'status', 'created'));
+    $query->condition('u.created', time() - 3600*24*4, '>=');
+    $query->condition('u.created', time() - 3600*24*3, '<=');
+    $query->condition('u.status', 1, '=');
+
+    // only sent to users once via the 3_day_marketing tag
+    $query->leftJoin('field_data_field_3_day_marketing', 'ma', 'ma.entity_id = u.uid');
+    $rOr = db_or();
+    $rOr->condition('ma.field_3_day_marketing_value', NULL, 'IS');
+    $rOr->condition('ma.field_3_day_marketing_value', 0, '=');
+    $query->condition($rOr);
+
+    $users = $query->execute()->fetchAllAssoc('uid');
+    if (!empty($users))
+    {
+        foreach($users as $uid => $u)
+        {
+            $newUser = user_load($uid);
+            studysauce_3_day_marketing($newUser);
+        }
+    }
+
+    // find reminders that need sending
+    $query = db_select('field_data_field_reminders', 'rem');
+    $query->fields('rem', array('field_reminders_value'));
+
+    // check for reminders for tomorrow that haven't been sent
+    $query->leftJoin('field_data_field_reminder', 'r', 'r.entity_id = rem.field_reminders_value AND r.field_reminder_value = 86400');
+    $query->condition('r.field_reminder_value', null, 'IS NOT');
+
+    $query->leftJoin('field_data_field_reminder_sent', 'rs', 'rs.entity_id = rem.field_reminders_value AND rs.field_reminder_sent_value = 86400');
+    $query->condition('rs.field_reminder_sent_value', null, 'IS');
+
+    // check for reminders due tomorrow
+    $query->join('field_data_field_due_date', 'dd', 'dd.entity_id = rem.field_reminders_value');
+    $query->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time()), '>=');
+    $query->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time() + 86400), '<=');
+
+    $reminders = $query->execute()->fetchAllAssoc('field_reminders_value');
+    if (!empty($reminders))
+    {
+        foreach($reminders as $eid => $r)
+        {
+            $reminder = entity_load('field_collection_item', array($eid));
+            if(isset($reminder[$eid]))
+            {
+                $account = user_load_by_mail($reminder[$eid]->hostEntity()->title);
+                if(isset($account->mail))
+                {
+                    studysauce_reminders($account, array($reminder[$eid]));
+                }
+            }
+        }
+    }
+
+    // check for users that have been inactive
+    $query = db_select('users', 'u');
+    $query->fields('u', array('uid', 'status', 'access'));
+    $query->condition('u.access', time() - 3600*24*15, '>=');
+    //$query->condition('u.access', time() - 3600*24*14, '<=');
+    $query->condition('u.status', 1, '=');
+
+    // check if the inactive email hasn't been sent in at least two weeks
+    $query->leftJoin('field_data_field_inactivity_sent', 'ia', 'ia.entity_id = u.uid');
+    $iOr = db_or();
+    $iOr->condition('ia.field_inactivity_sent_value', NULL, 'IS');
+    $iOr->condition('ia.field_inactivity_sent_value', time() - 3600*24*14, '<=');
+    $query->condition($iOr);
+
+    $users = $query->execute()->fetchAllAssoc('uid');
+    if (!empty($users))
+    {
+        foreach($users as $uid => $u)
+        {
+            $newUser = user_load($uid);
+            studysauce_inactivity($newUser);
+        }
     }
 }
 
@@ -1483,19 +1520,6 @@ function _studysauce_invite_webform($form, &$form_state)
             return array('#type' => 'ajax', '#commands' => $commands);
         }
     }
-}
-
-function _studysauce_user_update_form()
-{
-    global $user;
-    $user = user_load($user->uid);
-    $form_id = 'user_profile_form';
-    $form_state = array();
-    $form_state['build_info']['args'] = array($user, 'account', 'dashboard-profile');
-    form_load_include($form_state, 'inc', 'user', 'user.pages');
-    $form = drupal_build_form($form_id, $form_state, 'account');
-
-    return $form;
 }
 
 function _studysauce_get_schedule_classes($account = null)
