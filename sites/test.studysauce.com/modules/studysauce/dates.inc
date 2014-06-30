@@ -88,6 +88,7 @@ function studysauce_save_dates()
         foreach($_POST['dates'] as $j => $date)
         {
             // check if class entity already exists by name
+            $dateChanged = false;
             if(isset($date['eid']))
                 foreach($node->field_reminders['und'] as $i => $c)
                 {
@@ -95,6 +96,8 @@ function studysauce_save_dates()
                     {
                         $entity = entity_load('field_collection_item', array($c['value']));
                         $entity = $entity[$c['value']];
+                        if(isset($entity->field_due_date['und'][0]['value']) && $entity->field_due_date['und'][0]['value'] != gmdate('Y-m-d H:i:s', strtotime($date['due'])))
+                            $dateChanged = true;
                         $entity->revision = 1;
                         break;
                     }
@@ -112,6 +115,10 @@ function studysauce_save_dates()
             $entity->field_due_date['und'][0] = array(
                 'value' => gmdate('Y-m-d H:i:s', strtotime($date['due'])));
             $entity->field_percent['und'][0]['value'] = $date['percent'];
+
+            // reset the sent reminders if the date changes
+            if($dateChanged)
+                $entity->field_reminder_sent['und'] = array();
 
             $entity->save();
         }

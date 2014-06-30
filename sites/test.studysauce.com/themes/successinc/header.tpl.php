@@ -23,9 +23,9 @@ $readonly = false;
 if(isset($groups['node']))
 {
     // get group adviser
-    $query = db_select("og_membership", "ogm");
-    $query->condition("ogm.gid", array_keys($groups['node']), "=");
-    $query->fields("ogm", array("entity_type", "etid"));
+    $query = db_select('og_membership', 'ogm');
+    $query->condition('ogm.gid', array_keys($groups['node']), 'IN');
+    $query->fields('ogm', array('entity_type', 'etid'));
     $result = $query->execute();
     $members = $result->fetchAll();
     foreach($members as $i => $member)

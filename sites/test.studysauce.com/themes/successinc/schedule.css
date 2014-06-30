@@ -27,6 +27,27 @@ body.page-path-schedule2 .class-actions ~ *
     vertical-align: top;
 }
 
+.page-path-schedule .row.overlaps .field-name-field-time input
+{
+    border: 2px solid #FFDD00;
+}
+
+.page-path-schedule .row.overlaps .field-name-field-class-name .read-only
+{
+    padding-left:35px;
+    background: url('images/menu_icons_32.png') no-repeat left -1312px transparent;
+}
+
+.page-path-schedule .row:first-child .field-name-field-class-name .read-only
+{
+    margin-top:22px;
+}
+
+.page-path-schedule .row:first-child .field-name-field-class-name .read-only label
+{
+    display:none;
+}
+
 .page-path-schedule2 .class,
 .page-path-schedule .class
 {

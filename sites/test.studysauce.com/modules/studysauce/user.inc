@@ -4,15 +4,38 @@ function studysauce_group_save()
 {
     // add user invites to adviser account
     global $user;
-    $changes = array();
     $account = user_load($user->uid);
-
-    // TODO: check if we have sent an invite already today, field_sent and field_3_day_reminder
 
     if(isset($_POST['users']))
     {
         foreach($_POST['users'] as $i => $u)
         {
+            // check if we have sent an invite already today, field_sent and field_3_day_reminder
+            // find other invitations to this user
+            $query = db_select('field_data_field_invites', 'inv');
+            $query->fields('inv', array('field_invites_value'));
+            $query->fields('em', array('field_email_value'));
+            $query->fields('se', array('field_sent_value'));
+            $query->fields('re', array('field_3_day_reminder_value'));
+            $query->join('field_data_field_email', 'em', 'em.entity_id = inv.field_invites_value');
+            $query->condition('em.field_email_value', $u['email'], '=');
+
+            // check there is no sent entry from the last 24 hours
+            $query->join('field_data_field_sent', 'se', 'se.entity_id = inv.field_invites_value');
+            $sentAnd = db_and();
+            $sentAnd->condition('se.field_sent_value', date('Y-m-d H:i:s', time() - 3600*24), '>=');
+            $sentAnd->condition('se.field_sent_value', date('Y-m-d H:i:s', time()), '<=');
+
+            $query->leftJoin('field_data_field_3_day_reminder', 're', 're.entity_id = inv.field_invites_value');
+            $remAnd = db_and();
+            $remAnd->condition('re.field_3_day_reminder_value', date('Y-m-d H:i:s', time() - 3600*24), '>=');
+            $remAnd->condition('re.field_3_day_reminder_value', date('Y-m-d H:i:s', time()), '<=');
+
+            $query->condition(db_or()->condition($sentAnd)->condition($remAnd));
+            $entities = $query->execute()->fetchAllAssoc('field_invites_value');
+            if (!empty($entities))
+                continue;
+
             $entity = entity_create('field_collection_item', array('field_name' => 'field_invites'));
             $entity->setHostEntity('user', $account);
             $entity->field_first_name['und'][0]['value'] = $u['first'];
@@ -71,8 +94,26 @@ function studysauce_user_login()
             ->propertyCondition('field_name', 'field_partners')
             ->fieldCondition('field_email', 'value', $user->mail)
             ->execute();
+
+        // check for partner code in session
+        if(!isset($partners['field_collection_item']) && isset($_SESSION['studysauce']['partner_code']))
+        {
+            $partnerQuery = new EntityFieldQuery();
+            $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+                ->propertyCondition('field_name', 'field_partners')
+                ->fieldCondition('field_code', 'value', $_SESSION['studysauce']['partner_code'])
+                ->execute();
+
+            // TODO: update inviters email address
+            if(isset($partners['field_collection_item']))
+                foreach($partners['field_collection_item'] as $eid => $p)
+                {
+                    $e = entity_load('field_collection_item', array($eid));
+                    $e[$eid]->field_email['und'][0]['value'] = $user->mail;
+                    $e[$eid]->save();
+                }
+        }
     }
-    // TODO: check for partner code in session
 
 
     if(!in_array('adviser', $user->roles) && (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])))
@@ -91,6 +132,7 @@ function studysauce_user_login()
             // check for invite code in session
             if(!isset($invites['field_collection_item']) && isset($_SESSION['studysauce']['invite_code']))
             {
+                $partnerQuery = new EntityFieldQuery();
                 $invites = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
                     ->propertyCondition('field_name', 'field_invites')
                     ->fieldCondition('field_code', 'value', $_SESSION['studysauce']['invite_code'])
@@ -103,6 +145,13 @@ function studysauce_user_login()
                 foreach($invites['field_collection_item'] as $i => $inv)
                 {
                     $inviteEntity = entity_load('field_collection_item', array($i));
+                    // re-associate invite email and sign up email by modifying the invite record
+                    if($inviteEntity[$i]->field_email['und'][0]['value'] != $user->mail)
+                    {
+                        $inviteEntity[$i]->revision = 1;
+                        $inviteEntity[$i]->field_email['und'][0]['value'] = $user->mail;
+                        $inviteEntity[$i]->save();
+                    }
                     $adviserUser = $inviteEntity[$i]->hostEntity();
                     $account = user_load($adviserUser->uid);
                     if(in_array('adviser', $account->roles))
@@ -126,7 +175,6 @@ function studysauce_user_login()
                 $groups = og_get_groups_by_user($a);
                 $groups = array_keys($groups['node']);
                 $gid = end($groups);
-                $group = node_load($gid);
 
                 // Add the user to the group
                 og_group('node', $gid, array(
@@ -196,7 +244,7 @@ function studysauce_user_login()
                 }
             }
 
-            // TODO: change this when we need to check for different versions of the profile form
+            // TODO: change this when we need to check for completion of different versions of the profile form
         }
     }
 
@@ -206,6 +254,9 @@ function studysauce_user_login()
 
 function studysauce_drupal_goto_alter(&$path, &$options, &$http_response_code)
 {
+    // don't modify goto if it leads to a product page
+    if(strpos($path, 'cart/add') !== false || strpos($path, 'cart/checkout') !== false)
+        return;
     if(isset($GLOBALS['studysauce-goto']))
     {
         // alter drupal_goto
@@ -227,9 +278,9 @@ function studysauce_save_status()
     $groups = og_get_groups_by_user();
     if(isset($groups['node']) && isset($_POST['uid']) && isset($_POST['status']))
     {
-        $query = db_select("og_membership", "ogm");
-        $query->condition("ogm.gid", array_keys($groups['node']), "=");
-        $query->fields("ogm", array("entity_type", "etid"));
+        $query = db_select('og_membership', 'ogm');
+        $query->condition('ogm.gid', array_keys($groups['node']), 'IN');
+        $query->fields('ogm', array('entity_type', 'etid'));
         $result = $query->execute();
         $members = $result->fetchAll();
         foreach($members as $i => $member)

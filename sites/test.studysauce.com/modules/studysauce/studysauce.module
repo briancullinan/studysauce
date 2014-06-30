@@ -124,6 +124,13 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['billing/send'] = array(
+        'title' => 'Plupload upload page',
+        'page callback' => 'studysauce_billing_send',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     $items['group/save'] = array(
         'title' => 'Save imported users to group',
         'page callback' => 'studysauce_group_save',
@@ -373,13 +380,18 @@ function studysauce_plupload_file_validation(&$file, &$e) {
 function studysauce_order_completed()
 {
     global $user;
-    if(isset($user->field_parent_student['und'][0]['value']) && $user->field_parent_student['und'][0]['value'] == 'parent')
-        drupal_goto('<front>', array('fragment' => 'welcome'));
-    elseif(isset($user->field_parent_student['und'][0]['value']) && $user->field_parent_student['und'][0]['value'] == 'student')
-        drupal_goto('<front>', array('fragment' => 'welcome'));
+    $partnerQuery = new EntityFieldQuery();
+    $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+        ->propertyCondition('field_name', 'field_partners')
+        ->fieldCondition('field_email', 'value', $user->mail)
+        ->execute();
+
+    if(!in_array('adviser', $user->roles) && (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])))
+    {
+        drupal_goto('profile');
+    }
     else
-        drupal_goto('welcome');
-    drupal_exit();
+        drupal_goto('<front>', array('fragment' => 'welcome'));
 }
 
 function studysauce_get_connections($include_invites = false)
@@ -647,92 +659,7 @@ function studysauce_init()
     module_load_include('inc', 'studysauce', 'emails');
 
     global $user;
-    if(isset($_GET['invite_parent']))
-    {
-        if(isset($_SESSION['studysauce']['invite_parent']))
-            $code = $_SESSION['studysauce']['invite_parent'];
-        // get overrides session
-        if(isset($_GET['invite_parent']))
-            $code = $_GET['invite_parent'];
-        if(isset($code))
-        {
-            $invite = db_select('webform_submitted_data', 's')
-                ->fields('s', array('sid'))
-                ->condition('data', $code, '=')
-                ->execute()
-                ->fetchAssoc();
-            if(isset($invite['sid']))
-            {
-                // valid invite, destroy session
-                if($user->uid > 0)
-                {
-                    watchdog('user', 'Session closed for %name.', array('%name' => $user->name));
-                    module_invoke_all('user_logout', $user);
-                    session_destroy();
-                }
 
-                $_SESSION['studysauce']['invite_parent'] = $_GET['invite_code'] = $code;
-                $submission = db_select('webform_submitted_data', 's')
-                    ->fields('s', array('nid', 'cid', 'data'))
-                    ->condition('sid', $invite['sid'], '=')
-                    ->execute();
-                while(($data = $submission->fetchAssoc()) != null)
-                {
-                    if($data['nid'] == '113' && $data['cid'] == 3)
-                        $_SESSION['studysauce']['parent_first'] = $data['data'];
-                    elseif($data['nid'] == '113' && $data['cid'] == 6)
-                        $_SESSION['studysauce']['parent_last'] = $data['data'];
-                    elseif($data['nid'] == '113' && $data['cid'] == 9)
-                        $_SESSION['studysauce']['email'] = $data['data'];
-                }
-
-                $entity = studysauce_get_invite_entity();
-            }
-        }
-    }
-    if(isset($_GET['invite_student']))
-    {
-        if(isset($_SESSION['studysauce']['invite_student']))
-            $code = $_SESSION['studysauce']['invite_student'];
-        // get overrides session
-        if(isset($_GET['invite_student']))
-            $code = $_GET['invite_student'];
-        if(isset($code))
-        {
-            $invite = db_select('webform_submitted_data', 's')
-                ->fields('s', array('sid'))
-                ->condition('data', $code, '=')
-                ->execute()
-                ->fetchAssoc();
-            if(isset($invite['sid']))
-            {
-                // valid invite, destroy session
-                if($user->uid > 0)
-                {
-                    watchdog('user', 'Session closed for %name.', array('%name' => $user->name));
-                    module_invoke_all('user_logout', $user);
-                    session_destroy();
-                }
-
-                $_SESSION['studysauce']['invite_student'] = $_GET['invite_code'] = $code;
-                $submission = db_select('webform_submitted_data', 's')
-                    ->fields('s', array('nid', 'cid', 'data'))
-                    ->condition('sid', $invite['sid'], '=')
-                    ->execute();
-                while(($data = $submission->fetchAssoc()) != null)
-                {
-                    if($data['nid'] == '130' && $data['cid'] == 3)
-                        $_SESSION['studysauce']['first'] = $data['data'];
-                    elseif($data['nid'] == '130' && $data['cid'] == 6)
-                        $_SESSION['studysauce']['last'] = $data['data'];
-                    elseif($data['nid'] == '130' && $data['cid'] == 9)
-                        $_SESSION['studysauce']['email'] = $data['data'];
-                }
-
-                $entity = studysauce_get_invite_entity();
-            }
-        }
-    }
     if(isset($_GET['achievement']))
     {
         if(isset($_SESSION['studysauce']['achievement']))
@@ -757,7 +684,7 @@ function studysauce_init()
                     $achievement = $achievement[$eid];
                     $_SESSION['studysauce']['achievement'] = $code;
                     $achievement->field_activated['und'][0]['value'] = 1;
-                    $achievement->save(true);
+                    $achievement->save();
                 }
             }
         }
@@ -765,6 +692,10 @@ function studysauce_init()
     if(isset($_GET['invite_code']))
     {
         $entity = studysauce_get_invite_entity();
+    }
+    if(isset($_GET['partner_code']))
+    {
+        $entity = studysauce_get_partner_entity();
     }
     if(arg(1) == 'ajax')
     {
@@ -859,86 +790,49 @@ function studysauce_mail_alter(&$message){
         $message['send'] = FALSE;
         $message['to'] = 'junk@studysauce.com';
     }
-    if($message['id'] == 'webform_submission' && isset($_SESSION['studysauce']['webforms'][$message['params']['node']->nid]))
-    {
-        $invite = db_select('webform_submissions', 's')
-            ->fields('s', array('sid', 'submitted'))
-            ->condition('uid', $account->uid, '=')
-            ->condition('nid', $message['params']['node']->nid, '=')
-            ->orderBy('sid', 'DESC')
-            ->range(1,2)
-            ->execute();
-        $already_sent_today = false;
-        while(($sub = $invite->fetchAssoc()) && isset($sub['sid']))
-        {
-            if(time() - intval($sub['submitted']) < 86400)
-            {
-                $already_sent_today = true;
-                break;
-            }
-        }
-
-        if(!$already_sent_today)
-        {
-            $saved = $_SESSION['studysauce']['webforms'][$message['params']['node']->nid];
-            if(!empty($saved) && isset($saved['parents_email']))
-            {
-                $body = (preg_match('/^\s*Your student/', $message['body'][0]) ? preg_replace('/^\s*Your student/', $saved['your_first_name'], $message['body'][0]) :  $message['body'][0]) . '
-
-    Click on the below link to find out how we can help your student become a better studier.';
-
-                $new_message = drupal_mail('studysauce', 'parent-invite', $message['to'], language_default(), array(), $message['from'], FALSE);
-
-                $new_message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
-                $new_message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('bill-my-parents'))));
-                $new_message['subject'] = $message['subject'];
-                $new_message['body'] = theme('studysauce-email', array(
-                    'message' => implode('<br />', explode("\n", $body)),
-                    'greeting' => 'Dear ' . (isset($saved['parents_first_name']) && isset($saved['parents_last_name'])
-                            ? $saved['parents_first_name'] . ' ' . $saved['parents_last_name']
-                            : 'parent') . ',',
-                    'link' => l('Go to Study Sauce', 'parent/1', array(
-                        'query' => array('invite_parent' => $saved['invite_code']),
-                        'absolute' => true,
-                        'attributes' => array('style' => 'color:#FF9900;')))));
-
-                $system = drupal_mail_system('studysauce', 'parent-invite');
-                $new_message['result'] = $system->mail($new_message);
-            }
-            elseif(!empty($saved) && isset($saved['student_email']))
-            {
-                $body = 'Your personal study plan has been prepaid by ' . $saved['your_first_name'] . ' ' . $saved['your_last_name'] . '.
-
-    ' . $message['body'][0] . '
-
-    Please click below to finish filling out your class information, so we can finalize your study plan.';
-
-                $new_message = drupal_mail('studysauce', 'student-invite', $message['to'], language_default(), array(), $message['from'], FALSE);
-
-                $new_message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
-                $new_message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('prepay-for-student'))));
-                $new_message['subject'] = $message['subject'];
-                $new_message['body'] = theme('studysauce-email', array(
-                    'message' => implode('<br />', explode("\n", $body)),
-                    'greeting' => 'Dear ' . (isset($saved['student_first_name']) && isset($saved['student_last_name'])
-                            ? $saved['student_first_name'] . ' ' . $saved['student_last_name']
-                            : 'student') . ',',
-                    'link' => l('Go to Study Sauce', 'student/3', array(
-                        'query' => array('invite_student' => $saved['invite_code']),
-                        'absolute' => true,
-                        'attributes' => array('style' => 'color:#FF9900;')))));
-
-                $system = drupal_mail_system('studysauce', 'student-invite');
-                $new_message['result'] = $system->mail($new_message);
-            }
-        }
-
-        $message['send'] = FALSE;
-        $message['to'] = 'junk@studysauce.com';
-    }
 
 }
 
+function studysauce_get_partner_entity()
+{
+    global $user;
+    if(isset($_SESSION['studysauce']['partner_code']))
+        $code = $_SESSION['studysauce']['partner_code'];
+    // get overrides session
+    if(isset($_GET['partner_code']))
+        $code = $_GET['partner_code'];
+    if(isset($code))
+    {
+        $inviteQuery = new EntityFieldQuery();
+        $invites = $inviteQuery->entityCondition('entity_type', 'field_collection_item')
+            ->propertyCondition('field_name', 'field_partners')
+            ->fieldCondition('field_code', 'value', $code)
+            ->execute();
+        if(isset($invites['field_collection_item']))
+        {
+            $invites = array_keys($invites['field_collection_item']);
+            $eid = array_shift($invites);
+            $invite = entity_load('field_collection_item', array($eid));
+            if(!empty($invite))
+            {
+                // valid invite, destroy session
+                if($user->uid > 0)
+                {
+                    watchdog('user', 'Session closed for %name.', array('%name' => $user->name));
+                    module_invoke_all('user_logout', $user);
+                    session_destroy();
+                }
+
+                $_SESSION['studysauce']['partner_code'] = $code;
+                $invite = $invite[$eid];
+                $invite->field_activated['und'][0]['value'] = 1;
+                $invite->save();
+
+                return $invite;
+            }
+        }
+    }
+}
 function studysauce_get_invite_entity()
 {
     global $user;
@@ -972,7 +866,7 @@ function studysauce_get_invite_entity()
                 $_SESSION['studysauce']['invite_code'] = $code;
                 $invite = $invite[$eid];
                 $invite->field_activated['und'][0]['value'] = 1;
-                $invite->save(true);
+                $invite->save();
 
                 return $invite;
             }
@@ -1099,32 +993,115 @@ function studysauce_cron()
     $query = db_select('field_data_field_reminders', 'rem');
     $query->fields('rem', array('field_reminders_value'));
 
-    // check for reminders for tomorrow that haven't been sent
-    $query->leftJoin('field_data_field_reminder', 'r', 'r.entity_id = rem.field_reminders_value AND r.field_reminder_value = 86400');
-    $query->condition('r.field_reminder_value', null, 'IS NOT');
-
-    $query->leftJoin('field_data_field_reminder_sent', 'rs', 'rs.entity_id = rem.field_reminders_value AND rs.field_reminder_sent_value = 86400');
-    $query->condition('rs.field_reminder_sent_value', null, 'IS');
-
-    // check for reminders due tomorrow
+    // join for each duration reminder up front
     $query->join('field_data_field_due_date', 'dd', 'dd.entity_id = rem.field_reminders_value');
-    $query->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time()), '>=');
-    $query->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time() + 86400), '<=');
+    // tomorrow
+    $query->leftJoin('field_data_field_reminder', 'r', 'r.entity_id = rem.field_reminders_value AND r.field_reminder_value = 86400');
+    $query->leftJoin('field_data_field_reminder_sent', 'rs', 'rs.entity_id = rem.field_reminders_value AND rs.field_reminder_sent_value = 86400');
+
+    // two days
+    $query->leftJoin('field_data_field_reminder', 'r2', 'r2.entity_id = rem.field_reminders_value AND r2.field_reminder_value = 172800');
+    $query->leftJoin('field_data_field_reminder_sent', 'rs2', 'rs2.entity_id = rem.field_reminders_value AND rs2.field_reminder_sent_value = 172800');
+
+    // 4 days
+    $query->leftJoin('field_data_field_reminder', 'r3', 'r3.entity_id = rem.field_reminders_value AND r3.field_reminder_value = 345600');
+    $query->leftJoin('field_data_field_reminder_sent', 'rs3', 'rs3.entity_id = rem.field_reminders_value AND rs3.field_reminder_sent_value = 345600');
+
+    // 7 days
+    $query->leftJoin('field_data_field_reminder', 'r4', 'r4.entity_id = rem.field_reminders_value AND r4.field_reminder_value = 604800');
+    $query->leftJoin('field_data_field_reminder_sent', 'rs4', 'rs4.entity_id = rem.field_reminders_value AND rs4.field_reminder_sent_value = 604800');
+
+    // 14 days
+    $query->leftJoin('field_data_field_reminder', 'r5', 'r5.entity_id = rem.field_reminders_value AND r5.field_reminder_value = 1209600');
+    $query->leftJoin('field_data_field_reminder_sent', 'rs5', 'rs5.entity_id = rem.field_reminders_value AND rs5.field_reminder_sent_value = 1209600');
+
+    // check for reminders for tomorrow that haven't been sent
+    $andTom = db_and();
+    $andTom->condition('r.field_reminder_value', null, 'IS NOT');
+    $andTom->condition('rs.field_reminder_sent_value', null, 'IS');
+
+    // check for deadlines due tomorrow
+    $andTom->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time()), '>=');
+    $andTom->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time() + 86400), '<=');
+
+    // check for reminders in two days
+    $andTwo = db_and();
+    $andTwo->condition('r2.field_reminder_value', null, 'IS NOT');
+    $andTwo->condition('rs.field_reminder_sent_value', null, 'IS');
+    $andTwo->condition('rs2.field_reminder_sent_value', null, 'IS');
+
+    // check for deadlines due in two days
+    $andTwo->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time()), '>=');
+    $andTwo->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time() + 172800), '<=');
+
+    // check for 4 days reminders
+    $andFour = db_and();
+    $andFour->condition('r3.field_reminder_value', null, 'IS NOT');
+    $andFour->condition('rs.field_reminder_sent_value', null, 'IS');
+    $andFour->condition('rs2.field_reminder_sent_value', null, 'IS');
+    $andFour->condition('rs3.field_reminder_sent_value', null, 'IS');
+
+    // check for deadlines in 4 days
+    $andFour->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time()), '>=');
+    $andFour->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time() + 345600), '<=');
+
+    // check for 7 days reminders
+    $andSev = db_and();
+    $andSev->condition('r4.field_reminder_value', null, 'IS NOT');
+    $andSev->condition('rs.field_reminder_sent_value', null, 'IS');
+    $andSev->condition('rs2.field_reminder_sent_value', null, 'IS');
+    $andSev->condition('rs3.field_reminder_sent_value', null, 'IS');
+    $andSev->condition('rs4.field_reminder_sent_value', null, 'IS');
+
+    // check for deadlines in 7 days
+    $andSev->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time()), '>=');
+    $andSev->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time() + 604800), '<=');
+
+    // check for 14 days reminders
+    $and4Tn = db_and();
+    $and4Tn->condition('r5.field_reminder_value', null, 'IS NOT');
+    $and4Tn->condition('rs.field_reminder_sent_value', null, 'IS');
+    $and4Tn->condition('rs2.field_reminder_sent_value', null, 'IS');
+    $and4Tn->condition('rs3.field_reminder_sent_value', null, 'IS');
+    $and4Tn->condition('rs4.field_reminder_sent_value', null, 'IS');
+    $and4Tn->condition('rs5.field_reminder_sent_value', null, 'IS');
+
+    // check for deadlines in 14 days
+    $and4Tn->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time()), '>=');
+    $and4Tn->condition('dd.field_due_date_value', date('Y-m-d H:i:s', time() + 1209600), '<=');
+
+    // combine all conditions with original query
+    $allOr = db_or();
+    $allOr->condition($andTom);
+    $allOr->condition($andTwo);
+    $allOr->condition($andFour);
+    $allOr->condition($andSev);
+    $allOr->condition($and4Tn);
+    $query->condition($allOr);
 
     $reminders = $query->execute()->fetchAllAssoc('field_reminders_value');
     if (!empty($reminders))
     {
+        // TODO: group reminders by user and send 1 aggregate email per user
+        $users = array();
+        $deadlines = array();
         foreach($reminders as $eid => $r)
         {
             $reminder = entity_load('field_collection_item', array($eid));
             if(isset($reminder[$eid]))
             {
-                $account = user_load_by_mail($reminder[$eid]->hostEntity()->title);
-                if(isset($account->mail))
-                {
-                    studysauce_reminders($account, array($reminder[$eid]));
-                }
+                $deadline = $reminder[$eid]->hostEntity();
+                // TODO: change this association if we stop using titles for relating back to user
+                if(!isset($users[$deadline->title]))
+                    $users[$deadline->title] = user_load_by_mail($deadline->title);
+                $deadlines[$deadline->title][] = $reminder[$eid];
             }
+        }
+
+        // send aggregate emails
+        foreach($deadlines as $email => $all)
+        {
+            studysauce_reminders($users[$email], $all);
         }
     }
 
@@ -1237,6 +1214,17 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
                 $form['field_last_name']['und'][0]['value']['#default_value'] = $invite->field_last_name[LANGUAGE_NONE][0]['value'];
                 $form['account']['mail']['#default_value'] = $invite->field_email[LANGUAGE_NONE][0]['value'];
             }
+            else
+            {
+                $partner = studysauce_get_partner_entity();
+                if(isset($partner))
+                {
+                    $form['field_first_name']['und'][0]['value']['#default_value'] = $partner->field_first_name[LANGUAGE_NONE][0]['value'];
+                    $form['field_last_name']['und'][0]['value']['#default_value'] = $partner->field_last_name[LANGUAGE_NONE][0]['value'];
+                    $form['account']['mail']['#default_value'] = $partner->field_email[LANGUAGE_NONE][0]['value'];
+                }
+
+            }
 
             break;
         case 'connector_button_form':
@@ -1290,141 +1278,11 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
                 <p style="margin-bottom:0;line-height: 1px; clear:both;">&nbsp;</p>';
 
             break;
-        case 'webform_client_form_157':
-            $form['#prefix'] .= '
-            <h2>Share Study Sauce with a friend.</h2>';
-            $form['actions']['#attributes']['class'][] = 'highlighted-link';
-            $form['actions']['submit']['#value'] = 'Invite';
-            $form['actions']['submit']['#attributes']['class'][] = 'more';
-            $user = user_load($user->uid);
-            if(!empty($user->field_invites) && !empty($user->field_invites[LANGUAGE_NONE]))
-            {
-                $last = end($user->field_invites[LANGUAGE_NONE]);
-                $entity = entity_load('field_collection_item', array($last['value']));
-                $entity = $entity[$last['value']];
-                if(isset($entity->field_first_name[LANGUAGE_NONE]))
-                {
-                    $firstName = $entity->field_first_name[LANGUAGE_NONE][0]['value'];
-                    $form['submitted']['parent_first_name']['#default_value'] = $firstName;
-                }
-                if(isset($entity->field_last_name[LANGUAGE_NONE]))
-                {
-                    $lastName = $entity->field_last_name[LANGUAGE_NONE][0]['value'];
-                    $form['submitted']['parent_last_name']['#default_value'] = $lastName;
-                }
-                if(isset($entity->field_email[LANGUAGE_NONE]))
-                {
-                    $email = $entity->field_email[LANGUAGE_NONE][0]['value'];
-                    $form['submitted']['parent_email']['#default_value'] = $email;
-                    $form['actions']['submit']['#value'] = 'Re-invite';
-                }
-            }
-            $form['actions']['submit']['#ajax']['callback'] = '_studysauce_invite_webform';
-            break;
-        case 'webform_client_form_250':
-            $form['#prefix'] .= '
-            <h2>Invite your student to Study Sauce and sponsor his or her study goals.</h2>
-            <p>Many of our parents find that little rewards go along way in helping incentivize their students.  Our software also works best when students have a powerful reason to check in and learn the best study methods.</p>';
-            $form['actions']['#attributes']['class'][] = 'highlighted-link';
-            $form['actions']['submit']['#value'] = 'Invite';
-            $form['actions']['submit']['#attributes']['class'][] = 'more';
-            $user = user_load($user->uid);
-            if(!empty($user->field_invites) && !empty($user->field_invites[LANGUAGE_NONE]))
-            {
-                $last = end($user->field_invites[LANGUAGE_NONE]);
-                $entity = entity_load('field_collection_item', array($last['value']));
-                $entity = $entity[$last['value']];
-                if(isset($entity->field_first_name[LANGUAGE_NONE]))
-                {
-                    $firstName = $entity->field_first_name[LANGUAGE_NONE][0]['value'];
-                    $form['submitted']['student_first_name']['#default_value'] = $firstName;
-                }
-                if(isset($entity->field_last_name[LANGUAGE_NONE]))
-                {
-                    $lastName = $entity->field_last_name[LANGUAGE_NONE][0]['value'];
-                    $form['submitted']['student_last_name']['#default_value'] = $lastName;
-                }
-                if(isset($entity->field_email[LANGUAGE_NONE]))
-                {
-                    $email = $entity->field_email[LANGUAGE_NONE][0]['value'];
-                    $form['submitted']['student_email']['#default_value'] = $email;
-                    $form['actions']['submit']['#value'] = 'Re-invite';
-                }
-            }
-            $form['actions']['submit']['#ajax']['callback'] = '_studysauce_invite_webform';
-            break;
-        case 'webform_client_form_113':
-            $conn = studysauce_get_connections();
-
-            if($user->uid > 0)
-                $user = user_load($user->uid);
-
-            if(isset($user->mail))
-            {
-                $form['submitted']['your_email']['#default_value'] = $user->mail;
-                $form['submitted']['your_email']['#type'] = 'hidden';
-                $form['submitted']['your_email']['#title'] = '';
-            }
-            if(isset($user->field_first_name['und'][0]['value']))
-            {
-                $form['submitted']['your_first_name']['#default_value'] = $user->field_first_name['und'][0]['value'];
-                $form['submitted']['your_first_name']['#type'] = 'hidden';
-                $form['submitted']['your_first_name']['#title'] = '';
-            }
-            if(isset($user->field_last_name['und'][0]['value']))
-            {
-                $form['submitted']['your_last_name']['#default_value'] = $user->field_last_name['und'][0]['value'];
-                $form['submitted']['your_last_name']['#type'] = 'hidden';
-                $form['submitted']['your_last_name']['#title'] = '';
-            }
-            if(isset($conn[0]->mail))
-                $form['submitted']['parents_email']['#default_value'] = $conn[0]->mail;
-            if(isset($conn[0]->field_first_name[LANGUAGE_NONE][0]['value']))
-                $form['submitted']['parents_first_name']['#default_value'] = $conn[0]->field_first_name[LANGUAGE_NONE][0]['value'];
-            if(isset($conn[0]->field_last_name[LANGUAGE_NONE][0]['value']))
-                $form['submitted']['parents_last_name']['#default_value'] = $conn[0]->field_last_name[LANGUAGE_NONE][0]['value'];
-
-            $form['#submit'][] = '_studysauce_invite_webform';
-            break;
 
         case 'webform_client_form_11':
             $form['actions']['#attributes']['class'][] = 'highlighted-link';
             $form['actions']['submit']['#value'] = 'Send';
             $form['actions']['submit']['#attributes']['class'][] = 'more';
-            break;
-        case 'webform_client_form_130':
-
-            $conn = studysauce_get_connections();
-
-            if($user->uid > 0)
-                $user = user_load($user->uid);
-
-            if(isset($user->mail))
-            {
-                $form['submitted']['your_email']['#default_value'] = $user->mail;
-                $form['submitted']['your_email']['#type'] = 'hidden';
-                $form['submitted']['your_email']['#title'] = '';
-            }
-            if(isset($user->field_first_name['und'][0]['value']))
-            {
-                $form['submitted']['your_first_name']['#default_value'] = $user->field_first_name['und'][0]['value'];
-                $form['submitted']['your_first_name']['#type'] = 'hidden';
-                $form['submitted']['your_first_name']['#title'] = '';
-            }
-            if(isset($user->field_last_name['und'][0]['value']))
-            {
-                $form['submitted']['your_last_name']['#default_value'] = $user->field_last_name['und'][0]['value'];
-                $form['submitted']['your_last_name']['#type'] = 'hidden';
-                $form['submitted']['your_last_name']['#title'] = '';
-            }
-            if(isset($conn[0]->mail))
-                $form['submitted']['student_email']['#default_value'] = $conn[0]->mail;
-            if(isset($conn[0]->field_first_name[LANGUAGE_NONE][0]['value']))
-                $form['submitted']['student_first_name']['#default_value'] = $conn[0]->field_first_name[LANGUAGE_NONE][0]['value'];
-            if(isset($conn[0]->field_last_name[LANGUAGE_NONE][0]['value']))
-                $form['submitted']['student_last_name']['#default_value'] = $conn[0]->field_last_name[LANGUAGE_NONE][0]['value'];
-
-            $form['#submit'][] = '_studysauce_invite_webform';
             break;
     }
 
@@ -2245,69 +2103,6 @@ function _studysauce_orders_by_uid($uid, $order_status = 'completed')
     array_multisort($keys, SORT_NUMERIC, SORT_DESC, $orders);
     $o = end($orders);
     return $o;
-}
-
-function studysauce_webform_submission_render_alter(&$renderable)
-{
-    if(!empty($renderable['#email']) && isset($renderable['email_preview']))
-    {
-        $_SESSION['studysauce']['webforms'][$renderable['#node']->nid] = array(
-            'your_email' => $renderable['your_email']['#value'],
-            'your_first_name' => $renderable['your_first_name']['#value'],
-            'your_last_name' => $renderable['your_last_name']['#value'],
-            'template' => $renderable['email_preview']['#value']
-        );
-        if(isset($renderable['parents_first_name']))
-        {
-            $_SESSION['studysauce']['email'] = $renderable['your_email']['#value'];
-            $_SESSION['studysauce']['first'] = $renderable['your_first_name']['#value'];
-            $_SESSION['studysauce']['last'] = $renderable['your_last_name']['#value'];
-            $_SESSION['studysauce']['webforms'][$renderable['#node']->nid]['parents_first_name'] = $renderable['parents_first_name']['#value'];
-            $_SESSION['studysauce']['webforms'][$renderable['#node']->nid]['parents_last_name'] = $renderable['parents_last_name']['#value'];
-            $_SESSION['studysauce']['webforms'][$renderable['#node']->nid]['parents_email'] = $renderable['parents_email']['#value'];
-            $_SESSION['studysauce']['webforms'][$renderable['#node']->nid]['invite_code'] = $renderable['invite_code']['#markup'];
-        }
-        else
-        {
-            $_SESSION['studysauce']['email'] = $renderable['student_email']['#value'];
-            $_SESSION['studysauce']['first'] = $renderable['student_first_name']['#value'];
-            $_SESSION['studysauce']['last'] = $renderable['student_last_name']['#value'];
-            $_SESSION['studysauce']['parent_first'] = $renderable['your_first_name']['#value'];
-            $_SESSION['studysauce']['parent_last'] = $renderable['your_last_name']['#value'];
-            $_SESSION['studysauce']['webforms'][$renderable['#node']->nid]['student_first_name'] = $renderable['student_first_name']['#value'];
-            $_SESSION['studysauce']['webforms'][$renderable['#node']->nid]['student_last_name'] = $renderable['student_last_name']['#value'];
-            $_SESSION['studysauce']['webforms'][$renderable['#node']->nid]['student_email'] = $renderable['student_email']['#value'];
-            $_SESSION['studysauce']['webforms'][$renderable['#node']->nid]['invite_code'] = $renderable['invite_code']['#markup'];
-        }
-    }
-}
-
-function _studysauce_classes_validate(&$form, &$form_state)
-{
-    $i = 0;
-    do
-    {
-        if (!empty($form_state['values']['field_classes']['und'][$i]['field_class_name']['und'][0]['value']))
-        {
-            if(empty($form_state['values']['field_classes']['und'][$i]['field_time']['und'][0]['value']) ||
-                empty($form_state['values']['field_classes']['und'][$i]['field_time']['und'][0]['value2']))
-                form_set_error('field_classes][und][' . $i . '][field_time', t('You must enter a valid start and end time for class @class_name.', array('@class_name' => $form_state['values']['field_classes']['und'][$i]['field_class_name']['und'][0]['value'])));
-        }
-    } while (isset($form_state['values']['field_classes']['und'][++$i]));
-}
-
-function studysauce_submit($form, &$form_state) {
-    $_SESSION['studysauce']['email'] = $form_state['values']['mail'];
-    $_SESSION['studysauce']['first'] = $form_state['values']['field_first_name']['und'][0]['value'];
-    $_SESSION['studysauce']['last'] = $form_state['values']['field_last_name']['und'][0]['value'];
-    $form_state['redirect'] = 'buy';
-}
-
-function studysauce_submit2($form, &$form_state) {
-    $_SESSION['studysauce']['email'] = $form_state['values']['mail'];
-    $_SESSION['studysauce']['first'] = $form_state['values']['field_first_name']['und'][0]['value'];
-    $_SESSION['studysauce']['last'] = $form_state['values']['field_last_name']['und'][0]['value'];
-    $form_state['redirect'] = 'buy2';
 }
 
 function studysauce_cart_auto_empty ($form_id)

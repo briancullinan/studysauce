@@ -87,6 +87,29 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
             }
         });
 
+        jQuery('#profile, #plan').on('click', 'a[href="#bill-send"]', function (evt) {
+            evt.preventDefault();
+            var billing = jQuery(this).parents('.bill-my-parents'),
+                tab = jQuery(this).parents('.panel-pane');
+
+            $.ajax({
+                url: 'billing/send',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    first: billing.find('input[name="invite-first"]').val(),
+                    last: billing.find('input[name="invite-last"]').val(),
+                    email: billing.find('input[name="invite-email"]').val()
+                },
+                success: function (data) {
+                    billing.find('input[name="invite-first"]').val('');
+                    billing.find('input[name="invite-last"]').val('');
+                    billing.find('input[name="invite-email"]').val('');
+                    tab.removeClass('bill-my-parents-only').addClass('bill_step_2_only');
+                }
+            });
+        });
+
         // setup footer menu loading
         jQuery(footerLinks).each(function (i, x) {
             jQuery('body').on('click', 'a[href="/' + x + '"], a[href="/' + x + '"]', function (evt) {

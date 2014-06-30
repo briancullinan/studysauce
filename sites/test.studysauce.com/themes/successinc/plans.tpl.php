@@ -9,19 +9,46 @@ if(!isset($account))
 }
 $lastOrder = _studysauce_orders_by_uid($account->uid);
 $groups = og_get_groups_by_user();
+
+// only load events if the user is paid
 if($lastOrder || !empty($groups['node']))
     list($events, $node, $classes, $entities) = studysauce_get_events($account, $lastOrder ? $lastOrder->created : null);
-else
+
+// adjust times for demo accounts
+if(in_array('demo', $account->roles) || !$lastOrder && empty($groups['node']))
 {
-    $sample = theme('studysauce-plan-sample');
-    $encoded = preg_replace('/<\/?script>/i', '', $sample);
-    list($events, $classes, $entities) = json_decode($encoded);
+    if(!$lastOrder && empty($groups['node']))
+    {
+        $sample = theme('studysauce-plan-sample');
+        $encoded = preg_replace('/<\/?script>/i', '', $sample);
+        list($events, $classes, $entities) = json_decode($encoded);
+    }
+
+    // load study type into a property so it can be used to determine the default session type below
     $entities = array_map(function ($x) {
         return (object) array('field_study_type' => array('und' => array(0 => array('value' => $x)))); }, (array)$entities);
+
+    // convert classes to numeric array
     $classes = (array) $classes;
     foreach($classes as $i => $c)
         $classes[intval($i)] = $c;
-    $events = array_map(function ($x) { return (array)$x; }, (array) $events);
+
+    $startWeek = strtotime('this week 00:00:00', time()) - 86400;
+    $events = array_map(function ($x) use ($startWeek) {
+        $x = (array)$x;
+
+        // update times so there is always something showing
+        $classT = new DateTime($x['start']);
+        $startT = strtotime('this week 00:00:00', $classT->getTimestamp()) - 86400;
+        $diff = $startWeek - $startT;
+        $classT->setTimestamp($classT->getTimestamp() + $diff);
+        $classE = new DateTime($x['end']);
+        $classE->setTimestamp($classE->getTimestamp() + $diff);
+        $x['start'] = $classT->format('Y/m/d H:i:s') . ' UTC';
+        $x['end'] = $classE->format('Y/m/d H:i:s') . ' UTC';
+
+        return $x;
+    }, (array) $events);
 }
 
 if(!$lastOrder && empty($groups['node'])): ?><div class="buy-plan"><?php endif;
@@ -145,9 +172,42 @@ if(!$lastOrder && empty($groups['node'])): ?><div class="buy-plan"><?php endif;
     <p style="clear: both; margin-bottom:0; line-height:1px;">&nbsp;</p>
     <a class="return-to-top" href="#return-to-top">Top</a>
 
-<?php if(!$lastOrder): ?>
+<?php if(!$lastOrder && empty($groups['node'])): ?>
         <div class="middle-wrapper">
-            <a href="#premium"><h2>Upgrade to premium and we will build your personalized study plan.</h2></a>
+            <div class="highlighted-link">
+                <a href="#premium"><h2>Upgrade to premium and we will build your personalized study plan.</h2></a>
+                <a class="more-parents" href="#parents" onclick="jQuery('#plan').addClass('bill-my-parents-only'); return false;">Bill my parents</a>
+                <div class="bill-my-parents">
+                    <h3>Send an email to have someone prepay for Study Sauce.  We will then alert you when your account has been activated.</h3>
+                    <div class="form-item webform-component webform-component-textfield webform-component--student-first-name">
+                        <label>First name</label>
+                        <input type="text" name="invite-first" size="60" maxlength="128" class="form-text required"
+                               value="">
+                    </div>
+                    <div class="form-item webform-component webform-component-textfield webform-component--student-last-name">
+                        <label>Last name</label>
+                        <input type="text" name="invite-last" size="60" maxlength="128" class="form-text required"
+                               value="">
+                    </div>
+                    <div class="form-item webform-component webform-component-email">
+                        <label>Friend's email</label>
+                        <input class="email form-text form-email required" type="email" name="invite-email" size="60"
+                               value="">
+                    </div>
+                    <div style="text-align: right;">
+                        <a href="#bill-send" class="more">Send</a></div>
+                    <a href="#" onclick="jQuery('#plan').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;"
+                       class="fancy-close">&nbsp;</a>
+                </div>
+                <div class="bill_step_2">
+                    <h2>Thanks!</h2>
+                    <h3>We will let you know when your account has been activated.</h3>
+                    <div style="text-align: right;">
+                        <a href="#" onclick="jQuery('#plan').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;" class="more">Close</a></div>
+                    <a href="#" onclick="jQuery('#plan').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;"
+                       class="fancy-close">&nbsp;</a>
+                </div>
+            </div>
         </div>
     </div>
 <?php endif; ?>

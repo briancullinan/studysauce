@@ -95,7 +95,7 @@ jQuery(document).ready(function($) {
                        success: function (data) {
                            if(window.location.pathname == '/profile')
                            {
-                               // TODO: we have reached the last question?
+                               // we have reached the last question?
                                if(questions.is(profile.find('div[class*="profile-question"]').last()))
                                    window.location.pathname = '/schedule';
                                else

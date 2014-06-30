@@ -11,24 +11,67 @@ if(!isset($account))
 $classesNames = _studysauce_get_schedule_classes($account);
 list($times, $rows, $total, $hours) = _studysauce_get_metrics($account);
 
-$sample = json_encode(array(
-    'times' => $times,
-    'rows' => $rows,
-    'total' => $total,
-    'hours' => $hours
-));
-if(empty($times)):
-    // load times from fake data
-    $sample = theme('studysauce-metrics-sample');
-    $encoded = preg_replace('/<\/?script>/i', '', $sample);
-    list($times, $rows, $total, $hours) = json_decode($encoded);
+// move dates automatically in empty account and demo accounts
+if(empty($times) || in_array('demo', $account->roles)):
+    $classesNames = array();
+
+    // don't bother loading in demo account, just fix the dates
+    if(empty($times))
+    {
+        // load times from fake data
+        $sample = theme('studysauce-metrics-sample');
+        $encoded = preg_replace('/<\/?script>/i', '', $sample);
+        list($times, $rows, $total, $hours) = json_decode($encoded);
+    }
+
+    $timeGroups = array();
+    $times = (array)$times;
+
     // recalculate times to be current week
-    $last = end($times)->time;
-    $first = reset($times)->time;
+    $last = (array)end($times);
+    $last = $last['time'];
+    $first = (array)reset($times);
+    $first = $first['time'];
     $range = $last - $first;
-    $recent = time() - 60*60*24*7*5;
-    $times = array_map(function ($x) use ($recent, $first, $range) {
-        $x->time = ($x->time - $first) / $range * 60*60*24*7*5 + $recent;
+    $recent = time() - 60*60*24*7*4;
+
+    // sort by class then time
+    $classes = array_map(function ($x) use (&$classesNames) {
+        $x = (array)$x;
+        if(($c = array_search($x['class'], array_values($classesNames))) === false)
+        {
+            $c = count($classesNames);
+            $classesNames[] = $x['class'];
+        }
+        return $c;
+    }, (array)$times);
+    $ts = array_map(function ($x) {
+        $x = (array)$x;
+        return $x['time'];
+    }, (array)$times);
+    array_multisort($classes, SORT_NUMERIC, SORT_ASC, $ts, SORT_NUMERIC, SORT_ASC, $times);
+
+    $times = array_map(function ($x) use ($recent, $first, $range, $classesNames, &$timeGroups) {
+        $x = (array)$x;
+        $x['time'] = ($x['time'] - $first) / $range * 60*60*24*7*5 + $recent;
+        $c = intval(array_search($x['class'], $classesNames));
+
+        // recalculate metrics positions
+        $date = new DateTime();
+        $date->setTimestamp($x['time']);
+        $date->setTime(0, 0, 0);
+        $date = $date->add( new DateInterval('P1D') );
+        $g = $date->format('W');
+        if(!isset($timeGroups[$g][$c][0]))
+        {
+            $length0 = 0;
+        }
+        else
+        {
+            $length0 = array_sum($timeGroups[$g][$c]);
+        }
+        $timeGroups[$g][$c][] = $x['length'];
+        $x['length0'] = $length0;
         return $x;
     }, $times);
     ?>

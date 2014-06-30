@@ -178,7 +178,7 @@ jQuery(document).ready(function($) {
                        // update masthead
                        jQuery('#partner-message a[href="#partner"], #partner-message span').replaceWith('<span>' + partner.find('input[name="partner-first"]').val() + ' ' + partner.find('input[name="partner-last"]').val() + '</span>');
                        // update masthead picture
-                       jQuery('#partner-message img').replaceWith('<img src="'+ fileSaved.uri + '" height="48" width="48" alt="Partner" />')
+                       jQuery('#partner-message img').replaceWith('<img src="'+ (typeof fileSaved.uri != 'undefined' ? fileSaved.uri : (pathToTheme + '/images/empty-photo.png')) + '" height="48" width="48" alt="Partner" />')
                    }
                });
 

@@ -55,7 +55,7 @@ jQuery(document).ready(function($) {
                     userlist.find('tr.uid' + uid[1]).removeClass('status_green status_yellow status_red')
                         .addClass('status_' + status);
                 }
-            })
+            });
         });
         selectStatus.show();
     });

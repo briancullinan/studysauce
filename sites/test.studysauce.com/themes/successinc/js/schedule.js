@@ -1,3 +1,7 @@
+Date.prototype.addHours= function(h){
+    this.setHours(this.getHours()+h);
+    return this;
+};
 
 jQuery(document).ready(function($) {
 
@@ -43,15 +47,58 @@ jQuery(document).ready(function($) {
                                timeSteps: [1,1,"1"]
                            });
 
+            // check if there are any overlaps with the other rows
+            var startDate = new Date(row.find('input[name="schedule-value-date"]').val());
+            var endDate = new Date(row.find('input[name="schedule-value2-date"]').val());
+            var startTime = new Date('1/1/1970 ' + row.find('input[name="schedule-value-time"]').val().replace(/[ap]m$/i, ''));
+            if(row.find('input[name="schedule-value-time"]').val().match(/pm$/i) >= 0)
+                startTime = startTime.addHours(12);
+            var endTime = new Date('1/1/1970 ' + row.find('input[name="schedule-value2-time"]').val().replace(/[ap]m$/i, ''));
+            if(row.find('input[name="schedule-value2-time"]').val().match(/pm$/i) >= 0)
+                endTime = endTime.addHours(12);
+            var dotw = row.find('.field-name-field-day-of-the-week input[name*="schedule-dotw-"]:checked').map(function (i, x) {return $(x).val();}).get();
+            // reset overlaps tag to start
+            row.removeClass('overlaps');
+            schedule.find('.row').not(row).each(function () {
+                var that = jQuery(this);
+                // check if dates overlap
+                var startDate2 = new Date(that.find('input[name="schedule-value-date"]').val());
+                var endDate2 = new Date(that.find('input[name="schedule-value2-date"]').val());
+                if(startDate <= endDate2 || endDate >= startDate2)
+                {
+                    // check if weekdays overlap
+                    var dotwOverlaps = false,
+                        dotw2 = that.find('.field-name-field-day-of-the-week input[name*="schedule-dotw-"]:checked').map(function (i, x) {return $(x).val();}).get();
+                    for(var i in dotw)
+                        if(dotw2.indexOf(dotw[i]) > -1)
+                        {
+                            dotwOverlaps = true;
+                            break;
+                        }
+                    if(dotwOverlaps)
+                    {
+                        // check if times overlap
+                        var startTime2 = new Date('1/1/1970 ' + that.find('input[name="schedule-value-time"]').val().replace(/[ap]m$/i, ''));
+                        if(that.find('input[name="schedule-value-time"]').val().match(/pm$/i) != null)
+                            startTime2 = startTime2.addHours(12);
+                        var endTime2 = new Date('1/1/1970 ' + that.find('input[name="schedule-value2-time"]').val().replace(/[ap]m$/i, ''));
+                        if(that.find('input[name="schedule-value2-time"]').val().match(/pm$/i) != null)
+                            endTime2 = endTime2.addHours(12);
+                        if(startTime <= endTime2 || endTime >= startTime2)
+                        {
+                            row.addClass('overlaps');
+                        }
+                    }
+                }
+            });
         });
 
-        // TODO: fix this invalid even when university name changes
-        if(window.location.pathname != '/schedule2' && (schedule.find('.row.edit.valid').length == 0 &&
-           (schedule.find('.field-name-field-university input').val().trim() == '' ||
-            schedule.find('.field-name-field-university input').val() == schedule.find('.field-name-field-university input').prop('defaultValue'))))
-            schedule.removeClass('valid').addClass('invalid');
-        else
+        if(window.location.pathname == '/schedule2' ||
+            (schedule.find('.row.valid').length > 0 && schedule.find('.field-name-field-university input').val().trim() != '' && schedule.find('.field-name-field-university input').val() != schedule.find('.field-name-field-university input').prop('defaultValue')) ||
+            schedule.find('.row.edit.valid').length > 0)
             schedule.removeClass('invalid').addClass('valid');
+        else
+            schedule.removeClass('valid').addClass('invalid');
     };
 
     schedule.on('click', 'a[href="#edit-class"]', function (evt) {
@@ -83,6 +130,7 @@ jQuery(document).ready(function($) {
         jQuery('.other-schedule .row').remove();
         jQuery(data.schedule).find('.other-schedule .row')
             .appendTo(jQuery('.other-schedule'));
+        schedule.find('.schedule .row, .other-schedule .row').not('#add-class-dialog, #add-other-dialog').planFunc();
 
         // update profile tab
         if(typeof $.fn.profileFunc != 'undefined')

@@ -483,7 +483,7 @@ function studysauce_save_calendar()
                 {
                     $entity[$eid]->field_study_type['und'][0]['value'] = $settings['type'];
                     $entity[$eid]->field_study_difficulty['und'][0]['value'] = $settings['difficulty'];
-                    $entity[$eid]->save(true);
+                    $entity[$eid]->save();
 
                     node_save($node);
                 }
@@ -925,7 +925,7 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
                 if(isset($node->field_grades['und'][0]['value']) && $node->field_grades['und'][0]['value'] == 'as_only')
                     $studyFactor = 2.8;
                 // there are 16 usable hours, 4 * (5 - 1) = 16 * 7 days = 112 usable hours in a week
-                $shouldStudy = max($totalLength * $studyFactor, 112*3600); // a student should study 3 [2.6] times outside of class
+                $shouldStudy = max($totalLength * $studyFactor, 112*3600); // a student should study 3 [2.4] times outside of class
                 $remainingStudy = min($shouldStudy - $studyLength, 3600); // subtract the hours already accounted for by schedules study sessions
                 $freeHours = floor($remainingStudy / 3600);
                 for($j = 0; $j < $freeHours; $j++)

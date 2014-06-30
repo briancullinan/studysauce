@@ -4,6 +4,32 @@
     margin-bottom:-28px;
 }
 
+.page-dashboard #plan.bill_step_2_only .buy-plan .highlighted-link > a,
+.page-dashboard #plan.bill-my-parents-only .buy-plan .highlighted-link > a
+{
+    display:none;
+}
+
+.page-dashboard #plan .bill_step_2
+{
+    display:none;
+}
+
+.page-dashboard #plan.bill_step_2_only .bill_step_2
+{
+    display: block;
+}
+
+.page-dashboard #plan .buy-plan .bill-my-parents
+{
+    display:none;
+}
+
+.page-dashboard #plan.bill-my-parents-only .buy-plan .bill-my-parents
+{
+    display:block;
+}
+
 .page-dashboard #plan .buy-plan
 {
     position: absolute;

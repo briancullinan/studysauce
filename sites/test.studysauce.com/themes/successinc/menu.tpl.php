@@ -55,7 +55,7 @@ if(in_array('adviser', $user->roles)): ?>
     <?php
     $lastOrder = _studysauce_orders_by_uid($user->uid);
     $groups = og_get_groups_by_user();
-    if(!isset($groups['node']) || !$lastOrder): ?>
+    if(!isset($groups['node']) && !$lastOrder): ?>
         <li><a href="#premium"><span>&nbsp;</span>Premium</a></li>
     <?php endif; ?>
     <li><a href="#settings"><span>&nbsp;</span>Settings</a>

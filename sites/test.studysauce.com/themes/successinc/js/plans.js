@@ -333,7 +333,6 @@ jQuery(document).ready(function ($) {
         row.find('.strategy-spaced, .strategy-active, .strategy-teach, .strategy-other, .strategy-prework').hide();
         row.find('.strategy-' + strategy).show();
 
-        // TODO: save selected strategy per event
     }
 
     plans.on('change', 'select[name="strategy-select"]', renderStrategy);
@@ -477,6 +476,7 @@ jQuery(document).ready(function ($) {
                    type: 'POST',
                    dataType: 'json',
                    data: {
+                       // save selected strategy per event
                        'default':row.find('select[name="strategy-select"]').val() != '_none'
                            ? row.find('select[name="strategy-select"]').val()
                            : null,

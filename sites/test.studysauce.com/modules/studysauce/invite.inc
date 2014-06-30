@@ -4,13 +4,36 @@ function studysauce_invite_send()
 {
     // add a partner entity to current user
     global $user;
-    $changes = array();
     $account = user_load($user->uid);
-
-    // TODO: check if we have sent an invite already today, field_sent and field_3_day_reminder
 
     if(isset($_POST['first']) && isset($_POST['last']) && isset($_POST['email']))
     {
+        // check if we have sent an invite already today, field_sent and field_3_day_reminder
+        // find other invitations to this user
+        $query = db_select('field_data_field_invites', 'inv');
+        $query->fields('inv', array('field_invites_value'));
+        $query->fields('em', array('field_email_value'));
+        $query->fields('se', array('field_sent_value'));
+        $query->fields('re', array('field_3_day_reminder_value'));
+        $query->join('field_data_field_email', 'em', 'em.entity_id = inv.field_invites_value');
+        $query->condition('em.field_email_value', $_POST['email'], '=');
+
+        // check there is no sent entry from the last 24 hours
+        $query->join('field_data_field_sent', 'se', 'se.entity_id = inv.field_invites_value');
+        $sentAnd = db_and();
+        $sentAnd->condition('se.field_sent_value', date('Y-m-d H:i:s', time() - 3600*24), '>=');
+        $sentAnd->condition('se.field_sent_value', date('Y-m-d H:i:s', time()), '<=');
+
+        $query->leftJoin('field_data_field_3_day_reminder', 're', 're.entity_id = inv.field_invites_value');
+        $remAnd = db_and();
+        $remAnd->condition('re.field_3_day_reminder_value', date('Y-m-d H:i:s', time() - 3600*24), '>=');
+        $remAnd->condition('re.field_3_day_reminder_value', date('Y-m-d H:i:s', time()), '<=');
+
+        $query->condition(db_or()->condition($sentAnd)->condition($remAnd));
+        $entities = $query->execute()->fetchAllAssoc('field_invites_value');
+        if (!empty($entities))
+            return;
+
         $entity = entity_create('field_collection_item', array('field_name' => 'field_invites'));
         $entity->setHostEntity('user', $account);
         $entity->field_first_name['und'][0]['value'] = $_POST['first'];

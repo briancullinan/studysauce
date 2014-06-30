@@ -70,7 +70,7 @@ $lastOrder = _studysauce_orders_by_uid($user->uid);
 <?php
 $lastOrder = _studysauce_orders_by_uid($user->uid);
 $groups = og_get_groups_by_user();
-if(!isset($groups['node']) || !$lastOrder): ?>
+if(!isset($groups['node']) && !$lastOrder): ?>
 <div class="highlighted-link form-actions form-wrapper"><a href="/buy" class="more">Upgrade</a></div>
 <?php endif; ?>
 

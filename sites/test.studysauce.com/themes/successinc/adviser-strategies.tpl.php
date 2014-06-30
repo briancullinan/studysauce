@@ -16,24 +16,7 @@
     <div class="plupload" id="plan-{eid}-plupload">
         <div class="plup-list-wrapper">
             <ul class="plup-list clearfix ui-sortable">
-                <?php
-                // TODO: show saved image here
-                /*
-                if(isset($partner->field_partner_photo['und'][0]['fid'])):
-                    $file = file_load($partner->field_partner_photo['und'][0]['fid']);
-                    ?>
-                    <li>
-                        <div class="plup-thumb-wrapper">
-                            <img src="<?php print image_style_url('achievement', $file->uri); ?>" title="">
-                        </div>
-                        <a class="plup-remove-item"></a>
-                        <input type="hidden" name="partner-plupload[0][fid]" value="<?php print $file->fid; ?>">
-                        <input type="hidden" name="partner-plupload[0][weight]" value="0">
-                        <input type="hidden" name="partner-plupload[0][rename]" value="<?php print $file->filename; ?>">
-                    </li>
-                <?php else: */ ?>
-                    <img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/empty-play.png" alt="Upload" />
-                <?php  //endif; ?>
+                <li<img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/empty-play.png" alt="Upload" /></li>
             </ul>
         </div>
         <div class="plup-filelist" id="plan-{eid}-filelist">

@@ -34,8 +34,8 @@ jQuery(document).ready(function($) {
                 that.attr('name', that.attr('name') + count);
             newDeadline.find('label[for="' + oldId + '"]').attr('for', oldId + count);
         });
-        newDeadline.datesFunc();
-        deadlines.addClass('edit-date-only').scrollintoview();
+        newDeadline.scrollintoview().datesFunc();
+        deadlines.addClass('edit-date-only');
     });
 
     deadlines.on('click', 'a[href="#remove-reminder"]', function (evt) {

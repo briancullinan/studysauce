@@ -258,11 +258,6 @@ img {
 }
 
 /* Layout */
-/* TODO: make sure this doesn't ruin anything else
-.mt-grid-fix {
-    padding: 0 5px;
-}
-*/
 
 .landing-home .footer
 {
@@ -1929,8 +1924,8 @@ ul.company-info li.last {
     text-align: right;
 }
 
-.page-dashboard #plan .buy-plan a,
-.page-dashboard #profile .buy-plan a,
+.page-dashboard #plan .buy-plan .highlighted-link,
+.page-dashboard #profile .buy-plan .highlighted-link,
 .page-dashboard .group-achievement > div,
 .page-dashboard #invite-sent > h2,
 .page-dashboard #sds-messages > div,
@@ -1965,16 +1960,22 @@ ul.company-info li.last {
     width:100%;
 }
 
-.page-dashboard #plan .buy-plan a,
-.page-dashboard #profile .buy-plan a,
+.page-dashboard #plan .buy-plan .highlighted-link,
+.page-dashboard #profile .buy-plan .highlighted-link,
 .page-dashboard #metrics-empty a,
 .page-dashboard #empty-dates a,
 .page-dashboard #empty-schedule a
 {
     display: block;
     text-align: center;
-    margin-top: -70px;
+    margin-top: -78px;
     z-index: 50;
+}
+
+.page-dashboard #plan.bill-my-parents-only .buy-plan .highlighted-link,
+.page-dashboard #profile.bill-my-parents-only .buy-plan .highlighted-link
+{
+    margin-top: -140px;
 }
 
 @media all and (max-width: 759px)

@@ -1,6 +1,6 @@
 <div class="first-time-message">
     <h2>Welcome to Study Sauce</h2>
-    <h3>Thank you for agreeing to help your student, [f name].  Click the button below for a few tips on how to be a great accountability partner.</h3>
+    <h3>Thank you for agreeing to help your student<?php print (isset($account->field_first_name['und'][0]['value']) ? (', ' . $account->field_first_name['und'][0]['value']) : ''); ?>.  Click the button below for a few tips on how to be a great accountability partner.</h3>
     <p class="highlighted-link">
         <a class="more" href="#partner-info-next" onclick="jQuery(this).parents('.first-time-message').next('.first-time-message').show(); jQuery(this).parents('.first-time-message').hide(); return false;">Next</a>
     </p>

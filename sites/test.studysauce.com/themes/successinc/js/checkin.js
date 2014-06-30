@@ -195,7 +195,7 @@ jQuery(document).ready(function ($) {
     if(typeof minplayer != 'undefined')
     {
         minplayer.get(function (plugin) {
-            if(plugin.name == 'player')
+            if(plugin.name == 'player' && typeof plugin.media != 'undefined')
                 plugin.media.player.addEventListener('playing', function() {
                     plugin.media.hasFocus = false;
                 });

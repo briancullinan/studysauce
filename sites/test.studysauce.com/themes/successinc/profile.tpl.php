@@ -335,10 +335,43 @@ if (!empty($nodes['node']))
     <a href="#save-profile" class="more"><?php print (drupal_get_path_alias(current_path()) == 'customization2' ? 'Finish' : (drupal_get_path_alias(current_path()) == 'customization' || drupal_get_path_alias(current_path()) == 'profile' ? 'Next' : 'Save')); ?></a></p>
 
 <?php endif; ?>
-<?php if(!$lastOrder): ?>
+<?php if(!$lastOrder && empty($groups['node'])): ?>
     <div class="buy-plan">
         <div class="middle-wrapper">
-            <a href="#premium"><h2>Upgrade to premium to discover your unique study profile.</h2></a>
+            <div class="highlighted-link">
+                <a href="#premium"><h2>Upgrade to premium to discover your unique study profile.</h2></a>
+                <a class="more-parents" href="#parents" onclick="jQuery('#profile').addClass('bill-my-parents-only'); return false;">Bill my parents</a>
+                <div class="bill-my-parents">
+                    <h3>Send an email to have someone prepay for Study Sauce.  We will then alert you when your account has been activated.</h3>
+                    <div class="form-item webform-component webform-component-textfield webform-component--student-first-name">
+                        <label>First name</label>
+                        <input type="text" name="invite-first" size="60" maxlength="128" class="form-text required"
+                               value="">
+                    </div>
+                    <div class="form-item webform-component webform-component-textfield webform-component--student-last-name">
+                        <label>Last name</label>
+                        <input type="text" name="invite-last" size="60" maxlength="128" class="form-text required"
+                               value="">
+                    </div>
+                    <div class="form-item webform-component webform-component-email">
+                        <label>Friend's email</label>
+                        <input class="email form-text form-email required" type="email" name="invite-email" size="60"
+                               value="">
+                    </div>
+                    <div style="text-align: right;">
+                        <a href="#bill-send" class="more">Send</a></div>
+                    <a href="#" onclick="jQuery('#profile').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;"
+                       class="fancy-close">&nbsp;</a>
+                </div>
+                <div class="bill_step_2">
+                    <h2>Thanks!</h2>
+                    <h3>We will let you know when your account has been activated.</h3>
+                    <div style="text-align: right;">
+                        <a href="#" onclick="jQuery('#profile').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;" class="more">Close</a></div>
+                    <a href="#" onclick="jQuery('#profile').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;"
+                       class="fancy-close">&nbsp;</a>
+                </div>
+            </div>
         </div>
     </div>
 <?php endif; ?>
