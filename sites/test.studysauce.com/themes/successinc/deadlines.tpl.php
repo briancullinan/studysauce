@@ -104,6 +104,12 @@ drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
 <a href="#add-deadline" class="field-add-more-submit ajax-processed" name="field_reminders_add_more">
     Add <span>+</span> deadline
 </a>
+<div class="sort-by">
+    <label>Sort by: </label>
+    <input type="radio" id="deadlines-by-date" name="deadlines-by" value="date" checked="checked"><label for="deadlines-by-date">Date</label>&nbsp;
+    <input type="radio" id="deadlines-by-class" name="deadlines-by" value="class"><label for="deadlines-by-class">Class</label>
+    <input type="checkbox" id="deadlines-historic"><label for="deadlines-historic">View historical</label>
+</div>
 
 <?php
 if(!isset($account))

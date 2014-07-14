@@ -33,109 +33,112 @@ jQuery(document).ready(function() {
     var $ = jQuery,
         goals = jQuery('#goals');
 
-    var uploader = new plupload.Uploader({
-        alt_field: 0,
-        browse_button: "goals-plupload-select",
-        chunk_size: "512K",
-        container: "goals-plupload",
-        dragdrop: true,
-        drop_element: "goal-plupload-filelist",
-        filters: [
-            {
-                extensions: "png,gif,jpg,jpeg,images",
-                title: "Allowed extensions"
-            }
-        ],
-        flash_swf_url: "/sites/all/libraries/plupload/js/plupload.flash.swf",
-        image_style: "achievement",
-        image_style_path: "/sites/studysauce.com/files/styles/achievement/temporary/",
-        max_file_size: "512MB",
-        max_files: 1,
-        multipart: false,
-        multiple_queues: true,
-        name: "goals-plupload-upload",
-        runtimes: "html5,gears,flash,silverlight,browserplus,html4",
-        silverlight_xap_url: "/sites/all/libraries/plupload/js/plupload.silverlight.xap",
-        title_field: 0,
-        unique_names: true,
-        upload: "goals-plupload-upload",
-        url: jQuery('#goal-upload-path').val(),
-        urlstream_upload: false
-    });
-    uploader.init();
+    if(jQuery('#goals-plupload-upload').length != 0)
+    {
+        var uploader = new plupload.Uploader({
+            alt_field: 0,
+            browse_button: "goals-plupload-select",
+            chunk_size: "512K",
+            container: "goals-plupload",
+            dragdrop: true,
+            drop_element: "goal-plupload-filelist",
+            filters: [
+                {
+                    extensions: "png,gif,jpg,jpeg,images",
+                    title: "Allowed extensions"
+                }
+            ],
+            flash_swf_url: "/sites/all/libraries/plupload/js/plupload.flash.swf",
+            image_style: "achievement",
+            image_style_path: "/sites/studysauce.com/files/styles/achievement/temporary/",
+            max_file_size: "512MB",
+            max_files: 1,
+            multipart: false,
+            multiple_queues: true,
+            name: "goals-plupload-upload",
+            runtimes: "html5,gears,flash,silverlight,browserplus,html4",
+            silverlight_xap_url: "/sites/all/libraries/plupload/js/plupload.silverlight.xap",
+            title_field: 0,
+            unique_names: true,
+            upload: "goals-plupload-upload",
+            url: jQuery('#goal-upload-path').val(),
+            urlstream_upload: false
+        });
+        uploader.init();
 
-    uploader.bind('FilesAdded', function(up, files) {
-        $('#goals-plupload').find('.plup-drag-info').hide(); // Hide info
-        $('#goals-plupload').find('.plup-upload').show(); // Show upload button
+        uploader.bind('FilesAdded', function(up, files) {
+            $('#goals-plupload').find('.plup-drag-info').hide(); // Hide info
+            $('#goals-plupload').find('.plup-upload').show(); // Show upload button
 
-        // Put files visually into queue
-        $.each(files, function(i, file) {
-            $('#goals-plupload').find('.plup-filelist table').append('<tr id="' + file.id + '">' +
-                                                              '<td class="plup-filelist-file">' +  file.name + '</td>' +
-                                                              '<td class="plup-filelist-size">' + plupload.formatSize(file.size) + '</td>' +
-                                                              '<td class="plup-filelist-message"></td>' +
-                                                              '<td class="plup-filelist-remove"><a class="plup-remove-file"></a></td>' +
-                                                              '</tr>');
-            // Bind remove functionality to files added int oqueue
-            $('#' + file.id + ' .plup-filelist-remove > a').bind('click', function(event) {
-                $('#' + file.id).remove();
-                up.removeFile(file);
+            // Put files visually into queue
+            $.each(files, function(i, file) {
+                $('#goals-plupload').find('.plup-filelist table').append('<tr id="' + file.id + '">' +
+                                                                  '<td class="plup-filelist-file">' +  file.name + '</td>' +
+                                                                  '<td class="plup-filelist-size">' + plupload.formatSize(file.size) + '</td>' +
+                                                                  '<td class="plup-filelist-message"></td>' +
+                                                                  '<td class="plup-filelist-remove"><a class="plup-remove-file"></a></td>' +
+                                                                  '</tr>');
+                // Bind remove functionality to files added int oqueue
+                $('#' + file.id + ' .plup-filelist-remove > a').bind('click', function(event) {
+                    $('#' + file.id).remove();
+                    up.removeFile(file);
+                });
             });
+
+            up.refresh(); // Refresh for flash or silverlight
+            up.start();
+            jQuery('#' + up.settings.browse_button).parents('.plupload-container').addClass('uploaded');
         });
 
-        up.refresh(); // Refresh for flash or silverlight
-        up.start();
-        jQuery('#' + up.settings.browse_button).parents('.plupload-container').addClass('uploaded');
-    });
+        // File is being uploaded
+        uploader.bind('UploadProgress', function(up, file) {
+            // Refresh progressbar
+            $('#goals-plupload').find('.plup-progress').progressbar({value: uploader.total.percent});
+        });
 
-    // File is being uploaded
-    uploader.bind('UploadProgress', function(up, file) {
-        // Refresh progressbar
-        $('#goals-plupload').find('.plup-progress').progressbar({value: uploader.total.percent});
-    });
+        // Event after a file has been uploaded from queue
+        uploader.bind('FileUploaded', function(up, file, response) {
+            // Respone is object with response parameter so 2x repsone
+            $('#goals-plupload').find('.plup-list li').remove();
+            var fileSaved = jQuery.parseJSON(response.response);
+            var delta = $('#goals-plupload').find('.plup-list li').length;
+            var name = 'goals-plupload[' + delta + ']';
 
-    // Event after a file has been uploaded from queue
-    uploader.bind('FileUploaded', function(up, file, response) {
-        // Respone is object with response parameter so 2x repsone
-        $('#goals-plupload').find('.plup-list li').remove();
-        var fileSaved = jQuery.parseJSON(response.response);
-        var delta = $('#goals-plupload').find('.plup-list li').length;
-        var name = 'goals-plupload[' + delta + ']';
+            // Plupload has weird error handling behavior so we have to check for errors here
+            if (fileSaved.error_message) {
+                $('#' + file.id + ' > .plup-filelist-message').append('<b>Error: ' + fileSaved.error_message + '</b>');
+                up.refresh(); // Refresh for flash or silverlight
+                return;
+            }
 
-        // Plupload has weird error handling behavior so we have to check for errors here
-        if (fileSaved.error_message) {
-            $('#' + file.id + ' > .plup-filelist-message').append('<b>Error: ' + fileSaved.error_message + '</b>');
-            up.refresh(); // Refresh for flash or silverlight
-            return;
-        }
+            $('#goals-plupload').find('.plup-filelist #' + file.id).remove(); // Remove uploaded file from queue
+            // Add image thumbnail into list of uploaded items
+            $('#goals-plupload').find('.plup-list').append(
+                '<li>' +
+                    //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
+                '<div class="plup-thumb-wrapper"><img src="'+ fileSaved.secure_uri + '" title="'+ Drupal.checkPlain(file.target_name) +'" /></div>' +
+                '<a class="plup-remove-item"></a>' +
+                '<input type="hidden" name="' + name + '[fid]" value="' + fileSaved.fid + '" />' +
+                '<input type="hidden" name="' + name + '[weight]" value="' + delta + '" />' +
+                '<input type="hidden" name="' + name + '[rename]" value="' + file.name +'" />' +
+                '</li>');
+            // Bind remove functionality to uploaded file
+            var new_element = $('input[name="'+ name +'[fid]"]');
+            var remove_element = $(new_element).siblings('.plup-remove-item');
+            plup_remove_item(remove_element);
+            // Bind resize effect to inputs of uploaded file
+            var text_element = $(new_element).siblings('input.form-text');
+            plup_resize_input(text_element);
+            // Tell Drupal that form has been updated
+            new_element.trigger('formUpdated');
+        });
 
-        $('#goals-plupload').find('.plup-filelist #' + file.id).remove(); // Remove uploaded file from queue
-        // Add image thumbnail into list of uploaded items
-        $('#goals-plupload').find('.plup-list').append(
-            '<li>' +
-                //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
-            '<div class="plup-thumb-wrapper"><img src="'+ fileSaved.secure_uri + '" title="'+ Drupal.checkPlain(file.target_name) +'" /></div>' +
-            '<a class="plup-remove-item"></a>' +
-            '<input type="hidden" name="' + name + '[fid]" value="' + fileSaved.fid + '" />' +
-            '<input type="hidden" name="' + name + '[weight]" value="' + delta + '" />' +
-            '<input type="hidden" name="' + name + '[rename]" value="' + file.name +'" />' +
-            '</li>');
-        // Bind remove functionality to uploaded file
-        var new_element = $('input[name="'+ name +'[fid]"]');
-        var remove_element = $(new_element).siblings('.plup-remove-item');
-        plup_remove_item(remove_element);
-        // Bind resize effect to inputs of uploaded file
-        var text_element = $(new_element).siblings('input.form-text');
-        plup_resize_input(text_element);
-        // Tell Drupal that form has been updated
-        new_element.trigger('formUpdated');
-    });
-
-    // All fiels from queue has been uploaded
-    uploader.bind('UploadComplete', function(up, files) {
-        $('#goals-plupload').find('.plup-list').sortable('refresh'); // Refresh sortable
-        $('#goals-plupload').find('.plup-drag-info').show(); // Show info
-    });
+        // All fiels from queue has been uploaded
+        uploader.bind('UploadComplete', function(up, files) {
+            $('#goals-plupload').find('.plup-list').sortable('refresh'); // Refresh sortable
+            $('#goals-plupload').find('.plup-drag-info').show(); // Show info
+        });
+    }
 
     $.fn.goalsFunc = function () {
         jQuery(this).each(function (i, r) {

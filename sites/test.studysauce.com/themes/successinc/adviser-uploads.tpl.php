@@ -52,7 +52,7 @@ if (!empty($nodes['node']))
                     ->fields('s', array('revision_id'))
                     ->condition('field_' . $strategy . '_strategies_revision_id', $entity->revision_id, '=')
                     ->execute()->fetchAssoc();
-                // get node revision date
+                // get latest node revision date
                 if(isset($rev['revision_id']))
                 {
                     $nodeTime = db_select('node_revision', 's')
@@ -150,6 +150,10 @@ if (!empty($nodes['node']))
 
     ksort($dates, SORT_DESC);
 
+}
+
+if(!empty($nodes['node']) && !empty($dates))
+{
     // sort strategies by date and display strategies read-only
     foreach($dates as $t => $s)
     {

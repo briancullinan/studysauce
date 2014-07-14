@@ -37,9 +37,10 @@ tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-jQuery(document).ready(function ($) {
+jQuery(document).ready(function () {
 
     var plans = jQuery('#plan');
+    var $ = jQuery;
 
     $.propHooks.checked = {
         set: function (elem, value, name) {
@@ -49,7 +50,7 @@ jQuery(document).ready(function ($) {
         }
     };
 
-    plans.on('change', '.sort-by input', function (evt) {
+    plans.on('change', '.sort-by input[type="radio"]', function (evt) {
         var headings = {};
         jQuery('#plan .head').each(function () {
             var head = jQuery(this);
@@ -78,19 +79,43 @@ jQuery(document).ready(function ($) {
     });
 
     plans.on('change', '#schedule-historic', function () {
-        if(jQuery(this).prop('checked'))
-            jQuery('#plan .row.hide, #plan .head.hide').show();
+        if(jQuery(this).is(':checked'))
+            plans.addClass('show-historic');
         else
-            jQuery('#plan .row.hide, #plan .head.hide').hide();
+            plans.removeClass('show-historic');
     });
 
     plans.on('change', '.page-dashboard #plan .field-name-field-completed input', function () {
         var that = jQuery(this),
-            row = that.parents('.row');
-        if(that.is(':checked'))
-            row.addClass('done');
-        else
-            row.removeClass('done');
+            row = that.parents('.row'),
+            event = window.planEvents[row.attr('id').substring(4)];
+
+        $.ajax({
+            url: '/node/save/completed',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                className: event['title'],
+                completed: that.is(':checked'),
+                type: event['className'].indexOf('p-event') != -1
+                    ? 'p'
+                    : (event['className'].indexOf('sr-event') != -1
+                    ? 'sr'
+                    : (event['className'].indexOf('free-event') != -1
+                    ? 'f'
+                    : (event['className'].indexOf('other-event') != -1
+                    ? 'o'
+                    : (event['className'].indexOf('deadline-event') != -1
+                    ? 'd'
+                    : ''))))
+            },
+            success: function () {
+                if(that.is(':checked'))
+                    row.addClass('done');
+                else
+                    row.removeClass('done');
+            }
+        });
     });
 
     function renderStrategy()
@@ -546,6 +571,7 @@ jQuery(document).ready(function ($) {
                         aspectRatio: 1.9,
                         height:500,
                         timeslotsPerHour: 4,
+                        slotEventOverlap: false,
                         slotMinutes: 15,
                         firstHour: new Date().getHours(),
                         eventRender: function (event, element) {
@@ -682,7 +708,9 @@ jQuery(document).ready(function ($) {
     //   we will activate the calendar only once, when the menu is clicked, this assumes #hash detection works, and
     //   it triggers the menu clicking
     if(jQuery('#plan:visible').length > 0)
-        setTimeout(initialize, 100);
+    {
+        setTimeout(initialize, 1000);
+    }
     jQuery('body').on('click', 'a[href="#plan"]', function () {
         initialize();
         if($('#calendar:visible').length > 0)

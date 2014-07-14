@@ -32,7 +32,7 @@ if(empty($times) || in_array('demo', $account->roles)):
     $last = $last['time'];
     $first = (array)reset($times);
     $first = $first['time'];
-    $range = $last - $first;
+    $range = max(1, $last - $first);
     $recent = time() - 60*60*24*7*4;
 
     // sort by class then time
@@ -74,13 +74,17 @@ if(empty($times) || in_array('demo', $account->roles)):
         $x['length0'] = $length0;
         return $x;
     }, $times);
+
+    if(empty($times))
+    {
     ?>
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-        jQuery('#metrics').addClass('empty');
-    });
-</script>
-<? endif; ?>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('#metrics').addClass('empty');
+        });
+    </script>
+    <? }
+endif; ?>
 <div id="metrics-empty">
     <div class="middle-wrapper">
         <a href="#checkin" onclick="jQuery('#checkin').scrollintoview();"><h2>Check in to start tracking your study hours</h2></a>

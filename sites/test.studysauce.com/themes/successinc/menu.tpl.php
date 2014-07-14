@@ -8,7 +8,7 @@ $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item
     ->fieldCondition('field_email', 'value', $user->mail)
     ->execute();
 
-if(in_array('adviser', $user->roles)): ?>
+if(in_array('adviser', $user->roles) || in_array('master adviser', $user->roles)): ?>
     <ul>
         <li><a href="#userlist"><span>&nbsp;</span>Home</a></li>
         <li><a href="#import"><span>&nbsp;</span>Invite students</a>

@@ -135,6 +135,12 @@
     display:none;
 }
 
+.page-dashboard #plan.show-historic .head.hide,
+.page-dashboard #plan.show-historic .row.hide
+{
+    display:block;
+}
+
 .page-dashboard #plan .row .class-name
 {
     display: inline-block;
@@ -725,7 +731,6 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
 .page-dashboard #plan .sort-by
 {
     vertical-align: top;
-    display: inline;
 }
 
 .page-dashboard #plan .sort-by input
@@ -738,6 +743,7 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
 {
     padding-top: 5px;
     padding-bottom: 5px;
+    padding-right: 10px;
 }
 
 .page-dashboard #plan .sort-by label:not(:first-child)

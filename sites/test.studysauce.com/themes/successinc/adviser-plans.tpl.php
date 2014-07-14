@@ -96,7 +96,8 @@ foreach ($events as $eid => $event)
     print (strtotime($event['start']) >= $startWeek && strtotime($event['start']) <= $endWeek ? 'mobile' : ''); ?> <?php
     print ('class' . $classI); ?> <?php
     print ('cid' . $cid); ?> <?php
-    print ('default-' . $session); ?>" id="eid-<?php print $eid; ?>">
+    print ('default-' . $session); ?> <?php
+    print (isset($event['completed']) && $event['completed'] ? 'done' : ''); ?>" id="eid-<?php print $eid; ?>">
         <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
             <span class="class">&nbsp;</span>
             <div class="read-only"><?php print htmlspecialchars($classes[$cid], ENT_QUOTES); ?></div>
@@ -109,7 +110,8 @@ foreach ($events as $eid => $event)
         </div>
         <div class="field-type-list-boolean field-name-field-completed field-widget-options-onoff form-wrapper">
             <div class="read-only">
-                <input type="checkbox" id="schedule-completed-<?php print $eid; ?>" />
+                <input type="checkbox" id="schedule-completed-<?php print $eid; ?>" <?php
+                print (isset($event['completed']) && $event['completed'] ? 'checked="checked"' : ''); ?> />
                 <label for="schedule-completed-<?php print $eid; ?>">&nbsp;</label></div>
         </div>
         <input type="hidden" name="plan-path" value="<?php print url('node/plup/plan', array('query' => array('plupload_token' => drupal_get_token('plupload-handle-uploads')))); ?>" />

@@ -121,6 +121,28 @@
     margin-top: 10px !important;
 }
 
+.page-dashboard .field-name-field-profile-question-study-much label.option,
+.page-dashboard .field-name-field-profile-question-education label.option,
+.page-dashboard .field-name-field-profile-question-devices label.option,
+.page-dashboard .field-name-field-profile-question-time-management label.option,
+.page-dashboard .field-name-field-profile-question-mindset label.option,
+.page-dashboard .class-profile .field-name-field-class-name .read-only,
+.field-name-type-of-studying label.option,
+.field-name-difficulty-level label.option,
+.field-name-field-time-preference label.option,
+.field-name-field-weekends label.option,
+.field-name-field-grades label.option,
+.field-name-field-profile-question-study-much label.option,
+.field-name-field-profile-question-education label.option,
+.field-name-field-profile-question-mindset label.option,
+.field-name-field-profile-question-time-management label.option,
+.field-name-field-profile-question-devices label.option,
+.field-name-field-time-preference .field-type-list-integer > label
+{
+    font-size: 20px;
+    font-weight: normal;
+}
+
 .field-name-type-of-studying input:checked + label.option,
 .field-name-difficulty-level input:checked + label.option,
 .field-name-field-time-preference input.form-radio:checked + label,
@@ -304,6 +326,11 @@
     display:none;
 }
 
+.page-dashboard .page-path-profile hr
+{
+    display:block;
+}
+
 .page-path-customization2 .field-name-field-class-name span,
 .page-path-profile .field-name-field-class-name span {
     display: inline-block;
@@ -424,6 +451,7 @@
     box-sizing: border-box;
     padding-bottom: 60px;
     margin-bottom: 30px;
+    text-align: left;
 }
 
 .page-path-customization .study-preferences,
@@ -461,11 +489,22 @@
     margin:30px 0 !important;
 }
 
+.page-dashboard .page-path-profile .class-profile > h2 span,
+.page-dashboard .page-path-profile .study-preferences > h2 span
+{
+    display:none;
+}
+
 .field-name-field-profile-question-study-much h2 span,
 .field-name-field-profile-question-education h2 span,
 .field-name-field-profile-question-mindset h2 span,
 .field-name-field-profile-question-time-management h2 span,
-.field-name-field-profile-question-devices h2 span
+.field-name-field-profile-question-devices h2 span,
+.field-name-field-grades h2 span,
+.field-name-field-weekends h2 span,
+.field-name-field-time-preference h2 span,
+.field-name-type-of-studying h2 span,
+.field-name-difficulty-level h2 span
 {
     position:absolute;
     top:10px;

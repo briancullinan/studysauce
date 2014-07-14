@@ -50,14 +50,12 @@ function studysauce_group_save()
             $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('counselor-invite'))));
             $message['subject'] = 'Welcome to Study Sauce!';
             $sentMessage = array();
-            $sentMessage[] = 'Hello ' . $u['first'] . ',';
-            $sentMessage[] = '';
             $sentMessage[] = 'You have been invited to Study Sauce by ' . $account->field_first_name['und'][0]['value'] . ' ' . $account->field_last_name['und'][0]['value'] . '.  Your account has been prepaid.  Please click the link below to activate your account.';
             $message['body'] = theme('studysauce-email', array(
                 'message' => implode('<br />', $sentMessage),
                 'greeting' => 'Hello ' . $entity->field_first_name['und'][0]['value'] . ' ' . $entity->field_last_name['und'][0]['value'] . ',',
-                'link' => l('Set up my Study Sauce account.', '/students', array(
-                    'query' => array('invite_code' => $entity->field_code['und'][0]['value'], 'destination' => '#goals'),
+                'link' => l('Set up my Study Sauce account.', 'students', array(
+                    'query' => array('invite_code' => $entity->field_code['und'][0]['value']),
                     'absolute' => true,
                     'attributes' => array('style' => '-webkit-appearance: none; margin: 0; text-decoration:none; text-align: left; padding: 10px 25px; color: #1d1d1d; font-weight: 800; font-size: 18px; line-height: 150%; border-radius: 4px; -webkit-border-radius: 4px; background: #FF9900; border-bottom: 3px solid #993300; text-shadow: 0px 1px 2px rgba(255,255,255,0.5);')))));
 
@@ -116,7 +114,7 @@ function studysauce_user_login()
     }
 
 
-    if(!in_array('adviser', $user->roles) && (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])))
+    if(!in_array('adviser', $user->roles) && !in_array('master adviser', $user->roles) && (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])))
     {
 
         // check if the user was invited by an adviser and put the user in that group
@@ -154,7 +152,7 @@ function studysauce_user_login()
                     }
                     $adviserUser = $inviteEntity[$i]->hostEntity();
                     $account = user_load($adviserUser->uid);
-                    if(in_array('adviser', $account->roles))
+                    if(in_array('adviser', $account->roles) || in_array('master adviser', $account->roles))
                     {
                         $isBeingAdvised[] = $account;
                     }
@@ -173,16 +171,20 @@ function studysauce_user_login()
             {
                 // get the adviser group
                 $groups = og_get_groups_by_user($a);
-                $groups = array_keys($groups['node']);
-                $gid = end($groups);
+                if(is_array($groups['node']))
+                {
+                    $groups = array_keys($groups['node']);
+                    $gid = end($groups);
 
-                // Add the user to the group
-                og_group('node', $gid, array(
-                    'entity type'       => 'user',
-                    'entity'        => $user
-                ));
+                    // Add the user to the group
+                    og_group('node', $gid, array(
+                        'entity type'       => 'user',
+                        'entity'        => $user
+                    ));
+                }
             }
 
+            // refresh the groups list for use below
             $groups = og_get_groups_by_user();
         }
 

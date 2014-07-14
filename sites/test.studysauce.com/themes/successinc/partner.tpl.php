@@ -36,11 +36,13 @@ if(isset($groups['node']))
     foreach($members as $i => $member)
     {
         $m = user_load($member->etid);
-        if(array_search('adviser', $m->roles) !== false)
+        if(in_array('adviser', $m->roles) || in_array('master adviser', $m->roles))
         {
             $partner = $m;
             $permissions = array('goals', 'metrics', 'deadlines', 'uploads', 'plan', 'profile');
             $readonly = true;
+            if(in_array('adviser', $m->roles))
+                break;
         }
     }
 }

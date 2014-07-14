@@ -137,9 +137,12 @@ function studysauce_save_dates()
 
     node_save($node);
 
+    global $studysauceExportEvents;
     print json_encode(array(
         'reminders' => '<div>' . theme('studysauce-deadlines') . '</div>',
-        'plan' => '<div>' . theme('studysauce-plans') . '</div>'));
+        'plan' => '<div>' . theme('studysauce-plans') . '</div>',
+        'events' => $studysauceExportEvents
+    ));
     drupal_exit();
 }
 

@@ -50,11 +50,11 @@ jQuery(document).ready(function($) {
             // check if there are any overlaps with the other rows
             var startDate = new Date(row.find('input[name="schedule-value-date"]').val());
             var endDate = new Date(row.find('input[name="schedule-value2-date"]').val());
-            var startTime = new Date('1/1/1970 ' + row.find('input[name="schedule-value-time"]').val().replace(/[ap]m$/i, ''));
-            if(row.find('input[name="schedule-value-time"]').val().match(/pm$/i) >= 0)
+            var startTime = new Date('1/1/1970 ' + row.find('input[name="schedule-value-time"]').val().replace(/[ap]m$/i, '').replace(/12:/i, '00:'));
+            if(row.find('input[name="schedule-value-time"]').val().match(/pm$/i) != null)
                 startTime = startTime.addHours(12);
-            var endTime = new Date('1/1/1970 ' + row.find('input[name="schedule-value2-time"]').val().replace(/[ap]m$/i, ''));
-            if(row.find('input[name="schedule-value2-time"]').val().match(/pm$/i) >= 0)
+            var endTime = new Date('1/1/1970 ' + row.find('input[name="schedule-value2-time"]').val().replace(/[ap]m$/i, '').replace(/12:/i, '00:'));
+            if(row.find('input[name="schedule-value2-time"]').val().match(/pm$/i) != null)
                 endTime = endTime.addHours(12);
             var dotw = row.find('.field-name-field-day-of-the-week input[name*="schedule-dotw-"]:checked').map(function (i, x) {return $(x).val();}).get();
             // reset overlaps tag to start
@@ -78,13 +78,13 @@ jQuery(document).ready(function($) {
                     if(dotwOverlaps)
                     {
                         // check if times overlap
-                        var startTime2 = new Date('1/1/1970 ' + that.find('input[name="schedule-value-time"]').val().replace(/[ap]m$/i, ''));
+                        var startTime2 = new Date('1/1/1970 ' + that.find('input[name="schedule-value-time"]').val().replace(/[ap]m$/i, '').replace(/12:/i, '00:'));
                         if(that.find('input[name="schedule-value-time"]').val().match(/pm$/i) != null)
                             startTime2 = startTime2.addHours(12);
-                        var endTime2 = new Date('1/1/1970 ' + that.find('input[name="schedule-value2-time"]').val().replace(/[ap]m$/i, ''));
+                        var endTime2 = new Date('1/1/1970 ' + that.find('input[name="schedule-value2-time"]').val().replace(/[ap]m$/i, '').replace(/12:/i, '00:'));
                         if(that.find('input[name="schedule-value2-time"]').val().match(/pm$/i) != null)
                             endTime2 = endTime2.addHours(12);
-                        if(startTime <= endTime2 || endTime >= startTime2)
+                        if(startTime <= endTime2 && endTime >= startTime2)
                         {
                             row.addClass('overlaps');
                         }
@@ -118,6 +118,7 @@ jQuery(document).ready(function($) {
     function updateTabs(data, row)
     {
         // update calendar events
+
         window.planEvents = data.events;
 
         // reset edit mode

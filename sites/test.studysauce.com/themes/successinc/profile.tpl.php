@@ -35,7 +35,7 @@ if(drupal_get_path_alias(current_path()) == 'profile' ||
                size="60" maxlength="255" value="<?php print (isset($node->field_university['und'][0]['value']) ? $node->field_university['und'][0]['value'] : ''); ?>">
     </div> */ ?>
     <div class="field-type-list-text field-name-field-grades field-widget-options-buttons form-wrapper">
-        <h2>What kind of grades do you want?</h2>
+        <h2>What kind of grades do you want? <span>Q: 1/3</span></h2>
         <input type="radio" id="schedule-grades-as-only" name="field_grades" value="as_only" class="form-radio"
             <?php print (isset($node->field_grades['und'][0]['value']) && $node->field_grades['und'][0]['value'] == 'as_only' ? 'checked="checked"' : ''); ?>>
         <label class="option" for="schedule-grades-as-only">Nothing but As </label>
@@ -45,7 +45,7 @@ if(drupal_get_path_alias(current_path()) == 'profile' ||
             library </label>
     </div>
     <div class="field-type-list-text field-name-field-weekends field-widget-options-buttons form-wrapper">
-        <h2>How do your manage your weekends?</h2>
+        <h2>How do your manage your weekends? <span>Q: 2/3</span></h2>
         <input type="radio" id="schedule-weekends-hit-hard" name="field_weekends" value="hit_hard" class="form-radio"
             <?php print (isset($node->field_weekends['und'][0]['value']) && $node->field_weekends['und'][0]['value'] == 'hit_hard' ? 'checked="checked"' : ''); ?>>
         <label class="option" for="schedule-weekends-hit-hard">Hit hard, keep weeks open </label>
@@ -55,7 +55,7 @@ if(drupal_get_path_alias(current_path()) == 'profile' ||
     </div>
     <div class="field-name-field-time-preference">
         <h2>On a scale of 0-5 (5 being the best), rate how mentally sharp you feel during the following time
-            periods:</h2>
+            periods: <span>Q: 3/3</span></h2>
 
         <div class="field-type-list-integer field-name-field-6-am-11-am field-widget-options-buttons form-wrapper">
             <label>6 AM - 11 AM</label>
@@ -159,7 +159,7 @@ if(drupal_get_path_alias(current_path()) == 'profile' ||
     <div class="class-profile">
         <h2>Tell us a little more about your classes <span>2/2</span></h2>
         <div class="field-name-type-of-studying">
-            <h2>What is the primary type of studying you expect to do in this class?</h2>
+            <h2>What is the primary type of studying you expect to do in this class? <span>Q: 1/2</span></h2>
             <label>Memorization</label>
             <label>Reading/writing</label>
             <label>Conceptual application</label>
@@ -214,7 +214,7 @@ if(drupal_get_path_alias(current_path()) == 'profile' ||
                             <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?>
                         </div>
                     </div>
-                    <label class="mobile-only">How difficult will this class be?</label>
+                    <label class="mobile-only">How difficult will this class be? <span>Q: 2/2</span></label>
                     <div class="form-radios">
                         <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-easy"
                                name="study-difficulty-class-<?php print $eid; ?>" value="easy" class="form-radio"

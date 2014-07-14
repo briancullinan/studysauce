@@ -18,7 +18,13 @@
 .page-dashboard #deadlines .head.hide,
 .page-dashboard #deadlines .row.hide
 {
-    display:none !important;
+    display:none;
+}
+
+.page-dashboard #deadlines.show-historic .head.hide,
+.page-dashboard #deadlines.show-historic .row.hide
+{
+    display:block;
 }
 
 .page-dashboard #deadlines .node-key_dates-form
@@ -158,7 +164,59 @@
     vertical-align: top;
 }
 
-.page-dashboard #deadlines label:not(.option)
+.page-dashboard #deadlines .sort-by
+{
+    vertical-align: top;
+}
+
+.page-dashboard #deadlines .sort-by input
+{
+    visibility: hidden;
+    margin: 0 0 0 -13px;
+}
+
+.page-dashboard #deadlines .sort-by label
+{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+}
+
+.page-dashboard #deadlines .sort-by label:not(:first-child)
+{
+    background: url('images/menu_icons_128.png') no-repeat -54px -2848px transparent;
+    padding-left: 25px;
+    display:inline-block;
+    cursor: pointer;
+}
+
+.page-dashboard #deadlines .sort-by input:checked + label:not(:last-child)
+{
+    background-position: -54px -2734px;
+}
+
+.page-dashboard #deadlines .sort-by label:first-child
+{
+    display:inline;
+    float:left;
+}
+
+.page-dashboard #deadlines .sort-by label:last-child
+{
+    float:right !important;
+    padding-left: 25px;
+    background: url('images/menu_icons_128.png') no-repeat -54px -2848px transparent;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.page-dashboard #deadlines .sort-by input:checked + label:last-child
+{
+    background-position: -54px -2734px;
+}
+
+.page-dashboard #deadlines label:not(.option),
+.page-dashboard #deadlines.show-historic .row.first:not(.hide) label:not(.option)
 {
     display:none;
 }

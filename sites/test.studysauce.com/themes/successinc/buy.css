@@ -272,7 +272,8 @@
 }
 
 .page-cart-checkout #customer-pane,
-.page-cart-checkout #billing-pane
+.page-cart-checkout #billing-pane,
+.page-cart-checkout #coupon-pane
 {
     float:left;
     clear:left;

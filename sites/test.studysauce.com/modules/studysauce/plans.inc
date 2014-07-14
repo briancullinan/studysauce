@@ -300,6 +300,92 @@ function studysauce_get_strategies($account = null)
     return $result;
 }
 
+function studysauce_save_completed()
+{
+    if(!isset($account))
+    {
+        global $user;
+        $account = user_load($user->uid);
+    }
+
+    if($_POST['type'] == 'd')
+    {
+        // find deadline and mark completed
+
+        $query = new EntityFieldQuery();
+        $dates = $query->entityCondition('entity_type', 'node')
+            ->propertyCondition('type', 'key_dates')
+            ->propertyCondition('title', $account->mail)
+            ->propertyCondition('status', 1)
+            ->range(0, 1)
+            ->execute();
+
+        if (!empty($dates['node'])) {
+            $key_dates = array_keys($dates['node']);
+            $kid = array_shift($key_dates);
+            $dates = node_load($kid);
+
+            if (isset($dates->field_reminders[LANGUAGE_NONE][0]['value']))
+            {
+                foreach($dates->field_reminders[LANGUAGE_NONE] as $eid => $reminder)
+                {
+                    $eid = $reminder['value'];
+                    $entity = entity_load('field_collection_item', array($eid));
+                    if (!empty($entity) &&
+                        $entity[$eid]->field_class_name['und'][0]['value'] . ': ' . $entity[$eid]->field_assignment['und'][0]['value'] == $_POST['className'])
+                    {
+                        $entity[$eid]->field_completed[LANGUAGE_NONE][0]['value'] = true && $_POST['completed'];
+                        $entity[$eid]->save();
+                    }
+
+                }
+            }
+        }
+    }
+    else
+    {
+        // find matching event
+
+        list($events, $node, $classes, $entities) = studysauce_get_events();
+        foreach($events as $i => $event)
+        {
+            if($event['title'] == $_POST['className'])
+                break;
+        }
+
+        foreach($entities as $i => $entity)
+        {
+            if(isset($entity->field_class_name[LANGUAGE_NONE][0]['value']))
+            {
+                $saved[$entity->item_id] = $entity->field_class_name[LANGUAGE_NONE][0]['value'];
+                if($entity->field_class_name[LANGUAGE_NONE][0]['value'] == $_POST['className'])
+                    $thisEid = $entity->item_id;
+            }
+        }
+        if(!isset($thisEid))
+        {
+            $entity = entity_create('field_collection_item', array('field_name' => 'field_classes'));
+            $entity->setHostEntity('node', $node);
+        }
+        else
+        {
+            $entity = entity_load('field_collection_item', array($thisEid));
+            $entity = $entity[$thisEid];
+            $entity->revision = 1;
+        }
+        $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $_POST['className'];
+        $entity->field_day_of_the_week[LANGUAGE_NONE] = array();
+        $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $_POST['type'];
+        $entity->field_time[LANGUAGE_NONE][0] = array(
+            'value' => gmdate('Y-m-d H:i:s', strtotime($event['start'])),
+            'value2' => gmdate('Y-m-d H:i:s', strtotime($event['end']))
+        );
+        $entity->field_completed[LANGUAGE_NONE][0]['value'] = true && $_POST['completed'];
+        $entity->save();
+
+    }
+}
+
 function studysauce_save_calendar()
 {
     global $user;
@@ -378,8 +464,7 @@ function studysauce_save_calendar()
                 if(isset($entity->field_class_name[LANGUAGE_NONE][0]['value']))
                 {
                     $saved[$entity->item_id] = $entity->field_class_name[LANGUAGE_NONE][0]['value'];
-                    if($entity->field_class_name[LANGUAGE_NONE][0]['value'] == $class['className'] ||
-                        isset($class['cid']) && $entity->item_id == $class['cid'])
+                    if(isset($class['cid']) && $entity->item_id == $class['cid'])
                         $thisEid = $entity->item_id;
                 }
             }
@@ -393,6 +478,8 @@ function studysauce_save_calendar()
                 $entity = entity_load('field_collection_item', array($thisEid));
                 $entity = $entity[$thisEid];
                 $entity->revision = 1;
+
+                // TODO: figure out what changed
             }
             $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $class['className'];
             $entity->field_day_of_the_week[LANGUAGE_NONE] = array_map(function ($x) { return array('value' => $x); }, explode(',', $class['dotw']));
@@ -506,18 +593,16 @@ function studysauce_save_calendar()
 
 
     // get event schedule
-    list($events, $node, $classes, $entities) = studysauce_get_events();
-
     $newSDS = studysauce_get_sds_messages();
     $lastSDS = end($newSDS);
     list($awards) = studysauce_get_awards();
     list($times, $rows, $total, $hours) = _studysauce_get_metrics();
-
+    global $studysauceExportClasses, $studysauceExportEvents;
     print json_encode(array(
-        'events' => $events,
-        'classes' => $classes,
         'schedule' => '<div>' . theme('studysauce-schedule') . '</div>',
         'plan' => '<div>' . theme('studysauce-plans') . '</div>',
+        'events' => $studysauceExportEvents,
+        'classes' => $studysauceExportClasses,
         'profile' => '<div>' . theme('studysauce-profile') . '</div>',
         'lastSDS' => $lastSDS,
         'awards' => $awards,
@@ -907,6 +992,7 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
                             'className' => $entity->field_event_type['und'][0]['value'] == 'f' ? 'free-event' : 'class' . $i . ' ' . $entity->field_event_type['und'][0]['value'] . '-event',
                             'allDay' => false,
                             'dates' => isset($dates) ? $dates : null,
+                            'completed' => isset($entity->field_completed['und'][0]['value']) && $entity->field_completed['und'][0]['value'],
                             'rendered' => '
                                             <div class="row">
                                                 <div class="class-name"><span class="class' . $i . '">&nbsp;</span>' . $entity->field_class_name['und'][0]['value'] . '</div>
@@ -920,13 +1006,15 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
             // add free study events based on preference
             if($w < $startWeek + 2419200)
             {
+                $weekends = (isset($node->field_weekends['und'][0]['value']) && $node->field_weekends['und'][0]['value'] == 'hit_hard');
                 // TODO: adjust study factor based on nothing but A's preference, only affect free time, can we do more?
                 $studyFactor = 2.4;
                 if(isset($node->field_grades['und'][0]['value']) && $node->field_grades['und'][0]['value'] == 'as_only')
                     $studyFactor = 2.8;
                 // there are 16 usable hours, 4 * (5 - 1) = 16 * 7 days = 112 usable hours in a week
-                $shouldStudy = max($totalLength * $studyFactor, 112*3600); // a student should study 3 [2.4] times outside of class
-                $remainingStudy = min($shouldStudy - $studyLength, 3600); // subtract the hours already accounted for by schedules study sessions
+                $shouldStudy = min($totalLength * $studyFactor, ($weekends ? 112 : 80) * 3600 - $totalLength); // a student should study 3 [2.4] times outside of class
+                $remainingStudy = min(14 * 3600, // turns out filling up the entire week is too much
+                    max($shouldStudy - $studyLength, 3600)); // subtract the hours already accounted for by schedules study sessions
                 $freeHours = floor($remainingStudy / 3600);
                 for($j = 0; $j < $freeHours; $j++)
                 {
@@ -935,7 +1023,13 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
                         continue;
 
                     // use weekends setting to determine if the first free study should fall on a sunday
-                    $freeT = $w + 112 / $freeHours * $j * 3600 + 3600 * (isset($node->field_weekends['und'][0]['value']) && $node->field_weekends['und'][0]['value'] == 'hit_hard' ? -1 : 0) * 24;
+                    // subtract a day because the week starts on Monday
+                    if($weekends && $j < $freeHours / 2)
+                        $freeT = $w - 86400;
+                    elseif($weekends && $j > $freeHours / 2)
+                        $freeT = $w + 432000;
+                    else
+                        $freeT = $w + ($weekends ? 168 : 120) / $freeHours * $j * 3600 - ($weekends ? 86400 : 0);
                     $events[] = array(
                         'title' => $fTitle,
                         'start' => date('Y/m/d H:i:s', $freeT) . '  UTC',
@@ -1011,6 +1105,7 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
                         'end' => date('Y/m/d H:i:s', $dT + 86400 - 1) . ' UTC',
                         'className' => 'class' . $classI . ' deadline-event',
                         'allDay' => true,
+                        'completed' => isset($reminder->field_completed['und'][0]['value']) && $reminder->field_completed['und'][0]['value'],
                         'rendered' => '
                                         <div class="row">
                                             <div class="class-name"><span class="class' . $classI . ' deadline-event">&nbsp;</span>Holiday</div>
@@ -1057,8 +1152,9 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
         $i = 0;
 
         // MAGIC, DO NOT TOUCH!!!!!!
-        while (++$i < count($events)) {
-            if(in_array($events[$i]['title'], $saved))
+        while (++$i < count($events))
+        {
+            if(in_array($events[$i]['title'], $saved) || strpos($events[$i]['className'], 'deadline-event') !== false)
             {
                 continue;
             }
@@ -1133,6 +1229,7 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
                     usleep(1);
                 }
                 if ($i > 0 && strtotime($events[$i - 1]['end']) >= strtotime($events[$i]['start']) &&
+                    strpos($events[$i - 1]['className'], 'deadline-event') === false &&
                     (strpos($events[$i]['className'], 'p-event') !== false || strpos($events[$i]['className'], 'sr-event') !== false ||
                         strpos($events[$i]['className'], 'free-event') !== false)
                 ) {
@@ -1143,6 +1240,7 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
                     $anyMoved = true;
                 }
                 elseif ($i + 1 < count($events) && strtotime($events[$i + 1]['start']) <= strtotime($events[$i]['end']) &&
+                    strpos($events[$i + 1]['className'], 'deadline-event') === false &&
                     (strpos($events[$i]['className'], 'p-event') !== false || strpos($events[$i]['className'], 'sr-event') !== false ||
                         strpos($events[$i]['className'], 'free-event') !== false)
                 ) {

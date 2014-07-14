@@ -117,6 +117,12 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['node/save/completed'] = array(
+        'page callback' => 'studysauce_save_completed',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     $items['invite/send'] = array(
         'title' => 'Plupload upload page',
         'page callback' => 'studysauce_invite_send',
@@ -386,7 +392,7 @@ function studysauce_order_completed()
         ->fieldCondition('field_email', 'value', $user->mail)
         ->execute();
 
-    if(!in_array('adviser', $user->roles) && (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])))
+    if(!in_array('adviser', $user->roles) && !in_array('master adviser', $user->roles) && (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])))
     {
         drupal_goto('profile');
     }
@@ -1161,10 +1167,23 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
                         $form['panes']['payment']['#description'] .= '<a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout">$9.99/mo</a> <a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout" class="checked">$99/year <sup>Recommended</sup></a>';
                     else
                         $form['panes']['payment']['#description'] .= '<a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout" class="checked">$9.99/mo</a> <a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout">$99/year <sup>Recommended</sup></a>';
+                    break;
                 }
             }
             $form['panes']['payment']['#description'] .= '</div><img src="/' . drupal_get_path('theme', 'successinc') .'/images/money_back_compressed.png" />';
 
+            // alter coupon
+            //hide($form['panes']['coupon']);
+            hide($form['panes']['coupon_automatic']);
+            $form['panes']['coupon']['#description'] = '';
+            $form['panes']['coupon']['code']['#description'] = '';
+            $form['panes']['coupon']['code']['#title'] = '';
+            hide($form['panes']['coupon']['coupons']);
+            hide($form['panes']['coupon']['remove']);
+            //$form['panes']['payment']['code'] = $form['panes']['coupon']['code'];
+            //$form['panes']['payment']['apply'] = $form['panes']['coupon']['apply'];
+
+            // auto fill fields from account or session
             if(isset($_SESSION['studysauce']['email']))
                 $form['panes']['customer']['primary_email']['#default_value'] = $_SESSION['studysauce']['email'];
 

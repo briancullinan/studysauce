@@ -1,29 +1,61 @@
 
-jQuery(document).ready(function($) {
+jQuery(document).ready(function() {
 
-    var userlist = jQuery('#userlist');
+    var userlist = jQuery('#userlist'),
+        sortSelect = function (a, b) {
+            if(a == 'Student' || a == 'Status' || a == 'Adviser' || a == 'School' || a == 'Date')
+                a = -3;
+            if(a == 'Ascending (A-Z)')
+                a = -2;
+            if(a == 'Descending (Z-A)')
+                a = -1;
+            if(b == 'Student' || b == 'Status' || b == 'Adviser' || b == 'School' || b == 'Date')
+                b = -3;
+            if(b == 'Ascending (A-Z)')
+                b = -2;
+            if(b == 'Descending (Z-A)')
+                b = -1;
+            if (a > b)
+                return 1;
+            if (a < b)
+                return -1;
+            // a must be equal to b
+            return 0;
+        };
 
     var status = ['Status', 'Ascending', 'Descending', 'Red', 'Yellow', 'Green'];
-    userlist.find('th:nth-child(1)').html('<select><option>' + status.join("</option><option>") + '</option></select>')
+    userlist.find('th:nth-child(1)').html('<select><option>' + status.join("</option><option>") + '</option></select>');
 
     var dates = ['Date', 'Ascending (A-Z)', 'Descending (Z-A)'];
     userlist.find('td:nth-child(2)').each(function () {
         if(dates.indexOf(jQuery(this).text()) == -1)
             dates[dates.length] = jQuery(this).text();
     });
-    userlist.find('th:nth-child(2)').html('<select><option>' + dates.join("</option><option>") + '</option></select>')
+    userlist.find('th:nth-child(2)').html('<select><option>' + dates.join("</option><option>") + '</option></select>');
+
     var students = ['Student', 'Ascending (A-Z)', 'Descending (Z-A)'];
     userlist.find('td:nth-child(3)').each(function () {
         if(students.indexOf(jQuery(this).text()) == -1)
             students[students.length] = jQuery(this).text();
     });
-    userlist.find('th:nth-child(3)').html('<select><option>' + students.join("</option><option>") + '</option></select>')
+    students.sort(sortSelect);
+    userlist.find('th:nth-child(3)').html('<select><option>' + students.join("</option><option>") + '</option></select>');
+
     var schools = ['School', 'Ascending (A-Z)', 'Descending (Z-A)'];
     userlist.find('td:nth-child(4)').each(function () {
         if(schools.indexOf(jQuery(this).text()) == -1)
             schools[schools.length] = jQuery(this).text();
     });
-    userlist.find('th:nth-child(4)').html('<select><option>' + schools.join("</option><option>") + '</option></select>')
+    schools.sort(sortSelect);
+    userlist.find('th:nth-child(4)').html('<select><option>' + schools.join("</option><option>") + '</option></select>');
+
+    var advisers = ['Adviser', 'Ascending (A-Z)', 'Descending (Z-A)'];
+    userlist.find('td:nth-child(5)').each(function () {
+        if(advisers.indexOf(jQuery(this).text()) == -1)
+            advisers[advisers.length] = jQuery(this).text();
+    });
+    advisers.sort(sortSelect);
+    userlist.find('th:nth-child(5)').html('<select><option>' + advisers.join("</option><option>") + '</option></select>');
 
     userlist.on('click', 'a[href="#change-status"]', function (evt) {
         evt.preventDefault();
@@ -70,7 +102,8 @@ jQuery(document).ready(function($) {
             if(jQuery(this).val() != 'Status' &&
                 jQuery(this).val() != 'Date' &&
                 jQuery(this).val() != 'Student' &&
-                jQuery(this).val() != 'School')
+                jQuery(this).val() != 'School' &&
+                jQuery(this).val() != 'Adviser')
             {
                 jQuery(this).removeClass('unfiltered').addClass('filtered');
                 var i = jQuery(this).parents('th').index() + 1,
@@ -119,7 +152,7 @@ jQuery(document).ready(function($) {
                 jQuery(response.styles).each(function () {
                     var url = jQuery(this).attr('href');
                     if(typeof url != 'undefined' && jQuery('link[href="' + url + '"]').length == 0)
-                        $('head').append('<link href="' + url + '" type="text/css" rel="stylesheet" />');
+                        jQuery('head').append('<link href="' + url + '" type="text/css" rel="stylesheet" />');
                     else
                     {
                         var re = (/url\("(.*?)"\)/ig),
@@ -130,9 +163,9 @@ jQuery(document).ready(function($) {
                                jQuery('style:contains("' + match[1] + '")').length == 0)
                             {
                                 if(typeof media == 'undefined' || media == 'all')
-                                    $('head').append('<link href="' + match[1] + '" type="text/css" rel="stylesheet" />');
+                                    jQuery('head').append('<link href="' + match[1] + '" type="text/css" rel="stylesheet" />');
                                 else
-                                    $('head').append('<style media="' + media + '">@import url("' + match[1] + '");');
+                                    jQuery('head').append('<style media="' + media + '">@import url("' + match[1] + '");');
                             }
                         }
                     }
@@ -141,12 +174,15 @@ jQuery(document).ready(function($) {
                 jQuery(response.scripts).each(function () {
                     var url = jQuery(this).attr('src');
                     if(typeof url != 'undefined' && jQuery('script[src="' + url + '"]').length == 0)
+                    {
                         jQuery.getScript(url);
+                        console.log(url);
+                    }
                 });
 
                 pane.find('.pane-content').removeClass('loading');
             }
-                    });
+        });
     });
 
 });

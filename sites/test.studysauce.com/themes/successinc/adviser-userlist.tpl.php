@@ -3,28 +3,14 @@ global $user;
 
 drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/userlist.js');
 drupal_add_css(drupal_get_path('theme', 'successinc') .'/adviser-userlist.css');
-?>
-<div id="select-status">
-    <a href="#green"><span>&nbsp;</span></a>
-    <a href="#yellow"><span>&nbsp;</span></a>
-    <a href="#red"><span>&nbsp;</span></a></div>
-<table>
-    <thead>
-        <tr>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Student</th>
-            <th>School</th>
-        </tr>
-    </thead>
-    <tbody>
-<?php
+
 $users = array();
 $groups = og_get_groups_by_user();
+$adviserGroups = array();
 if(isset($groups['node']))
 {
     $query = db_select('og_membership', 'ogm');
-    $query->fields('ogm', array('entity_type', 'etid'));
+    $query->fields('ogm', array('entity_type', 'etid', 'gid'));
     $query->condition('ogm.gid', array_keys($groups['node']), 'IN');
     $result = $query->execute();
     $members = $result->fetchAll();
@@ -33,8 +19,24 @@ if(isset($groups['node']))
     foreach($members as $i => $member)
     {
         $m = user_load($member->etid);
-        if(!in_array('adviser', $m->roles) && $m->uid != $user->uid)
+        if((in_array('adviser', $m->roles) || in_array('master adviser', $m->roles)) && $m->uid != $user->uid)
+        {
+            // only set master adviser if there are no other advisers for this group
+            if(!isset($adviserGroups[$member->gid]) || in_array('adviser', $m->roles))
+                $adviserGroups[$member->gid] = $m;
+        }
+    }
+
+    foreach($members as $i => $member)
+    {
+        $m = user_load($member->etid);
+
+        if(!in_array('adviser', $m->roles) && !in_array('master adviser', $m->roles) && $m->uid != $user->uid)
+        {
+            if(isset($adviserGroups[$member->gid]))
+                $m->otherAdviser = $adviserGroups[$member->gid];
             $users[$m->uid] = $m;
+        }
         /*{
             $subgroups = og_get_groups_by_user($m);
             $query = db_select('og_membership', 'ogm');
@@ -79,7 +81,7 @@ $accessed = array();
 foreach($users as $i => $m)
 {
     // do not include adviser or self in userlist
-    if(in_array('adviser', $m->roles) || $m->uid == $user->uid)
+    if(in_array('adviser', $m->roles) || in_array('master adviser', $m->roles) || $m->uid == $user->uid)
         continue;
 
     $accesses = db_select('accesslog', 'l')
@@ -105,7 +107,25 @@ foreach($users as $i => $m)
 
 $dates = array_map(function ($x) { return $x[0]; } , $accessed);
 array_multisort($dates, SORT_NUMERIC, SORT_DESC, $accessed);
-
+?>
+    <div id="select-status">
+        <a href="#green"><span>&nbsp;</span></a>
+        <a href="#yellow"><span>&nbsp;</span></a>
+        <a href="#red"><span>&nbsp;</span></a></div>
+    <table>
+        <thead>
+        <tr>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Student</th>
+            <th>School</th>
+            <?php if (count($adviserGroups) > 1) :?>
+            <th>Adviser</th>
+            <?php endif; ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
 foreach($accessed as $i => $a)
 {
     list($t, $m) = $a;
@@ -132,6 +152,7 @@ foreach($accessed as $i => $a)
     else
         print '<td>Not set</td>';
 
+    if(count($adviserGroups) > 1) :?><td><?php print (isset($m->otherAdviser) && isset($m->otherAdviser->field_first_name['und'][0]['value']) ? ($m->otherAdviser->field_first_name['und'][0]['value'] . ' ' . $m->otherAdviser->field_last_name['und'][0]['value']) : 'You'); ?></td><?php endif;
     print '</tr>';
 }
 ?>

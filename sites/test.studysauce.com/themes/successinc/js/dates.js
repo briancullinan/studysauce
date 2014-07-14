@@ -58,6 +58,36 @@ jQuery(document).ready(function($) {
                });
     });
 
+    deadlines.on('change', '#deadlines-historic', function () {
+        if(jQuery(this).is(':checked'))
+            deadlines.addClass('show-historic');
+        else
+            deadlines.removeClass('show-historic');
+    });
+
+    deadlines.on('change', '.sort-by input[type="radio"]', function (evt) {
+        var headings = {};
+        jQuery('#deadlines .head').each(function () {
+            var head = jQuery(this);
+            head.nextUntil('*:not(.row)').each(function () {
+                var row = jQuery(this),
+                    that = row.find('.field-name-field-class-name .read-only');
+                if(typeof headings[that.text().substring(1)] == 'undefined')
+                    headings[that.text().substring(1)] = row;
+                else
+                    headings[that.text().substring(1)] = jQuery.merge(headings[that.text().substring(1)], row);
+                that.html(that.html().replace(that.text().substring(1), head.text()));
+            });
+        });
+        var rows = [];
+        for(var h in headings)
+        {
+            var hidden = headings[h].filter('.row:not(.hide)').length == 0;
+            rows = jQuery.merge(rows, jQuery.merge(jQuery('<div class="head ' + (hidden ? 'hide' : '') + '">' + h + '</div>'), headings[h].detach()));
+        }
+        deadlines.find('.head, .row').not('#new-dates-row').not(deadlines.find('#new-dates-row').prevUntil(':not(.row)')).replaceWith(rows);
+    });
+
     deadlines.on('click', 'a[href="#save-dates"]', function (evt) {
         evt.preventDefault();
         var dates = [];
@@ -98,6 +128,9 @@ jQuery(document).ready(function($) {
                            deadlines.find('.row, .head, a[href="#add-deadline"]')
                                .replaceWith(jQuery(data.reminders).find('.row, .head, a[href="#add-deadline"]'));
                            invalids.insertBefore(deadlines.find('#new-dates-row'));
+
+                           // update calendar events
+                           window.planEvents = data.events;
 
                            // update plan tab
                            var plan = jQuery('#plan');
