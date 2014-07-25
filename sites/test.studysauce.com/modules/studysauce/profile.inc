@@ -4,6 +4,15 @@ function studysauce_save_profile()
 {
     global $user;
 
+    // skip building only if told to do so
+    $skipBuild = isset($_POST['skipBuild']) && $_POST['skipBuild'] == 'true';
+
+    // check if the user is paid
+    $lastOrder = _studysauce_orders_by_uid($user->uid);
+    $groups = og_get_groups_by_user();
+    $isPaid = isset($groups['node']) || $lastOrder;
+
+    // load the profile node
     $query = new EntityFieldQuery();
     $nodes = $query->entityCondition('entity_type', 'node')
         ->propertyCondition('type', 'profile')
@@ -45,11 +54,32 @@ function studysauce_save_profile()
 
     node_save($node);
 
-    list($events, $node, $classes, $entities) = studysauce_get_events();
+    // load the schedule node
+    $query = new EntityFieldQuery();
+    $nodes = $query->entityCondition('entity_type', 'node')
+        ->propertyCondition('type', 'schedule')
+        ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+        ->propertyCondition('status', 1)
+        ->range(0, 1)
+        ->execute();
+    if (!empty($nodes['node']))
+    {
+        $nodes = array_keys($nodes['node']);
+        $nid = array_shift($nodes);
+        $node = node_load($nid);
 
+        $entities = array();
+        if(isset($node->field_classes[LANGUAGE_NONE]) && is_array($node->field_classes[LANGUAGE_NONE]))
+            $entities = entity_load('field_collection_item', array_map(function ($x) { return $x['value']; }, $node->field_classes[LANGUAGE_NONE]));
+        if($isPaid && !$skipBuild)
+            studysauce_rebuild_schedule($node, $entities);
+    }
+
+    global $studysauceExportClasses, $studysauceExportEvents;
     print json_encode(array(
-        'events' => $events,
-        'plan' => '<div>' . theme('studysauce-plans') . '</div>'
+        'plan' => '<div>' . theme('studysauce-plans') . '</div>',
+        'events' => $studysauceExportEvents,
+        'classes' => $studysauceExportClasses
     ));
     drupal_exit();
 }

@@ -133,7 +133,7 @@ foreach($accessed as $i => $a)
             ? 'green'
             : $m->field_adviser_status['und'][0]['value']) . '">';
     print '<td><a href="#change-status"><span>&nbsp;</span></a></td>';
-    print '<td>' . ($t == 0 ? 'N/A' : date('d-M', $t)) . '</td>';
+    print '<td actual="' . $t . '">' . ($t == 0 ? 'N/A' : date('d-M', $t)) . '</td>';
     print '<td><a href="#uid-' . $m->uid . '">' . $m->field_first_name['und'][0]['value'] . ' ' . $m->field_last_name['und'][0]['value'] . '</a></td>';
     $query = new EntityFieldQuery();
     $nodes = $query->entityCondition('entity_type', 'node')

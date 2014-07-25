@@ -7,22 +7,22 @@
  * @return
  *   A string containing the breadcrumb output.
  */
-function successinc_breadcrumb($variables){
+function successinc_breadcrumb($variables)
+{
 
-  $breadcrumb = $variables['breadcrumb'];
-  $breadcrumb_separator=theme_get_setting('breadcrumb_separator','successinc');
-  
-  if (!empty($breadcrumb)) {
-    $breadcrumb[] = drupal_get_title();
-	return '<div class="breadcrumb">' . implode(' <span class="breadcrumb-separator">' . $breadcrumb_separator . '</span>', $breadcrumb) . '</div>';
-  }
+    $breadcrumb = $variables['breadcrumb'];
+    $breadcrumb_separator = theme_get_setting('breadcrumb_separator', 'successinc');
+
+    if (!empty($breadcrumb)) {
+        $breadcrumb[] = drupal_get_title();
+        return '<div class="breadcrumb">' . implode(' <span class="breadcrumb-separator">' . $breadcrumb_separator . '</span>', $breadcrumb) . '</div>';
+    }
 }
 
 function successinc_preprocess_page(&$variables)
 {
-
     // if this is a panel page, add template suggestions
-    if(($panel_page = page_manager_get_current_page())) {
+    if (($panel_page = page_manager_get_current_page())) {
         $layout = explode(':', $panel_page['handler']->conf['display']->layout);
 
         // add a generic suggestion for all panel pages
@@ -30,7 +30,7 @@ function successinc_preprocess_page(&$variables)
 
         // add the panel page machine name to the template suggestions
         $variables['theme_hook_suggestions'][] = 'page__' . $panel_page['name'];
-        if(isset($layout[1]))
+        if (isset($layout[1]))
             $variables['theme_hook_suggestions'][] = 'page__panel_' . $layout[1];
 
         //add a body class for good measure
@@ -38,9 +38,10 @@ function successinc_preprocess_page(&$variables)
     }
 }
 
-function successinc_preprocess_block(&$variables) {
-	
-  $variables['classes_array'][]='clearfix';
+function successinc_preprocess_block(&$variables)
+{
+
+    $variables['classes_array'][] = 'clearfix';
 
 }
 
@@ -60,179 +61,211 @@ function _studysauce_reminders_date_sort($a, $b)
 /**
  * Override or insert variables into the html template.
  */
-function successinc_preprocess_html(&$variables) {
+function successinc_preprocess_html(&$variables)
+{
 
     $variables['classes_array'][] = 'page-path-' . drupal_clean_css_identifier(drupal_get_path_alias(current_path()));
 
-	if (empty($variables['page']['banner'])) {
-		$variables['classes_array'][] = 'no-banner';
-	}
-	
-	$color_scheme = theme_get_setting('color_scheme');
-	
-	if ($color_scheme != 'default') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/style-' .$color_scheme. '.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	$protocol = theme_get_setting('protocol');
+    if (empty($variables['page']['banner'])) {
+        $variables['classes_array'][] = 'no-banner';
+    }
 
-	if (theme_get_setting('sitename_font_family')=='sff-1'  ||
-		theme_get_setting('headings_font_family')=='hff-1') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/merriweather-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('sitename_font_family')=='sff-2'  ||
-		theme_get_setting('headings_font_family')=='hff-2' || 
-		theme_get_setting('slogan_font_family')=='slff-2' ||
-		theme_get_setting('paragraph_font_family')=='pff-2') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/sourcesanspro-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('sitename_font_family')=='sff-3'  ||
-		theme_get_setting('headings_font_family')=='hff-3' ||
-		theme_get_setting('slogan_font_family')=='slff-4' ||
-		theme_get_setting('paragraph_font_family')=='pff-4') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/exo-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('sitename_font_family')=='sff-4'  ||
-		theme_get_setting('headings_font_family')=='hff-4' ||
-		theme_get_setting('slogan_font_family')=='slff-5' ||
-		theme_get_setting('paragraph_font_family')=='pff-5') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/titilliumweb-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('sitename_font_family')=='sff-5'  ||
-		theme_get_setting('headings_font_family')=='hff-5') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/adventpro-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('sitename_font_family')=='sff-6'  ||
-		theme_get_setting('headings_font_family')=='hff-6' ||
-		theme_get_setting('slogan_font_family')=='slff-7' ||
-		theme_get_setting('paragraph_font_family')=='pff-7') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/ubuntu-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('sitename_font_family')=='sff-7'  ||
-		theme_get_setting('headings_font_family')=='hff-7') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/playfairdisplaysc-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('sitename_font_family')=='sff-10'  ||
-		theme_get_setting('headings_font_family')=='hff-10' ||
-		theme_get_setting('slogan_font_family')=='slff-11' ||
-		theme_get_setting('paragraph_font_family')=='pff-11') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/gentiumbookbasic-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('sitename_font_family')=='sff-11'  ||
-		theme_get_setting('headings_font_family')=='hff-11') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/noticiatext-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('slogan_font_family')=='slff-1'  ||
-		theme_get_setting('paragraph_font_family')=='pff-1') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/lato-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('slogan_font_family')=='slff-3'  ||
-		theme_get_setting('paragraph_font_family')=='pff-3') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/opensans-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('slogan_font_family')=='slff-6'  ||
-		theme_get_setting('paragraph_font_family')=='pff-6') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/ptsans-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
+    $color_scheme = theme_get_setting('color_scheme');
 
-	if (theme_get_setting('slogan_font_family')=='slff-8'  ||
-		theme_get_setting('paragraph_font_family')=='pff-8') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/amaranth-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('slogan_font_family')=='slff-12'  ||
-		theme_get_setting('paragraph_font_family')=='pff-12') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/alegreya-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	if (theme_get_setting('slogan_font_family')=='slff-13'  ||
-		theme_get_setting('paragraph_font_family')=='pff-13') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/josefinslab-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
-	
-	drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/ptserif-font.css', array('group' => CSS_THEME, 'type' => 'file'));
-	
-	drupal_add_css(path_to_theme() . '/ie9.css', array('group' => CSS_THEME, 'browsers' => array('IE' => '(IE 9)&(!IEMobile)', '!IE' => FALSE), 'preprocess' => FALSE));
-	drupal_add_css(path_to_theme() . '/css/layout-ie.css', array('group' => CSS_THEME, 'browsers' => array('IE' => '(lt IE 9)&(!IEMobile)', '!IE' => FALSE), 'preprocess' => FALSE));
-	drupal_add_css(path_to_theme() . '/ie.css', array('group' => CSS_THEME, 'browsers' => array('IE' => '(lt IE 9)&(!IEMobile)', '!IE' => FALSE), 'preprocess' => FALSE));
-	
-	// Adding local.css file for CSS overrides
-	drupal_add_css(drupal_get_path('theme', 'successinc') . '/local.css', array('group' => CSS_THEME, 'type' => 'file'));
-	
+    if ($color_scheme != 'default') {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/style-' . $color_scheme . '.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    $protocol = theme_get_setting('protocol');
+
+    if (theme_get_setting('sitename_font_family') == 'sff-1' ||
+        theme_get_setting('headings_font_family') == 'hff-1'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/merriweather-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('sitename_font_family') == 'sff-2' ||
+        theme_get_setting('headings_font_family') == 'hff-2' ||
+        theme_get_setting('slogan_font_family') == 'slff-2' ||
+        theme_get_setting('paragraph_font_family') == 'pff-2'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/sourcesanspro-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('sitename_font_family') == 'sff-3' ||
+        theme_get_setting('headings_font_family') == 'hff-3' ||
+        theme_get_setting('slogan_font_family') == 'slff-4' ||
+        theme_get_setting('paragraph_font_family') == 'pff-4'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/exo-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('sitename_font_family') == 'sff-4' ||
+        theme_get_setting('headings_font_family') == 'hff-4' ||
+        theme_get_setting('slogan_font_family') == 'slff-5' ||
+        theme_get_setting('paragraph_font_family') == 'pff-5'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/titilliumweb-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('sitename_font_family') == 'sff-5' ||
+        theme_get_setting('headings_font_family') == 'hff-5'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/adventpro-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('sitename_font_family') == 'sff-6' ||
+        theme_get_setting('headings_font_family') == 'hff-6' ||
+        theme_get_setting('slogan_font_family') == 'slff-7' ||
+        theme_get_setting('paragraph_font_family') == 'pff-7'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/ubuntu-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('sitename_font_family') == 'sff-7' ||
+        theme_get_setting('headings_font_family') == 'hff-7'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/playfairdisplaysc-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('sitename_font_family') == 'sff-10' ||
+        theme_get_setting('headings_font_family') == 'hff-10' ||
+        theme_get_setting('slogan_font_family') == 'slff-11' ||
+        theme_get_setting('paragraph_font_family') == 'pff-11'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/gentiumbookbasic-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('sitename_font_family') == 'sff-11' ||
+        theme_get_setting('headings_font_family') == 'hff-11'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/noticiatext-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('slogan_font_family') == 'slff-1' ||
+        theme_get_setting('paragraph_font_family') == 'pff-1'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/lato-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('slogan_font_family') == 'slff-3' ||
+        theme_get_setting('paragraph_font_family') == 'pff-3'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/opensans-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('slogan_font_family') == 'slff-6' ||
+        theme_get_setting('paragraph_font_family') == 'pff-6'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/ptsans-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('slogan_font_family') == 'slff-8' ||
+        theme_get_setting('paragraph_font_family') == 'pff-8'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/amaranth-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('slogan_font_family') == 'slff-12' ||
+        theme_get_setting('paragraph_font_family') == 'pff-12'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/alegreya-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    if (theme_get_setting('slogan_font_family') == 'slff-13' ||
+        theme_get_setting('paragraph_font_family') == 'pff-13'
+    ) {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/josefinslab-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
+
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/fonts/' . $protocol . '/ptserif-font.css', array('group' => CSS_THEME, 'type' => 'file'));
+
+    drupal_add_css(path_to_theme() . '/ie9.css', array('group' => CSS_THEME, 'browsers' => array('IE' => '(IE 9)&(!IEMobile)', '!IE' => FALSE), 'preprocess' => FALSE));
+    drupal_add_css(path_to_theme() . '/css/layout-ie.css', array('group' => CSS_THEME, 'browsers' => array('IE' => '(lt IE 9)&(!IEMobile)', '!IE' => FALSE), 'preprocess' => FALSE));
+    drupal_add_css(path_to_theme() . '/ie.css', array('group' => CSS_THEME, 'browsers' => array('IE' => '(lt IE 9)&(!IEMobile)', '!IE' => FALSE), 'preprocess' => FALSE));
+
+    // Adding local.css file for CSS overrides
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/local.css', array('group' => CSS_THEME, 'type' => 'file'));
+
 }
 
-function successinc_preprocess_maintenance_page(&$variables) {
-	$color_scheme = theme_get_setting('color_scheme');
-	
-	if ($color_scheme != 'default') {
-		drupal_add_css(drupal_get_path('theme', 'successinc') . '/style-' .$color_scheme. '.css', array('group' => CSS_THEME, 'type' => 'file'));
-	}
+function successinc_preprocess_maintenance_page(&$variables)
+{
+    $color_scheme = theme_get_setting('color_scheme');
+
+    if ($color_scheme != 'default') {
+        drupal_add_css(drupal_get_path('theme', 'successinc') . '/style-' . $color_scheme . '.css', array('group' => CSS_THEME, 'type' => 'file'));
+    }
 }
 
 /**
  * Override or insert variables into the html template.
  */
-function successinc_process_html(&$vars) {
+function successinc_process_html(&$vars)
+{
 
-  global $user;
-  $user = user_load($user->uid);
-  $classes = explode(' ', $vars['classes']);
-  $classes[] = theme_get_setting('sitename_font_family');
-  $classes[] = theme_get_setting('slogan_font_family');
-  $classes[] = theme_get_setting('headings_font_family');
-  $classes[] = theme_get_setting('paragraph_font_family');
-  if(arg(1) == '67' || arg(1) == '90' || arg(1) == '103' || arg(1) == '104')
-      $classes[] = 'page-node-landing';
-  if(!empty($user->field_parent_student) && $user->field_parent_student['und'][0]['value'] == 'student')
-      $classes[] = 'student';
-  if(!empty($user->field_parent_student) && $user->field_parent_student['und'][0]['value'] == 'parent')
-      $classes[] = 'parent';
-  $vars['classes'] = trim(implode(' ', $classes));
- 
+    global $user;
+    $user = user_load($user->uid);
+    $classes = explode(' ', $vars['classes']);
+    $classes[] = theme_get_setting('sitename_font_family');
+    $classes[] = theme_get_setting('slogan_font_family');
+    $classes[] = theme_get_setting('headings_font_family');
+    $classes[] = theme_get_setting('paragraph_font_family');
+    if (arg(1) == '67' || arg(1) == '90' || arg(1) == '103' || arg(1) == '104')
+        $classes[] = 'page-node-landing';
+    if (!empty($user->field_parent_student) && $user->field_parent_student['und'][0]['value'] == 'student')
+        $classes[] = 'student';
+    if (!empty($user->field_parent_student) && $user->field_parent_student['und'][0]['value'] == 'parent')
+        $classes[] = 'parent';
+
+
+    $lastOrder = _studysauce_orders_by_uid($user->uid);
+    $groups = og_get_groups_by_user();
+    if (isset($groups['node']) || $lastOrder)
+        $classes[] = 'paid-user';
+
+
+
+    $vars['classes'] = trim(implode(' ', $classes));
+
+
 }
 
-function successinc_page_alter($page) {
-	// <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-	$viewport = array(
-		'#type' => 'html_tag',
-		'#tag' => 'meta',
-		'#attributes' => array(
-		'name' =>  'viewport',
-		'content' =>  'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
-		)
-	);
-	drupal_add_html_head($viewport, 'viewport');
+function successinc_page_alter($page)
+{
+    // <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    $viewport = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+            'name' => 'viewport',
+            'content' => 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        )
+    );
+    drupal_add_html_head($viewport, 'viewport');
 }
 
-function successinc_form_alter(&$form, &$form_state, $form_id) {
+function successinc_form_alter(&$form, &$form_state, $form_id)
+{
     $color_scheme = theme_get_setting('color_scheme');
     $color_folder = '';
-    if ($color_scheme != 'default') { $color_folder = '/' . theme_get_setting('color_scheme'); }
+    if ($color_scheme != 'default') {
+        $color_folder = '/' . theme_get_setting('color_scheme');
+    }
 
-	if ($form_id == 'search_block_form') {
+    if ($form_id == 'search_block_form') {
 
-    unset($form['search_block_form']['#title']);
+        unset($form['search_block_form']['#title']);
 
-    $form['search_block_form']['#type'] = 'textfield';
-    $form['search_block_form']['#title_display'] = 'invisible';
-	$form_default = t('Search        ');
-    $form['search_block_form']['#attributes'] = array('placeholder' => $form_default );
+        $form['search_block_form']['#type'] = 'textfield';
+        $form['search_block_form']['#title_display'] = 'invisible';
+        $form_default = t('Search        ');
+        $form['search_block_form']['#attributes'] = array('placeholder' => $form_default);
 
-    $form['actions']['submit'] = array('#type' => 'image_button', '#src' => base_path() . path_to_theme() . '/images'. $color_folder . '/search-button.png');
-  }
+        $form['actions']['submit'] = array('#type' => 'image_button', '#src' => base_path() . path_to_theme() . '/images' . $color_folder . '/search-button.png');
+    }
 
-    if($form_id == 'user_login_block') {
+    if ($form_id == 'user_login_block') {
         $form['#attributes'] = array('class' => 'container-inline');
         unset($form['name']['#title']);
         $form['name']['#title_display'] = 'invisible';
@@ -240,37 +273,33 @@ function successinc_form_alter(&$form, &$form_state, $form_id) {
         $form['pass']['#title_display'] = 'invisible';
 
         $username_default = t('Email      ');
-        $form['name']['#attributes'] = array('placeholder' => $username_default );
+        $form['name']['#attributes'] = array('placeholder' => $username_default);
 
         $password_default = t('Password       ');
-        $form['pass']['#attributes'] = array('placeholder' => $password_default );
+        $form['pass']['#attributes'] = array('placeholder' => $password_default);
 
-        $form['actions']['submit'] = array('#type' => 'image_button', '#src' => base_path() . path_to_theme() . '/images'. $color_folder . '/login-right.png');
+        $form['actions']['submit'] = array('#type' => 'image_button', '#src' => base_path() . path_to_theme() . '/images' . $color_folder . '/login-right.png');
     }
 
-    if($form_id == 'user_login')
-    {
+    if ($form_id == 'user_login') {
         $form['actions']['#attributes']['class'][] = 'highlighted-link';
         $form['actions']['submit']['#attributes']['class'][] = 'more';
     }
 
-    if($form_id == 'user_register_form')
-    {
+    if ($form_id == 'user_register_form') {
         drupal_set_title(t('Create new account'));
         $form['actions']['#attributes']['class'][] = 'highlighted-link';
         $form['actions']['submit']['#attributes']['class'][] = 'more';
         $form['actions']['submit']['#value'] = 'Get started';
     }
 
-    if($form_id == 'schedule_node_form')
-    {
+    if ($form_id == 'schedule_node_form') {
         $form['actions']['#attributes']['class'][] = 'highlighted-link';
         $form['actions']['submit']['#attributes']['class'][] = 'more';
         $form['actions']['submit']['#value'] = 'Save';
     }
 
-    if($form_id == 'user_profile_form')
-    {
+    if ($form_id == 'user_profile_form') {
         $form['actions']['#attributes']['class'][] = 'highlighted-link';
         $form['actions']['submit']['#attributes']['class'][] = 'more';
     }
@@ -289,11 +318,11 @@ function successinc_panels_flexible($vars)
 
     $renderer = panels_flexible_create_renderer(FALSE, $css_id, $content, $settings, $display, $layout, $handler);
 
-    if($layout['name'] == 'flexible:clone_of_full' ||
-        $layout['name'] == 'flexible:full');
-        // skip css
-    else
-    {
+    if ($layout['name'] == 'flexible:clone_of_full' ||
+        $layout['name'] == 'flexible:full'
+    ) ;
+    // skip css
+    else {
         // CSS must be generated because it reports back left/middle/right
         // positions.
         $css = panels_flexible_render_css($renderer);
@@ -309,12 +338,10 @@ function successinc_panels_flexible($vars)
             // Give the CSS to the renderer to put where it wants.
             if ($handler) {
                 $handler->add_css($filename, 'module', 'all', FALSE);
-            }
-            else {
+            } else {
                 drupal_add_css($filename);
             }
-        }
-        else {
+        } else {
             // If the id is 'new' we can't reliably cache the CSS in the filesystem
             // because the display does not truly exist, so we'll stick it in the
             // head tag. We also do this if we've been told we're in the layout
@@ -345,7 +372,7 @@ function successinc_panels_flexible($vars)
  */
 if (theme_get_setting('scrolltop_display')) {
 
-	drupal_add_js('jQuery(document).ready(function($) { 
+    drupal_add_js('jQuery(document).ready(function($) {
 	$(window).scroll(function() {
 		if($(this).scrollTop() != 0) {
 			$("#toTop").fadeIn();	
@@ -359,21 +386,20 @@ if (theme_get_setting('scrolltop_display')) {
 	});	
 	
 	});',
-	array('type' => 'inline', 'scope' => 'header'));
+        array('type' => 'inline', 'scope' => 'header'));
 
 }
 
 global $user;
-drupal_add_css(drupal_get_path('theme', 'successinc') .'/header.css');
-drupal_add_css(drupal_get_path('theme', 'successinc') .'/buy.css');
-drupal_add_css(drupal_get_path('theme', 'successinc') .'/funnel.css');
+drupal_add_css(drupal_get_path('theme', 'successinc') . '/header.css');
+drupal_add_css(drupal_get_path('theme', 'successinc') . '/buy.css');
+drupal_add_css(drupal_get_path('theme', 'successinc') . '/funnel.css');
 drupal_add_js('window.pathToTheme=' . json_encode(path_to_theme()) . ';', 'inline');
 
-if(drupal_is_front_page() && $user->uid != 0)
-{
+if (drupal_is_front_page() && $user->uid != 0) {
 //    drupal_add_css(drupal_get_path('module', 'date') .'/date_api/date.css');
 //    drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/date_popup.js');
-    drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/jquery.timeentry.pack.js');
+    drupal_add_js(drupal_get_path('module', 'date') . '/date_popup/jquery.timeentry.pack.js');
     drupal_add_library('system', 'ui.datepicker');
     drupal_add_library('system', 'ui.draggable');
     drupal_add_library('system', 'ui.resizable');
@@ -381,34 +407,33 @@ if(drupal_is_front_page() && $user->uid != 0)
     drupal_add_library('system', 'ui.sortable');
     drupal_add_library('system', 'ui.progressbar');
 
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/skrollr.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/flipclock/libs/prefixfree.min.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/jquery.scrollintoview.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/sauce.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/d3.v3.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/jquery.tipsy.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/fullcalendar/fullcalendar.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/checkin.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/user.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/skrollr.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/flipclock/libs/prefixfree.min.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.scrollintoview.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/sauce.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/d3.v3.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.tipsy.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/fullcalendar/fullcalendar.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/checkin.js');
+    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/user.js');
     drupal_add_js(libraries_get_path('plupload') . '/js/plupload.full.js');
 
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/js/fullcalendar/fullcalendar.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/css/flipclock.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/css/tipsy.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/menu.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/home.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/checkin.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/awards.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/profile.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/invite.css');
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/user-parent-student.css');
-}
-elseif(drupal_is_front_page() || arg(0) == 'parents' || arg(0) == 'students' ||
-    arg(0) == 'parents2' || arg(0) == 'students2')
-{
-    drupal_add_css(drupal_get_path('theme', 'successinc') .'/front.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/js/fullcalendar/fullcalendar.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/css/flipclock.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/css/tipsy.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/menu.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/home.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/checkin.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/awards.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/profile.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/invite.css');
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/user-parent-student.css');
+} elseif (drupal_is_front_page() || arg(0) == 'parents' || arg(0) == 'students' ||
+    arg(0) == 'parents2' || arg(0) == 'students2'
+) {
+    drupal_add_css(drupal_get_path('theme', 'successinc') . '/front.css');
 
-    $parallax =<<<EOJS
+    $parallax = <<<EOJS
 jQuery(document).ready(function () {
     jQuery(window).scroll(function () {
         var distance = jQuery('.header-wrapper').height(),
@@ -428,8 +453,7 @@ EOJS;
     drupal_add_js($parallax, array('type' => 'inline', 'scope' => 'header'));
 
     // experiments code
-    if(arg(0) == 'parents')
-    {
+    if (arg(0) == 'parents') {
         $exp = <<<EOJS
 // <!-- Google Analytics Content Experiment code -->
 function utmx_section(){}function utmx(){}(function(){var
@@ -451,8 +475,7 @@ EOJS;
         drupal_add_js("utmx('url','A/B');", array('type' => 'inline', 'scope' => 'header'));
     }
 
-    if(arg(0) == 'students')
-    {
+    if (arg(0) == 'students') {
         $exp = <<<EOJS
 // <!-- Google Analytics Content Experiment code -->
 function utmx_section(){}function utmx(){}(function(){var
@@ -486,7 +509,7 @@ drupal_add_html_head(array(
     '#type' => 'html_tag',
     '#tag' => 'meta',
     '#attributes' => array(
-        'name' =>  'description',
+        'name' => 'description',
         'content' => 'Study Sauce teaches you the most effective study methods and provides you the tools to make the most of your study time.',
     )), 'facebook_description_meta');
 
@@ -494,7 +517,7 @@ drupal_add_html_head(array(
     '#type' => 'html_tag',
     '#tag' => 'meta',
     '#attributes' => array(
-        'property' =>  'og:image',
+        'property' => 'og:image',
         'content' => url(drupal_get_path('theme', 'successinc') . '/images/studysauce-google-page.png', array('absolute' => true)),
     )), 'facebook_image_meta');
 

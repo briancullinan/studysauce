@@ -13,6 +13,18 @@ list($times, $rows, $total, $hours) = _studysauce_get_metrics($account);
 
 // move dates automatically in empty account and demo accounts
 if(empty($times) || in_array('demo', $account->roles)):
+
+    // display the empty metrics message
+    if(empty($times))
+    {
+        ?>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                jQuery('#metrics').addClass('empty');
+            });
+        </script>
+    <? }
+
     $classesNames = array();
 
     // don't bother loading in demo account, just fix the dates
@@ -75,15 +87,6 @@ if(empty($times) || in_array('demo', $account->roles)):
         return $x;
     }, $times);
 
-    if(empty($times))
-    {
-    ?>
-    <script type="text/javascript">
-        jQuery(document).ready(function () {
-            jQuery('#metrics').addClass('empty');
-        });
-    </script>
-    <? }
 endif; ?>
 <div id="metrics-empty">
     <div class="middle-wrapper">

@@ -110,9 +110,7 @@ body.page-path-schedule2 .class-actions ~ *
 }
 
 .page-path-schedule2 .row,
-.page-path-schedule .row,
-.page-dashboard #goals .row,
-.page-dashboard #deadlines .row
+.page-path-schedule .row
 {
     clear: both;
     display: block;
@@ -122,9 +120,7 @@ body.page-path-schedule2 .class-actions ~ *
 }
 
 .page-path-schedule2 .row > *,
-.page-path-schedule .row > *,
-.page-dashboard #goals .row > *,
-.page-dashboard #deadlines .row > *
+.page-path-schedule .row > *
 {
     white-space: nowrap;
     vertical-align: top;

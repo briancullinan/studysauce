@@ -214,36 +214,36 @@ function studysauce_user_login()
 
             if(!isset($GLOBALS['studysauce-goto']))
             {
-                // check if schedule exists
-                $query = new EntityFieldQuery();
-                $nodes = $query->entityCondition('entity_type', 'node')
-                    ->propertyCondition('type', 'schedule')
-                    ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
-                    ->propertyCondition('status', 1)
-                    ->range(0, 1)
-                    ->execute();
-                if (empty($nodes['node']))
+                $classes = _studysauce_get_schedule_classes();
+                if(!count($classes))
                     $GLOBALS['studysauce-goto'] = 'schedule';
                 else
                 {
-                    // check if we need to visit customization pages
+                    $query = new EntityFieldQuery();
+                    $nodes = $query->entityCondition('entity_type', 'node')
+                        ->propertyCondition('type', 'schedule')
+                        ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+                        ->propertyCondition('status', 1)
+                        ->range(0, 1)
+                        ->execute();
+
                     $nodes = array_keys($nodes['node']);
                     $nid = array_shift($nodes);
                     $node = node_load($nid);
                     if(!isset($node->field_weekends['und'][0]['value']))
                         $GLOBALS['studysauce-goto'] = 'customization';
-                    elseif(!isset($node->field_classes['und'][0]['value']))
-                        $GLOBALS['studysauce-goto'] = 'schedule';
-                    else
+                }
+
+                if(!isset($GLOBALS['studysauce-goto']))
+                {
+                    foreach($classes as $e => $class)
                     {
-                        $cid = $node->field_classes['und'][0]['value'];
-                        $c = entity_load('field_collection_item', array($cid));
-                        if(isset($c[$cid]) && !isset($c[$cid]->field_study_difficulty['und'][0]['value']))
-                        {
+                        $entity = entity_load('field_collection_item', array($e));
+                        if(isset($entity[$e]) && !isset($entity[$e]->field_study_difficulty['und'][0]['value']))
                             $GLOBALS['studysauce-goto'] = 'customization2';
-                        }
                     }
                 }
+
             }
 
             // TODO: change this when we need to check for completion of different versions of the profile form

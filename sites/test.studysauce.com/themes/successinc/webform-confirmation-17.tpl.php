@@ -66,7 +66,7 @@ $submission = studysauce_render_webform_plain($node, $sid);
             <p><?php print $GLOBALS['studysauce']['webform'][$node->nid][4]; ?></p>
         </div>
         <div class="grid_5 right">
-            <p><em><strong>4</strong></em>Studying in bed is a definite no-no. &nbsp;Your brain associates your bed with sleeping and therefore will likely make you more drowsy while you try to sleep. &nbsp;This in turn reduces your effectiveness in studying.</p>
+            <p><em><strong>4</strong></em>Studying in bed is a definite no-no. &nbsp;Your brain associates your bed with sleeping and therefore will likely make you more drowsy while you try to study. &nbsp;This in turn reduces your effectiveness in studying.</p>
         </div>
     </div>
     <div class="quiz-wrapper">
@@ -94,7 +94,7 @@ $submission = studysauce_render_webform_plain($node, $sid);
         <?php endif; ?>
     </div>
     <div class="grid_6 highlighted-link">
-        <a class="more" href="#premium" onclick="jQuery('#tips').removeClass('study-quiz-only');">Go premium</a>
+        <a class="more" href="#premium" onclick="jQuery('#home').removeClass('study-quiz-only');">Go premium</a>
     </div>
     <a href="#" onclick="jQuery('#home').removeClass('study-quiz-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
     <p style="margin-bottom:0;line-height: 1px; clear:both;">&nbsp;</p>

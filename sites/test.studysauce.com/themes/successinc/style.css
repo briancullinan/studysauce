@@ -353,7 +353,7 @@ img {
 
 .page-dashboard .page .panel-pane
 {
-    margin-left:200px;
+    margin-left:220px;
     padding-top:76px;
     display:none;
 }
@@ -1936,6 +1936,8 @@ ul.company-info li.last {
 .page-dashboard #study-quiz .webform-confirmation,
 .page-dashboard #mozart-effect > div,
 .page-dashboard #empty-schedule a,
+.page-dashboard #schedule .building-schedule h2,
+.page-dashboard #profile .building-schedule h2,
 .page-dashboard .first-time-message,
 .page-dashboard #empty-dates a,
 .page-dashboard #metrics-empty a,
@@ -1962,6 +1964,8 @@ ul.company-info li.last {
 
 .page-dashboard #plan .buy-plan .highlighted-link,
 .page-dashboard #profile .buy-plan .highlighted-link,
+.page-dashboard #schedule .building-schedule h2,
+.page-dashboard #profile .building-schedule h2,
 .page-dashboard #metrics-empty a,
 .page-dashboard #empty-dates a,
 .page-dashboard #empty-schedule a
@@ -1991,7 +1995,9 @@ ul.company-info li.last {
 .page-dashboard #profile .buy-plan h2,
 .page-dashboard #metrics-empty h2,
 .page-dashboard #empty-dates h2,
-.page-dashboard #empty-schedule h2
+.page-dashboard #empty-schedule h2,
+.page-dashboard #schedule .building-schedule h2,
+.page-dashboard #profile .building-schedule h2
 {
     text-align: center;
 }
@@ -4798,6 +4804,7 @@ tbody
 .page-dashboard #checkin #checklist,
 .page-dashboard #plan #checklist,
 .page-dashboard #schedule,
+.building-schedule,
 .page-dashboard #empty-schedule,
 .page-dashboard #empty-dates,
 .page-dashboard #mozart-effect,
@@ -4821,6 +4828,8 @@ tbody
 .page-dashboard #study-quiz:before,
 .page-dashboard #schedule:before,
 .page-dashboard #plan .buy-plan:before,
+.page-dashboard #schedule .building-schedule:before,
+.page-dashboard #profile .building-schedule:before,
 .page-dashboard #metrics-empty:before,
 .page-dashboard #empty-schedule:before,
 .page-dashboard #empty-dates:before,
@@ -4889,6 +4898,8 @@ tbody
 .page-dashboard.parent #checkin .parents_only h2,
 .page-dashboard.parent #checkin .parents_only a,
 .page-dashboard.parent #checkin .parents_only,
+.page-dashboard #schedule .building-schedule,
+.page-dashboard #profile .building-schedule,
 .page-dashboard #empty-schedule,
 .page-dashboard #empty-dates,
 .page-dashboard #mozart-effect,

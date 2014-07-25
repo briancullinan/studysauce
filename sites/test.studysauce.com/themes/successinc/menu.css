@@ -36,7 +36,7 @@
 {
     margin: 0;
     padding:0;
-    width:200px;
+    width:220px;
     text-align: left;
 }
 
@@ -112,6 +112,8 @@
 .page-dashboard #plan.checklist-only #checklist,
 .page-dashboard #metrics.empty #metrics-empty,
 .page-dashboard #checkin.mozart-only #mozart-effect,
+.page-dashboard #schedule.building .building-schedule,
+.page-dashboard #profile.building .building-schedule,
 .page-dashboard #checkin.empty #empty-schedule,
 .page-dashboard #deadlines.empty #empty-dates,
 .page-dashboard .study-quiz-only #study-quiz,
@@ -310,6 +312,11 @@
         display:block;
     }
 
+    .page-dashboard.menu-open #main-menu ul ul
+    {
+        display: none;
+    }
+
     .page-dashboard.admin-menu #main-menu > div > ul
     {
         padding-top: 0;
@@ -324,6 +331,11 @@
         margin-left: 100%;
         position: relative;
         display:none;
+    }
+
+    .page-dashboard.paid-user #main-menu ul ul
+    {
+        width: 500%;
     }
 
     .page-dashboard #main-menu li ul
@@ -379,9 +391,15 @@
         margin-left: -500%;
     }
 
+    .page-dashboard.paid-user #main-menu ul li:nth-child(5) ul li,
     .page-dashboard #main-menu ul li:nth-child(6) ul li
     {
         width:50%;
+    }
+
+    .page-dashboard.paid-user #main-menu ul li:nth-child(5) ul
+    {
+        margin-left: -400%;
     }
 
     .page-dashboard #main-menu li
@@ -392,6 +410,11 @@
         text-align: center;
         height: 62px;
         padding: 0;
+    }
+
+    .page-dashboard.paid-user #main-menu li
+    {
+        width:20%;
     }
 
     .page-dashboard.parent #main-menu li

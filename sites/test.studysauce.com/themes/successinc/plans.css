@@ -40,11 +40,13 @@
     bottom:0;
     right:0;
     overflow: hidden;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .page-dashboard #plan #calendar
 {
-    max-height:500px;
+    /*max-height:500px;*/
     margin-bottom:20px;
 }
 
@@ -59,6 +61,7 @@
     white-space: nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
+    display: block;
 }
 
 .page-dashboard #plan .fc-event-title h4
@@ -80,21 +83,21 @@
     line-height: 10px;
 }
 
-.page-dashboard #plan .class-event,
-.page-dashboard #plan .other-event
+.page-dashboard #plan .event-type-c,
+.page-dashboard #plan .fc-event.event-type-o
 {
     border: 3px solid #555555;
 }
 
-.page-dashboard #plan .holiday-event,
-.page-dashboard #plan .free-event,
-.page-dashboard #plan .other-event
+.page-dashboard #plan .event-type-h,
+.page-dashboard #plan .fc-event.event-type-f,
+.page-dashboard #plan .fc-event.event-type-o
 {
     color:#ffffff;
     background-color: #555555;
 }
 
-.page-dashboard #plan .other-event
+.page-dashboard #plan .fc-event.event-type-o
 {
     background-color: #000000;
 }
@@ -124,9 +127,9 @@
     vertical-align: top;
 }
 
-.page-dashboard #plan .row.deadline
+.page-dashboard #plan .row.event-type-d .field-name-field-class-name
 {
-    background: url('images/menu_icons_32.png') no-repeat left -1314px transparent;
+    background: url('images/menu_icons_32.png') no-repeat left -1312px transparent;
 }
 
 .page-dashboard #plan .head.hide,
@@ -304,6 +307,12 @@
     line-height: 30px;
     margin:10px 0;
     background: url(images/menu_icons_32.png) no-repeat 0 -1344px transparent;
+}
+
+.page-dashboard #plan .sort-by a[href="#expand"]
+{
+    float:right;
+    margin:0;
 }
 
 .page-dashboard #plan .row.expanded a[href="#expand"]
@@ -619,7 +628,7 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
 }
 
 .page-dashboard #plan .class .class,
-.page-dashboard #plan .class-event.fc-event
+.page-dashboard #plan .event-type-c.fc-event
 {
     border: 3px solid #555555;
     color:#FFFFFF;

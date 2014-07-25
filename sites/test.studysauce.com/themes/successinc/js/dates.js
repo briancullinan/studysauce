@@ -52,6 +52,15 @@ jQuery(document).ready(function($) {
                        deadlines.find('.row, .head, a[href="#add-deadline"]')
                            .replaceWith(jQuery(data.reminders).find('.row, .head, a[href="#add-deadline"]'));
 
+                       // update calendar events
+                       window.planEvents = data.events;
+
+                       // update plan tab
+                       var plan = jQuery('#plan');
+                       plan.find('.row, .head').remove();
+                       jQuery(data.plan).find('.row, .head')
+                           .insertBefore(plan.find('.pane-content p').last());
+
                        if(deadlines.find('.row').not('#new-dates-row').length == 0)
                            deadlines.find('a[href="#add-deadline"]').first().trigger('click');
                    }
@@ -87,6 +96,29 @@ jQuery(document).ready(function($) {
         }
         deadlines.find('.head, .row').not('#new-dates-row').not(deadlines.find('#new-dates-row').prevUntil(':not(.row)')).replaceWith(rows);
     });
+
+    // move the save button to the current row if the window is smaller that the content length
+    jQuery(window).scroll(function () {
+        if(jQuery(window).height() < deadlines.height())
+        {
+            // get edit row closest to the center of the window
+            var closest = {};
+            var keys = [];
+            deadlines.find('.row.edit').add(deadlines.find('.row').last()).each(function () {
+                var center = Math.abs(jQuery(window).height() / 2 - (jQuery(this).offset().top - jQuery(window).scrollTop()));
+                closest[center] = jQuery(this);
+                keys[keys.length] = center;
+            });
+            keys.sort(function(a, b){return a-b});
+            deadlines.find('.highlighted-link').detach().insertAfter(closest[keys[0]]);
+        }
+        else if(deadlines.find('.row').last().next()[0] != deadlines.find('.highlighted-link')[0])
+            deadlines.find('.highlighted-link').detach().insertAfter(deadlines.find('.row').last());
+    });
+    jQuery(window).resize(function () {
+        jQuery(window).trigger('scroll');
+    });
+
 
     deadlines.on('click', 'a[href="#save-dates"]', function (evt) {
         evt.preventDefault();

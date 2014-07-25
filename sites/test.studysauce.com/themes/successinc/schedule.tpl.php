@@ -10,8 +10,26 @@ if(drupal_get_path_alias(current_path()) == 'schedule' ||
     print theme('studysauce-funnel');
 
 global $user;
-list($events, $node, $classes, $entities) = studysauce_get_events();
+$query = new EntityFieldQuery();
+$nodes = $query->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'schedule')
+    ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+    ->propertyCondition('status', 1)
+    ->range(0, 1)
+    ->execute();
+if (!empty($nodes['node'])) {
+    $nodes = array_keys($nodes['node']);
+    $nid = array_shift($nodes);
+    $node = node_load($nid);
+}
+list($events, $classes, $others) = studysauce_get_events();
 ?>
+
+<div class="building-schedule">
+    <div class="middle-wrapper">
+        <h2>Please wait while we build your personalized study plan.</h2>
+    </div>
+</div>
 
 <h2>Enter your class + work schedule below</h2>
 <div class="field-type-text field-name-field-university field-widget-text-textfield form-wrapper">
@@ -29,36 +47,40 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
         for($i = 0; $i < 5; $i++)
         {
             if(count($classes) < 5)
-                $classes[-$i] = '';
+            {
+                $blank = new stdClass();
+                $blank->field_class_name['und'][0]['value'] = '';
+                $classes[-$i] = $blank;
+            }
         }
     }
 
     $examples = ['HIST 101', 'CALC 120', 'MAT 200', 'PHY 110', 'BUS 300', 'ANT 350', 'GEO 400', 'BIO 250', 'CHM 180', 'PHIL 102', 'ENG 100'];
 
+    $classI = 0;
     foreach($classes as $eid => $c)
     {
-        $classI = array_search($eid, array_keys($classes));
         $classConfig[$eid]['className'] = 'class' . $classI;
         $startDate = null;
         $endDate = null;
-        if(isset($entities[$eid]->field_time['und'][0]['value']))
-            $startDate = strtotime(date('Y/m/d H:i:s', strtotime($entities[$eid]->field_time['und'][0]['value'])) . ' UTC');
-        if(isset($entities[$eid]->field_time['und'][0]['value2']))
-            $endDate = strtotime(date('Y/m/d H:i:s', strtotime($entities[$eid]->field_time['und'][0]['value2'])) . ' UTC');
+        if(isset($classes[$eid]->field_time['und'][0]['value']))
+            $startDate = strtotime(date('Y/m/d H:i:s', strtotime($classes[$eid]->field_time['und'][0]['value'])) . ' UTC');
+        if(isset($classes[$eid]->field_time['und'][0]['value2']))
+            $endDate = strtotime(date('Y/m/d H:i:s', strtotime($classes[$eid]->field_time['und'][0]['value2'])) . ' UTC');
 
         $daysOfTheWeek = array();
-        if(isset($entities[$eid]->field_day_of_the_week['und'][0]['value']))
-            $daysOfTheWeek = array_map(function ($x) { return $x['value']; }, $entities[$eid]->field_day_of_the_week['und']);
+        if(isset($classes[$eid]->field_day_of_the_week['und'][0]['value']))
+            $daysOfTheWeek = array_map(function ($x) { return $x['value']; }, $classes[$eid]->field_day_of_the_week['und']);
 
         ?>
-        <div class="row <?php print ($c == '' ? 'edit' : ''); ?>" id="eid-<?php print $eid; ?>">
+        <div class="row <?php print ($c->field_class_name['und'][0]['value'] == '' ? 'edit' : ''); ?>" id="eid-<?php print $eid; ?>">
             <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
                 <div class="read-only">
                     <label>&nbsp;</label>
-                    <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?></div>
+                    <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c->field_class_name['und'][0]['value']; ?></div>
                 <div class="form-item form-type-textfield">
                     <label>Class name</label>
-                    <input name="schedule-class-name" value="<?php print $c; ?>"
+                    <input name="schedule-class-name" value="<?php print $c->field_class_name['und'][0]['value']; ?>"
                            class="text-full form-text jquery_placeholder-processed"
                            type="text" size="60" maxlength="255" placeholder="<?php print $examples[array_rand($examples, 1)]; ?>" value="" autocomplete="off">
                 </div>
@@ -168,6 +190,7 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
             </div>
         </div>
     <?php
+        $classI++;
     }
     ?>
 
@@ -284,12 +307,13 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
 <div class="other-schedule">
     <?php
 
-    foreach($entities as $eid => $entity)
+    foreach($others as $eid => $entity)
     {
-        if(!isset($entity->field_event_type['und'][0]['value']) || $entity->field_event_type['und'][0]['value'] != 'o')
+        if(!isset($entity->field_event_type['und'][0]['value']) || $entity->field_event_type['und'][0]['value'] != 'o' ||
+            empty($entity->field_day_of_the_week['und']))
             continue;
 
-        $c = $entities[$eid]->field_class_name['und'][0]['value'];
+        $c = $entity->field_class_name['und'][0]['value'];
         $startDate = null;
         $endDate = null;
         if(isset($entity->field_time['und'][0]['value']))
@@ -385,10 +409,10 @@ list($events, $node, $classes, $entities) = studysauce_get_events();
                         <span class="<?php print (in_array('monthly', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Monthly</span><br />
                     </div>
                     <div class="form-checkboxes form-type-checkbox">
-                        <input type="radio" name="schedule-reoccurring-<?php print $eid; ?>" id="other-schedule-weekly-<?php print $eid; ?>"
+                        <input type="checkbox" name="schedule-reoccurring-<?php print $eid; ?>" id="other-schedule-weekly-<?php print $eid; ?>"
                                value="weekly" class="form-checkbox" <?php print (!in_array('monthly', $daysOfTheWeek) ? 'checked="checked"' : ''); ?>/>
                         <label for="other-schedule-weekly-<?php print $eid; ?>">Weekly</label>
-                        <input type="radio" name="schedule-reoccurring-<?php print $eid; ?>" id="other-schedule-monthly-<?php print $eid; ?>"
+                        <input type="checkbox" name="schedule-reoccurring-<?php print $eid; ?>" id="other-schedule-monthly-<?php print $eid; ?>"
                                value="monthly" class="form-checkbox" <?php print (in_array('monthly', $daysOfTheWeek) ? 'checked="checked"' : ''); ?>/>
                         <label for="other-schedule-monthly-<?php print $eid; ?>">Monthly</label>
                     </div>

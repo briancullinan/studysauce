@@ -1,6 +1,16 @@
+
 var calendar = null,
     youtubeReady = false,
     uploads = [];
+
+function resizeCalendar(calendarView) {
+    if(!jQuery('#plan').is('.fullcalendar'))
+        return;
+    if(calendarView.name === 'agendaWeek' || calendarView.name === 'agendaDay') {
+        // if height is too big for these views, then scrollbars will be hidden
+        calendarView.setHeight(9999);
+    }
+}
 
 function initPlayer(id)
 {
@@ -90,22 +100,23 @@ jQuery(document).ready(function () {
             row = that.parents('.row'),
             event = window.planEvents[row.attr('id').substring(4)];
 
+
         $.ajax({
             url: '/node/save/completed',
             type: 'POST',
             dataType: 'json',
             data: {
-                className: event['title'],
+                cid: event['cid'],
                 completed: that.is(':checked'),
-                type: event['className'].indexOf('p-event') != -1
+                type: event['className'].indexOf('event-type-p') != -1
                     ? 'p'
-                    : (event['className'].indexOf('sr-event') != -1
+                    : (event['className'].indexOf('event-type-sr') != -1
                     ? 'sr'
-                    : (event['className'].indexOf('free-event') != -1
+                    : (event['className'].indexOf('event-type-f') != -1
                     ? 'f'
-                    : (event['className'].indexOf('other-event') != -1
+                    : (event['className'].indexOf('event-type-o') != -1
                     ? 'o'
-                    : (event['className'].indexOf('deadline-event') != -1
+                    : (event['className'].indexOf('event-type-d') != -1
                     ? 'd'
                     : ''))))
             },
@@ -126,8 +137,7 @@ jQuery(document).ready(function () {
                 ? (/default-([a-z]*)(\s|$)/ig).exec(row.attr('class'))[1]
                 : that.val(),
             eid = row.attr('id').substring(4),
-            classname = row.find('.field-name-field-class-name .read-only').text(),
-            title = row.find('input[name="plan-title"]').val();
+            classname = row.find('.field-name-field-class-name .read-only').text();
 
         // add strategy if they haven't used it before
         if(row.find('.strategy-' + strategy).length == 0 && jQuery('#plan .strategy-' + strategy).length > 0)
@@ -138,23 +148,23 @@ jQuery(document).ready(function () {
             if(strategy == 'active')
             {
                 // copy values back in to newly rendered fields
-                if(typeof window.strategies != 'undefined' && typeof window.strategies[title] != 'undefined' &&
-                   typeof window.strategies[title]['active'] != 'undefined')
+                if(typeof window.strategies != 'undefined' && typeof window.strategies[eid] != 'undefined' &&
+                   typeof window.strategies[eid]['active'] != 'undefined')
                 {
-                    newStrategy.find('textarea[name="strategy-skim"]').val(window.strategies[title]['active'].skim);
-                    newStrategy.find('textarea[name="strategy-why"]').val(window.strategies[title]['active'].why);
-                    newStrategy.find('textarea[name="strategy-questions"]').val(window.strategies[title]['active'].questions);
-                    newStrategy.find('textarea[name="strategy-summarize"]').val(window.strategies[title]['active'].summarize);
-                    newStrategy.find('textarea[name="strategy-exam"]').val(window.strategies[title]['active'].exam);
+                    newStrategy.find('textarea[name="strategy-skim"]').val(window.strategies[eid]['active'].skim);
+                    newStrategy.find('textarea[name="strategy-why"]').val(window.strategies[eid]['active'].why);
+                    newStrategy.find('textarea[name="strategy-questions"]').val(window.strategies[eid]['active'].questions);
+                    newStrategy.find('textarea[name="strategy-summarize"]').val(window.strategies[eid]['active'].summarize);
+                    newStrategy.find('textarea[name="strategy-exam"]').val(window.strategies[eid]['active'].exam);
                 }
             }
             if(strategy == 'other')
             {
                 // copy values back in to newly rendered fields
-                if(typeof window.strategies != 'undefined' && typeof window.strategies[title] != 'undefined' &&
-                   typeof window.strategies[title]['other'] != 'undefined')
+                if(typeof window.strategies != 'undefined' && typeof window.strategies[eid] != 'undefined' &&
+                   typeof window.strategies[eid]['other'] != 'undefined')
                 {
-                    newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[title]['other'].notes);
+                    newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[eid]['other'].notes);
                 }
             }
             if(strategy == 'spaced')
@@ -168,12 +178,12 @@ jQuery(document).ready(function () {
                     }).join('<br />');
                     newStrategy.find('.strategy-review').append(dateStr);
                 }
-                if(typeof window.strategies != 'undefined' && typeof window.strategies[title] != 'undefined' &&
-                   typeof window.strategies[title]['spaced'] != 'undefined')
+                if(typeof window.strategies != 'undefined' && typeof window.strategies[eid] != 'undefined' &&
+                   typeof window.strategies[eid]['spaced'] != 'undefined')
                 {
-                    newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[title]['spaced'].notes);
-                    if(window.strategies[title]['spaced'].review != '')
-                        window.strategies[title]['spaced'].review.split(',').forEach(function (x, i) {
+                    newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[eid]['spaced'].notes);
+                    if(window.strategies[eid]['spaced'].review != '')
+                        window.strategies[eid]['spaced'].review.split(',').forEach(function (x, i) {
                             newStrategy.find('input[value="' + x + '"]').prop('checked', true);
                         });
                 }
@@ -188,12 +198,12 @@ jQuery(document).ready(function () {
                         that.attr('name', that.attr('name') + eid);
                     newStrategy.find('label[for="' + oldId + '"]').attr('for', oldId + eid);
                 });
-                if(typeof window.strategies != 'undefined' && typeof window.strategies[title] != 'undefined' &&
-                    typeof window.strategies[title]['prework'] != 'undefined')
+                if(typeof window.strategies != 'undefined' && typeof window.strategies[eid] != 'undefined' &&
+                    typeof window.strategies[eid]['prework'] != 'undefined')
                 {
-                    newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[title]['prework'].notes);
-                    if(window.strategies[title]['prework'].prepared != '')
-                        window.strategies[title]['prework'].prepared.split(',').forEach(function (x, i) {
+                    newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[eid]['prework'].notes);
+                    if(window.strategies[eid]['prework'].prepared != '')
+                        window.strategies[eid]['prework'].prepared.split(',').forEach(function (x, i) {
                             newStrategy.find('input[value="' + x + '"]').prop('checked', true);
                         });
                 }
@@ -321,21 +331,21 @@ jQuery(document).ready(function () {
                     $('#plan-' + eid + '-plupload').find('.plup-drag-info').show(); // Show info
                 });
 
-                if(typeof window.strategies != 'undefined' && typeof window.strategies[title] != 'undefined' &&
-                   typeof window.strategies[title]['teach'] != 'undefined')
+                if(typeof window.strategies != 'undefined' && typeof window.strategies[eid] != 'undefined' &&
+                   typeof window.strategies[eid]['teach'] != 'undefined')
                 {
-                    newStrategy.find('input[name="strategy-title"]').val(window.strategies[title]['teach'].title);
-                    newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[title]['teach'].notes);
+                    newStrategy.find('input[name="strategy-title"]').val(window.strategies[eid]['teach'].title);
+                    newStrategy.find('textarea[name="strategy-notes"]').val(window.strategies[eid]['teach'].notes);
                     var delta = $('#plan-' + eid + '-plupload').find('.plup-list li').length;
                     var name = 'plan-plupload[' + delta + ']';
-                    if(typeof window.strategies[title]['teach'].uploads != 'undefined' &&
-                        typeof window.strategies[title]['teach'].uploads[0] != 'undefined')
+                    if(typeof window.strategies[eid]['teach'].uploads != 'undefined' &&
+                        typeof window.strategies[eid]['teach'].uploads[0] != 'undefined')
                     {
-                        var thumb = '<img src="' + window.strategies[title]['teach'].uploads[0].uri + '" title="teaching" />';
-                        if(typeof window.strategies[title]['teach'].uploads[0].play != 'undefined')
+                        var thumb = '<img src="' + window.strategies[eid]['teach'].uploads[0].uri + '" title="teaching" />';
+                        if(typeof window.strategies[eid]['teach'].uploads[0].play != 'undefined')
                         {
-                            thumb = '<video width="184" height="184" preload="auto" controls="controls" poster="' + window.strategies[title]['teach'].uploads[0].uri + '">' +
-                                    '<source src="' + window.strategies[title]['teach'].uploads[0].play + '" type="video/webm" />';
+                            thumb = '<video width="184" height="184" preload="auto" controls="controls" poster="' + window.strategies[eid]['teach'].uploads[0].uri + '">' +
+                                    '<source src="' + window.strategies[eid]['teach'].uploads[0].play + '" type="video/webm" />';
                             $('#plan-' + eid + '-plupload').addClass('uploaded');
                         }
                         $('#plan-' + eid + '-plupload').find('img[src*="empty-play.png"]').remove();
@@ -345,8 +355,8 @@ jQuery(document).ready(function () {
                                 //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
                                 '<div class="plup-thumb-wrapper">' + thumb + '</div>' +
                                 '<a class="plup-remove-item"></a>' +
-                                '<input type="hidden" name="' + name + '[fid]" value="' + window.strategies[title]['teach'].uploads[0].fid + '" />' +
-                                '<input type="hidden" name="' + name + '[thumbnail]" value="' + window.strategies[title]['teach'].uploads[0].thumbnail + '" />' +
+                                '<input type="hidden" name="' + name + '[fid]" value="' + window.strategies[eid]['teach'].uploads[0].fid + '" />' +
+                                '<input type="hidden" name="' + name + '[thumbnail]" value="' + window.strategies[eid]['teach'].uploads[0].thumbnail + '" />' +
                                 '</li>');
                         // Bind remove functionality to uploaded file
                     }
@@ -372,6 +382,7 @@ jQuery(document).ready(function () {
         evt.preventDefault();
         var that = jQuery(this),
             row = that.parents('.row'),
+            eid = row.attr('id').substring(4),
             strategies = [];
         row.find('.strategy-active, .strategy-spaced, .strategy-teach, .strategy-other, .strategy-prework').each(function () {
             var that = jQuery(this);
@@ -379,7 +390,7 @@ jQuery(document).ready(function () {
             {
                 var strategy = {
                     type: 'active',
-                    name:      row.find('input[name="plan-title"]').val(),
+                    eid:      eid,
                     skim:      that.find('textarea[name="strategy-skim"]').val() || '',
                     why:       that.find('textarea[name="strategy-why"]').val() || '',
                     questions: that.find('textarea[name="strategy-questions"]').val() || '',
@@ -393,7 +404,7 @@ jQuery(document).ready(function () {
                    strategy.exam.trim() == '')
                 strategy = {
                     type: 'active',
-                    name:row.find('input[name="plan-title"]').val(),
+                    eid:eid,
                     remove:true
                 };
                 strategies[strategies.length] = strategy;
@@ -415,7 +426,7 @@ jQuery(document).ready(function () {
 
                 var strategy = {
                     type: 'teach',
-                    name:  row.find('input[name="plan-title"]').val(),
+                    eid:  eid,
                     title: that.find('input[name="strategy-title"]').val() || '',
                     notes: that.find('textarea[name="strategy-notes"]').val() || '',
                     uploads: uploads
@@ -425,7 +436,7 @@ jQuery(document).ready(function () {
                    strategy.uploads.length == 0)
                     strategy = {
                         type:   'teach',
-                        name:   row.find('input[name="plan-title"]').val() || '',
+                        eid:   eid,
                         remove: true
                     };
                 strategies[strategies.length] = strategy;
@@ -441,7 +452,7 @@ jQuery(document).ready(function () {
                 });
                 var strategy = {
                     type:   'spaced',
-                    name:   row.find('input[name="plan-title"]').val(),
+                    eid:   eid,
                     notes:  that.find('textarea[name="strategy-notes"]').val() || '',
                     review: review.join(',') || ''
                 };
@@ -449,7 +460,7 @@ jQuery(document).ready(function () {
                    strategy.review.trim() == '')
                     strategy = {
                         type: 'spaced',
-                        name:row.find('input[name="plan-title"]').val(),
+                        eid:eid,
                         remove:true
                     };
                 strategies[strategies.length] = strategy;
@@ -461,13 +472,13 @@ jQuery(document).ready(function () {
             {
                 var strategy = {
                     type:  'other',
-                    name:  row.find('input[name="plan-title"]').val(),
+                    eid:  eid,
                     notes: that.find('textarea[name="strategy-notes"]').val() || ''
                 };
                 if(strategy.notes.trim() == '')
                     strategy = {
                         type:   'other',
-                        name:   row.find('input[name="plan-title"]').val(),
+                        eid:   eid,
                         remove: true
                     };
                 strategies[strategies.length] = strategy;
@@ -480,7 +491,7 @@ jQuery(document).ready(function () {
                 });
                 var strategy = {
                     type:   'prework',
-                    name:    row.find('input[name="plan-title"]').val(),
+                    eid:    eid,
                     notes:   that.find('textarea[name="strategy-notes"]').val() || '',
                     prepared: prepare.join(',') || ''
                 };
@@ -488,7 +499,7 @@ jQuery(document).ready(function () {
                     strategy.prepare.trim() == '')
                     strategy = {
                         type:   'prework',
-                        name:   row.find('input[name="plan-title"]').val(),
+                        eid:   eid,
                         remove: true
                     };
                 strategies[strategies.length] = strategy;
@@ -558,18 +569,22 @@ jQuery(document).ready(function () {
             row.find('.strategy-spaced:visible, .strategy-active:visible, .strategy-teach:visible, .strategy-other:visible, .strategy-prework:visible').first().scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
     });
 
-    var date = new Date();
+    var date = new Date(),
+        original;
     var isInitialized = false,
         initialize = function () {
             if (!isInitialized)
             {
                 calendar = $('#calendar').fullCalendar(
                     {
+                        viewDisplay: resizeCalendar,
+                        windowResize: resizeCalendar,
                         titleFormat: 'MMMM',
                         editable: true,
                         draggable: true,
                         aspectRatio: 1.9,
                         height:500,
+                        timezone: 'local',
                         timeslotsPerHour: 4,
                         slotEventOverlap: false,
                         slotMinutes: 15,
@@ -586,102 +601,86 @@ jQuery(document).ready(function () {
                         defaultView: 'agendaWeek',
                         selectable: false,
                         events: function (start, end, callback) {
+                            var events = [];
                             for(var eid in window.planEvents)
                             {
                                 window.planEvents[eid].start = new Date(window.planEvents[eid].start);
                                 window.planEvents[eid].end = new Date(window.planEvents[eid].end);
+                                events[events.length] = window.planEvents[eid];
                             }
-                            callback(window.planEvents);
+
+                            callback(events);
                         },
                         eventClick: function(calEvent, jsEvent, view) {
-                            var eid = window.planEvents.indexOf(calEvent);
                             // var eid =  calEvent._id.substring(3);
                             // change the border color just for fun
-                            if(plans.find('#eid-' + eid).length > 0)
-                                plans.find('#eid-' + eid).scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
+                            if(plans.find('#eid-' + calEvent.cid).length > 0)
+                                plans.find('#eid-' + calEvent.cid).scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
 
                         },
                         eventDragStart: function (event, jsEvent, ui, view) {
-                            var prev, next;
-                            for (var i in window.planEvents)
-                                if (window.planEvents[i].start < event.start &&
-                                    window.planEvents[i].className[1] == event.className[0])
-                                    prev = window.planEvents[i];
-                                else if (window.planEvents[i].className[1] == event.className[0]) {
-                                    next = window.planEvents[i];
-                                    break;
-                                }
-                            /*var dragDropEvent = {
-                             allDay:false,
-                             className: ['drag-event'],
-                             start: prev.end,
-                             end: next.start,
-                             editable: false,
-                             title: 'Drag &amp; Drop',
-                             _id: 'drag-and-drop'
-                             };*/
-                            //dragSource = [dragDropEvent];
-                            //calendar.fullCalendar( 'renderEvent',  dragDropEvent, true);
-                            //view.setEventData(events); // for View.js, TODO: unify with renderEvents
-                            //window.planEvents.push(dragDropEvent);
-                            //view.renderEvents(window.planEvents, 'drag-and-drop'); // actually render the DOM elements
-
+                            original = new Date(event.start.getTime());
                         },
                         eventDragStop: function (event, jsEvent, ui, view) {
                         },
                         eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc) {
-                            //calendar.fullCalendar( 'removeEventSource',  dragSource);
-                            var prev, next,
-                                lastTime = event.start.getTime() - dayDelta * 86400 * 1000 - minuteDelta * 60 * 1000;
-                            for (var i in window.planEvents) {
-                                if ((window.planEvents[i].className[1] == event.className[0] ||
-                                     window.planEvents[i].className[0] == event.className[0]) &&
-                                    window.planEvents[i] != event) {
-                                    // TODO: update this if classes are draggable
-                                    if (window.planEvents[i].start.getTime() < lastTime &&
-                                        (prev == null || window.planEvents[i].end.getTime() > prev.end.getTime()))
-                                        prev = window.planEvents[i];
 
-                                    if (window.planEvents[i].start.getTime() > lastTime &&
-                                        (next == null || window.planEvents[i].start.getTime() < next.start.getTime()))
+                            if(allDay)
+                            {
+                                revertFunc();
+                                return;
+                            }
+
+                            var prev, next;
+
+                            for (var i in window.planEvents) {
+                                if ((window.planEvents[i].className[1] == event.className[1] ||
+                                     window.planEvents[i].className[0] == event.className[1]) &&
+                                    window.planEvents[i].className[0] != 'event-type-r' &&
+                                    window.planEvents[i].className[0] != 'event-type-h' &&
+                                    window.planEvents[i].className[0] != 'event-type-d' &&
+                                    i != event.cid)
+                                {
+                                    // TODO: update this if classes are draggable
+                                    if ((next == null || window.planEvents[i].start.getTime() < next.start.getTime()) &&
+                                        window.planEvents[i].start.getTime() > original.getTime())
+                                    {
                                         next = window.planEvents[i];
+                                    }
+                                    else if((prev == null || window.planEvents[i].start.getTime() > prev.start.getTime()) &&
+                                        window.planEvents[i].start.getTime() < original.getTime())
+                                        prev = window.planEvents[i];
                                 }
                             }
-                            // + dayDelta * 86400 * 1000 + minuteDelta * 60 * 1000
-                            if (event.start.getTime() < prev.end.getTime() ||
-                                event.end.getTime() > next.start.getTime())
+
+                            // check for last event of type or first event of type
+                            if ((prev != null && event.start.getTime() < prev.end.getTime()) ||
+                                (next != null && event.end.getTime() > next.start.getTime()))
+                            {
                                 revertFunc();
-                            //alert(
-                            //    event.title + " was moved " +
-                            //    dayDelta + " days and " +
-                            //    minuteDelta + " minutes."
-                            //);
+                                return;
+                            }
 
-                            //if (allDay) {
-                            //alert("Event is now all-day");
-                            //}else{
-                            //alert("Event has a time-of-day");
-                            //}
 
-                            //if (!confirm("Are you sure about this change?")) {
-                            //revertFunc();
-                            //}
                             $.ajax({
-                                       url: '/node/save/schedule',
+                                       url: '/node/move/schedule',
                                        type: 'POST',
                                        dataType: 'json',
                                        data: {
-                                           className: event['title'],
+                                           cid: event['cid'],
                                            start: event['start'].toJSON(),
                                            end: event['end'].toJSON(),
-                                           dotw: '',
-                                           type: event['className'].indexOf('p-event') != -1
+                                           type: event['className'].indexOf('event-type-p') != -1
                                                ? 'p'
-                                               : (event['className'].indexOf('sr-event') != -1
+                                               : (event['className'].indexOf('event-type-sr') != -1
                                                ? 'sr'
-                                               : (event['className'].indexOf('free-event') != -1
+                                               : (event['className'].indexOf('event-type-f') != -1
                                                ? 'f'
-                                               : ''))
+                                               : (event['className'].indexOf('event-type-o') != -1
+                                               ? 'o'
+                                               : (event['className'].indexOf('event-type-d') != -1
+                                               ? 'd'
+                                               : ''))))
                                        },
                                        error: revertFunc,
                                        success: function (data) {
@@ -697,6 +696,10 @@ jQuery(document).ready(function () {
                 //calendar.find('.fc-agenda-slots tr:nth-child(4n-3) .fc-agenda-axis').eq(new Date().getHours()).scrollintoview({padding: {top:120,bottom:500,left:0,right:0}});
 
                 isInitialized = true;
+                jQuery('#plan').on('click', '.sort-by a[href="#expand"]', function () {
+                    jQuery('#plan').toggleClass('fullcalendar');
+                    $('#calendar').fullCalendar('render');
+                });
             }
         },
         d = date.getDate(),
@@ -718,3 +721,5 @@ jQuery(document).ready(function () {
     });
 });
 
+//@ sourceURL=plans.js
+//# sourceURL=plans.js

@@ -88,8 +88,8 @@ if(isset($b->item_id)): ?>
                 </div>
             </div>
         </div>
-        <?php if(isset($b->field_hours['und'][0]['value'])) : ?>
-            <div class="row draggable even <?php print (isset($m->item_id) ? ('gid' . $m->item_id) : ''); ?> <?php print (!isset($m->field_grade['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
+        <?php if(isset($b->field_hours['und'][0]['value']) && isset($m->field_grade['und'][0]['value'])) : ?>
+            <div class="row draggable even <?php print (isset($m->item_id) ? ('gid' . $m->item_id) : ''); ?>">
                 <div class="field-name-field-type"><strong>Study Milestone</strong></div>
                 <div class="field-type-list-text field-name-field-grade field-widget-options-select form-wrapper">
                     <div class="read-only">
@@ -151,8 +151,8 @@ if(isset($b->item_id)): ?>
             </div>
         <?php
         endif;
-        if(isset($m->field_grade['und'][0]['value'])) : ?>
-            <div class="row draggable odd <?php print (isset($o->item_id) ? ('gid' . $o->item_id) : ''); ?> <?php print (!isset($o->field_gpa['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
+        if(isset($m->field_grade['und'][0]['value']) && isset($o->field_gpa['und'][0]['value'])) : ?>
+            <div class="row draggable odd <?php print (isset($o->item_id) ? ('gid' . $o->item_id) : ''); ?>">
                 <div class="field-name-field-type"><strong>Study Outcome</strong></div>
                 <div class="field-type-list-float field-name-field-gpa field-widget-options-select form-wrapper">
                     <div class="read-only"><label>Goal: </label>

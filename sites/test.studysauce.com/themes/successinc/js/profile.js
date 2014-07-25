@@ -87,6 +87,11 @@ jQuery(document).ready(function($) {
                 profileData[k] = that.find('input:checked').val();
             });
 
+            profile.addClass('building');
+            // skip building the schedule if we are in the middle of the buy funnel
+            if(window.location.pathname == '/profile')
+                profileData['skipBuild'] = true;
+
             $.ajax({
                        url: '/node/save/profile',
                        type: 'POST',
@@ -117,7 +122,11 @@ jQuery(document).ready(function($) {
 
                                // update profile tab
                                profile.removeClass('valid').addClass('invalid');
+                               profile.removeClass('building');
                            }
+                       },
+                       error: function () {
+                           profile.removeClass('building');
                        }
                    });
         }
@@ -151,6 +160,12 @@ jQuery(document).ready(function($) {
             scheduleData['9-pm-2-am'] = profile.find('.field-name-field-9-pm-2-am input:checked').val();
         }
 
+        profile.addClass('building');
+
+        // skip building the schedule if we are in the middle of the buy funnel
+        if(window.location.pathname == '/customization')
+            scheduleData['skipBuild'] = true;
+
         $.ajax({
                    url: '/node/save/schedule',
                    type: 'POST',
@@ -175,7 +190,11 @@ jQuery(document).ready(function($) {
 
                            // update profile tab
                            profile.removeClass('valid').addClass('invalid');
+                           profile.removeClass('building');
                        }
+                   },
+                   error: function () {
+                       profile.removeClass('building');
                    }
                });
 

@@ -133,6 +133,10 @@ jQuery(document).ready(function($) {
             .appendTo(jQuery('.other-schedule'));
         schedule.find('.schedule .row, .other-schedule .row').not('#add-class-dialog, #add-other-dialog').planFunc();
 
+        // add empty other if there aren't any
+        if(schedule.find('.other-schedule .row').not('#add-other-dialog').length == 0)
+            schedule.find('a[href="#add-other"]').first().trigger('click');
+
         // update profile tab
         if(typeof $.fn.profileFunc != 'undefined')
         {
@@ -271,6 +275,7 @@ jQuery(document).ready(function($) {
     schedule.on('click', 'a[href="#remove-class"]', function (evt) {
         evt.preventDefault();
         var row = jQuery(this).parents('.row');
+        schedule.addClass('building');
         $.ajax({
                    url: '/node/save/schedule',
                    type: 'POST',
@@ -280,6 +285,7 @@ jQuery(document).ready(function($) {
                    },
                    success: function (data) {
                        updateTabs(data);
+                       schedule.removeClass('building');
                    }
                });
     });
@@ -303,15 +309,20 @@ jQuery(document).ready(function($) {
                 type: row.find('input[name="schedule-type"]').val()
             };
         });
+        schedule.addClass('building');
+
         $.ajax({
                    url: '/node/save/schedule',
                    type: 'POST',
                    dataType: 'json',
                    data: {
+                       // skip building the schedule if we are in the middle of the buy funnel
+                       skipBuild: (window.location.pathname == '/schedule' || window.location.pathname == '/schedule2'),
                        university: schedule.find('.field-name-field-university input').val(),
                        classes: classes
                    },
                    success: function (data) {
+
                        if(window.location.pathname == '/schedule')
                            window.location = '/schedule2';
                        else if(window.location.pathname == '/schedule2')
@@ -321,6 +332,10 @@ jQuery(document).ready(function($) {
                            schedule.removeClass('valid').addClass('invalid');
                            updateTabs(data);
                        }
+                       schedule.removeClass('building');
+                   },
+                   error: function () {
+                       schedule.removeClass('building');
                    }
                });
     });

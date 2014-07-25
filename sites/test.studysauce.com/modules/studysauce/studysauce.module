@@ -35,6 +35,12 @@ function studysauce_menu_alter(&$items) {
         'type' => MENU_CALLBACK
     );
 
+    $items['node/move/schedule'] = array(
+        'page callback' => 'studysauce_move_calendar',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
     $items['node/save/profile'] = array(
         'page callback' => 'studysauce_save_profile',
         'access callback' => true,
@@ -188,6 +194,7 @@ function studysauce_partner()
 function studysauce_adviser()
 {
     // TODO: check if user is in advisers group
+
     print json_encode(array(
         'content' => theme('studysauce-adviser', array('account' => user_load(intval($_GET['uid'])))),
         'styles' => drupal_get_css(),
@@ -1399,44 +1406,6 @@ function _studysauce_invite_webform($form, &$form_state)
     }
 }
 
-function _studysauce_get_schedule_classes($account = null)
-{
-    if($account == null)
-    {
-        global $user;
-        $account = user_load($user->uid);
-    }
-    $classes = array();
-    $query = new EntityFieldQuery();
-    $entities = $query->entityCondition('entity_type', 'node')
-        ->propertyCondition('type', 'schedule')
-        ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
-        ->propertyCondition('status', 1)
-        ->range(0,1)
-        ->execute();
-    if (!empty($entities['node']))
-    {
-        $nodes = array_keys($entities['node']);
-        $nid = array_shift($nodes);
-        $node = node_load($nid);
-        if(isset($node->field_classes[LANGUAGE_NONE][0]))
-        {
-            foreach($node->field_classes[LANGUAGE_NONE] as $i => $class)
-            {
-                $eid = $class['value'];
-                $entity = entity_load('field_collection_item', array($eid));
-                if(!empty($entity))
-                {
-                    if(isset($entity[$eid]->field_class_name['und'][0]['value']) && !empty($entity[$eid]->field_class_name['und'][0]['value']) &&
-                        (!isset($entity[$eid]->field_event_type['und'][0]['value']) || $entity[$eid]->field_event_type['und'][0]['value'] == 'c'))
-                        $classes[$eid] = $entity[$eid]->field_class_name['und'][0]['value'];
-                }
-            }
-        }
-    }
-    return $classes;
-}
-
 function _studysauce_get_touched()
 {
     global $user;
@@ -1628,13 +1597,7 @@ function studysauce_get_sds_messages()
             $checkins = array();
             $checkouts = array();
             $validLocations = array();
-            $classes = array_map(function ($class) {
-                $entity = entity_load('field_collection_item', array($class['value']));
-                if(!empty($entity))
-                    return $entity[$class['value']];
-                else
-                    return null;
-            }, $node->field_classes[LANGUAGE_NONE]);
+            $classes = entity_load('field_collection_item', array_map(function ($x) { return $x['value']; }, $node->field_classes[LANGUAGE_NONE]));
 
             list($checkins, $checkouts) = studysauce_clean_checkins($classes);
 
