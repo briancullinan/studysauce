@@ -43,6 +43,11 @@
     display:none;
 }
 
+#import .row .read-only
+{
+    margin:0 5px;
+}
+
 #import .row.first label
 {
     display:block;

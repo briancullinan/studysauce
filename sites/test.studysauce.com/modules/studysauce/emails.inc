@@ -1,5 +1,66 @@
 <?php
 
+function studysauce_welcome_partner()
+{
+
+}
+
+function studysauce_welcome_student($account)
+{
+    $msg = <<< EOHTML
+Congratulations on taking the first step to improving your study effectiveness!  To get the most out of Study Sauce, we recommend a few key things to do.
+
+1. Enter your important deadlines and we will send you reminders to stay on track.
+
+2. Check in when you study and we will guide you through the best study techniques.
+
+3. Set up study goals and rewards.
+
+As always, we are happy to help with any questions that you might have.  Just email us at admin@studysauce.com.
+EOHTML;
+
+    $body = theme('studysauce-email', array(
+        'message' => implode('<br />', explode("\n", $msg)),
+        'greeting' => 'Dear ' . (isset($account->field_first_name[LANGUAGE_NONE][0]['value'])
+                ? $account->field_first_name[LANGUAGE_NONE][0]['value']
+                : 'student') . ','));
+
+    $new_message = drupal_mail('studysauce', 'welcome', $account->mail, language_default(), array(), variable_get('site_mail', ''), FALSE);
+
+    $new_message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+    $new_message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('welcome-student'))));
+    $new_message['subject'] = 'Welcome to Study Sauce';
+    $new_message['body'] = str_replace('admin@studysauce.com', '<a href="mailto:admin@studysauce.com" style="color:#FF9900;">admin@studysauce.com</a>', $body);
+
+    $system = drupal_mail_system('studysauce', 'welcome');
+    $new_message['result'] = $system->mail($new_message);
+
+}
+
+function studysauce_admin_email($post)
+{
+    $message = drupal_mail('studysauce', 'reminder', variable_get('site_mail', 'admin@studysauce.com'), language_default(), array(), null, FALSE);
+
+    $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+    $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('reminders'))));
+    $message['subject'] = 'New contact us submission from: ' . $post['name'];
+
+    $results = '';
+    array_walk($post, function ($k, $v) use ($results) {
+        $results .= $k . ' = ' . $v;
+    });
+    $message['body'] = theme('studysauce-email', array(
+        'message' => $results,
+        'greeting' => 'Hi Admin',
+        'link' => l('Click here to view submission', '<front>', array(
+            'fragment' => 'dates',
+            'absolute' => true,
+            'attributes' => array('style' => 'color:#FF8900;')))));
+
+    $system = drupal_mail_system('studysauce', 'reminder');
+
+    $message['result'] = $system->mail($message);
+}
 
 function studysauce_billing_send()
 {
@@ -43,6 +104,34 @@ Click on the below link to find out how we can help your student become a better
 
         $entity->save();
     }
+
+}
+
+function studysauce_prepay_send($order)
+{
+
+    $message = drupal_mail('studysauce', 'invite', $order->field_email['und'][0]['value'], language_default(), array(), $order->primary_email, FALSE);
+
+    $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+    $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('sponsor-invite'))));
+    $message['subject'] = $order->billing_first_name . ' has prepaid for your study plan';
+
+    $message['body'] = theme('studysauce-email', array(
+        'message' => 'Your personal study plan has been prepaid by ' . $order->billing_first_name . ' ' . $order->billing_last_name . '.' .
+            '<br /><br />' .
+            'We started Study Sauce based on the realization that no one ever teaches students the most effective study methods.  Considering the fact that students spend 75% of college studying outside of the classroom.  We thought that was crazy.  Especially when considering the fact that we have carefully researched the science behind the most effective studying techniques and use them to build your study plan for the entire semester.' .
+            '<br /><br />' .
+            'Our students find that they no longer have to cram for tests and are far less stressed when they use our methods (the same methods that Jeopardy champions use to retain information - btw).  Come discover the secret sauce to studying and find out how other students like you are raising their GPAs.' .
+            '<br /><br />' .
+            'Please click below to finish filling out your class information, so we can finalize your study plan.',
+        'greeting' => 'Dear student,',
+        'link' => l('Go to Study Sauce', 'students', array(
+            'query' => array('order_code' => $order->field_code['und'][0]['value']),
+            'absolute' => true,
+            'attributes' => array('style' => 'color:#FF8900;')))));
+
+    $system = drupal_mail_system('studysauce', 'invite');
+    $message['result'] = $system->mail($message);
 
 }
 
@@ -183,8 +272,34 @@ function studysauce_inactivity($account)
     $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('inactivity'))));
     $message['subject'] = 'Improve your grades with Study Sauce';
 
+    // check if student is being advised
+    // TODO: move this to cron logic
+    $groups = og_get_groups_by_user($account);
+    $adviser = '';
+    if(isset($groups['node']))
+    {
+        // get group adviser
+        $query = db_select('og_membership', 'ogm');
+        $query->condition('ogm.gid', array_keys($groups['node']), 'IN');
+        $query->fields('ogm', array('entity_type', 'etid'));
+        $result = $query->execute();
+        $members = $result->fetchAll();
+        foreach($members as $i => $member)
+        {
+            $m = user_load($member->etid);
+            if(in_array('adviser', $m->roles) || in_array('master adviser', $m->roles))
+            {
+                $partner = $m;
+                if(in_array('adviser', $m->roles))
+                    break;
+            }
+        }
+        if(isset($partner))
+            $adviser = 'Additionally, your adviser, ' . $partner->field_first_name['und'][0]['value'] . ' ' . $partner->field_last_name['und'][0]['value'] . ', will be viewing the data from Study Sauce for your periodic check ins.<br /><br />';
+    }
+
     $message['body'] = theme('studysauce-email', array(
-        'message' => 'We haven\'t seen you in a while.  By using Study Sauce when you study, you can apply the very best study methods to make sure you do your best in every class.<br /><br />Additionally, your advisor, [advisor fname] [advisor lname], will be viewing the data from Study Sauce for your periodic check ins.<br /><br />If you have any questions, comments, or feedback, we would love to hear them.  Just reply to this email.',
+        'message' => 'We haven\'t seen you in a while.  By using Study Sauce when you study, you can apply the very best study methods to make sure you do your best in every class.<br /><br />' . $adviser . 'If you have any questions, comments, or feedback, we would love to hear them.  Just reply to this email.',
         'greeting' => 'Hello ' . (isset($account->field_first_name['und'][0]['value'])
                 ? $account->field_first_name['und'][0]['value']
                 : 'student') . ',',

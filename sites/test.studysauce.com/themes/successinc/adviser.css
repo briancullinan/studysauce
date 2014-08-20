@@ -28,7 +28,7 @@ hr
     width: 100%;
     left: 0;
     box-sizing: border-box;
-    padding: 0 30px 0 230px;
+    padding: 0 30px 0 250px;
 }
 
 .admin-menu .user-pane .user-name
@@ -79,5 +79,36 @@ hr
 .user-pane > div > #plan h2
 {
     color:#555;
+}
+
+@media all and (max-width: 760px)
+{
+    .user-pane .user-name
+    {
+        padding-left: 20px;
+        padding-right: 20px;
+        top:56px;
+    }
+
+    .page-dashboard .page .panel-pane {
+        padding-top: 56px !important;
+    }
+
+    .user-pane > div > #metrics
+    {
+        margin-top:-50px;
+    }
+}
+
+@media all and (max-width: 480px)
+{
+    .user-pane .user-name
+    {
+        top:43px;
+    }
+
+    .page-dashboard .page .panel-pane {
+        padding-top: 43px !important;
+    }
 }
 

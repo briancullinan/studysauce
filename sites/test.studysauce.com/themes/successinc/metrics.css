@@ -38,8 +38,19 @@
 .page-dashboard #metrics #timeline
 {
     display: inline-block;
-    width:475px;
-    max-width: 100%;
+    width:50%;
+    max-width:600px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: 0 -10px;
+    padding: 0 10px;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+.page-dashboard #metrics #pie-chart h3, .page-dashboard #metrics #pie-chart h4
+{
+    text-align: center;
 }
 
 .page-dashboard #metrics #timeline svg
@@ -55,8 +66,13 @@
 .page-dashboard #metrics #pie-chart
 {
     display: inline-block;
-    width:475px;
-    max-width: 100%;
+    width: 25%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: 0 -10px;
+    padding: 0 10px;
+    vertical-align: middle;
+    overflow: hidden;
 }
 
 .page-dashboard #metrics #pie-chart text,
@@ -136,12 +152,26 @@
 
 .page-dashboard #metrics ol
 {
+    display: inline-block;
     list-style: none;
-    display:inline-block;
-    margin:20px 0 0 0;
+    margin:0 auto;
     padding:0;
     vertical-align: top;
     text-align: left;
+    width:auto;
+}
+
+.page-dashboard #metrics #legend
+{
+    text-align: center;
+    width:25%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    vertical-align: middle;
+    margin:20px -10px 0 -10px;
+    padding:0 10px;
+    display:inline-block;
+    overflow: hidden;
 }
 
 .page-dashboard #metrics ol li
@@ -263,6 +293,15 @@
     .page-dashboard #metrics .row .class-time
     {
         width:30%;
+    }
+
+    .page-dashboard #metrics #legend,
+    .page-dashboard #metrics #timeline,
+    .page-dashboard #metrics #pie-chart
+    {
+        display:block;
+        width:auto;
+        clear:both;
     }
 }
 

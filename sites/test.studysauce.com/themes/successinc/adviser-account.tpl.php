@@ -85,15 +85,18 @@ global $user;
 </div>
 <?php
 $lastOrder = _studysauce_orders_by_uid($user->uid);
+$groups = og_get_groups_by_user();
+$advised = (in_array('adviser', $user->roles) || in_array('master adviser', $user->roles)) ||
+    isset($groups['node']);
 ?>
 <div class="form-item form-type-radios field-name-account-type">
     <label>Account type:</label>
     <div class="form-checkboxes">
-        <input readonly="readonly" type="radio" value="free" name="account-type" id="account-type-free" <?php print(!$lastOrder ? 'checked="checked"' : ''); ?> />
+        <input readonly="readonly" type="radio" value="free" name="account-type" id="account-type-free" <?php print(!$lastOrder && !$advised ? 'checked="checked"' : ''); ?> />
         <label for="account-type-free">Free</label>
         <input readonly="readonly" type="radio" value="monthly" name="account-type" id="account-type-monthly" <?php print(isset($lastOrder) && is_object($lastOrder) && floatval($lastOrder->order_total) == 9.99000 ? 'checked="checked"' : ''); ?> />
         <label for="account-type-monthly">Monthly</label>
-        <input readonly="readonly" type="radio" value="yearly" name="account-type" id="account-type-yearly" <?php print(isset($lastOrder) && is_object($lastOrder) && floatval($lastOrder->order_total) > 9.99000 ? 'checked="checked"' : ''); ?> />
+        <input readonly="readonly" type="radio" value="yearly" name="account-type" id="account-type-yearly" <?php print($advised || (isset($lastOrder) && is_object($lastOrder) && floatval($lastOrder->order_total)) > 9.99000 ? 'checked="checked"' : ''); ?> />
         <label for="account-type-yearly">Annual</label>
     </div>
 </div>

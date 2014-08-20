@@ -129,40 +129,6 @@ $email_base = 'https://www.studysauce.com/sites/studysauce.com/themes/successinc
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    <div>
-                                                        <table cellpadding="" cellspacing="0" border="0"
-                                                               style="width:100%;border-collapse:separate;table-layout:fixed;">
-                                                            <tbody>
-                                                            <tr>
-                                                                <td style="background:#555555;padding-top:10px;padding-right:35px;padding-bottom:10px;padding-left:35px;">
-                                                                    <table width="100%" cellspacing="0" cellpadding="0"
-                                                                           border="0"
-                                                                           style="border-collapse:separate;border-spacing:0px;table-layout:fixed;background:#555555;">
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td style="vertical-align:top;">
-                                                                                <div
-                                                                                    style="word-wrap:break-word;line-height:140%;text-align:left;">
-                                                                                    <h2 style="width:100%;font-size:30px;line-height:170%;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-align:left;font-family:Arial,sans-serif;">
-                                                                                        <span
-                                                                                            style="font-size:26px;"><span
-                                                                                                style="color:#ff8c00;"><span
-                                                                                                    style="font-weight: bold;">Check in when you study</span></span></span>
-                                                                                    </h2>
-
-                                                                                    <p style="color:#808080;font-family:Arial,sans-serif;font-size:16px;line-height:160%;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-align:left;">
-                                                                                        <span style="color:#ffffff;">Our Study Detection Software is free for everyone to use. &nbsp;We can automatically detects your study behavior and guides you through the leading scientific research on effective study techniques.</span>
-                                                                                    </p>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -297,7 +263,7 @@ $email_base = 'https://www.studysauce.com/sites/studysauce.com/themes/successinc
                                                                                 <div><img
                                                                                         style="border:medium none;width:150px;height:89px;resize:none;position:relative;display:block;top:0px;left:0px;"
                                                                                         width="150" height="89"
-                                                                                        src="<?php print $email_base; ?>/images/plan.png">
+                                                                                        src="<?php print $email_base; ?>/images/plan_background.png">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>

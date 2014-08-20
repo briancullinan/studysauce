@@ -42,26 +42,26 @@
     </div>
     <div class="strategy-notes">
         <label>Title:</label>
-        <input type="text" class="form-text" name="strategy-title" />
+        <input type="text" class="form-text" name="strategy-title" readonly="readonly" />
         <label>Notes:</label>
-        <textarea type="text" name="strategy-notes"></textarea>
+        <textarea type="text" name="strategy-notes" readonly="readonly"></textarea>
     </div>
 </div>
 <div class="strategy-active">
     <h3>Active reading - Follow the guide below to better retain what you are reading.</h3>
     <h4>Before reading:</h4>
     <label>Take no more than 2 minutes to skim the reading. What is the topic?</label>
-    <textarea name="strategy-skim"></textarea>
+    <textarea name="strategy-skim" readonly="readonly"></textarea>
     <label>Why am I being asked to read this at this point in the class?</label>
-    <textarea name="strategy-why"></textarea>
+    <textarea name="strategy-why" readonly="readonly"></textarea>
     <h4>During reading:</h4>
     <label>What questions do I have as I am reading?</label>
-    <textarea name="strategy-questions"></textarea>
+    <textarea name="strategy-questions" readonly="readonly"></textarea>
     <h4>After reading:</h4>
     <label>Please summarize the reading in a few paragraphs (less than 1 page).  What are the 1 or 2 most important ideas from the reading?</label>
-    <textarea name="strategy-summarize"></textarea>
+    <textarea name="strategy-summarize" readonly="readonly"></textarea>
     <label>What possible exam questions will result from this reading?</label>
-    <textarea name="strategy-exam"></textarea>
+    <textarea name="strategy-exam" readonly="readonly"></textarea>
 </div>
 <div class="strategy-spaced">
     <h3>Spaced repetition - Commit information to your long term memory by revisiting past work.</h3>
@@ -71,25 +71,25 @@
     </div>
     <div class="strategy-notes">
         <label>Write down any notes below:</label>
-        <textarea type="text" name="strategy-notes"></textarea>
+        <textarea type="text" name="strategy-notes" readonly="readonly"></textarea>
     </div>
 </div>
 <div class="strategy-other">
     <h3>Notes:</h3>
-    <textarea name="strategy-notes" placeholder="Write any notes here."></textarea>
+    <textarea name="strategy-notes" placeholder="Write any notes here." readonly="readonly"></textarea>
 </div>
 <div class="strategy-prework">
     <h3>Prework - Get prepared for your class tomorrow.</h3>
-    <input type="checkbox" name="strategy-topics" id="strategy-topics" value="topics">
+    <input type="checkbox" name="strategy-topics" id="strategy-topics" value="topics" readonly="readonly">
     <label for="strategy-topics">Look at your syllabus to see what topics will be covered.</label><br />
-    <input type="checkbox" name="strategy-reading" id="strategy-reading" value="reading">
+    <input type="checkbox" name="strategy-reading" id="strategy-reading" value="reading" readonly="readonly">
     <label for="strategy-reading">Ensure you have completed the assigned reading.</label><br />
-    <input type="checkbox" name="strategy-confusion" id="strategy-confusion" value="confusion">
+    <input type="checkbox" name="strategy-confusion" id="strategy-confusion" value="confusion" readonly="readonly">
     <label for="strategy-confusion">Identify areas of confusion.  This will help you focus during the class on areas of need.</label><br />
-    <input type="checkbox" name="strategy-questions" id="strategy-questions" value="questions">
+    <input type="checkbox" name="strategy-questions" id="strategy-questions" value="questions" readonly="readonly">
     <label for="strategy-questions">Prepare questions that you would like answered during class.</label><br />
     <h3>Notes:</h3>
-    <textarea name="strategy-notes"></textarea>
+    <textarea name="strategy-notes" readonly="readonly"></textarea>
 </div>
 
 

@@ -37,13 +37,13 @@ function studysauce_checkin()
                     {
                         end($entity->field_checkin['und']);
                         $last = key($entity->field_checkin['und']);
-                        $entity->field_checkin['und'][$last]['value2'] = date('Y-m-d H:i:s', $_POST['date']);
+                        $entity->field_checkin['und'][$last]['value2'] = date('Y-m-d H:i:s', strtotime($_POST['date']));
 
                         end($entity->field_utc_checkin['und']);
                         $last = key($entity->field_utc_checkin['und']);
                         $entity->field_utc_checkin['und'][$last]['value2'] = date('Y-m-d H:i:s', time());
                         $entity->save();
-                        list($awards) = studysauce_get_awards();
+                        //list($awards) = studysauce_get_awards();
                     }
                     else
                     {
@@ -51,7 +51,7 @@ function studysauce_checkin()
                         foreach(explode(',', $_POST['checklist']) as $check)
                             $entity->field_checklist['und'][] = array('value' => $check);
                         $entity->field_checkin['und'][] = array(
-                            'value' => date('Y-m-d H:i:s', $_POST['date'])
+                            'value' => date('Y-m-d H:i:s', strtotime($_POST['date']))
                         );
                         $entity->field_utc_checkin['und'][] = array(
                             'value' => date('Y-m-d H:i:s', time())
@@ -70,14 +70,17 @@ function studysauce_checkin()
     $lastSDS = end($newSDS);
 
     list($times, $rows, $total, $hours) = _studysauce_get_metrics();
+    global $exportMetricsClasses, $exportMetricsTimes;
+    $metrics = theme('studysauce-metrics');
 
     print json_encode(array(
         'lastSDS' => $lastSDS,
         'rows' => $rows,
-        'times' => $times,
+        'times' => $exportMetricsTimes,
         'total' => $total,
         'hours' => $hours,
-        'awards' => $awards,
+        'classes' => $exportMetricsClasses,
+        //'awards' => $awards,
         'eid' => isset($_POST['eid']) ? $_POST['eid'] : null
     ));
     drupal_exit();

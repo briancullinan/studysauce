@@ -63,8 +63,22 @@ jQuery(document).ready(function($) {
                 newUser.find('.field-name-field-email input').val(parser[3]);
 
                 newUser.importFunc();
-                importTab.addClass('edit-user-only').scrollintoview();
+                importTab.addClass('edit-user-only');
             });
+
+            // remove empties
+            if(importTab.find('.row.edit.valid').not('fieldset .row').length > 1)
+            {
+                importTab.find('.row.edit').not('#add-user-row').each(function () {
+                    var that = jQuery(this);
+                    if(that.find('.field-name-field-first-name input').val().trim() == '' &&
+                        that.find('.field-name-field-last-name input').val().trim() == '' &&
+                        that.find('.field-name-field-email input').val().trim() == '')
+                    {
+                        that.remove();
+                    }
+                });
+            }
         },
         previewTimeout = null,
         previewImport = function () {
@@ -97,6 +111,26 @@ jQuery(document).ready(function($) {
             clearTimeout(previewTimeout);
         previewTimeout = setTimeout(previewImport, 1000);
     });
+    importTab.on('focus', 'textarea', function () {
+        if(previewTimeout != null)
+            clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(previewImport, 1000);
+    });
+    importTab.on('blur', 'textarea', function () {
+        if(previewTimeout != null)
+            clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(previewImport, 1000);
+    });
+    importTab.on('keydown', 'textarea', function () {
+        if(previewTimeout != null)
+            clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(previewImport, 1000);
+    });
+    importTab.on('keyup', 'textarea', function () {
+        if(previewTimeout != null)
+            clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(previewImport, 1000);
+    });
 
     importTab.on('click', 'a[href="#import-group"]', function (evt) {
         evt.preventDefault();
@@ -122,10 +156,10 @@ jQuery(document).ready(function($) {
             newUser.find('label[for="' + oldId + '"]').attr('for', oldId + count);
         });
         newUser.importFunc();
-        importTab.addClass('edit-user-only');
+        importTab.addClass('edit-user-only').scrollintoview();
     });
 
-    if(importTab.find('.row').not('#add-user-row').length == 0)
+    if(importTab.find('.row.edit').not('#add-user-row').length == 0)
         importTab.find('a[href="#add-user"]').first().trigger('click').trigger('click');
 
     importTab.on('click', 'a[href="#save-group"]', function (evt) {
@@ -147,10 +181,11 @@ jQuery(document).ready(function($) {
             data: {
                 users: users
             },
-            success: function ()
+            success: function (data)
             {
                 // clear rows
-                importTab.find('.row').not('#add-user-row').remove();
+                importTab.find('.row').not('#add-user-row')
+                    .replaceWith(jQuery(data.import).filter('.row').not('#add-user-row'));
 
                 // always show at least two rows
                 importTab.find('a[href="#add-user"]').first().trigger('click').trigger('click');

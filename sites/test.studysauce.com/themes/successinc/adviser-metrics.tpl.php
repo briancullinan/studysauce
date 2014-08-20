@@ -13,17 +13,13 @@ $classesNames = _studysauce_get_schedule_classes($account);
 list($times, $rows, $total, $hours) = _studysauce_get_metrics($account);
 
 // move dates automatically in empty account and demo accounts
-if(empty($times) || in_array('demo', $account->roles)):
+if(in_array('demo', $account->roles)):
     $classesNames = array();
 
-    // don't bother loading in demo account, just fix the dates
-    if(empty($times))
-    {
-        // load times from fake data
-        $sample = theme('studysauce-metrics-sample');
-        $encoded = preg_replace('/<\/?script>/i', '', $sample);
-        list($times, $rows, $total, $hours) = json_decode($encoded);
-    }
+    // load times from fake data
+    $sample = theme('studysauce-metrics-sample');
+    $encoded = preg_replace('/<\/?script>/i', '', $sample);
+    list($times, $rows, $total, $hours) = json_decode($encoded);
 
     $timeGroups = array();
     $times = (array)$times;
@@ -100,37 +96,39 @@ if(empty($times)):
 <? endif;
 if(!empty($times)):
 ?>
-<div class="centrify">
-    <div id="timeline">
-        <h3>Study hours by week</h3>
-        <h4 style="margin:5px 0; color:#555;"><?php print ($hours > 0 ? ('Goal: ' . $hours . ' hours') : '&nbsp;'); ?></h4>
+    <div class="centrify">
+        <div id="legend">
+            <ol>
+                <?php
+                foreach($classesNames as $cid => $c)
+                {
+                    ?><li><span class="class<?php print array_search($cid, array_keys($classesNames)); ?>">&nbsp;</span><?php print $c; ?></li><?php
+                }
+                ?>
+            </ol>
+        </div>
+        <div id="timeline">
+            <h3>Study hours by week</h3>
+            <h4 style="margin:5px 0; color:#555;"><?php print ($hours > 0 ? ('Goal: ' . $hours . ' hours') : '&nbsp;'); ?></h4>
+        </div>
+        <div id="pie-chart">
+            <h3>Study hours by class</h3>
+            <h4 style="margin:5px 0; color:#555;">Total study hours: <strong id="study-total"><?php print $total; ?></strong></h4>
+        </div>
     </div>
-    <div id="pie-chart">
-        <h3>Study hours by class</h3>
-        <h4 style="margin:5px 0; color:#555;">Total study hours: <strong id="study-total"><?php print $total; ?></strong></h4>
+    <hr/>
+    <script type="text/javascript">
+        window.initialHistory = <?php print json_encode($times); ?>;
+        window.classNames = <?php print json_encode(array_values($classesNames)); ?>;
+    </script>
+    <div id="checkins-list">
+        <div class="heading row">
+            <label class="class-name">Class</label>
+            <label class="class-date"><span class="full-only">Check in date</span><span class="mobile-only">Date</span></label>
+            <label class="class-time">Duration</label>
+        </div>
+        <?php print $rows; ?>
     </div>
-    <ol>
-        <?php
-        foreach($classesNames as $cid => $c)
-        {
-            ?><li><span class="class<?php print array_search($cid, array_keys($classesNames)); ?>">&nbsp;</span><?php print $c; ?></li><?php
-        }
-        ?>
-    </ol>
-</div>
-<hr/>
-<script type="text/javascript">
-    window.initialHistory = <?php print json_encode($times); ?>;
-    window.classNames = <?php print json_encode(array_values($classesNames)); ?>;
-</script>
-<div id="checkins-list">
-    <div class="heading row">
-        <label class="class-name">Class</label>
-        <label class="class-date"><span class="full-only">Check in date</span><span class="mobile-only">Date</span></label>
-        <label class="class-time">Duration</label>
-    </div>
-    <?php print $rows; ?>
-</div>
 <?php endif; ?>
 
 <hr/>

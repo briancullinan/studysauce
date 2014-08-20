@@ -430,6 +430,7 @@ html,
         -moz-box-sizing: border-box;
         float:none !important;
         width:auto !important;
+        min-height: 0 !important;
     }
 
     #study-quiz .webform-confirmation .mobile-only

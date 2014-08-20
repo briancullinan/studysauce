@@ -203,25 +203,22 @@ function studysauce_save_dates()
 
     if(count($_POST['dates']) > 0)
     {
+        if(isset($node->field_reminders['und']) && !empty($node->field_reminders['und']))
+            $reminders = entity_load('field_collection_item', array_map(function ($x) {return $x['value']; }, $node->field_reminders['und']));
+        else
+            $reminders = array();
+
         foreach($_POST['dates'] as $j => $date)
         {
             // check if class entity already exists by name
             $dateChanged = false;
-            if(isset($date['eid']))
-                foreach($node->field_reminders['und'] as $i => $c)
-                {
-                    if($c['value'] == $date['eid'])
-                    {
-                        $entity = entity_load('field_collection_item', array($c['value']));
-                        $entity = $entity[$c['value']];
-                        if(isset($entity->field_due_date['und'][0]['value']) && $entity->field_due_date['und'][0]['value'] != gmdate('Y-m-d H:i:s', strtotime($date['due'])))
-                            $dateChanged = true;
-                        $entity->revision = 1;
-                        break;
-                    }
-                    unset($entity);
-                }
-            if(!isset($entity))
+            if(isset($date['eid']) && isset($reminders[$date['eid']]))
+            {
+                $entity = $reminders[$date['eid']];
+                if(isset($entity->field_due_date['und'][0]['value']) && $entity->field_due_date['und'][0]['value'] != gmdate('Y-m-d H:i:s', strtotime($date['due'])))
+                    $dateChanged = true;
+            }
+            else
             {
                 $entity = entity_create('field_collection_item', array('field_name' => 'field_reminders'));
                 $entity->setHostEntity('node', $node);
@@ -238,8 +235,13 @@ function studysauce_save_dates()
             if($dateChanged)
                 $entity->field_reminder_sent['und'] = array();
 
-            $entity->save();
+            if(!isset($date['eid']) || !isset($reminders[$date['eid']]))
+                $reminders[$entity->item_id] = $entity;
+
+            $entity->save(true);
         }
+
+        $node->field_reminders['und'] = array_map(function ($x) {return array('value' => $x->item_id, 'entity' => $x);}, $reminders);
     }
 
     if(isset($_POST['remove']))
@@ -296,12 +298,18 @@ function studysauce_get_deadlines($account = null)
         {
             $entities = entity_load('field_collection_item', array_map(function ($x) { return $x['value']; }, $node->field_reminders[LANGUAGE_NONE]));
 
-            uasort($entities, function ($a, $b) {
-                if(isset($a->field_due_date['und'][0]['value']) && isset($b->field_due_date['und'][0]['value']))
-                    return strtotime($a->field_due_date['und'][0]['value']) - strtotime($b->field_due_date['und'][0]['value']);
+            $result = array();
+            foreach($entities as $eid => $entity)
+            {
+                if(isset($entity->field_due_date['und'][0]['value']))
+                    $result[$eid] = $entity;
+            }
+
+            uasort($result, function ($a, $b) {
+                return strtotime($a->field_due_date['und'][0]['value']) - strtotime($b->field_due_date['und'][0]['value']);
             });
 
-            return $entities;
+            return $result;
         }
     }
 

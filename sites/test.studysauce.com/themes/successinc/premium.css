@@ -1,17 +1,160 @@
 
+.page-dashboard #premium h1,
 .page-dashboard #premium h2
 {
     font-size: 32px;
-    text-align: center;
     vertical-align: middle;
     margin-bottom: 30px;
-    background: rgba(0,0,0,.85);
     border-radius: 10px;
-    display: inline-block;
     padding: 10px;
-    color: #FFFFFF;
-    margin-top: 5%;
-    margin-left: 8%;
+    font-weight: bold;
+}
+
+.page-dashboard #premium .did-you-know h1
+{
+    text-align: center;
+    padding-left:165px;
+}
+
+.page-dashboard #premium .plans h2
+{
+    text-align: center;
+    color: #555;
+}
+
+.page-dashboard #premium .plans .premium h2,
+.page-dashboard #premium table.plans th.highlight h2
+{
+    color: #FFF;
+}
+
+.page-dashboard #premium table.plans th p
+{
+    margin:0;
+}
+
+.page-dashboard #premium table.plans tr th.pick-text
+{
+    background:transparent;
+    border-top: none;
+}
+
+.page-dashboard #premium table.plans tr th
+{
+    text-align: center;
+    padding: 12px 10px;
+    border-top: #555555 solid 1px;
+    border-right: #555555 solid 1px;
+    border-bottom: #555555 solid 1px;
+    background: #ffffff;
+    color:inherit;
+}
+
+.page-dashboard #premium div.plans .highlighted-link
+{
+    text-align: center;
+}
+
+.page-dashboard #premium .plans .price
+{
+    font-size:22px;
+    margin:20px 0;
+    display:inline-block;
+    font-weight: bold;
+}
+
+.page-dashboard #premium div.plans > div
+{
+    border: #555555 solid 1px;
+    border-radius: 10px;
+    background: #ffffff;
+    margin-bottom: 30px;
+}
+
+.page-dashboard #premium div.plans p
+{
+    padding:10px;
+    border-bottom: #555555 solid 1px;
+    margin:0;
+}
+
+.page-dashboard #premium div.plans .premium p
+{
+    border-bottom: #EEEEEE solid 1px;
+}
+
+.page-dashboard #premium div.plans .premium p:last-of-type,
+.page-dashboard #premium div.plans p:last-of-type
+{
+    border-bottom: none;
+}
+
+.page-dashboard #premium div.plans p img
+{
+    float:right;
+}
+
+.page-dashboard #premium table.plans tr td.feature
+{
+    font-weight: bold;
+}
+
+.page-dashboard #premium table.plans tr td
+{
+    border-right: #555555 solid 1px;
+    border-bottom: #555555 solid 1px;
+    padding: 7px 10px;
+    background: url("images/noise_white.png") repeat scroll 0 0 #ffffff;
+    text-align: center;
+    font-size: 16px;
+}
+
+.page-dashboard #premium table.plans tr td.blank
+{
+    background: transparent;
+    border: none;
+}
+
+.page-dashboard #premium table.plans tr th.highlight
+{
+    background: #555555;
+    border-top: #EEEEEE solid 1px;
+    border-right: #555555 solid 1px;
+    border-bottom: #EEEEEE solid 1px;
+    color: #fff;
+}
+
+.page-dashboard #premium table.plans tr td.best
+{
+    background: #555555;
+    border-radius: 10px 10px 0 0;
+    border-right: none;
+}
+
+.page-dashboard #premium table.plans tr td.highlight
+{
+    background: #555555;
+    border-top: #EEEEEE solid 1px;
+    border-right: #555555 solid 1px;
+    border-bottom: #EEEEEE solid 1px;
+}
+
+.page-dashboard #premium .plans .premium
+{
+    background: #555555;
+    color: #ffffff;
+}
+
+.page-dashboard #premium table.plans tr td.feature,
+.page-dashboard #premium table.plans tr th.feature
+{
+    background: #eeeeee;
+    border-left: 0;
+    border-top: 0;
+    text-align: right;
+    white-space: nowrap;
+    border-bottom: #555555 solid 1px;
+    font-size: 14px;
 }
 
 .page-dashboard #premium img.money-back-stamp
@@ -21,14 +164,6 @@
     top:30px;
 }
 
-.page-dashboard #premium .highlighted-link
-{
-    text-align: center;
-    width: 353px;
-    margin-left: 8%;
-    margin-bottom: 50px;
-}
-
 .page-dashboard #premium h2 span
 {
     font-size: 60px;
@@ -36,6 +171,46 @@
     color: #0089BE;
     display: block;
     margin: 15px 0;
+}
+
+.page-dashboard #premium .did-you-know
+{
+    background: #ffffff;
+    padding:50px 0;
+    margin: 75px -20px 65px -20px;
+    text-align: center;
+}
+
+.page-dashboard #premium .did-you-know-container
+{
+    display:inline-block;
+    margin:0 auto;
+    max-width: 760px;
+    width:100%;
+}
+
+.page-dashboard #premium .one
+{
+    padding-left:165px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    vertical-align: top;
+    text-align: center;
+}
+
+.page-dashboard #premium .one h3
+{
+    padding-left:50px;
+    position: relative;
+    text-align: left;
+}
+
+.page-dashboard #premium .one h3 span
+{
+    position: absolute;
+    top:0;
+    left:0;
+    font-size: 56px;
 }
 
 .page-dashboard #premium li,
@@ -54,7 +229,7 @@
 
 .page-dashboard #premium li
 {
-    width:32%;
+    width:33%;
     display: inline-block;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -68,6 +243,11 @@
     margin-top: 0px;
     text-align: center;
     font-size: 24px;
+}
+
+.page-dashboard #premium li p
+{
+    font-size: 20px;
 }
 
 .page-dashboard #premium li p:last-child
@@ -160,17 +340,55 @@
     z-index: 1;
 }
 
+.page-dashboard #premium div.plans
+{
+    display:none;
+}
+
+@media all and (min-width: 1420px)
+{
+    .page-dashboard #premium .img-wrapper img
+    {
+        margin-bottom: -15%;
+    }
+}
+
 @media all and (max-width: 980px)
 {
+
+    .page-dashboard #premium .did-you-know img
+    {
+        float:none !important;
+    }
+
+    .page-dashboard #premium .did-you-know h1
+    {
+        padding-left:0;
+    }
+
+    .page-dashboard #premium .one
+    {
+        padding-left: 0;
+    }
+
+    .page-dashboard #premium .did-you-know
+    {
+        padding: 20px 0;
+    }
+
+    .page-dashboard #premium table.plans
+    {
+        display:none;
+    }
+
+    .page-dashboard #premium div.plans
+    {
+        display:block;
+    }
+
     .page-dashboard #premium h2
     {
         font-size:24px;
-    }
-
-    .page-dashboard #premium .highlighted-link
-    {
-        width: 277px;
-        margin-bottom:80px;
     }
 
     .page-dashboard #premium li

@@ -158,96 +158,41 @@ function studysauce_save_goals()
             }
         }
 
+        if(isset($conn[0]->mail))
+        {
+            $message = drupal_mail('studysauce', 'achievement', $conn[0]->mail, language_default(), array(), $user->mail, FALSE);
+
+            $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+            $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('achievement'))));
+            $message['subject'] = (isset($user->field_first_name[LANGUAGE_NONE][0]['value'])
+                    ? $user->field_first_name[LANGUAGE_NONE][0]['value']
+                    : 'Your student') . ' has a study achievement and wanted you to know.';
+
+            $last = end($entity[$eid]->field_achievements['und']);
+            $last = entity_load('field_collection_item', array($last['value']));
+            $last = array_pop($last);
+            $sentMessage = array();
+            $sentMessage[] = 'Log in to Study Sauce to see your student\'s accomplishment.';
+            $message['body'] = theme('studysauce-email', array(
+                'message' => implode('<br />', $sentMessage),
+                'greeting' => 'Dear ' . (isset($conn[0]->field_first_name[LANGUAGE_NONE][0]['value']) && isset($conn[0]->field_last_name[LANGUAGE_NONE][0]['value'])
+                        ? $conn[0]->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $conn[0]->field_last_name[LANGUAGE_NONE][0]['value']
+                        : 'parent') . ',',
+                'link' => l('Study Sauce', 'user/login', array(
+                    'query' => array('achievement' => $last->field_code['und'][0]['value'], 'destination' => '#goals'),
+                    'absolute' => true,
+                    'attributes' => array('style' => 'color:#FF9900;')))));
+
+            $system = drupal_mail_system('studysauce', 'achievement');
+
+            $message['result'] = $system->mail($message);
+        }
 
     }
 
     node_save($node);
 
-    // load parent sponsored node
-    /*
-    $_POST = array('ajax_iframe_upload' => true);
-    if(!isset($form_state['build_info']['args'][1]) || $form_state['build_info']['args'][1] != 'parent-sponsored')
-    {
-        if(isset($parent))
-        {
-            $commands[] = ajax_command_invoke('#parent-sponsored .node-incentive-form, #parent-sponsored .grid_6, #parent-sponsored h4', 'remove');
-            $commands[] = array('command' => 'insert', 'method' => 'append', 'selector' => '#parent-sponsored', 'data' => drupal_render($parent), 'settings' => null);
-            $commands[] = ajax_command_invoke('.page-dashboard #goals .pane-content > div', 'addClass', array('done'));
-        }
-
-        $form['changed']['#value'] = $form['changed']['#default_value'];
-        $form_state['values']['changed'] = $form['changed']['#default_value'];
-        $achievementContent = _studysauce_get_achievements($parent, $form, $achievements);
-        $content = drupal_render($form);
-        $commands[] = array('command' => 'insert', 'method' => null, 'selector' => '#non-sponsored form', 'data' => $content, 'settings' => null);
-    }
-    // this only occurs when a form is claimed, the other form doesn't really need to be replaced unless a student and a parent are using it at the same time
-    //   the form values are also used in _studysauce_get_achievements, which should just use the node instead
-    else
-    */
-
     $achievementContent = _studysauce_get_achievements();
-    //if(isset($_GET['achievement']))
-    //    $commands[] = ajax_command_invoke('#achievements .grid_3:last-of-type', 'scrollintoview', array(array('padding' => array('top' => 120, 'left' => 0, 'bottom' => 320, 'right' => 0))));
-
-    if(isset($_GET['achievement']) && isset($conn[0]->mail))
-    {
-        $message = drupal_mail('studysauce', 'achievement', $conn[0]->mail, language_default(), array(), $user->mail, FALSE);
-
-        $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
-        $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('achievement'))));
-        $message['subject'] = (isset($user->field_first_name[LANGUAGE_NONE][0]['value'])
-                ? $user->field_first_name[LANGUAGE_NONE][0]['value']
-                : 'Your student') . ' has a study achievement and wanted you to know.';
-
-        $last = end($achievements);
-        $sentMessage = array();
-        $sentMessage[] = 'Log in to Study Sauce to see your student\'s accomplishment.';
-        $message['body'] = theme('studysauce-email', array(
-            'message' => implode('<br />', $sentMessage),
-            'greeting' => 'Dear ' . (isset($conn[0]->field_first_name[LANGUAGE_NONE][0]['value']) && isset($conn[0]->field_last_name[LANGUAGE_NONE][0]['value'])
-                    ? $conn[0]->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $conn[0]->field_last_name[LANGUAGE_NONE][0]['value']
-                    : 'parent') . ',',
-            'link' => l('Study Sauce', 'user/login', array(
-                'query' => array('achievement' => $last['code'], 'destination' => '#goals'),
-                'absolute' => true,
-                'attributes' => array('style' => 'color:#FF9900;')))));
-
-        $system = drupal_mail_system('studysauce', 'achievement');
-
-        $message['result'] = $system->mail($message);
-    }
-    elseif(isset($conn[0]->mail) &&
-        // only trigger if logged in as a parent setting up rewards
-        $user->field_parent_student['und'][0]['value'] == 'parent' &&
-        // check if rewards have changed, set in workflows
-        isset($GLOBALS['rewards_code']))
-    {
-        $message = drupal_mail('studysauce', 'reward-setup', $conn[0]->mail, language_default(), array(), $user->mail, FALSE);
-
-        $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
-        $message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('reward-setup'))));
-        $message['subject'] = (isset($user->field_first_name[LANGUAGE_NONE][0]['value'])
-                ? $user->field_first_name[LANGUAGE_NONE][0]['value']
-                : $user->mail) . ' has set up rewards for you in Study Sauce.';
-
-        $sentMessage = array();
-        $sentMessage[] = 'Use Study Sauce to earn rewards when you study.  Log in to see how you can redeem the rewards.';
-        $message['body'] = theme('studysauce-email', array(
-            'message' => implode('<br />', $sentMessage),
-            'greeting' => 'Dear ' . (isset($conn[0]->field_first_name[LANGUAGE_NONE][0]['value']) && isset($conn[0]->field_last_name[LANGUAGE_NONE][0]['value'])
-                    ? $conn[0]->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $conn[0]->field_last_name[LANGUAGE_NONE][0]['value']
-                    : 'parent') . ',',
-            'link' => l('Study Sauce', 'user/login', array(
-                'query' => array('reward' => $GLOBALS['rewards_code'], 'destination' => '#goals'),
-                'absolute' => true,
-                'attributes' => array('style' => 'color:#FF9900;')))));
-
-        $system = drupal_mail_system('studysauce', 'reward-setup');
-
-        $message['result'] = $system->mail($message);
-    }
-
     list($awards) = studysauce_get_awards();
     print json_encode(array(
         'goals' => '<div>' . theme('studysauce-goals') . '</div>',
@@ -315,19 +260,18 @@ function studysauce_get_shared_goals($account = null)
     }
     if(!empty($account->field_invites) && !empty($account->field_invites[LANGUAGE_NONE]))
     {
-        foreach($account->field_invites[LANGUAGE_NONE] as $i => $invite)
+        $invites = entity_load('field_collection_item', array_map(function ($x) {return $x['value'];}, $account->field_invites[LANGUAGE_NONE]));
+        foreach($invites as $i => $invite)
         {
-            $entity = entity_load('field_collection_item', array($invite['value']));
-            $entity = $entity[$invite['value']];
-            if(isset($entity->field_activated[LANGUAGE_NONE][0]['value']) &&
-                isset($entity->field_email[LANGUAGE_NONE][0]['value']) &&
-                $entity->field_activated[LANGUAGE_NONE][0]['value'] &&
-                $entity->field_email[LANGUAGE_NONE][0]['value'] != $account->mail)
+            if(isset($invite->field_activated[LANGUAGE_NONE][0]['value']) &&
+                isset($invite->field_email[LANGUAGE_NONE][0]['value']) &&
+                $invite->field_activated[LANGUAGE_NONE][0]['value'] &&
+                $invite->field_email[LANGUAGE_NONE][0]['value'] != $account->mail)
             {
                 $query = new EntityFieldQuery();
                 $incentives = $query->entityCondition('entity_type', 'node')
                     ->propertyCondition('type', 'incentive')
-                    ->propertyCondition('title', $entity->field_email[LANGUAGE_NONE][0]['value'])
+                    ->propertyCondition('title', $invite->field_email[LANGUAGE_NONE][0]['value'])
                     ->propertyCondition('status', 1)
                     ->range(0,1)
                     ->execute();

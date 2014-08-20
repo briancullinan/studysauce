@@ -205,7 +205,7 @@ function successinc_process_html(&$vars)
 {
 
     global $user;
-    $user = user_load($user->uid);
+    $account = user_load($user->uid);
     $classes = explode(' ', $vars['classes']);
     $classes[] = theme_get_setting('sitename_font_family');
     $classes[] = theme_get_setting('slogan_font_family');
@@ -213,20 +213,24 @@ function successinc_process_html(&$vars)
     $classes[] = theme_get_setting('paragraph_font_family');
     if (arg(1) == '67' || arg(1) == '90' || arg(1) == '103' || arg(1) == '104')
         $classes[] = 'page-node-landing';
-    if (!empty($user->field_parent_student) && $user->field_parent_student['und'][0]['value'] == 'student')
+    if (!empty($account->field_parent_student) && $account->field_parent_student['und'][0]['value'] == 'student')
         $classes[] = 'student';
-    if (!empty($user->field_parent_student) && $user->field_parent_student['und'][0]['value'] == 'parent')
+    if (!empty($account->field_parent_student) && $account->field_parent_student['und'][0]['value'] == 'parent')
         $classes[] = 'parent';
 
 
-    $lastOrder = _studysauce_orders_by_uid($user->uid);
+    $lastOrder = _studysauce_orders_by_uid($account->uid);
     $groups = og_get_groups_by_user();
-    if (isset($groups['node']) || $lastOrder)
+    if(in_array('adviser', $account->roles) || in_array('master adviser', $account->roles))
+        $classes[] = 'adviser-user';
+    elseif(isset($partners['field_collection_item']) && !empty($partners['field_collection_item']))
+        $classes[] = 'partner-user';
+    elseif (isset($groups['node']) || $lastOrder)
         $classes[] = 'paid-user';
 
 
 
-    $vars['classes'] = trim(implode(' ', $classes));
+$vars['classes'] = trim(implode(' ', $classes));
 
 
 }
@@ -395,6 +399,7 @@ drupal_add_css(drupal_get_path('theme', 'successinc') . '/header.css');
 drupal_add_css(drupal_get_path('theme', 'successinc') . '/buy.css');
 drupal_add_css(drupal_get_path('theme', 'successinc') . '/funnel.css');
 drupal_add_js('window.pathToTheme=' . json_encode(path_to_theme()) . ';', 'inline');
+drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.scrollintoview.js');
 
 if (drupal_is_front_page() && $user->uid != 0) {
 //    drupal_add_css(drupal_get_path('module', 'date') .'/date_api/date.css');
@@ -409,16 +414,13 @@ if (drupal_is_front_page() && $user->uid != 0) {
 
     drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/skrollr.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/flipclock/libs/prefixfree.min.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.scrollintoview.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/sauce.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/d3.v3.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.tipsy.js');
-    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/fullcalendar/fullcalendar.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/checkin.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/user.js');
     drupal_add_js(libraries_get_path('plupload') . '/js/plupload.full.js');
 
-    drupal_add_css(drupal_get_path('theme', 'successinc') . '/js/fullcalendar/fullcalendar.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') . '/css/flipclock.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') . '/css/tipsy.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') . '/menu.css');
@@ -429,7 +431,7 @@ if (drupal_is_front_page() && $user->uid != 0) {
     drupal_add_css(drupal_get_path('theme', 'successinc') . '/invite.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') . '/user-parent-student.css');
 } elseif (drupal_is_front_page() || arg(0) == 'parents' || arg(0) == 'students' ||
-    arg(0) == 'parents2' || arg(0) == 'students2'
+    arg(0) == 'parents2' || arg(0) == 'students2' || arg(0) == 'partners'
 ) {
     drupal_add_css(drupal_get_path('theme', 'successinc') . '/front.css');
 
@@ -438,7 +440,7 @@ jQuery(document).ready(function () {
     jQuery(window).scroll(function () {
         var distance = jQuery('.header-wrapper').height(),
             offset = Math.min(jQuery(window).scrollTop() / distance, 1);
-        jQuery('.header-wrapper').stop().animate({'background-position-y': -(100 - (offset * 100))}, 50, 'linear');
+        jQuery('.header-wrapper').stop().animate({'background-position-y': -(0 - (offset * 100))}, 50, 'linear');
 
 /*
         var pageDistance = jQuery(window).height() + jQuery('.page').outerHeight(),
@@ -497,6 +499,31 @@ EOJS;
         drupal_add_js("utmx('url','A/B');", array('type' => 'inline', 'scope' => 'header'));
     }
 }
+
+$notSupported = <<<EOJS
+jQuery(document).ready(function () {
+    var ua = navigator.userAgent.toLowerCase();
+    var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+
+    if(jQuery.browser.msie && jQuery.browser.version < 11)
+    {
+        jQuery('body').append(jQuery('<div class="browser-not-supported"><div class="middle-wrapper"><div style="margin:0 auto;text-align:center;">' +
+         '<h2>Your browser is not supported</h2>' +
+          '<p>Please upgrade to the latest version of Internet Explorer by click on the icon below, or use Firefox, Chrome or Safari.  Thank you!</p>' +
+           '<p style="margin:0 auto;display:inline-block;margin-bottom: 100px;"><a href="https://www.google.com/chrome/browser/">&nbsp;</a><a href="https://www.mozilla.org/en-US/firefox/new/">&nbsp;</a><a href="http://support.apple.com/downloads/#safari">&nbsp;</a><a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">&nbsp;</a></p>' +
+         '</div></div></div>'));
+    }
+    if(isAndroid)
+    {
+        jQuery('body').append(jQuery('<div class="browser-not-supported"><div class="middle-wrapper"><div style="margin:0 auto;text-align:center;">' +
+         '<h2>Your browser is not supported</h2>' +
+          '<p>Please use another mobile browser.  Thank you!</p>' +
+         '</div></div></div>'));
+    }
+});
+EOJS;
+
+drupal_add_js($notSupported, array('type' => 'inline', 'scope' => 'header'));
 
 //EOF:Javascript
 

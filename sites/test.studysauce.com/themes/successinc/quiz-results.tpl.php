@@ -18,9 +18,14 @@
  * - $sid: The unique submission ID of this submission.
  */
 ?>
-<?php print $progressbar;
+<?php
 list($awards) = studysauce_get_awards();
-$submission = studysauce_render_webform_plain($node, $sid);
+$s = db_select('studysauce_quiz', 'q')
+    ->fields('q', array('place', 'underlining', 'same_subject', 'laying_down', 'longer_sessions'))
+    ->condition('q.sid', $sid, '=')
+    ->orderBy('time_completed')
+    ->execute()
+    ->fetchAssoc();
 ?>
 
 <div class="webform-confirmation">
@@ -31,12 +36,12 @@ $submission = studysauce_render_webform_plain($node, $sid);
         <div class="grid_5 right full-only">
             <h2>What the science says...</h2>
         </div>
-        <h2 class="mobile-only">See how your study habits stack up with the science in the gray boxes</h2>
+        <h2 class="mobile-only">See how your study habits stack up with the science in the dark gray boxes</h2>
     </div>
     <div class="quiz-wrapper">
         <div class="grid_5 even first">
             <p><em><strong>1</strong></em>I always study in the same place</p>
-            <p><?php print $GLOBALS['studysauce']['webform'][$node->nid][1]; ?></p>
+            <p><span class="<?php print ($s['place'] ? 'incorrect' : 'correct'); ?>"><span>True</span><br /><span>False</span></span></p>
         </div>
         <div class="grid_5 right first">
             <p><em><strong>1</strong></em>Simply varying the location of where you study has been proven to dramatically improve information retention.</p>
@@ -45,7 +50,7 @@ $submission = studysauce_render_webform_plain($node, $sid);
     <div class="quiz-wrapper">
         <div class="grid_5 even">
             <p><em><strong>2</strong></em>I underline and highlight materials to help me remember information</p>
-            <p><?php print $GLOBALS['studysauce']['webform'][$node->nid][2]; ?></p>
+            <p><span class="<?php print ($s['underlining'] ? 'incorrect' : 'correct'); ?>"><span>True</span><br /><span>False</span></span></p>
         </div>
         <div class="grid_5 right">
             <p><em><strong>2</strong></em>It turns out that highlighting and underlining are some of the least effective study methods. &nbsp;Don't spend too much time doing them. Instead, quickly identify the important material and then create flash cards. &nbsp;Flash cards are a very effective way to train your brain to remember important information.</p>
@@ -54,7 +59,7 @@ $submission = studysauce_render_webform_plain($node, $sid);
     <div class="quiz-wrapper">
         <div class="grid_5 even">
             <p><em><strong>3</strong></em>I focus on one subject until I am sure I understand everything</p>
-            <p><?php print $GLOBALS['studysauce']['webform'][$node->nid][3]; ?></p>
+            <p><span class="<?php print ($s['same_subject'] ? 'incorrect' : 'correct'); ?>"><span>True</span><br /><span>False</span></span></p>
         </div>
         <div class="grid_5 right">
             <p><em><strong>3</strong></em>By alternating study material, your brain is better able to retain information. &nbsp;Think of this as the equivalent of cross-training for athletes.</p>
@@ -63,7 +68,7 @@ $submission = studysauce_render_webform_plain($node, $sid);
     <div class="quiz-wrapper">
         <div class="grid_5 even">
             <p><em><strong>4</strong></em>I frequently study while lying down or in a comfortable place</p>
-            <p><?php print $GLOBALS['studysauce']['webform'][$node->nid][4]; ?></p>
+            <p><span class="<?php print ($s['laying_down'] ? 'incorrect' : 'correct'); ?>"><span>True</span><br /><span>False</span></span></p>
         </div>
         <div class="grid_5 right">
             <p><em><strong>4</strong></em>Studying in bed is a definite no-no. &nbsp;Your brain associates your bed with sleeping and therefore will likely make you more drowsy while you try to study. &nbsp;This in turn reduces your effectiveness in studying.</p>
@@ -72,7 +77,7 @@ $submission = studysauce_render_webform_plain($node, $sid);
     <div class="quiz-wrapper">
         <div class="grid_5 even last">
             <p><em><strong>5</strong></em>I prefer longer study sessions to power through material</p>
-            <p><?php print $GLOBALS['studysauce']['webform'][$node->nid][5]; ?></p>
+            <p><span class="<?php print ($s['longer_sessions'] ? 'incorrect' : 'correct'); ?>"><span>True</span><br /><span>False</span></span></p>
         </div>
         <div class="grid_5 right last">
             <p><em><strong>5</strong></em>Individual tolerance will vary, but in general you should follow a 50/10 rule for studying. &nbsp;That is 50 minutes of studying followed by a 10 minute break. &nbsp;This keeps you fresh and will allow you to perform better.</p>
@@ -81,9 +86,9 @@ $submission = studysauce_render_webform_plain($node, $sid);
     <p style="clear: both; margin-bottom:0px;">&nbsp;</p>
     <hr />
     <div class="grid_6 retry-link">
-        <?php if(!$GLOBALS['studysauce']['webform'][$node->nid]['correct']): ?>
+        <?php if($s['place'] || $s['underlining'] || $s['same_subject'] || $s['laying_down'] || $s['longer_sessions']): ?>
         <a href="#retry">Retry</a>
-        <?php elseif(in_array('beginner-brain', $awards)): ?>
+        <?php /* elseif(in_array('beginner-brain', $awards)): ?>
             &nbsp;
             <script type="text/javascript">
                 jQuery(document).ready(function () {
@@ -91,11 +96,11 @@ $submission = studysauce_render_webform_plain($node, $sid);
                     jQuery('#badges').relocateAward('beginner-brain', '#tips > .pane-content')
                 });
             </script>
-        <?php endif; ?>
+        <?php */ endif; ?>
     </div>
-    <div class="grid_6 highlighted-link">
-        <a class="more" href="#premium" onclick="jQuery('#home').removeClass('study-quiz-only');">Go premium</a>
-    </div>
+    <p class="highlighted-link">
+        <a href="#" class="more" onclick="jQuery('#home').removeClass('study-quiz-only').scrollintoview(); return false;">Close</a>
+    </p>
     <a href="#" onclick="jQuery('#home').removeClass('study-quiz-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
     <p style="margin-bottom:0;line-height: 1px; clear:both;">&nbsp;</p>
 </div>

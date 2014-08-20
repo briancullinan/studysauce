@@ -10,17 +10,21 @@ jQuery(document).ready(function($) {
     $.fn.planFunc = function () {
         jQuery(this).each(function () {
             var row = $(this).closest('.row');
-            if(row.find('.field-name-field-class-name input').val().trim() == '' ||
-               row.find('.field-name-field-day-of-the-week .form-type-checkboxes .form-type-checkbox input:checked, ' +
-                        '.field-name-field-recurring input[value="monthly"]:checked, ' +
-                        '.field-name-field-recurring input[value="yearly"]:checked').length == 0 ||
+            if(row.find('.field-name-field-class-name input').val().trim() == '' &&
+                row.find('.field-name-field-day-of-the-week .form-type-checkboxes .form-type-checkbox input:checked').length == 0 &&
+                row.find('.field-name-field-time input[name="schedule-value-date"]').val().trim() == '' &&
+                row.find('.field-name-field-time input[name="schedule-value2-date"]').val().trim() == '')
+                row.removeClass('invalid').addClass('valid blank');
+            else if(row.find('.field-name-field-class-name input').val().trim() == '' ||
+                (row.parent().is('.schedule') &&
+                    row.find('.field-name-field-day-of-the-week .form-type-checkboxes .form-type-checkbox input:checked').length == 0) ||
                row.find('.field-name-field-time input[name="schedule-value-time"]').val().trim() == '' ||
                row.find('.field-name-field-time input[name="schedule-value2-time"]').val().trim() == '' ||
                row.find('.field-name-field-time input[name="schedule-value-date"]').val().trim() == '' ||
                row.find('.field-name-field-time input[name="schedule-value2-date"]').val().trim() == '')
-                row.removeClass('valid').addClass('invalid');
+                row.removeClass('valid blank').addClass('invalid');
             else
-                row.removeClass('invalid').addClass('valid');
+                row.removeClass('invalid blank').addClass('valid');
 
             row.find('input[name="schedule-value-date"], input[name="schedule-value2-date"]')
                 .datepicker({
@@ -46,6 +50,24 @@ jQuery(document).ready(function($) {
                                spinnerImage: '',
                                timeSteps: [1,1,"1"]
                            });
+            row.find('input[name="schedule-value-time"], input[name="schedule-value2-time"]').keypress(function (evt) {
+                var chr = String.fromCharCode(event.charCode === undefined ? event.keyCode : event.charCode);
+                if (chr < ' ') {
+                    return true;
+                }
+                var ampmSet = jQuery(this).data('ampmSet') || false;
+                if(chr.toLowerCase() == 'a' || chr.toLowerCase() == 'p')
+                    jQuery(this).data('ampmSet', true);
+                else if (chr >= '0' && chr <= '9' && !ampmSet)
+                {
+                    var time = jQuery(this).timeEntry('getTime');
+                    var hours = time.getHours();
+                    if(hours < 8)
+                        jQuery(this).timeEntry('setTime', new Date(0, 0, 0, hours + 12, time.getMinutes(), 0));
+                    else if(hours >= 20)
+                        jQuery(this).timeEntry('setTime', new Date(0, 0, 0, hours - 12, time.getMinutes(), 0));
+                }
+            });
 
             // check if there are any overlaps with the other rows
             var startDate = new Date(row.find('input[name="schedule-value-date"]').val());
@@ -58,6 +80,7 @@ jQuery(document).ready(function($) {
                 endTime = endTime.addHours(12);
             var dotw = row.find('.field-name-field-day-of-the-week input[name*="schedule-dotw-"]:checked').map(function (i, x) {return $(x).val();}).get();
             // reset overlaps tag to start
+            var overlaps = row.is('.overlaps');
             row.removeClass('overlaps');
             schedule.find('.row').not(row).each(function () {
                 var that = jQuery(this);
@@ -84,21 +107,34 @@ jQuery(document).ready(function($) {
                         var endTime2 = new Date('1/1/1970 ' + that.find('input[name="schedule-value2-time"]').val().replace(/[ap]m$/i, '').replace(/12:/i, '00:'));
                         if(that.find('input[name="schedule-value2-time"]').val().match(/pm$/i) != null)
                             endTime2 = endTime2.addHours(12);
-                        if(startTime <= endTime2 && endTime >= startTime2)
+                        if(startTime < endTime2 && endTime > startTime2)
                         {
+                            that.addClass('overlaps');
                             row.addClass('overlaps');
                         }
                     }
                 }
             });
+
+            // if it changed, remove other overlaps
+            if(overlaps && !row.is('.overlaps'))
+            {
+                schedule.find('.row.overlaps').planFunc();
+            }
         });
 
         if(window.location.pathname == '/schedule2' ||
-            (schedule.find('.row.valid').length > 0 && schedule.find('.field-name-field-university input').val().trim() != '' && schedule.find('.field-name-field-university input').val() != schedule.find('.field-name-field-university input').prop('defaultValue')) ||
-            schedule.find('.row.edit.valid').length > 0)
-            schedule.removeClass('invalid').addClass('valid');
+            (schedule.find('.row.invalid:visible').length == 0 && schedule.find('.field-name-field-university input').val().trim() != '' && schedule.find('.field-name-field-university input').val() != schedule.find('.field-name-field-university input').prop('defaultValue')) ||
+            (schedule.find('.field-name-field-university input').val().trim() != '' && schedule.find('.row.edit.valid:visible').length > 0 && schedule.find('.row.edit.invalid:visible').length == 0))
+            schedule.removeClass('invalid invalid-only').addClass('valid');
         else
             schedule.removeClass('valid').addClass('invalid');
+
+        if(schedule.find('.row.overlaps').filter(':visible').length > 0 || window.location.pathname != '/schedule2' && schedule.find('.row.overlaps').length > 0)
+            schedule.addClass('overlaps');
+        else
+            schedule.removeClass('overlaps');
+
     };
 
     schedule.on('click', 'a[href="#edit-class"]', function (evt) {
@@ -119,7 +155,7 @@ jQuery(document).ready(function($) {
     {
         // update calendar events
 
-        window.planEvents = data.events;
+        jQuery('#calendar').updatePlan(data.events);
 
         // reset edit mode
         schedule.removeClass('edit-class-only edit-other-only');
@@ -154,6 +190,20 @@ jQuery(document).ready(function($) {
         jQuery('#sds-messages .show').removeClass('show');
         if (typeof data.lastSDS != 'undefined')
             jQuery('#sds-messages .' + data.lastSDS).addClass('show');
+
+        // update metrics key
+        if (data.times.length != 0)
+        {
+            window.classNames = [];
+            var mc = 0;
+            jQuery('#metrics ol li').remove();
+            for(var eid in data.classes)
+            {
+                window.classNames[window.classNames.length] = data.classes[eid];
+                jQuery('#metrics ol').append('<li><span class="class' + mc + '">&nbsp;</span>' + data.classes[eid] + '</li>');
+                mc++;
+            }
+        }
 
         // update metrics
         jQuery('#metrics .row:not(.heading)').remove();
@@ -209,7 +259,7 @@ jQuery(document).ready(function($) {
         });
 
         // update awards such as pulse detected for setting up a class
-        if (typeof data.awards != 'undefined' && typeof $.fn.relocateAward != 'undefined') {
+        /*if (typeof data.awards != 'undefined' && typeof $.fn.relocateAward != 'undefined') {
             var lastAward = null;
             for (var i in data.awards) {
                 if (data.awards[i] != false && jQuery('#badges #' + i).is('.not-awarded')) {
@@ -222,7 +272,7 @@ jQuery(document).ready(function($) {
                 jQuery('#badges').relocateAward(lastAward, '#schedule > .pane-content');
             else if (lastAward != null)
                 jQuery('#badges').relocateAward(lastAward, '#badges > .pane-content');
-        }
+        }*/
 
         // scroll back to tab they clicked edit on
     }
@@ -276,6 +326,16 @@ jQuery(document).ready(function($) {
         evt.preventDefault();
         var row = jQuery(this).parents('.row');
         schedule.addClass('building');
+        schedule.find('.timer').pietimer('reset');
+        schedule.find('.timer').pietimer({
+            timerSeconds: 30,
+            color: '#09B',
+            fill: false,
+            showPercentage: true,
+            callback: function() {
+            }
+        });
+        schedule.find('.timer').pietimer('start');
         $.ajax({
                    url: '/node/save/schedule',
                    type: 'POST',
@@ -292,11 +352,20 @@ jQuery(document).ready(function($) {
 
     schedule.on('click', 'a[href="#save-class"]', function (evt) {
         evt.preventDefault();
+
+        if(schedule.is('.invalid'))
+        {
+            schedule.addClass('invalid-only');
+            return;
+        }
+
         var classes = [];
         schedule.find('.row.edit.valid:visible, .row.valid.edit:visible').each(function () {
             var row = $(this),
                 dotw = row.find('.field-name-field-day-of-the-week input[name*="schedule-dotw-"]:checked').map(function (i, x) {return $(x).val();}).get();
-            if(row.find('.field-name-field-recurring input[value="monthly"]:checked').length > 0)
+            if(row.find('.field-name-field-recurring input[value="weekly"]:checked').length > 0)
+                dotw[dotw.length] = 'weekly';
+            else if(row.find('.field-name-field-recurring input[value="monthly"]:checked').length > 0)
                 dotw[dotw.length] = 'monthly';
             else if(row.find('.field-name-field-recurring input[value="yearly"]:checked').length > 0)
                 dotw[dotw.length] = 'yearly';
@@ -310,6 +379,16 @@ jQuery(document).ready(function($) {
             };
         });
         schedule.addClass('building');
+        schedule.find('.timer').pietimer('reset');
+        schedule.find('.timer').pietimer({
+            timerSeconds: 60,
+            color: '#09B',
+            fill: false,
+            showPercentage: true,
+            callback: function() {
+            }
+        });
+        schedule.find('.timer').pietimer('start');
 
         $.ajax({
                    url: '/node/save/schedule',
@@ -342,10 +421,11 @@ jQuery(document).ready(function($) {
 
     var checkDate = function () {
         var row = jQuery(this).parents('.row');
-        if(row.find('.field-name-field-time input[name="schedule-value-date"]').val() == '' &&
-           row.find('.field-name-field-time input[name="schedule-value2-date"]').val() == '' &&
-           schedule.find('.row').first().find('input[name="schedule-value-date"]').val() != '' &&
-           schedule.find('.row').first().find('input[name="schedule-value2-date"]').val() != '' &&
+        if(row.find('.field-name-field-class-name input').val() != '' &&
+            row.find('.field-name-field-time input[name="schedule-value-date"]').val() == '' &&
+            row.find('.field-name-field-time input[name="schedule-value2-date"]').val() == '' &&
+            schedule.find('.row').first().find('input[name="schedule-value-date"]').val() != '' &&
+            schedule.find('.row').first().find('input[name="schedule-value2-date"]').val() != '' &&
             row[0] != schedule.find('.row').first()[0])
         {
             // use first rows dates
@@ -367,10 +447,15 @@ jQuery(document).ready(function($) {
         var that = $(this),
             row = that.parents('.row');
 
-        if(row.find('.field-name-field-recurring input[value="weekly"]').is(':checked'))
-            row.find('.field-name-field-day-of-the-week .form-checkboxes .form-type-checkbox').css('visibility', 'visible');
-        else
-            row.find('.field-name-field-day-of-the-week .form-checkboxes .form-type-checkbox').css('visibility', 'hidden');
+        if(that.is('[value="monthly"]') && row.find('.field-name-field-recurring input[value="weekly"]').is(':checked'))
+            row.find('.field-name-field-recurring input[value="weekly"]').prop('checked', false);
+        if(that.is('[value="weekly"]') && row.find('.field-name-field-recurring input[value="monthly"]').is(':checked'))
+            row.find('.field-name-field-recurring input[value="monthly"]').prop('checked', false);
+
+        //if(row.find('.field-name-field-recurring input[value="weekly"]').is(':checked'))
+        //    row.find('.field-name-field-day-of-the-week .form-checkboxes .form-type-checkbox').css('visibility', 'visible');
+        //else
+        //    row.find('.field-name-field-day-of-the-week .form-checkboxes .form-type-checkbox').css('visibility', 'hidden');
 
     });
 

@@ -82,7 +82,7 @@
 .page-node-13 #subfooter
 {
     padding-top: 3px;
-    position: fixed;
+    position: static;
     bottom: 0;
     top: auto;
     left: 0;
@@ -114,14 +114,22 @@
 .page-node-89 #page,
 .page-node-13 #page
 {
-    margin-left:20%;
-    margin-right:20%;
-    margin-top:10px;
-    padding-top: 10px;
     background: url("images/noise_gray.png") repeat scroll 0 0 #EEEEEE;
-    padding-left:20px;
-    padding-right:20px;
-    margin-bottom:20px;
+    margin: 10px 20%;
+    padding:20px;
+}
+
+
+.page-path-schedule2 .grid_12,
+.page-path-schedule .grid_12,
+.page-path-profile .grid_12,
+.page-path-customization2 .grid_12,
+.page-path-customization .grid_12,
+.page-cart-checkout .grid_12,
+.page-node-89 .grid_12,
+.page-node-13 .grid_12
+{
+    margin:0;
 }
 
 .page-path-schedule2,
@@ -279,14 +287,25 @@
     clear:left;
 }
 
+.page-cart-checkout form
+{
+    padding-left:10px;
+}
+
 .page-cart-checkout fieldset
 {
     display:inline-block;
-    width:49%;
+    width:50%;
     vertical-align: top;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    margin-bottom: 5px;
+    margin: 0 -1px 5px -10px;
+}
+
+.page-cart-checkout #payment-pane
+{
+    margin-left:10px;
+    margin-right:-10px;
 }
 
 #uc-cart-checkout-form #comments-pane,
@@ -325,8 +344,8 @@
 
 #payment-pane .fieldset-description div
 {
-    margin-right: -170px;
-    padding-right: 170px;
+    margin-right: -100px;
+    padding-right: 100px;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     width: 100%;
@@ -406,11 +425,6 @@
     padding-top:0 !important;
 }
 
-#payment-pane
-{
-    margin-left:1%;
-}
-
 .uc-cart-checkout-form .form-actions
 {
     clear:right;
@@ -418,15 +432,40 @@
     margin:5px 0;
 }
 
-#customer-pane
-{
-    display:none;
-}
-
 #billing-pane,
 #payment-pane
 {
     min-height: 390px;
+}
+
+#coupon-pane .form-item-panes-coupon-code
+{
+    display:inline-block;
+    width:100%;
+    padding-right:160px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-right: -160px;
+    vertical-align: middle;
+}
+
+#coupon-pane .form-submit
+{
+    margin-left:auto;
+    margin-right:0;
+    vertical-align: middle;
+}
+
+.uc-store-address-field .form-item-panes-billing-billing-first-name,
+.uc-store-address-field .form-item-panes-billing-billing-last-name
+{
+    width: 50%;
+    margin: 0 -1px;
+    padding:0 1px !important;
+    display: inline-block;
+    vertical-align: bottom;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 @media all and (max-width:1442px)
@@ -464,6 +503,30 @@
 
 @media all and (max-width:760px)
 {
+    #coupon-pane .form-item-panes-coupon-code
+    {
+        margin-right: 0;
+        padding-right: 0;
+        display: block;
+    }
+
+    .page-cart-checkout #payment-pane
+    {
+        margin-left:-10px;
+        margin-right:-1px;
+    }
+
+    .page-path-schedule2 #page,
+    .page-path-schedule #page,
+    .page-path-profile #page,
+    .page-path-customization2 #page,
+    .page-path-customization #page,
+    .page-cart-checkout #page,
+    .page-node-89 #page,
+    .page-node-13 #page
+    {
+        padding:10px;
+    }
 
     .page-path-schedule2 #subfooter,
     .page-path-schedule #subfooter,
@@ -477,10 +540,14 @@
         position: static;
     }
 
-    .page-cart-checkout fieldset
+    .page-cart-checkout #payment-pane,
+    .page-cart-checkout #billing-pane,
+    .page-cart-checkout #coupon-pane
     {
         width: auto;
         display:block;
+        float:none;
+        clear:both;
     }
 }
 

@@ -77,7 +77,7 @@ function checkinCallback(pos, eid, checkedIn) {
                     dataType: 'json',
                     data: {
                         checkedIn: checkedIn,
-                        date: new Date().getTime() / 1000,
+                        date: new Date().toJSON(),
                         eid: eid,
                         checklist: checked.join(','),
                         location: lat + ',' + lng
@@ -109,6 +109,19 @@ function checkinCallback(pos, eid, checkedIn) {
                             jQuery('#home-tips').attr('checked', 'checked');
                         if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
                             jQuery('#home-tasks-checklist').attr('checked', 'checked');
+
+                        // update metrics key
+                        var mc = 0;
+                        jQuery('#metrics ol li').remove();
+                        window.classNames = [];
+                        for(var eid in data.classes)
+                        {
+                            window.classNames[window.classNames.length] = data.classes[eid];
+                            jQuery('#metrics ol').append('<li><span class="class' + mc + '">&nbsp;</span>' + data.classes[eid] + '</li>');
+                            mc++;
+                        }
+
+                        // update metrics graphs
                         jQuery('#metrics').updateMetrics(data.times);
                         if (data.times.length == 0)
                             jQuery('#metrics').addClass('empty');
@@ -117,8 +130,9 @@ function checkinCallback(pos, eid, checkedIn) {
                         jQuery('#study-total').text(data.total);
                         jQuery('#timeline > h4').html(data.hours > 0 ? ('Goal: ' + data.hours + ' hours') : '&nbsp;');
 
+
                         // update awards
-                        if (typeof data.awards != 'undefined') {
+                        /*if (typeof data.awards != 'undefined') {
                             var lastAward = null;
                             for (var i in data.awards) {
                                 if (data.awards[i] != false && jQuery('#badges #' + i).is('.not-awarded')) {
@@ -137,6 +151,7 @@ function checkinCallback(pos, eid, checkedIn) {
                             else if (lastAward != null)
                                 jQuery('#badges').relocateAward(lastAward, '#badges > .pane-content');
                         }
+                        */
                     }
                 });
 }
@@ -153,21 +168,36 @@ function checkinClick(evt)
     jQuery('#checklist .checkboxes input').removeAttr('checked');
     panel.find('.pane-content').append(jQuery('#checklist, #sds-messages, #timer-expire').detach());
     // if it is in session always display timer expire
-    if (jQuery('#checkin .classes a.checked-in, #plan .mini-checkin > a.checked-in').length > 0 && clock != null)
+    if (that.is('.checked-in'))
     {
-        clearInterval(clock);
+        if(clock != null)
+            clearInterval(clock);
+        clock = null;
+        sessionStart = new Date().getTime() / 1000;
+        setClock();
+        panel.addClass('timer-expire-only').scrollintoview();
+        checkinCallback(null, id, true);
+        return;
+    }
+    else if (jQuery('#checkin .classes a.checked-in, #plan .mini-checkin > a.checked-in').length > 0)
+    {
+        if(clock != null)
+            clearInterval(clock);
         clock = null;
         sessionStart = new Date().getTime() / 1000;
         setClock();
         // show expire message
         panel.addClass('timer-expire-only').scrollintoview();
+
+        // switch off other checkin buttons
+        var tmpThat = jQuery('#checkin .classes a.checked-in, #plan .mini-checkin > a.checked-in').first(),
+            tmpId = (/cid([0-9]+)(\s|$)/ig).exec(panel.is('#plan')
+                ? tmpThat.parents('.row').attr('class')
+                : tmpThat.attr('class'))[1];
+        checkinCallback(null, tmpId, true);
     }
-    if (that.is('.checked-in'))
-    {
-        checkinCallback(null, id, true);
-        return;
-    }
-    else if (jQuery('#sds-messages .show').length > 0)
+
+    if (jQuery('#sds-messages .show').length > 0)
     {
         panel.addClass('sds-message-only').scrollintoview();
     }
@@ -192,10 +222,28 @@ function checkinClick(evt)
 
 jQuery(document).ready(function ($) {
 
+    setInterval(function () {
+        if(typeof window.minplayer != 'undefined')
+        {
+            var plugins = window.minplayer.plugins;
+            for(var p in plugins)
+            {
+                if(typeof plugins[p].media != 'undefined')
+                {
+                    for(var i in plugins[p].media)
+                    {
+                        plugins[p].media[i].hasFocus = false;
+                    }
+                }
+            }
+        }
+    }, 2000);
+
     if(typeof minplayer != 'undefined')
     {
         minplayer.get(function (plugin) {
-            if(plugin.name == 'player' && typeof plugin.media != 'undefined')
+            if(plugin.name == 'player' && typeof plugin.media != 'undefined' &&
+                typeof plugin.media.player != 'undefined')
                 plugin.media.player.addEventListener('playing', function() {
                     plugin.media.hasFocus = false;
                 });
@@ -216,10 +264,12 @@ jQuery(document).ready(function ($) {
             window.location = '#metrics';
     });
 
+    /*
     jQuery('#checkin').on('click', '#timer-expire a[href="#badges"]', function (evt) {
         jQuery('#checkin .classes a.checked-in').first().trigger('click');
         jQuery('#checkin').removeClass('timer-expire-only').scrollintoview();
     });
+    */
 
     jQuery('#checkin').on('click', 'a[title="Play"], a[title="Pause"]', function () {
         jQuery('.header-wrapper a[title="' + jQuery(this).attr('title') + '"]').trigger('click');
@@ -258,7 +308,7 @@ jQuery(document).ready(function ($) {
                 setClock();
                 // show expire message
                 jQuery('.minplayer-default-pause').trigger('click');
-                jQuery('#checkin').addClass('timer-expire-only').scrollintoview();
+                jQuery('#checkin .classes a.checked-in, #plan .mini-checkin > a.checked-in').first().trigger('click');
             }
         }, 1000);
     };

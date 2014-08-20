@@ -75,11 +75,11 @@ function studysauce_save_profile()
             studysauce_rebuild_schedule($node, $entities);
     }
 
-    global $studysauceExportClasses, $studysauceExportEvents;
+    global $studysauceExportEvents;
     print json_encode(array(
         'plan' => '<div>' . theme('studysauce-plans') . '</div>',
         'events' => $studysauceExportEvents,
-        'classes' => $studysauceExportClasses
+        'classes' => _studysauce_get_schedule_classes($user)
     ));
     drupal_exit();
 }

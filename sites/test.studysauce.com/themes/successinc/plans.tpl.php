@@ -1,6 +1,10 @@
 <?php
 drupal_add_css(drupal_get_path('theme', 'successinc') .'/plans.css');
 drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/plans.js');
+drupal_add_css(drupal_get_path('theme', 'successinc') . '/js/fullcalendar/fullcalendar.css');
+drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/fullcalendar/lib/moment.min.js');
+drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/fullcalendar/fullcalendar.js');
+
 // check if user has purchased a plan
 if(!isset($account))
 {
@@ -33,8 +37,10 @@ else
         $encoded = preg_replace('/<\/?script>/i', '', $sample);
         list($events, $classes, $others) = json_decode($encoded);
     }
+    else
+        list($events, $classes, $others) = array(array(), array(), array());
 
-    // convert classes to numeric array
+            // convert classes to numeric array
     $classes = array_map(function ($x) {
         $x->field_time = (array)$x->field_time;
         $x->field_time['und'][0] = (array)$x->field_time['und'][0];
@@ -72,7 +78,7 @@ else
 }
 
 // this is used when the plan has to be rendered but the javascript is removed by jquery like in a ajax callback, the jsEvents is then loaded manually as a separate property
-global $studysauceExportEvents, $studysauceExportClasses;
+global $studysauceExportEvents;
 $jsEvents = array();
 foreach($events as $i => $x)
 {
@@ -101,7 +107,20 @@ foreach($events as $i => $x)
     elseif($x->field_event_type['und'][0]['value'] == 'h')
         $label = 'HOLIDAY';
     elseif($x->field_event_type['und'][0]['value'] == 'r')
+    {
         $label = 'REMINDER';
+        continue;
+    }
+    elseif($x->field_event_type['und'][0]['value'] == 'm')
+    {
+        $label = 'MEAL';
+        continue;
+    }
+    elseif($x->field_event_type['und'][0]['value'] == 'z')
+    {
+        $label = 'SLEEP';
+        continue;
+    }
 
     // set up dates recurrence
     if($x->field_event_type['und'][0]['value'] == 'sr')
@@ -134,7 +153,6 @@ foreach($events as $i => $x)
     );
 }
 $studysauceExportEvents = $jsEvents;
-$studysauceExportClasses = array_map(function ($x) { return $x->field_class_name['und'][0]['value']; }, $classes);
 
 if(!$lastOrder && empty($groups['node'])): ?><div class="buy-plan"><?php endif;
 
@@ -172,7 +190,12 @@ if(!$lastOrder && empty($groups['node'])): ?><div class="buy-plan"><?php endif;
 
         // TODO: should we allow notes for class events?
         if(isset($event->field_event_type['und'][0]['value']) &&
-            ($event->field_event_type['und'][0]['value'] == 'c' || $event->field_event_type['und'][0]['value'] == 'h' || $event->field_event_type['und'][0]['value'] == 'r'))
+            ($event->field_event_type['und'][0]['value'] == 'c' ||
+                $event->field_event_type['und'][0]['value'] == 'h' ||
+                $event->field_event_type['und'][0]['value'] == 'r' ||
+                $event->field_event_type['und'][0]['value'] == 'm' ||
+                $event->field_event_type['und'][0]['value'] == 'z'
+            ))
             continue;
 
         $time = new DateTime($event->field_time['und'][0]['value'], new DateTimeZone('UTC'));
@@ -181,7 +204,8 @@ if(!$lastOrder && empty($groups['node'])): ?><div class="buy-plan"><?php endif;
         if($headStr != $newHead)
         {
             $headStr = $newHead;
-            ?><div class="head <?php print ($time->getTimestamp() < $nowTimestamp - 86400 ? 'hide' : ''); ?>"><?php print $headStr; ?></div><?
+            ?><div class="head <?php print ($time->getTimestamp() < $nowTimestamp - 86400 ? 'hide' : ''); ?> <?php
+                print (strtotime($event->field_time['und'][0]['value']) >= $startWeek && strtotime($event->field_time['und'][0]['value']) <= $endWeek ? 'mobile' : ''); ?>"><?php print $headStr; ?></div><?
         }
         $cid = array_search($event->field_class_name['und'][0]['value'], array_map(function ($x) { return $x->field_class_name['und'][0]['value']; }, $classes));
         if($cid === false)
@@ -207,8 +231,10 @@ if(!$lastOrder && empty($groups['node'])): ?><div class="buy-plan"><?php endif;
                                 // if nothing is selected nothing shows up
                                 : ''))));
 
-        if($event->field_event_type['und'][0]['value'] == 'd')
+        if($event->field_event_type['und'][0]['value'] == 'd' && $cid != '')
             $title = 'Deadline' . preg_replace(array('/' . preg_quote($classes[$cid]->field_class_name['und'][0]['value']) . '\s*/'), array(''), $event->field_class_name['und'][0]['value']);
+        elseif($event->field_event_type['und'][0]['value'] == 'd')
+            $title = 'Deadline' . str_replace('Nonacademic', '', $event->field_class_name['und'][0]['value']);
         elseif($event->field_event_type['und'][0]['value'] == 'f')
         {
             $cid = 'f';
@@ -230,7 +256,8 @@ if(!$lastOrder && empty($groups['node'])): ?><div class="buy-plan"><?php endif;
         print ('class' . $classI); ?> <?php
         print ('cid' . $cid); ?> <?php
         print ('default-' . $session); ?> <?php
-        print (isset($event->field_completed['und'][0]['value']) && $event->field_completed['und'][0]['value'] ? 'done' : ''); ?>" id="eid-<?php print $eid; ?>">
+        print (isset($event->field_completed['und'][0]['value']) && $event->field_completed['und'][0]['value'] ? 'done' : ''); ?>"
+             id="eid-<?php print $eid; ?>">
             <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
                 <span class="class">&nbsp;</span>
                 <div class="read-only"><?php print htmlspecialchars($event->field_class_name['und'][0]['value'], ENT_QUOTES); ?></div>
@@ -260,6 +287,8 @@ if(!$lastOrder && empty($groups['node'])): ?><div class="buy-plan"><?php endif;
             <div class="highlighted-link">
                 <a href="#premium"><h2>Upgrade to premium and we will build your personalized study plan.</h2></a>
                 <a class="more-parents" href="#parents" onclick="jQuery('#plan').addClass('bill-my-parents-only'); return false;">Bill my parents</a>
+                <a href="#premium" class="more">Go Premium</a>
+
                 <div class="bill-my-parents">
                     <h3>Send an email to have someone prepay for Study Sauce.  We will then alert you when your account has been activated.</h3>
                     <div class="form-item webform-component webform-component-textfield webform-component--student-first-name">

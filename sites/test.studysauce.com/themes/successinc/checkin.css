@@ -477,6 +477,16 @@
         display:none;
     }
 
+    .page-dashboard #checkin .classes
+    {
+        width:52%;
+        margin:0 -2%;
+    }
+
+    .page-dashboard #checkin .classes a
+    {
+        margin: 25px 10px;
+    }
 }
 @media all and (max-width: 759px)
 {
@@ -495,14 +505,20 @@
         width:auto;
         margin: 20px auto;
     }
+
+    .page-dashboard #checkin .classes a
+    {
+        margin: 25px 25px;
+    }
 }
 
 @media all and (max-width: 480px)
 {
-    .page-dashboard #checkin p.classes
+    .page-dashboard #checkin .classes
     {
         margin:0 -10px;
     }
+
 
     .page-dashboard #checkin .classes a
     {

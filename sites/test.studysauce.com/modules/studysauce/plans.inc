@@ -28,15 +28,12 @@ function studysauce_save_strategies()
         ->propertyCondition('status', 1)
         ->range(0, 1)
         ->execute();
-    if (!empty($nodes['node']))
-    {
+    if (!empty($nodes['node'])) {
         $nodes = array_keys($nodes['node']);
         $nid = array_shift($nodes);
         $node = node_load($nid);
         $node->revision = 1;
-    }
-    else
-    {
+    } else {
         $node = new stdClass();
         $node->title = isset($user->mail) ? $user->mail : '';
         $node->type = 'strategies';
@@ -48,95 +45,87 @@ function studysauce_save_strategies()
         node_save($node);
     }
 
-    if(isset($_POST['strategies']) && is_array($_POST['strategies']))
-    {
+    if (isset($_POST['strategies']) && is_array($_POST['strategies'])) {
         // first, we need a list of all the events, this is stored in the schedule node
         list($events) = studysauce_get_events();
 
-        foreach($_POST['strategies'] as $i => $strategy)
-        {
+        foreach ($_POST['strategies'] as $i => $strategy) {
             // check if the event name actually exists ins schedule
-            if(isset($events[$strategy['eid']]))
-            {
+            if (isset($events[$strategy['eid']])) {
                 // check if the strategy is already saved
                 $field = 'field_' . $strategy['type'] . '_strategies';
                 $strategies = $node->$field;
-                if(isset($strategies['und']) && is_array($strategies['und']))
-                {
+                if (isset($strategies['und']) && is_array($strategies['und'])) {
                     $saved = db_select('field_data_field_class_name', 'ti')
                         ->fields('ti', array('entity_id'))
                         ->condition('bundle', $field, '=')
                         ->condition('field_class_name_value', '% (' . $strategy['eid'] . ')', 'LIKE')
-                        ->condition('entity_id', array_map(function ($x) {return $x['value'];}, $strategies['und']), 'IN')
+                        ->condition('entity_id', array_map(function ($x) {
+                            return $x['value'];
+                        }, $strategies['und']), 'IN')
                         ->execute()
                         ->fetchAssoc();
-                    if($saved)
-                    {
+                    if ($saved) {
                         $entity = entity_load('field_collection_item', array($saved['entity_id']));
-                        if(isset($entity[$saved['entity_id']]))
+                        if (isset($entity[$saved['entity_id']]))
                             $existing = $entity[$saved['entity_id']];
                     }
                 }
 
                 // remove the strategy
-                if(isset($strategy['remove']))
-                {
-                    if(isset($existing))
-                    {
+                if (isset($strategy['remove'])) {
+                    if (isset($existing)) {
                         entity_delete('field_collection_item', array($existing->item_id));
                         node_save($node);
                     }
-                }
-                // create the strategy
-                else
-                {
-                    if(!isset($existing))
-                    {
+                } // create the strategy
+                else {
+                    if (!isset($existing)) {
                         $existing = entity_create('field_collection_item', array('field_name' => $field));
                         $existing->setHostEntity('node', $node);
                         $existing->field_class_name['und'][0]['value'] = $events[$strategy['eid']]->field_class_name['und'][0]['value'] . ' (' . $strategy['eid'] . ')';
-                    }
-                    else
-                    {
+                    } else {
                         //$existing->revision = 1;
                     }
 
-                    if(isset($_POST['default']) && $_POST['default'] == $strategy['type'])
+                    if (isset($_POST['default']) && $_POST['default'] == $strategy['type'])
                         $existing->field_default['und'][0]['value'] = 1;
                     else
                         $existing->field_default['und'][0]['value'] = 0;
 
-                    if(isset($strategy['skim']))
+                    if (isset($strategy['skim']))
                         $existing->field_skim['und'][0]['value'] = $strategy['skim'];
-                    if(isset($strategy['why']))
+                    if (isset($strategy['why']))
                         $existing->field_why['und'][0]['value'] = $strategy['why'];
-                    if(isset($strategy['questions']))
+                    if (isset($strategy['questions']))
                         $existing->field_questions['und'][0]['value'] = $strategy['questions'];
-                    if(isset($strategy['summarize']))
+                    if (isset($strategy['summarize']))
                         $existing->field_summarize['und'][0]['value'] = $strategy['summarize'];
-                    if(isset($strategy['exam']))
+                    if (isset($strategy['exam']))
                         $existing->field_exam['und'][0]['value'] = $strategy['exam'];
 
-                    if(isset($strategy['title']))
+                    if (isset($strategy['title']))
                         $existing->field_title['und'][0]['value'] = $strategy['title'];
-                    if(isset($strategy['notes']))
+                    if (isset($strategy['notes']))
                         $existing->field_notes['und'][0]['value'] = $strategy['notes'];
-                    if(isset($strategy['uploads'][0]['thumbnail']))
+                    if (isset($strategy['uploads'][0]['thumbnail']))
                         $existing->field_teaching['und'][0]['thumbnail'] = $strategy['uploads'][0]['thumbnail'];
-                    if(isset($strategy['uploads'][0]['fid']))
+                    if (isset($strategy['uploads'][0]['fid']))
                         $existing->field_teaching['und'][0]['fid'] = $strategy['uploads'][0]['fid'];
-                    if(isset($strategy['review']))
-                    {
-                        if(!empty($strategy['review']))
-                            $existing->field_review['und'] = array_map(function ($x) { return array('value'=> $x); },
+                    if (isset($strategy['review'])) {
+                        if (!empty($strategy['review']))
+                            $existing->field_review['und'] = array_map(function ($x) {
+                                    return array('value' => $x);
+                                },
                                 explode(',', $strategy['review']));
                         else
                             $existing->field_review['und'] = array();
                     }
-                    if(isset($strategy['prepared']))
-                    {
-                        if(!empty($strategy['prepared']))
-                            $existing->field_prepared['und'] = array_map(function ($x) { return array('value'=> $x); },
+                    if (isset($strategy['prepared'])) {
+                        if (!empty($strategy['prepared']))
+                            $existing->field_prepared['und'] = array_map(function ($x) {
+                                    return array('value' => $x);
+                                },
                                 explode(',', $strategy['prepared']));
                         else
                             $existing->field_prepared['und'] = array();
@@ -145,8 +134,7 @@ function studysauce_save_strategies()
 
                     $existing->save();
 
-                    if(isset($strategy['uploads'][0]['fid']))
-                    {
+                    if (isset($strategy['uploads'][0]['fid'])) {
                         $file = file_load($strategy['uploads'][0]['fid']);
                         $fileName = isset($strategy['uploads'][0]['rename']) ? $strategy['uploads'][0]['rename'] : $file->filename;
                         $location = 'public:///';
@@ -180,8 +168,7 @@ function studysauce_save_strategies()
 
 function studysauce_get_strategies($account = null)
 {
-    if(!isset($account))
-    {
+    if (!isset($account)) {
         global $user;
         $account = user_load($user->uid);
     }
@@ -194,31 +181,30 @@ function studysauce_get_strategies($account = null)
         ->propertyCondition('status', 1)
         ->range(0, 1)
         ->execute();
-    if (!empty($nodes['node']))
-    {
+    if (!empty($nodes['node'])) {
         $nodes = array_keys($nodes['node']);
         $nid = array_shift($nodes);
         $node = node_load($nid);
-        foreach(array('active', 'other', 'spaced', 'teach', 'prework') as $i => $strategy)
-        {
+        foreach (array('active', 'other', 'spaced', 'teach', 'prework') as $i => $strategy) {
             $field = 'field_' . $strategy . '_strategies';
             $entities = $node->$field;
-            if(!isset($entities['und']) || empty($entities['und']))
+            if (!isset($entities['und']) || empty($entities['und']))
                 continue;
 
-            $strategies = entity_load('field_collection_item', array_map(function ($x) {return $x['value'];}, $entities['und']));
-            foreach($strategies as $i => $entity)
-            {
-                if(!isset($entity->field_class_name['und'][0]['value']) || empty($entity->field_class_name['und'][0]['value']) ||
-                    !preg_match('/\s\(([0-9]+)\)$/i', $entity->field_class_name['und'][0]['value'], $matches))
+            $strategies = entity_load('field_collection_item', array_map(function ($x) {
+                return $x['value'];
+            }, $entities['und']));
+            foreach ($strategies as $i => $entity) {
+                if (!isset($entity->field_class_name['und'][0]['value']) || empty($entity->field_class_name['und'][0]['value']) ||
+                    !preg_match('/\s\(([0-9]+)\)$/i', $entity->field_class_name['und'][0]['value'], $matches)
+                )
                     continue;
 
                 $eid = $matches[1];
                 $result[$eid][$strategy]['default'] = isset($entity->field_default['und'][0]['value'])
                     ? $entity->field_default['und'][0]['value']
                     : false;
-                if($strategy == 'active')
-                {
+                if ($strategy == 'active') {
                     $result[$eid][$strategy]['skim'] = isset($entity->field_skim['und'][0]['value'])
                         ? $entity->field_skim['und'][0]['value']
                         : '';
@@ -234,23 +220,18 @@ function studysauce_get_strategies($account = null)
                     $result[$eid][$strategy]['exam'] = isset($entity->field_exam['und'][0]['value'])
                         ? $entity->field_exam['und'][0]['value']
                         : '';
-                }
-                elseif($strategy == 'other')
-                {
+                } elseif ($strategy == 'other') {
                     $result[$eid][$strategy]['notes'] = isset($entity->field_notes['und'][0]['value'])
                         ? $entity->field_notes['und'][0]['value']
                         : '';
-                }
-                elseif($strategy == 'teach')
-                {
+                } elseif ($strategy == 'teach') {
                     $result[$eid][$strategy]['title'] = isset($entity->field_title['und'][0]['value'])
                         ? $entity->field_title['und'][0]['value']
                         : '';
                     $result[$eid][$strategy]['notes'] = isset($entity->field_notes['und'][0]['value'])
                         ? $entity->field_notes['und'][0]['value']
                         : '';
-                    if(isset($entity->field_teaching['und'][0]['fid']))
-                    {
+                    if (isset($entity->field_teaching['und'][0]['fid'])) {
                         $result[$eid][$strategy]['uploads'][0]['fid'] = $entity->field_teaching['und'][0]['fid'];
                         $result[$eid][$strategy]['uploads'][0]['thumbnail'] = $entity->field_teaching['und'][0]['thumbnail'];
                         $result[$eid][$strategy]['uploads'][0]['uri'] = image_style_url('achievement', $entity->field_teaching['und'][0]['thumbnailfile']->uri);
@@ -263,11 +244,10 @@ function studysauce_get_strategies($account = null)
                             ->execute()->fetchAllAssoc('output_fid');
                         foreach ($outputs as $outputfid => $output) {
                             $trans = file_load($output->output_fid);
-                            if($trans->filesize > 0)
+                            if ($trans->filesize > 0)
                                 $result[$eid][$strategy]['uploads'][0]['play'] = check_plain(file_create_url($trans->uri));
                         }
-                        if(empty($outputs))
-                        {
+                        if (empty($outputs)) {
                             $result[$eid][$strategy]['uploads'][0]['play'] = check_plain(file_create_url($file->uri));
                             $video = video_jobs::load($entity->field_teaching['und'][0]['fid']);
                             if (!$video) {
@@ -286,23 +266,23 @@ function studysauce_get_strategies($account = null)
                             video_jobs::update($video);
                         }
                     }
-                }
-                elseif($strategy == 'spaced')
-                {
+                } elseif ($strategy == 'spaced') {
                     $result[$eid][$strategy]['notes'] = isset($entity->field_notes['und'][0]['value'])
                         ? $entity->field_notes['und'][0]['value']
                         : '';
                     $result[$eid][$strategy]['review'] = isset($entity->field_review['und'][0]['value'])
-                        ? implode(',', array_map(function ($x) { return $x['value']; }, $entity->field_review['und']))
+                        ? implode(',', array_map(function ($x) {
+                            return $x['value'];
+                        }, $entity->field_review['und']))
                         : '';
-                }
-                elseif($strategy == 'prework')
-                {
+                } elseif ($strategy == 'prework') {
                     $result[$eid][$strategy]['notes'] = isset($entity->field_notes['und'][0]['value'])
                         ? $entity->field_notes['und'][0]['value']
                         : '';
                     $result[$eid][$strategy]['prepared'] = isset($entity->field_prepared['und'][0]['value'])
-                        ? implode(',', array_map(function ($x) { return $x['value']; }, $entity->field_prepared['und']))
+                        ? implode(',', array_map(function ($x) {
+                            return $x['value'];
+                        }, $entity->field_prepared['und']))
                         : '';
                 }
             }
@@ -313,14 +293,12 @@ function studysauce_get_strategies($account = null)
 
 function studysauce_save_completed()
 {
-    if(!isset($account))
-    {
+    if (!isset($account)) {
         global $user;
         $account = user_load($user->uid);
     }
 
-    if($_POST['type'] == 'd')
-    {
+    if ($_POST['type'] == 'd') {
         // find deadline and mark completed
 
         $query = new EntityFieldQuery();
@@ -336,15 +314,13 @@ function studysauce_save_completed()
             $kid = array_shift($key_dates);
             $dates = node_load($kid);
 
-            if (isset($dates->field_reminders[LANGUAGE_NONE][0]['value']))
-            {
-                foreach($dates->field_reminders[LANGUAGE_NONE] as $eid => $reminder)
-                {
+            if (isset($dates->field_reminders[LANGUAGE_NONE][0]['value'])) {
+                foreach ($dates->field_reminders[LANGUAGE_NONE] as $eid => $reminder) {
                     $eid = $reminder['value'];
                     $entity = entity_load('field_collection_item', array($eid));
                     if (!empty($entity) &&
-                        $entity[$eid]->field_class_name['und'][0]['value'] . ': ' . $entity[$eid]->field_assignment['und'][0]['value'] == $_POST['className'])
-                    {
+                        $entity[$eid]->field_class_name['und'][0]['value'] . ': ' . $entity[$eid]->field_assignment['und'][0]['value'] == $_POST['className']
+                    ) {
                         $entity[$eid]->field_completed[LANGUAGE_NONE][0]['value'] = true && $_POST['completed'];
                         $entity[$eid]->save();
                     }
@@ -352,13 +328,10 @@ function studysauce_save_completed()
                 }
             }
         }
-    }
-    else
-    {
+    } else {
         // find matching event
         list($events) = studysauce_get_events();
-        if(isset($events[$_POST['cid']]))
-        {
+        if (isset($events[$_POST['cid']])) {
             db_update('studysauce_events')
                 ->fields(array('completed' => 1))
                 ->condition('eid', $_POST['cid'], '=')
@@ -379,26 +352,28 @@ function studysauce_get_strategies_titles()
         ->propertyCondition('status', 1)
         ->range(0, 1)
         ->execute();
-    if (!empty($nodes['node']))
-    {
+    if (!empty($nodes['node'])) {
         $nodes = array_keys($nodes['node']);
         $nid = array_shift($nodes);
         $node = node_load($nid);
-        foreach(array('active', 'other', 'spaced', 'teach', 'prework') as $i => $strategy)
-        {
+        foreach (array('active', 'other', 'spaced', 'teach', 'prework') as $i => $strategy) {
             $field = 'field_' . $strategy . '_strategies';
             $strategies = $node->$field;
-            if(!isset($strategies['und']) || empty($strategies['und']))
+            if (!isset($strategies['und']) || empty($strategies['und']))
                 continue;
 
             $saved = db_select('field_data_field_class_name', 'ti')
                 ->fields('ti', array('entity_id', 'field_class_name_value'))
                 ->condition('bundle', $field, '=')
-                ->condition('entity_id', array_map(function ($x) {return $x['value'];}, $strategies['und']), 'IN')
+                ->condition('entity_id', array_map(function ($x) {
+                    return $x['value'];
+                }, $strategies['und']), 'IN')
                 ->execute()
                 ->fetchAllAssoc('entity_id');
 
-            $titles = array_merge($titles, array_map(function ($x) { return $x->field_class_name_value;}, $saved));
+            $titles = array_merge($titles, array_map(function ($x) {
+                return $x->field_class_name_value;
+            }, $saved));
         }
     }
 
@@ -412,10 +387,10 @@ function studysauce_remove_old_events(&$node, &$events, $renamed)
     // get a list of strategy titles that have been saved
     $titles = studysauce_get_strategies_titles();
     $strategyEvents = array();
-    foreach($titles as $sid => $title)
-    {
-        if(!isset($title) || empty($title) ||
-            !preg_match('/\s\(([0-9]+)\)$/i', $title, $matches))
+    foreach ($titles as $sid => $title) {
+        if (!isset($title) || empty($title) ||
+            !preg_match('/\s\(([0-9]+)\)$/i', $title, $matches)
+        )
             continue;
 
         $eid = $matches[1];
@@ -423,10 +398,9 @@ function studysauce_remove_old_events(&$node, &$events, $renamed)
     }
 
     // only save events that have been moved intentionally and have strategies associated with them
-    foreach($events as $eid => $event)
-    {
+    foreach ($events as $eid => $event) {
         // TODO: uncomment this to only save events with data attached
-        if(isset($strategyEvents[$eid]) || $event->field_user_moved['und'][0]['value'])
+        if (isset($strategyEvents[$eid]) || $event->field_user_moved['und'][0]['value'])
             $saved[$eid] = $event;
     }
 
@@ -439,23 +413,25 @@ function studysauce_add_reoccurring_events($node, &$events, $class, $saved)
 {
     global $holidays;
 
+    $once = false;
+    if($class->field_event_type['und'][0]['value'] == 'o' && !in_array('weekly', array_map(function ($x) {return $x['value'];}, $class->field_day_of_the_week['und'])))
+        $once = true;
+
     $classStart = new DateTime($class->field_time['und'][0]['value'], new DateTimeZone('UTC'));
     $classEnd = new DateTime($class->field_time['und'][0]['value2'], new DateTimeZone('UTC'));
 
     $length = strtotime($classEnd->format('1/1/1970 H:i:s')) - strtotime($classStart->format('1/1/1970 H:i:s'));
-    if($length <= 0)
+    if ($length <= 0)
         $length += 86400;
 
     // add repeating other events
     $startTerm = strtotime('this week', $classStart->getTimestamp());
     $endTerm = strtotime('this week', $classEnd->getTimestamp()) + 604800;
-    for ($w = $startTerm; $w < $endTerm; $w += 604800)
-    {
-        foreach ($class->field_day_of_the_week['und'] as $j => $dotw)
-        {
+    for ($w = $startTerm; $w < $endTerm; $w += 604800) {
+        foreach ($class->field_day_of_the_week['und'] as $j => $dotw) {
             $d = 0;
-            switch ($dotw['value'])
-            {
+            $skip = false;
+            switch ($dotw['value']) {
                 case 'M':
                     break;
                 case 'Tu':
@@ -477,16 +453,18 @@ function studysauce_add_reoccurring_events($node, &$events, $class, $saved)
                     $d = 86400 * 6;
                     break;
                 default:
-                    continue;
+                    $skip = true;
             }
-
+            if($skip)
+                continue;
             $t = strtotime('this week', $w) + $d;
-            if($t < $classStart->getTimestamp() || $t > $classEnd->getTimestamp())
+            if ($t < $classStart->getTimestamp() || $t > $classEnd->getTimestamp())
                 continue;
 
             $classT = new DateTime();
             $classT->setTimestamp($t);
-            if(isset($holidays[$classT->format('Y/m/d')]))
+            // skip class on holidays
+            if ($class->field_event_type['und'][0]['value'] == 'c' && isset($holidays[$classT->format('Y/m/d')]))
                 continue;
             $classT->setTimezone(new DateTimeZone('UTC'));
             $classT->setTime($classStart->format('H'), $classStart->format('i'), $classStart->format('s'));
@@ -495,21 +473,17 @@ function studysauce_add_reoccurring_events($node, &$events, $class, $saved)
             $lastEid = 0;
             $lastDistance = 172800;
             // TODO: use each so we save our location
-            foreach($saved as $eid => $event)
-            {
+            foreach ($saved as $eid => $event) {
                 // if saved is 24 hours before current event, skip and never go back because we are ordered by time
                 $distance = abs(strtotime($event->field_time['und'][0]['value']) - $classT->getTimestamp());
-                if($distance < $lastDistance)
-                {
+                if ($distance < $lastDistance) {
                     $lastEid = $eid;
                     $lastDistance = $distance;
-                }
-                elseif($lastEid > 0)
+                } elseif ($lastEid > 0)
                     break;
             }
 
-            if($lastEid)
-            {
+            if ($lastEid) {
                 $events[$lastEid] = $saved[$lastEid];
                 unset($saved[$lastEid]);
                 $events[$lastEid]->field_time[LANGUAGE_NONE][0] = array(
@@ -518,16 +492,16 @@ function studysauce_add_reoccurring_events($node, &$events, $class, $saved)
                 );
 
                 studysauce_bucket_event($node, $events, $lastEid);
-            }
-            else
-            {
+            } else {
 
                 $entity = new stdClass();
                 $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $class->field_class_name['und'][0]['value'];
                 $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $class->field_event_type[LANGUAGE_NONE][0]['value'];
                 $entity->field_time[LANGUAGE_NONE][0] = array(
                     'value' => $classT->format('Y/m/d H:i:s'),
-                    'value2' => date_add($classT, new DateInterval('PT' . $length . 'S'))->format('Y/m/d H:i:s')
+                    'value2' => $once
+                        ? date_timestamp_set($classT, min(date_add($classT, new DateInterval('PT86400S'))->getTimestamp(), $classEnd->getTimestamp()))->format('Y/m/d H:i:s')
+                        : date_add($classT, new DateInterval('PT' . $length . 'S'))->format('Y/m/d H:i:s')
                 );
                 $key = 'new' . count($events);
                 $events[$key] = $entity;
@@ -547,8 +521,10 @@ function studysauce_bucket_event($node, $events, $cid)
     global $buckets, $classTotals, $studyTotals;
 
     // don't count all day events
-    if($events[$cid]->field_event_type['und'][0]['value'] == 'h' || $events[$cid]->field_event_type['und'][0]['value'] == 'd' ||
-        $events[$cid]->field_event_type['und'][0]['value'] == 'r')
+    if ($events[$cid]->field_event_type['und'][0]['value'] == 'h' || $events[$cid]->field_event_type['und'][0]['value'] == 'd' ||
+        $events[$cid]->field_event_type['und'][0]['value'] == 'r' || $events[$cid]->field_event_type['und'][0]['value'] == 'm' ||
+        $events[$cid]->field_event_type['und'][0]['value'] == 'z'
+    )
         return;
 
     $start = new DateTime($events[$cid]->field_time['und'][0]['value'], new DateTimeZone('UTC'));
@@ -558,22 +534,20 @@ function studysauce_bucket_event($node, $events, $cid)
 
     // if the event is before 4 am put in the bucket from the previous day
     $bucket = clone $start;
-    $bucket->setTime(0,0,0);
+    $bucket->setTime(0, 0, 0);
     $b = $bucket->format('Y/m/d');
     $h = 0;
-    if(intval($start->format('H')) < 6)
-    {
+    if (intval($start->format('H')) < 6) {
         $bucket->sub(new DateInterval('P1D'));
         $b = $bucket->format('Y/m/d');
         $h = 21;
-    }
-    elseif(intval($start->format('H')) < 11)
+    } elseif (intval($start->format('H')) < 11)
         $h = 6;
-    elseif(intval($start->format('H')) < 16)
+    elseif (intval($start->format('H')) < 16)
         $h = 11;
-    elseif(intval($start->format('H')) < 21)
+    elseif (intval($start->format('H')) < 21)
         $h = 16;
-    elseif(intval($start->format('H')) < 24)
+    elseif (intval($start->format('H')) < 24)
         $h = 21;
 
     $s = $start->getTimestamp();
@@ -581,38 +555,32 @@ function studysauce_bucket_event($node, $events, $cid)
     $length = $e - $s + 900;
     $bucketStart = $bucket->getTimestamp();
     // iterate over buckets until length is used up
-    while($bucketStart + $h * 3600 < $e)
-    {
+    while ($bucketStart + $h * 3600 < $e) {
         // the night time bucket is actually 9 hours because we don't want to over-pack before 6 AM
         $time = min($bucketStart + $h * 3600 + ($h == 21 ? (3600 * 9) : (3600 * 5)), $e) - max($bucketStart + $h * 3600, $s);
         $buckets[$b][$h] = (isset($buckets[$b][$h]) ? $buckets[$b][$h] : 0) + $time / 3600.0;
 
         // skip sleepy time
-        if($h == 21)
-        {
+        if ($h == 21) {
             $h = 6;
             $bucket->add(new DateInterval('P1D'));
             $b = $bucket->format('Y/m/d');
             $bucketStart += 86400;
-        }
-        else
+        } else
             $h += 5;
     }
 
     // add the length to the specific week
-    $start->setTime(0,0,0);
+    $start->setTime(0, 0, 0);
     $startWeek = strtotime('last sunday', $start->getTimestamp());
 
     // if we get last Sunday, we actually wanted this sunday
-    if($startWeek + 604800 == $start->getTimestamp())
+    if ($startWeek + 604800 == $start->getTimestamp())
         $startWeek += 604800;
 
-    if($events[$cid]->field_event_type['und'][0]['value'] == 'c')
-    {
+    if ($events[$cid]->field_event_type['und'][0]['value'] == 'c') {
         $classTotals[$startWeek] = (isset($classTotals[$startWeek]) ? $classTotals[$startWeek] : 0) + $length;
-    }
-    elseif($events[$cid]->field_event_type['und'][0]['value'] == 'sr' || $events[$cid]->field_event_type['und'][0]['value'] == 'p')
-    {
+    } elseif ($events[$cid]->field_event_type['und'][0]['value'] == 'sr' || $events[$cid]->field_event_type['und'][0]['value'] == 'p') {
         $studyTotals[$startWeek] = (isset($studyTotals[$startWeek]) ? $studyTotals[$startWeek] : 0) + $length;
     }
 }
@@ -628,11 +596,10 @@ function studysauce_bucket_event($node, $events, $cid)
 // normalize each group value over 4, that leaves room for 15 minute breaks
 global $timeslots;
 $timeslots = array();
-function studysauce_get_preferred_time($node, $events, $cid, $notBefore = false)
+function studysauce_get_preferred_time($node, $events, $start, $notBefore = false, $notAfter = false)
 {
     global $timeslots, $buckets;
-    if(empty($timeslots))
-    {
+    if (empty($timeslots)) {
         $timeslots = array(
             16 => isset($node->field_4_pm_9_pm['und'][0]['value']) ? intval($node->field_4_pm_9_pm['und'][0]['value']) / 5.0 * 4 : 2,
             21 => isset($node->field_11_am_4_pm['und'][0]['value']) ? intval($node->field_9_pm_2_am['und'][0]['value']) / 5.0 * 4 : 2,
@@ -643,15 +610,11 @@ function studysauce_get_preferred_time($node, $events, $cid, $notBefore = false)
     }
 
     // find the best bucket to put this event into
-    $start = new DateTime($events[$cid]->field_time['und'][0]['value'], new DateTimeZone('UTC'));
-    $start->setTimezone(new DateTimeZone(date_default_timezone_get()));
-
     $bucket = clone $start;
-    $bucket->setTime(0,0,0);
+    $bucket->setTime(0, 0, 0);
     $b = $bucket->format('Y/m/d');
     // if it starts before 6 AM put it in the previous nights bucket
-    if(intval($start->format('H')) < 6)
-    {
+    if (intval($start->format('H')) < 6) {
         $bucket->sub(new DateInterval('P1D'));
         $b = $bucket->format('Y/m/d');
     }
@@ -659,89 +622,54 @@ function studysauce_get_preferred_time($node, $events, $cid, $notBefore = false)
     $s = $start->getTimestamp();
     $bucketStart = $bucket->getTimestamp();
 
-    if($b == '2014/07/21' && $events[$cid]->field_event_type['und'][0]['value'] == 'sr' &&
-        $events[$cid]->field_class_name['und'][0]['value'] == 'Phys 101')
-    {
-        $hit = 'wtf?';
-    }
-
     // we are over the amount for the day
     $overfilled = false;
-    if(isset($buckets[$b]) && array_sum(array_values($buckets[$b])) >= array_sum(array_values($timeslots)))
-    {
+    if (isset($buckets[$b]) && array_sum(array_values($buckets[$b])) >= array_sum(array_values($timeslots))) {
         // add to the bucket with the least?
         $overfilled = true;
         $tmpTimeslots = array();
 
         // get timeslots that are not filled yet
-        foreach($timeslots as $t => $c)
-            if(!isset($buckets[$b][$t]) || $buckets[$b][$t] < 4)
+        foreach ($timeslots as $t => $c)
+            if (!isset($buckets[$b][$t]) || $buckets[$b][$t] < 4)
                 $tmpTimeslots[$t] = $c;
 
         // get timeslots in order of least filled
-        if(empty($tmpTimeslots))
-        {
-            foreach($timeslots as $t => $c)
+        if (empty($tmpTimeslots)) {
+            foreach ($timeslots as $t => $c)
                 $tmpTimeslots[$t] = isset($buckets[$b][$t]) ? $buckets[$b][$t] : 0;
             asort($tmpTimeslots);
         }
-    }
-    else
+    } else
         $tmpTimeslots = $timeslots;
 
-    foreach($tmpTimeslots as $h => $count)
-    {
+    foreach ($tmpTimeslots as $h => $count) {
+
         // check if the timeslot is before the class, study sessions cannot be moved before classes
-        // TODO: check for prework and notAfter the next class event
-        if($notBefore)
+        if ((!empty($notBefore) && $bucketStart + $h * 3600 < $notBefore) ||
+            (!empty($notAfter) && $bucketStart + $h * 3600 > $notAfter))
         {
-            if($bucketStart + $h * 3600 < $s)
-                continue;
+            continue;
         }
 
-        if(!isset($buckets[$b][$h]) || $buckets[$b][$h] < $count || $overfilled)
-        {
-            // TODO: check if the next day is emptier
-            /*
-            $next = clone $bucket;
-            $next->add(new DateInterval('P1D'));
-            $n = $next->format('Y/m/d');
-            if($overfilled && isset($buckets[$n][6]) && $buckets[$n][6] > 3 &&
-                array_sum($buckets[$n]) < $buckets[$b] / 2)
-            {
-                if($timeslots[11] > $timeslots[16])
-                    $diff = $bucketStart + 86400 + 11 * 3600 - $s;
-                else
-                    $diff = $bucketStart + 86400 + 16 * 3600 - $s;
-            }
-            else
-            */
-                // calculate how far the event has to move to be in the bucket accounting for change in timezone
-                $diff = $bucketStart + $h * 3600 - $s;
+        if (!isset($buckets[$b][$h]) || $buckets[$b][$h] < $count || $overfilled) {
+            // calculate how far the event has to move to be in the bucket accounting for change in timezone
+            $diff = $bucketStart + $h * 3600 - $s;
 
-            $events[$cid]->field_time['und'][0]['value'] = date('Y/m/d H:i:s', strtotime($events[$cid]->field_time['und'][0]['value']) + $diff);
-            $events[$cid]->field_time['und'][0]['value2'] = date('Y/m/d H:i:s', strtotime($events[$cid]->field_time['und'][0]['value2']) + $diff);
-
-            // bucket events before overlaps are removed so we know if they got pushed out of their bucket and we don't repeat
-            // TODO: fix this to trigger on the first time it happens by looking for empty spaces in plan
-            //studysauce_bucket_event($node, $events, $cid);
-            break;
+            return $diff;
         }
     }
 
-    return array(
-        0 => $events[$cid]->field_time['und'][0]['value'],
-        1 => $events[$cid]->field_time['und'][0]['value2']);
-
+    return 0;
 }
 
 function studysauce_sort_events(&$events)
 {
     uasort($events, function ($a, $b) use ($events) {
         // put all of the details at the beginning
-        if(isset($a->field_day_of_the_week['und']) && !empty($a->field_day_of_the_week['und']))
+        if (isset($a->field_day_of_the_week['und']) && !empty($a->field_day_of_the_week['und']))
             return -count($events);
-        if(isset($b->field_day_of_the_week['und']) && !empty($b->field_day_of_the_week['und']))
+        if (isset($b->field_day_of_the_week['und']) && !empty($b->field_day_of_the_week['und']))
             return count($events);
 
         return strtotime($a->field_time['und'][0]['value']) - strtotime($b->field_time['und'][0]['value']);
@@ -749,152 +677,286 @@ function studysauce_sort_events(&$events)
 
 }
 
-function studysauce_remove_overlaps($node, $events, $cid, $notBefore = false)
+function studysauce_get_working_events($events, $notCid, $notBefore, $notAfter)
 {
-    $s = strtotime($events[$cid]->field_time['und'][0]['value']);
-    $e = strtotime($events[$cid]->field_time['und'][0]['value2']);
-
     // get a list of events within a 24 hour time range to work with, we should never move more than that
-    $workingEvents = array(
-        'back' => clone $events[$cid],
-        'forw' => clone $events[$cid]
-    );
-    foreach($events as $eid => $event)
-        if(strtotime($event->field_time['und'][0]['value']) > $s - 86400 && strtotime($event->field_time['und'][0]['value2']) < $e + 86400 &&
-            // skip cid because it's already added
-            $eid != $cid &&
-            // ignore class entries, this is just for display
-            (!isset($event->field_day_of_the_week['und']) || empty($event->field_day_of_the_week['und'])) &&
+    $beforeDistances = array();
+    $afterDistances = array();
+    foreach ($events as $eid => $event)
+    {
+        if($eid == $notCid ||
             // ignore all day events
-            $event->field_event_type['und'][0]['value'] != 'd' && $event->field_event_type['und'][0]['value'] != 'h' &&
-            $event->field_event_type['und'][0]['value'] != 'r'
-        )
-            $workingEvents[$eid] = $event;
+            $event->field_event_type['und'][0]['value'] == 'd' || $event->field_event_type['und'][0]['value'] == 'h' ||
+            $event->field_event_type['und'][0]['value'] == 'r')
+            continue;
 
-
-    if($events[$cid]->field_event_type['und'][0]['value'] == 'p' &&
-        $events[$cid]->field_class_name['und'][0]['value'] == 'Phys 401' &&
-        strtotime($events[$cid]->field_time['und'][0]['value']) > strtotime('2014/07/06 00:00:00'))
-    {
-        $hit = 'should not be overlapping';
+        $startDistance = date_timezone_set(new DateTime($event->field_time['und'][0]['value'], new DateTimeZone('UTC')), new DateTimeZone(date_default_timezone_get()))->getTimestamp()
+            - $notBefore;
+        $endDistance = $notAfter - date_timezone_set(new DateTime($event->field_time['und'][0]['value2'], new DateTimeZone('UTC')), new DateTimeZone(date_default_timezone_get()))->getTimestamp();
+        $beforeDistances[$eid] = $startDistance;
+        $afterDistances[$eid] = $endDistance;
     }
 
-    // move overlapping study times
-    $safety = 96; // our safety is high because we are only moving at 1/6 * 60 increments, don't move more than 24 hours
-    while(--$safety > 0)
+    // working events are made of intersection of keys from between before and after times
+    //  including 1 negative from both meaning occurs before and after
+    asort($beforeDistances);
+    asort($afterDistances);
+    $workingBefore = array();
+    $workingAfter = array();
+    $first = true;
+    unset($last);
+    foreach($beforeDistances as $cid => $distance)
     {
-
-        studysauce_sort_events($workingEvents);
-        $keys = array_keys($workingEvents);
-
-        // move overlapping study times for events next to $cid
-        $backIndex = array_search('back', $keys); // every iteration move a copy forward and a copy backward
-        $forwIndex = array_search('forw', $keys);
-        $diff = 0;
-        if(($forwIndex > 0 && ($prev = $keys[$forwIndex - 1]) != 'back' ||
-            $forwIndex > 1 && ($prev = $keys[$forwIndex - 2]) != 'back') &&
-            strtotime($workingEvents[$prev]->field_time['und'][0]['value2']) >= strtotime($workingEvents['forw']->field_time['und'][0]['value']))
+        if($distance >= 0)
         {
-            $diff = 60 * 10; // tried to move to end times of other classes and it didn't work very well
+            if($first)
+            {
+                if(isset($last))
+                    $workingBefore[$last] = $events[$last];
+                $first = false;
+            }
+            $workingBefore[$cid] = $events[$cid];
         }
-        elseif(($forwIndex < count($workingEvents) - 1 && ($prev = $keys[$forwIndex + 1]) != 'back' ||
-            $forwIndex < count($workingEvents) - 2 && ($prev = $keys[$forwIndex + 2]) != 'back') &&
-            strtotime($workingEvents[$prev]->field_time['und'][0]['value']) <= strtotime($workingEvents['forw']->field_time['und'][0]['value2']))
+        $last = $cid;
+    }
+    $first = true;
+    unset($last);
+    foreach($afterDistances as $cid => $distance)
+    {
+        if($distance >= 0)
         {
-            $diff = 60 * 10;
+            if($first)
+            {
+                if(isset($last))
+                    $workingAfter[$last] = $events[$last];
+                $first = false;
+            }
+            $workingAfter[$cid] = $events[$cid];
         }
-        else
-        {
-            // success!
-            return array(
-                0 => $workingEvents['forw']->field_time['und'][0]['value'],
-                1 => $workingEvents['forw']->field_time['und'][0]['value2']);
-        }
-        $newStart = date('Y/m/d H:i:s', strtotime($workingEvents['forw']->field_time['und'][0]['value']) + $diff);
-        $newDate = new DateTime($newStart, new DateTimeZone('UTC'));
-        $newDate->setTimezone(new DateTimeZone(date_default_timezone_get()));
-        if(intval($newDate->format('H')) >= 6 || intval($newDate->format('H')) <= 2)
-        {
-            $workingEvents['forw']->field_time['und'][0]['value'] = date('Y/m/d H:i:s', strtotime($workingEvents['forw']->field_time['und'][0]['value']) + $diff);
-            $workingEvents['forw']->field_time['und'][0]['value2'] = date('Y/m/d H:i:s', strtotime($workingEvents['forw']->field_time['und'][0]['value2']) + $diff);
-        }
-
-        $diff = 0;
-        if(($backIndex > 0 && ($next = $keys[$backIndex - 1]) != 'forw' ||
-            $backIndex > 1 && ($next = $keys[$backIndex - 2]) != 'forw') &&
-            strtotime($workingEvents[$next]->field_time['und'][0]['value2']) >= strtotime($workingEvents['back']->field_time['und'][0]['value']))
-        {
-            $diff = -60 * 10;
-        }
-        elseif(($backIndex < count($workingEvents) - 1 && ($next = $keys[$backIndex + 1]) != 'forw' ||
-            $backIndex < count($workingEvents) - 2 && ($next = $keys[$backIndex + 2]) != 'forw') &&
-            strtotime($workingEvents[$next]->field_time['und'][0]['value']) <= strtotime($workingEvents['back']->field_time['und'][0]['value2']))
-        {
-            $diff = -60 * 10; // move 15 minutes
-        }
-        else
-        {
-            // success!
-            return array(
-                0 => $workingEvents['back']->field_time['und'][0]['value'],
-                1 => $workingEvents['back']->field_time['und'][0]['value2']);
-        }
-        $newStart = date('Y/m/d H:i:s', strtotime($workingEvents['back']->field_time['und'][0]['value']) + $diff);
-        $newDate = new DateTime($newStart, new DateTimeZone('UTC'));
-        $newDate->setTimezone(new DateTimeZone(date_default_timezone_get()));
-        if((intval($newDate->format('H')) >= 6 || intval($newDate->format('H')) <= 2) &&
-            // make sure it doesn't come before the class
-            (!$notBefore || $newDate->getTimestamp() >= $notBefore))
-        {
-            $workingEvents['back']->field_time['und'][0]['value'] = date('Y/m/d H:i:s', strtotime($workingEvents['back']->field_time['und'][0]['value']) + $diff);
-            $workingEvents['back']->field_time['und'][0]['value2'] = date('Y/m/d H:i:s', strtotime($workingEvents['back']->field_time['und'][0]['value2']) + $diff);
-        }
-
+        $last = $cid;
     }
 
-    if($safety < 2)
+    $workingEvents = array_intersect_key($workingBefore, $workingAfter);
+
+    return $workingEvents;
+}
+
+function studysauce_remove_overlaps($node, $events, $cid, $notBefore = false, $notAfter = false)
+{
+    if(!defined('OVERLAP_INCREMENT'))
+        define('OVERLAP_INCREMENT', 60 * 10);
+
+    $s = new DateTime($events[$cid]->field_time['und'][0]['value'], new DateTimeZone('UTC'));
+    $s->setTimezone(new DateTimeZone(date_default_timezone_get()));
+    $e = new DateTime($events[$cid]->field_time['und'][0]['value2'], new DateTimeZone('UTC'));
+    $e->setTimezone(new DateTimeZone(date_default_timezone_get()));
+    $length = $e->getTimestamp() - $s->getTimestamp();
+    if(empty($notBefore))
+        $notBefore = $s->getTimestamp() - 86400;
+    if(empty($notAfter))
+        $notAfter = $e->getTimestamp() + 86400;
+
+    $workingEvents = studysauce_get_working_events($events, $cid, $notBefore, $notAfter);
+
+    if($events[$cid]->field_class_name['und'][0]['value'] == 'MUS 220' &&
+        $events[$cid]->field_event_type['und'][0]['value'] == 'sr')
     {
-        $hit = 'something is wrong';
+        $hit = 'wrong time';
     }
 
+    studysauce_sort_events($workingEvents);
+    // find gaps
+    $first = reset($workingEvents);
+    if($first)
+    {
+        $gapStart = new DateTime($first->field_time['und'][0]['value'], new DateTimeZone('UTC'));
+        $gapStart->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        $gapStart->setTimestamp($notBefore);
+        $last = $gapStart->getTimestamp();
+        $gaps = array();
+        foreach($workingEvents as $c => $event)
+        {
+            $gapEnd = new DateTime($event->field_time['und'][0]['value'], new DateTimeZone('UTC'));
+            $gapEnd->setTimezone(new DateTimeZone(date_default_timezone_get()));
+            $gapEnd->setTimestamp(min($gapEnd->getTimestamp(), $notAfter));
+            $gap = $gapEnd->getTimestamp() - $gapStart->getTimestamp();
+
+            if($gap >= $length + 2 * OVERLAP_INCREMENT &&
+                $gapEnd->getTimestamp() > $notBefore &&
+                $gapStart->getTimestamp() < $notAfter
+            )
+                $gaps[$c] = clone $gapStart;
+
+            $gapStart = new DateTime($event->field_time['und'][0]['value2'], new DateTimeZone('UTC'));
+            $gapStart->setTimezone(new DateTimeZone(date_default_timezone_get()));
+            $gapStart->setTimestamp(max($gapStart->getTimestamp(), $notBefore));
+            // fix situation where this is one already overlapping
+            $gapStart->setTimestamp(max($gapStart->getTimestamp(), $last));
+            $last = $gapStart->getTimestamp();
+        }
+
+        // get the closest opening to the original time
+        $closest = array();
+        foreach($gaps as $c => $d)
+        {
+            // reset the time so we pick out the closest day,
+            //    this levels the playing field for all daily preferred times
+            $startDay = clone $s;
+            if(intval($startDay->format('H')) < 5)
+                $startDay->sub(new DateInterval('P1D'));
+            $startDay->setTime(0, 0, 0);
+
+            // if event only occurs once a week, average the startDay with the middle of
+            // TODO: move this in to add_study and add_prework?
+            // TODO: only do this when days are filled up?
+            /*
+            if($events[$cid]->field_event_type['und'][0]['value'] != 'f')
+            {
+                if($s->getTimestamp() - $notBefore > 3600 * 24 * 5)
+                {
+                    $startDay->sub(new DateInterval('P3D'));
+                }
+                if($notAfter - $e->getTimestamp() > 3600 * 24 * 5)
+                {
+                    $startDay->add(new DateInterval('P3D'));
+                }
+            }
+            */
+
+            // compare start time of gap to preferred day
+            $gapStart = clone $gaps[$c];
+            if(intval($gapStart->format('H')) < 5)
+                $gapStart->sub(new DateInterval('P1D'));
+            $gapStart->setTime(0, 0, 0);
+            $closest[$c] = abs($gapStart->getTimestamp() - $startDay->getTimestamp());
+
+            // check if ending of gap is closer to preferred day
+            $gapEnd = new DateTime($workingEvents[$c]->field_time['und'][0]['value'], new DateTimeZone('UTC'));
+            $gapEnd->setTimezone(new DateTimeZone(date_default_timezone_get()));
+            // if after midnight subtract 1 day
+            if(intval($gapEnd->format('H')) < 5)
+                $gapEnd->sub(new DateInterval('P1D'));
+            $gapEnd->setTime(0, 0, 0); // reset the time so we pick out the closest day, this levels the playing field for all daily preferred times
+            $gapEnd->setTimestamp(min($gapEnd->getTimestamp(), $notAfter));
+            $end = abs($gapEnd->getTimestamp() - $startDay->getTimestamp());
+            if($end < $closest[$c])
+                $closest[$c] = $end;
+        }
+
+        if($events[$cid]->field_event_type['und'][0]['value'] == 'f' &&
+            //$events[$cid]->field_class_name['und'][0]['value'] == 'Dinner' &&
+            $s->format('Y/m/d') == '2014/08/03')
+        {
+            $hit = 'should be earlier';
+        }
+
+        // find the closest time to the preferred time
+        $distance = array();
+        $ends = array();
+        foreach($closest as $c => $d)
+        {
+            $start = clone $gaps[$c];
+            // if we are dealing with a mean the preferred time is when the meal is originally set
+            // TODO: move this in to add_meals somehow?
+            if($events[$cid]->field_event_type['und'][0]['value'] == 'm' ||
+                $events[$cid]->field_event_type['und'][0]['value'] == 'z')
+            {
+                $preferred = new DateTime($events[$cid]->field_time['und'][0]['value'], new DateTimeZone('UTC'));
+                $preferred->setTimezone(new DateTimeZone(date_default_timezone_get()));
+            }
+            else
+            {
+                $diff = studysauce_get_preferred_time($node, $events, $start, $start->getTimestamp() - 86400, $start->getTimestamp() + 86400);
+                $preferred = clone $start;
+                $preferred->setTimestamp($start->getTimestamp() + $diff);
+            }
+
+            $distance[$c] = $closest[$c] + (abs($start->getTimestamp() - $preferred->getTimestamp()));
+            $gapEnd = new DateTime($workingEvents[$c]->field_time['und'][0]['value'], new DateTimeZone('UTC'));
+            $gapEnd->setTimezone(new DateTimeZone(date_default_timezone_get()));
+            $gapEnd->setTimestamp(min($gapEnd->getTimestamp(), $notAfter));
+            $end = $closest[$c] + (abs($gapEnd->getTimestamp() - $length - $preferred->getTimestamp()));
+            if($end < $distance[$c])
+            {
+                $distance[$c] = $end;
+                $ends[] = $c;
+            }
+        }
+
+        array_multisort($closest, SORT_NUMERIC, SORT_ASC, $distance, SORT_NUMERIC, SORT_ASC);
+
+        reset($distance);
+        $top = key($distance);
+        if($top)
+        {
+            if(in_array($top, $ends))
+            {
+                $gapEnd = new DateTime($workingEvents[$top]->field_time['und'][0]['value'], new DateTimeZone('UTC'));
+                $gapEnd->setTimezone(new DateTimeZone(date_default_timezone_get()));
+                $gapEnd->setTimestamp(min($gapEnd->getTimestamp(), $notAfter));
+                $gapEnd->setTimezone(new DateTimeZone('UTC'));
+                $gapEnd->sub(new DateInterval('PT' . ($length + OVERLAP_INCREMENT) . 'S'));
+                return array(
+                    $gapEnd->format('Y/m/d H:i:s'),
+                    date_add($gapEnd, new DateInterval('PT' . $length . 'S'))->format('Y/m/d H:i:s')
+                );
+            }
+            else
+            {
+                $gaps[$top]->setTimezone(new DateTimeZone('UTC'));
+                $gaps[$top]->add(new DateInterval('PT' . OVERLAP_INCREMENT . 'S'));
+                return array(
+                    $gaps[$top]->format('Y/m/d H:i:s'),
+                    date_add($gaps[$top], new DateInterval('PT' . $length . 'S'))->format('Y/m/d H:i:s')
+                );
+            }
+        }
+    }
+    $s->setTimezone(new DateTimeZone('UTC'));
+    $e->setTimezone(new DateTimeZone('UTC'));
     return array(
-        0 => $events[$cid]->field_time['und'][0]['value'],
-        1 => $events[$cid]->field_time['und'][0]['value2']);
+        $s->format('Y/m/d H:i:s'),
+        $e->format('Y/m/d H:i:s')
+    );
 }
 
 function studysauce_add_prework_events($node, &$events, $class, $saved)
 {
+    global $buckets;
+
     $classStart = new DateTime($class->field_time['und'][0]['value'], new DateTimeZone('UTC'));
     $classEnd = new DateTime($class->field_time['und'][0]['value2'], new DateTimeZone('UTC'));
 
     $length = strtotime($classEnd->format('1/1/1970 H:i:s')) - strtotime($classStart->format('1/1/1970 H:i:s'));
-    if($length <= 0)
+    if ($length <= 0)
         $length += 86400;
     //if($length > 7200)
     //    $length = 7200;
 
     // if class is easy only study for 30 minutes
-    if(isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'easy')
+    if (isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'easy')
         $length /= 2;
-    elseif(isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'tough')
+    elseif (isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'tough')
         $length *= 1.5;
 
     // add repeating other events
     $startTerm = strtotime('this week', $classStart->getTimestamp());
     $endTerm = strtotime('this week', $classEnd->getTimestamp()) + 604800;
-    for ($w = $startTerm; $w < $endTerm; $w += 604800)
-    {
+
+    $lastTimestamp = 0;
+    $nearestClass = 604800;
+
+    // loop through each week and add events
+    for ($w = $startTerm - 604800; $w < $endTerm; $w += 604800) {
         // get events this week plus next 24 hours since we only move forward
         $workingEvents = array();
-        foreach($events as $e => $event)
-            if(strtotime($event->field_time['und'][0]['value']) > $w - 86400 * 2 && strtotime($event->field_time['und'][0]['value2']) < $w + 604800 + 86400 * 2)
+        foreach ($events as $e => $event)
+            if (strtotime($event->field_time['und'][0]['value']) > $w - 86400 * 2 && strtotime($event->field_time['und'][0]['value2']) < $w + 604800 + 86400 * 2)
                 $workingEvents[$e] = $event;
 
-        foreach ($class->field_day_of_the_week['und'] as $j => $dotw)
-        {
+        foreach ($class->field_day_of_the_week['und'] as $j => $dotw) {
             $d = 0;
-            switch ($dotw['value'])
-            {
+            switch ($dotw['value']) {
                 case 'M':
                     break;
                 case 'Tu':
@@ -920,17 +982,25 @@ function studysauce_add_prework_events($node, &$events, $class, $saved)
             }
 
             $t = strtotime('this week', $w) + $d;
-            if($t < $classStart->getTimestamp() || $t > $classEnd->getTimestamp())
-                continue;
-
+            // find the last hypothetical time of the class before the first class
             $classT = new DateTime();
             $classT->setTimestamp($t);
             $classT->setTimezone(new DateTimeZone('UTC'));
             $classT->setTime($classStart->format('H'), $classStart->format('i'), $classStart->format('s'));
-            $classT->sub(new DateInterval('P1D'));
-
-            if($class->field_class_name['und'][0]['value'] == 'HIST 102')
+            $classTimestamp = date_timezone_set(clone $classT, new DateTimeZone(date_default_timezone_get()))->getTimestamp();
+            if($classT->getTimestamp() - $classStart->getTimestamp() < 0 && abs($classT->getTimestamp() - $classStart->getTimestamp()) < $nearestClass)
             {
+                $nearestClass = $classT->getTimestamp() - $classStart->getTimestamp();
+                $lastTimestamp = $classTimestamp;
+            }
+
+            if ($t < $classStart->getTimestamp() || $t > $classEnd->getTimestamp())
+                continue;
+
+            $classT->sub(new DateInterval('P1D'));
+            //$classT->sub(new DateInterval('PT' . $length . 'S'));
+
+            if ($class->field_class_name['und'][0]['value'] == 'HIST 102') {
                 $hit = 'something is wrong';
             }
 
@@ -938,21 +1008,17 @@ function studysauce_add_prework_events($node, &$events, $class, $saved)
             $lastEid = 0;
             $lastDistance = 172800;
             // TODO: use each so we save our location
-            foreach($saved as $eid => $event)
-            {
+            foreach ($saved as $eid => $event) {
                 // if saved is 24 hours before current event, skip and never go back because we are ordered by time
                 $distance = abs(strtotime($event->field_time['und'][0]['value']) - $classT->getTimestamp());
-                if($distance < $lastDistance)
-                {
+                if ($distance < $lastDistance) {
                     $lastEid = $eid;
                     $lastDistance = $distance;
-                }
-                elseif($lastEid > 0)
+                } elseif ($lastEid > 0)
                     break;
             }
 
-            if($lastEid)
-            {
+            if ($lastEid) {
                 $events[$lastEid] = $saved[$lastEid];
                 unset($saved[$lastEid]);
                 $events[$lastEid]->field_time[LANGUAGE_NONE][0] = array(
@@ -961,17 +1027,11 @@ function studysauce_add_prework_events($node, &$events, $class, $saved)
                 );
                 $workingEvents[$lastEid] = $events[$lastEid];
 
-                // don't change times for events that have been moved
-                if(!$events[$lastEid]->field_user_moved[LANGUAGE_NONE][0]['value'])
-                    list($events[$lastEid]->field_time[LANGUAGE_NONE][0]['value'], $events[$lastEid]->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_get_preferred_time($node, $events, $lastEid);
-
                 // move saved events if they overlap with a higher priority event, class, other, pre-work, study session
-                list($events[$lastEid]->field_time[LANGUAGE_NONE][0]['value'], $events[$lastEid]->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $lastEid);
+                list($events[$lastEid]->field_time[LANGUAGE_NONE][0]['value'], $events[$lastEid]->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $lastEid, $lastTimestamp > 0 ? $lastTimestamp : $classTimestamp - 86400 * 2, $classTimestamp);
 
                 studysauce_bucket_event($node, $events, $lastEid);
-            }
-            else
-            {
+            } else {
 
                 $entity = new stdClass();
                 $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $class->field_class_name['und'][0]['value'];
@@ -984,14 +1044,13 @@ function studysauce_add_prework_events($node, &$events, $class, $saved)
                 $events[$key] = $entity;
                 $workingEvents[$key] = $entity;
 
-                // find the right time for the event a day before
-                list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_get_preferred_time($node, $events, $key);
-
                 // remove overlap from newly placed event
-                list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key);
+                list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key, $lastTimestamp > 0 ? $lastTimestamp : $classTimestamp - 86400 * 2, $classTimestamp);
 
                 studysauce_bucket_event($node, $events, $key);
             }
+
+            $lastTimestamp = $classTimestamp;
         }
     }
     // do nothing more for singly occurring events
@@ -1000,43 +1059,52 @@ function studysauce_add_prework_events($node, &$events, $class, $saved)
 
 function studysauce_add_study_events($node, &$events, $class, $saved)
 {
+    global $buckets;
+
     $classStart = new DateTime($class->field_time['und'][0]['value'], new DateTimeZone('UTC'));
     $classEnd = new DateTime($class->field_time['und'][0]['value2'], new DateTimeZone('UTC'));
 
     $length = strtotime($classEnd->format('1/1/1970 H:i:s')) - strtotime($classStart->format('1/1/1970 H:i:s'));
-    if($length <= 0)
+    if ($length <= 0)
         $length += 86400;
     $fullLength = $length;
     //if($length > 7200)
     //    $length = 7200;
 
     // if class is easy only study for 30 minutes
-    if(isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'easy')
+    if (isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'easy')
         $length /= 2;
-    elseif(isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'tough')
+    elseif (isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'tough')
         $length *= 1.5;
 
     // SR sessions should go a month after the last class
     $isSr = $class->field_event_type['und'][0]['value'] == 'c' &&
         (!isset($class->field_study_type['und'][0]['value']) || $class->field_study_type['und'][0]['value'] == 'memorization');
 
+
+    // get a list of just these class events to calculate the range the study can move
+    $workingClasses = array();
+    foreach ($events as $e => $event)
+    {
+        if($event->field_class_name['und'][0]['value'] == $class->field_class_name['und'][0]['value'] &&
+            $event->field_event_type['und'][0]['value'] == 'c')
+            $workingClasses[$e] = $event;
+    }
+    studysauce_sort_events($workingClasses);
+
     // add repeating other events
     $startTerm = strtotime('this week', $classStart->getTimestamp());
     $endTerm = strtotime('this week', $classEnd->getTimestamp()) + ($isSr ? 2419200 : 604800);
-    for ($w = $startTerm; $w < $endTerm; $w += 604800)
-    {
+    for ($w = $startTerm; $w < $endTerm; $w += 604800) {
         // get events this week plus next 24 hours since we only move forward
         $workingEvents = array();
-        foreach($events as $e => $event)
-            if(strtotime($event->field_time['und'][0]['value']) > $w - 86400 * 2 && strtotime($event->field_time['und'][0]['value2']) < $w + 604800 + 86400 * 2)
+        foreach ($events as $e => $event)
+            if (strtotime($event->field_time['und'][0]['value']) > $w - 86400 * 2 && strtotime($event->field_time['und'][0]['value2']) < $w + 604800 + 86400 * 2)
                 $workingEvents[$e] = $event;
 
-
-        foreach ($class->field_day_of_the_week['und'] as $j => $dotw)
-        {
+        foreach ($class->field_day_of_the_week['und'] as $j => $dotw) {
             $d = 0;
-            switch ($dotw['value'])
-            {
+            switch ($dotw['value']) {
                 case 'M':
                     break;
                 case 'Tu':
@@ -1062,7 +1130,7 @@ function studysauce_add_study_events($node, &$events, $class, $saved)
             }
 
             $t = strtotime('this week', $w) + $d;
-            if($t < $classStart->getTimestamp() || $t > $classEnd->getTimestamp() + ($isSr ? 2419200 : 0))
+            if ($t < $classStart->getTimestamp() || $t > $classEnd->getTimestamp() + ($isSr ? 2419200 : 0))
                 continue;
 
             $classT = new DateTime();
@@ -1070,26 +1138,23 @@ function studysauce_add_study_events($node, &$events, $class, $saved)
             $classT->setTimezone(new DateTimeZone('UTC'));
             $classT->setTime($classStart->format('H'), $classStart->format('i'), $classStart->format('s'));
             $classT->add(new DateInterval('PT' . $fullLength . 'S'));
+            $classTimestamp = date_timezone_set(clone $classT, new DateTimeZone(date_default_timezone_get()))->getTimestamp();
 
             // check if we have a saved event around the same time
             $lastEid = 0;
             $lastDistance = 172800;
             // TODO: use each so we save our location
-            foreach($saved as $eid => $event)
-            {
+            foreach ($saved as $eid => $event) {
                 // if saved is 24 hours before current event, skip and never go back because we are ordered by time
                 $distance = abs(strtotime($event->field_time['und'][0]['value']) - $classT->getTimestamp());
-                if($distance < $lastDistance)
-                {
+                if ($distance < $lastDistance) {
                     $lastEid = $eid;
                     $lastDistance = $distance;
-                }
-                elseif($lastEid > 0)
+                } elseif ($lastEid > 0)
                     break;
             }
 
-            if($lastEid)
-            {
+            if ($lastEid) {
                 $events[$lastEid] = $saved[$lastEid];
                 unset($saved[$lastEid]);
                 $events[$lastEid]->field_time[LANGUAGE_NONE][0] = array(
@@ -1098,17 +1163,23 @@ function studysauce_add_study_events($node, &$events, $class, $saved)
                 );
                 $workingEvents[$lastEid] = $events[$lastEid];
 
-                // don't change times for events that have been moved
-                if(!$events[$lastEid]->field_user_moved[LANGUAGE_NONE][0]['value'])
-                    list($events[$lastEid]->field_time[LANGUAGE_NONE][0]['value'], $events[$lastEid]->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_get_preferred_time($node, $events, $lastEid, true);
-
                 // move saved events if they overlap with a higher priority event, class, other, pre-work, study session
-                list($events[$lastEid]->field_time[LANGUAGE_NONE][0]['value'], $events[$lastEid]->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $lastEid, $classT->getTimestamp());
+                //   fix case where there is no next class of this type
+                $next = $classTimestamp + 86400 * 7;
+                foreach($workingClasses as $c => $e)
+                {
+                    $s = date_timezone_set(new DateTime($e->field_time['und'][0]['value'], new DateTimeZone('UTC')), new DateTimeZone(date_default_timezone_get()))->getTimestamp();
+                    if($s > $classTimestamp)
+                    {
+                        $next = $s;
+                        break;
+                    }
+                }
+                list($events[$lastEid]->field_time[LANGUAGE_NONE][0]['value'], $events[$lastEid]->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $lastEid, $classTimestamp, $next);
 
                 studysauce_bucket_event($node, $events, $lastEid);
-            }
-            else
-            {
+
+            } else {
 
                 $entity = new stdClass();
                 $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $class->field_class_name['und'][0]['value'];
@@ -1121,28 +1192,18 @@ function studysauce_add_study_events($node, &$events, $class, $saved)
                 $events[$key] = $entity;
                 $workingEvents[$key] = $entity;
 
-                // find the right time for the event a day before
-                list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_get_preferred_time($node, $events, $key, true);
-
                 // remove overlap from newly placed event
-                list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key, $classT->getTimestamp());
-
-                // TODO: check if we have late classes and early classes, maybe the afternoon would be better
-                /*
-                $next = clone $bucket;
-                $next->add(new DateInterval('P1D'));
-                $n = $next->format('Y/m/d');
-                if(($h == 21 || $h == 16) && isset($buckets[$n][6]) && $buckets[$n][6] > 3 &&
-                    $events[$cid]->field_event_type['und'][0]['value'] == 'sr' &&
-                    (!isset($buckets[$n][11]) || $buckets[$n][11] < 4 || !isset($buckets[$n][16]) || $buckets[$n][16] < 4))
+                $next = $classTimestamp + 86400;
+                foreach($workingClasses as $c => $e)
                 {
-                    if($timeslots[11] > $timeslots[16])
-                        $diff = $bucketStart + 86400 + 11 * 3600 - $s;
-                    else
-                        $diff = $bucketStart + 86400 + 16 * 3600 - $s;
+                    $s = date_timezone_set(new DateTime($e->field_time['und'][0]['value'], new DateTimeZone('UTC')), new DateTimeZone(date_default_timezone_get()))->getTimestamp();
+                    if($s > $classTimestamp)
+                    {
+                        $next = $s;
+                        break;
+                    }
                 }
-                else
-                */
+                list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key, $classTimestamp, $next);
 
                 studysauce_bucket_event($node, $events, $key);
             }
@@ -1156,24 +1217,23 @@ function studysauce_add_meals_events($node, &$events)
 {
     global $classTotals;
 
-    foreach($classTotals as $w => $totalLength)
-    {
+    foreach ($classTotals as $w => $totalLength) {
         $workingEvents = array();
-        foreach($events as $e => $event)
-            if(strtotime($event->field_time['und'][0]['value']) > $w - 86400 * 2 && strtotime($event->field_time['und'][0]['value2']) < $w + 604800 + 86400 * 2)
+        foreach ($events as $e => $event)
+            if (strtotime($event->field_time['und'][0]['value']) > $w - 86400 * 2 && strtotime($event->field_time['und'][0]['value2']) < $w + 604800 + 86400 * 2)
                 $workingEvents[$e] = $event;
 
         // add meals to every day of the week
-        for($j = 0; $j < 7; $j++)
-        {
+        for ($j = 0; $j < 7; $j++) {
             $day = date('Y/m/d', $w + $j * 86400);
             // breakfast
             $classT = new DateTime($day, new DateTimeZone(date_default_timezone_get()));
-            $classT->setTime(6,0,0);
+            $classT->setTime(8, 0, 0);
             $classT->setTimezone(new DateTimeZone('UTC'));
+            $mealTimestamp = date_timezone_set(clone $classT, new DateTimeZone(date_default_timezone_get()))->getTimestamp();
 
             $entity = new stdClass();
-            $entity->field_class_name[LANGUAGE_NONE][0]['value'] = 'Eat';
+            $entity->field_class_name[LANGUAGE_NONE][0]['value'] = 'Breakfast';
             $entity->field_event_type[LANGUAGE_NONE][0]['value'] = 'm';
             $entity->field_time[LANGUAGE_NONE][0] = array(
                 'value' => $classT->format('Y/m/d H:i:s'),
@@ -1184,17 +1244,18 @@ function studysauce_add_meals_events($node, &$events)
             $workingEvents[$key] = $entity;
 
             // remove overlap from newly placed event
-            list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key);
+            list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key, $mealTimestamp - 3600 * 3, $mealTimestamp + 3600 * 2);
 
             studysauce_bucket_event($node, $events, $key);
 
             // lunch
             $classT = new DateTime($day, new DateTimeZone(date_default_timezone_get()));
-            $classT->setTime(12,0,0);
+            $classT->setTime(12, 30, 0);
             $classT->setTimezone(new DateTimeZone('UTC'));
+            $mealTimestamp = date_timezone_set(clone $classT, new DateTimeZone(date_default_timezone_get()))->getTimestamp();
 
             $entity = new stdClass();
-            $entity->field_class_name[LANGUAGE_NONE][0]['value'] = 'Eat';
+            $entity->field_class_name[LANGUAGE_NONE][0]['value'] = 'Lunch';
             $entity->field_event_type[LANGUAGE_NONE][0]['value'] = 'm';
             $entity->field_time[LANGUAGE_NONE][0] = array(
                 'value' => $classT->format('Y/m/d H:i:s'),
@@ -1205,30 +1266,75 @@ function studysauce_add_meals_events($node, &$events)
             $workingEvents[$key] = $entity;
 
             // remove overlap from newly placed event
-            list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key);
+            list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key, $mealTimestamp - 3600 * 2, $mealTimestamp + 3600 * 3);
 
             studysauce_bucket_event($node, $events, $key);
 
             // dinner
             $classT = new DateTime($day, new DateTimeZone(date_default_timezone_get()));
-            $classT->setTime(18,0,0);
+            $classT->setTime(19, 0, 0);
+            if($classT->format('Y/m/d') == '2014/08/08')
+            {
+                $hit = 'meal overlaps';
+            }
             $classT->setTimezone(new DateTimeZone('UTC'));
+            $mealTimestamp = date_timezone_set(clone $classT, new DateTimeZone(date_default_timezone_get()))->getTimestamp();
 
             $entity = new stdClass();
-            $entity->field_class_name[LANGUAGE_NONE][0]['value'] = 'Eat';
+            $entity->field_class_name[LANGUAGE_NONE][0]['value'] = 'Dinner';
             $entity->field_event_type[LANGUAGE_NONE][0]['value'] = 'm';
             $entity->field_time[LANGUAGE_NONE][0] = array(
                 'value' => $classT->format('Y/m/d H:i:s'),
-                'value2' => date_add($classT, new DateInterval('PT1800S'))->format('Y/m/d H:i:s')
+                'value2' => date_add($classT, new DateInterval('PT2700S'))->format('Y/m/d H:i:s')
             );
             $key = 'new' . count($events);
             $events[$key] = $entity;
             $workingEvents[$key] = $entity;
 
             // remove overlap from newly placed event
-            list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key, $classT->getTimestamp());
+            list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key, $mealTimestamp - 3600 * 2.5, $mealTimestamp + 3600 * 5.5);
 
             studysauce_bucket_event($node, $events, $key);
+
+            // longer sleep time on weekends, fri, sat, sun
+            $length = 21600;
+            if($j == 0 || $j == 1 || $j == 6)
+                $length = 28800;
+
+            // sleep
+            $classT = new DateTime($day, new DateTimeZone(date_default_timezone_get()));
+            $classT->setTime(12, 0, 0);
+            // TODO: adjust time based on preferred time
+            $diff = studysauce_get_preferred_time($node, $workingEvents, $classT, $classT->getTimestamp() - 86400, $classT->getTimestamp() + 86400);
+            if(intval(date_timestamp_set(clone $classT, $classT->getTimestamp() + $diff)->format('H')) == 6)
+            {
+                $classT->setTime(4, 0, 0);
+                $mealTimestamp = $classT->getTimestamp();
+                $notBefore = $mealTimestamp - 3600 * ($length / 3600 + 2);
+                $notAfter = $mealTimestamp + 3600 * (2 + ($length / 3600 - 6)); // allow 8 AM start time on weekends
+            }
+            else
+            {
+                $classT->setTime(6, 0, 0);
+                $mealTimestamp = $classT->getTimestamp();
+                $notBefore = $mealTimestamp - 3600 * ($length / 3600 + 2);
+                $notAfter = $mealTimestamp + 3600 * (2 + ($length / 3600 - 6)); // allow 8 AM start time on weekends
+            }
+            $classT->setTimezone(new DateTimeZone('UTC'));
+
+            $entity = new stdClass();
+            $entity->field_class_name[LANGUAGE_NONE][0]['value'] = 'Sleep';
+            $entity->field_event_type[LANGUAGE_NONE][0]['value'] = 'z';
+            $entity->field_time[LANGUAGE_NONE][0] = array(
+                'value' => $classT->format('Y/m/d H:i:s'),
+                'value2' => date_add($classT, new DateInterval('PT' . $length . 'S'))->format('Y/m/d H:i:s')
+            );
+            $key = 'new' . count($events);
+            $events[$key] = $entity;
+            $workingEvents[$key] = $entity;
+
+            // remove overlap from newly placed event
+            list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key, $notBefore, $notAfter);
         }
 
     }
@@ -1242,12 +1348,11 @@ function studysauce_add_free_study_events($node, &$events, $saved)
     global $classTotals, $studyTotals, $buckets;
 
     // add free study to every
-    foreach($classTotals as $w => $totalLength)
-    {
+    foreach ($classTotals as $w => $totalLength) {
         // get events this week plus next 24 hours since we only move forward
         $workingEvents = array();
-        foreach($events as $e => $event)
-            if(strtotime($event->field_time['und'][0]['value']) > $w - 86400 * 2 && strtotime($event->field_time['und'][0]['value2']) < $w + 604800 + 86400 * 2)
+        foreach ($events as $e => $event)
+            if (strtotime($event->field_time['und'][0]['value']) > $w - 86400 * 2 && strtotime($event->field_time['und'][0]['value2']) < $w + 604800 + 86400 * 2)
                 $workingEvents[$e] = $event;
 
         $studyLength = isset($studyTotals[$w]) ? $studyTotals[$w] : 0;
@@ -1256,27 +1361,55 @@ function studysauce_add_free_study_events($node, &$events, $saved)
 
         // TODO: adjust study factor based on nothing but A's preference, only affect free time, can we do more?
         $studyFactor = 2;
-        if(isset($node->field_grades['und'][0]['value']) && $node->field_grades['und'][0]['value'] == 'as_only')
+        if (isset($node->field_grades['und'][0]['value']) && $node->field_grades['und'][0]['value'] == 'as_only')
             $studyFactor = 2.6;
 
         // there are 16 usable hours, 4 * (5 - 1) = 16 * 7 days = 112 usable hours in a week
         $shouldStudy = min($totalLength * $studyFactor, ($weekends ? 112 : 80) * 3600 - $totalLength); // a student should study 3 [2.4] times outside of class
-        $remainingStudy = min(7 * 3600, // turns out filling up the entire week is too much
+        $remainingStudy = min(14 * 3600, // turns out filling up the entire week is too much
             max($shouldStudy - $studyLength, 3600 * 5)); // subtract the hours already accounted for by schedules study sessions
         $freeHours = floor($remainingStudy / 3600);
-        for($j = 0; $j < $freeHours; $j++)
-        {
+        for ($j = 0; $j < $freeHours; $j++) {
 
             // get the buckets for each day this week and figure out which day have the least obligations
             $bucketSums = array();
             // if no weekends subtract 3 days, don't schedule free study on Fri-Sun, we know they won't study on Fridays
-            for($i = ($weekends ? 0 : 1); $i < ($weekends ? 7 : 5); $i++)
-                $bucketSums[date('Y/m/d', $w + $i * 86400)] = isset($buckets[date('Y/m/d', $w + $i * 86400)]) ? array_sum($buckets[date('Y/m/d', $w + $i * 86400)]) : 0;
+            for ($i = ($weekends ? 0 : 1); $i < ($weekends ? 7 : 5); $i++)
+            {
+                $d = date('Y/m/d', $w + $i * 86400);
+                $bucketSums[$d] = isset($buckets[$d]) ? array_sum($buckets[$d]) : 0;
+            }
             asort($bucketSums);
+
+            // don't place free study on weekends
+            // TODO: unless it is the only option?
+            if(!$weekends)
+            {
+                $notBefore = date_timestamp_set(new DateTime('now', new DateTimeZone('UTC')), $w);
+                $notBefore->setTimezone(new DateTimeZone(date_default_timezone_get()));
+                $notBefore->add(new DateInterval('P1D'));
+                $notAfter = clone $notBefore;
+                $notAfter->add(new DateInterval('P5D'));
+                $notBefore = $notBefore->getTimestamp();
+                $notAfter = $notAfter->getTimestamp();
+            }
+            else
+            {
+                $notBefore = date_timestamp_set(new DateTime('now', new DateTimeZone('UTC')), $w);
+                $notBefore->setTimezone(new DateTimeZone(date_default_timezone_get()));
+                $notAfter = clone $notBefore;
+                $notAfter->add(new DateInterval('P7D'));
+                $notBefore = $notBefore->getTimestamp();
+                $notAfter = $notAfter->getTimestamp();
+            }
 
             // get the day with the least obligations
             $classT = new DateTime(key($bucketSums), new DateTimeZone(date_default_timezone_get()));
-            $classT->setTime(12,0,0);
+            $classT->setTime(12, 0, 0);
+            if($classT->format('Y/m/d') == '2014/08/04')
+            {
+                $hit = 'too many sessions on one day';
+            }
             $classT->setTimezone(new DateTimeZone('UTC'));
 
 
@@ -1284,21 +1417,17 @@ function studysauce_add_free_study_events($node, &$events, $saved)
             $lastEid = 0;
             $lastDistance = 86400 * 7;
             // TODO: use each so we save our location
-            foreach($saved as $eid => $event)
-            {
+            foreach ($saved as $eid => $event) {
                 // if saved is 24 hours before current event, skip and never go back because we are ordered by time
                 $distance = abs(strtotime($event->field_time['und'][0]['value']) - $classT->getTimestamp());
-                if($distance < $lastDistance)
-                {
+                if ($distance < $lastDistance) {
                     $lastEid = $eid;
                     $lastDistance = $distance;
-                }
-                elseif($lastEid > 0)
+                } elseif ($lastEid > 0)
                     break;
             }
 
-            if($lastEid)
-            {
+            if ($lastEid) {
                 $events[$lastEid] = $saved[$lastEid];
                 unset($saved[$lastEid]);
                 $events[$lastEid]->field_time[LANGUAGE_NONE][0] = array(
@@ -1308,16 +1437,14 @@ function studysauce_add_free_study_events($node, &$events, $saved)
                 $workingEvents[$lastEid] = $events[$lastEid];
 
                 // don't change times for events that have been moved
-                if(!$events[$lastEid]->field_user_moved[LANGUAGE_NONE][0]['value'])
-                    list($events[$lastEid]->field_time[LANGUAGE_NONE][0]['value'], $events[$lastEid]->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_get_preferred_time($node, $events, $lastEid);
+                //if (!$events[$lastEid]->field_user_moved[LANGUAGE_NONE][0]['value'])
+                //    list($events[$lastEid]->field_time[LANGUAGE_NONE][0]['value'], $events[$lastEid]->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_get_preferred_time($node, $events, $lastEid);
 
                 // move saved events if they overlap with a higher priority event, class, other, pre-work, study session
-                list($events[$lastEid]->field_time[LANGUAGE_NONE][0]['value'], $events[$lastEid]->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $lastEid);
+                list($events[$lastEid]->field_time[LANGUAGE_NONE][0]['value'], $events[$lastEid]->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $lastEid, $notBefore, $notAfter);
 
                 studysauce_bucket_event($node, $events, $lastEid);
-            }
-            else
-            {
+            } else {
                 $entity = new stdClass();
                 $entity->field_class_name[LANGUAGE_NONE][0]['value'] = 'Free study';
                 $entity->field_event_type[LANGUAGE_NONE][0]['value'] = 'f';
@@ -1330,10 +1457,10 @@ function studysauce_add_free_study_events($node, &$events, $saved)
                 $workingEvents[$key] = $entity;
 
                 // find the right time for the event a day before
-                list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_get_preferred_time($node, $events, $key);
+                //list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_get_preferred_time($node, $events, $key);
 
                 // remove overlap from newly placed event
-                list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key);
+                list($entity->field_time[LANGUAGE_NONE][0]['value'], $entity->field_time[LANGUAGE_NONE][0]['value2']) = studysauce_remove_overlaps($node, $workingEvents, $key, $notBefore, $notAfter);
 
                 studysauce_bucket_event($node, $events, $key);
             }
@@ -1346,44 +1473,38 @@ function studysauce_add_deadlines_and_holidays($node, &$events, $saved)
     global $holidays;
     // add deadlines and holidays
     $deadlines = studysauce_get_deadlines();
-    foreach($deadlines as $did => $d)
-    {
+    foreach ($deadlines as $did => $d) {
         $classT = new DateTime($d->field_due_date['und'][0]['value'], new DateTimeZone(date_default_timezone_get()));
-        $classT->setTime(0,0,0);
+        $classT->setTime(0, 0, 0);
         $classT->setTimezone(new DateTimeZone('UTC'));
 
         // check if we have a saved event around the same time
         $lastEid = 0;
         $lastDistance = 172800;
         // TODO: use each so we save our location
-        foreach($saved as $eid => $event)
-        {
+        foreach ($saved as $eid => $event) {
             // if saved is 24 hours before current event, skip and never go back because we are ordered by time
-            if($event->field_event_type['und'][0]['value'] != 'd' ||
-                $event->field_class_name['und'][0]['value'] != $d->field_class_name['und'][0]['value'])
+            if ($event->field_event_type['und'][0]['value'] != 'd' ||
+                $event->field_class_name['und'][0]['value'] != $d->field_class_name['und'][0]['value']
+            )
                 continue;
 
             $distance = abs(strtotime($event->field_time['und'][0]['value']) - $classT->getTimestamp());
-            if($distance < $lastDistance)
-            {
+            if ($distance < $lastDistance) {
                 $lastEid = $eid;
                 $lastDistance = $distance;
-            }
-            elseif($lastEid > 0)
+            } elseif ($lastEid > 0)
                 break;
         }
 
-        if($lastEid)
-        {
+        if ($lastEid) {
             $events[$lastEid] = $saved[$lastEid];
             unset($saved[$lastEid]);
             $events[$lastEid]->field_time[LANGUAGE_NONE][0] = array(
                 'value' => $classT->format('Y/m/d H:i:s'),
                 'value2' => date_add($classT, new DateInterval('PT86399S'))->format('Y/m/d H:i:s')
             );
-        }
-        else
-        {
+        } else {
             // create a new event
             $entity = new stdClass();
             $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $d->field_class_name['und'][0]['value'];
@@ -1396,11 +1517,10 @@ function studysauce_add_deadlines_and_holidays($node, &$events, $saved)
             $events[$key] = $entity;
         }
 
-        if(isset($d->field_reminder['und']) && is_array($d->field_reminder['und']))
-            foreach($d->field_reminder['und'] as $i => $r)
-            {
+        if (isset($d->field_reminder['und']) && is_array($d->field_reminder['und']))
+            foreach ($d->field_reminder['und'] as $i => $r) {
                 $classT = new DateTime($d->field_due_date['und'][0]['value'], new DateTimeZone(date_default_timezone_get()));
-                $classT->setTime(0,0,0);
+                $classT->setTime(0, 0, 0);
                 $classT->setTimezone(new DateTimeZone('UTC'));
                 $classT->sub(new DateInterval('PT' . $r['value'] . 'S'));
 
@@ -1409,34 +1529,29 @@ function studysauce_add_deadlines_and_holidays($node, &$events, $saved)
                 $lastEid = 0;
                 $lastDistance = 172800;
                 // TODO: use each so we save our location
-                foreach($saved as $eid => $event)
-                {
+                foreach ($saved as $eid => $event) {
                     // if saved is 24 hours before current event, skip and never go back because we are ordered by time
-                    if($event->field_event_type['und'][0]['value'] != 'r' ||
-                        $event->field_class_name['und'][0]['value'] != $d->field_class_name['und'][0]['value'])
+                    if ($event->field_event_type['und'][0]['value'] != 'r' ||
+                        $event->field_class_name['und'][0]['value'] != $d->field_class_name['und'][0]['value']
+                    )
                         continue;
 
                     $distance = abs(strtotime($event->field_time['und'][0]['value']) - $classT->getTimestamp());
-                    if($distance < $lastDistance)
-                    {
+                    if ($distance < $lastDistance) {
                         $lastEid = $eid;
                         $lastDistance = $distance;
-                    }
-                    elseif($lastEid > 0)
+                    } elseif ($lastEid > 0)
                         break;
                 }
 
-                if($lastEid)
-                {
+                if ($lastEid) {
                     $events[$lastEid] = $saved[$lastEid];
                     unset($saved[$lastEid]);
                     $events[$lastEid]->field_time[LANGUAGE_NONE][0] = array(
                         'value' => $classT->format('Y/m/d H:i:s'),
                         'value2' => date_add($classT, new DateInterval('PT86399S'))->format('Y/m/d H:i:s')
                     );
-                }
-                else
-                {
+                } else {
                     $entity = new stdClass();
                     $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $d->field_class_name['und'][0]['value'];
                     $entity->field_event_type[LANGUAGE_NONE][0]['value'] = 'r';
@@ -1450,10 +1565,9 @@ function studysauce_add_deadlines_and_holidays($node, &$events, $saved)
             }
     }
 
-    foreach($holidays as $k => $h)
-    {
+    foreach ($holidays as $k => $h) {
         $classT = new DateTime($k, new DateTimeZone(date_default_timezone_get()));
-        $classT->setTime(0,0,0);
+        $classT->setTime(0, 0, 0);
         $classT->setTimezone(new DateTimeZone('UTC'));
 
 
@@ -1461,34 +1575,29 @@ function studysauce_add_deadlines_and_holidays($node, &$events, $saved)
         $lastEid = 0;
         $lastDistance = 172800;
         // TODO: use each so we save our location
-        foreach($saved as $eid => $event)
-        {
+        foreach ($saved as $eid => $event) {
             // if saved is 24 hours before current event, skip and never go back because we are ordered by time
-            if($event->field_event_type['und'][0]['value'] != 'h' ||
-                $event->field_class_name['und'][0]['value'] != $h)
+            if ($event->field_event_type['und'][0]['value'] != 'h' ||
+                $event->field_class_name['und'][0]['value'] != $h
+            )
                 continue;
 
             $distance = abs(strtotime($event->field_time['und'][0]['value']) - $classT->getTimestamp());
-            if($distance < $lastDistance)
-            {
+            if ($distance < $lastDistance) {
                 $lastEid = $eid;
                 $lastDistance = $distance;
-            }
-            elseif($lastEid > 0)
+            } elseif ($lastEid > 0)
                 break;
         }
 
-        if($lastEid)
-        {
+        if ($lastEid) {
             $events[$lastEid] = $saved[$lastEid];
             unset($saved[$lastEid]);
             $events[$lastEid]->field_time[LANGUAGE_NONE][0] = array(
                 'value' => $classT->format('Y/m/d H:i:s'),
                 'value2' => date_add($classT, new DateInterval('PT86399S'))->format('Y/m/d H:i:s')
             );
-        }
-        else
-        {
+        } else {
             $entity = new stdClass();
             $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $h;
             $entity->field_event_type[LANGUAGE_NONE][0]['value'] = 'h';
@@ -1505,48 +1614,104 @@ function studysauce_add_deadlines_and_holidays($node, &$events, $saved)
 
 function studysauce_save_classes($node, &$events, $classes)
 {
-    $oldEntities = array_map(function ($x) {return $x->item_id; }, $events);
+    $oldEntities = array_map(function ($x) {
+        return $x->item_id;
+    }, $events);
     $added = array();
     $renamed = array();
 
-    foreach($classes as $j => $class)
-    {
+    foreach ($classes as $j => $class) {
         // check if class entity already exists
-        if(!isset($class['cid']) || !isset($events[$class['cid']]))
-        {
+        if (!isset($class['cid']) || !isset($events[$class['cid']])) {
             $entity = entity_create('field_collection_item', array('field_name' => 'field_classes'));
             $entity->setHostEntity('node', $node);
-        }
-        else
-        {
+        } else {
             $entity = $events[$class['cid']];
             // figure out what changed
-            if(isset($entity->field_class_name[LANGUAGE_NONE][0]['value']) &&
-                $entity->field_class_name[LANGUAGE_NONE][0]['value'] != $class['className'])
-            {
+            if (isset($entity->field_class_name[LANGUAGE_NONE][0]['value']) &&
+                $entity->field_class_name[LANGUAGE_NONE][0]['value'] != $class['className']
+            ) {
                 // remove old reoccurring events
                 $renamed[$class['cid']] = $entity->field_class_name[LANGUAGE_NONE][0]['value'];
             }
         }
         $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $class['className'];
         $dotw = explode(',', $class['dotw']);
-        $entity->field_day_of_the_week[LANGUAGE_NONE] = array_map(function ($x) { return array('value' => $x); }, $dotw);
+        if(empty($dotw[0]))
+            $dotw = array();
+
+        // select the first day between the two dates
+        if($class['type'] == 'o' && !in_array('weekly', $dotw))
+        {
+            $classStart = date_timestamp_set(new DateTime(), strtotime($class['start']));
+            $classEnd = date_timestamp_set(new DateTime(), strtotime($class['end']));
+
+            // add repeating other events
+            $startTerm = date_timestamp_set(new DateTime(), strtotime('this week', $classStart->getTimestamp()));
+            $startTerm->setTime(0, 0, 0);
+            $endTerm = date_timestamp_set(new DateTime(), strtotime('this week', $classEnd->getTimestamp()) + 604800);
+            $endTerm->setTime(0, 0, 0);
+            for ($w = $startTerm->getTimestamp(); $w < $endTerm->getTimestamp(); $w += 604800)
+            {
+                for($d = 0; $d < 7; $d++)
+                {
+                    $t = strtotime('this week', $w) + $d * 86400;
+                    if ($t <= $classEnd->getTimestamp() && $t + 86400 >= $classStart->getTimestamp())
+                    {
+                        switch ($d)
+                        {
+                            case 0:
+                                $dotw[] = 'M';
+                                break;
+                            case 1:
+                                $dotw[] = 'Tu';
+                                break;
+                            case 2:
+                                $dotw[] = 'W';
+                                break;
+                            case 3:
+                                $dotw[] = 'Th';
+                                break;
+                            case 4:
+                                $dotw[] = 'F';
+                                break;
+                            case 5:
+                                $dotw[] = 'Sa';
+                                break;
+                            case 6:
+                                $dotw[] = 'Su';
+                                break;
+                            default:
+                                continue;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        $entity->field_day_of_the_week[LANGUAGE_NONE] = array_map(function ($x) {
+            return array('value' => $x);
+        }, array_unique($dotw));
         $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $class['type'];
         $entity->field_time[LANGUAGE_NONE][0] = array(
             'value' => gmdate('Y-m-d H:i:s', strtotime($class['start'])),
             'value2' => gmdate('Y-m-d H:i:s', strtotime($class['end']))
         );
 
-        if(!isset($events[$class['cid']]))
-        {
+        if (!isset($events[$class['cid']])) {
             // we don't need manage removal of new entries
             $added['new' . count($added)] = $entity;
         }
     }
 
     $entities = array_merge(array_values($events), array_values($added));
-    $node->field_classes['und'] = array_map(function ($x) {return array('entity' => $x, 'value' => $x->item_id);}, $entities);
-    $removeEntities = array_intersect($oldEntities, array_diff($oldEntities, array_map(function ($x) {return $x['value'];}, $node->field_classes['und'])));
+    $node->field_classes['und'] = array_map(function ($x) {
+        return array('entity' => $x, 'value' => $x->item_id);
+    }, $entities);
+    $removeEntities = array_intersect($oldEntities, array_diff($oldEntities, array_map(function ($x) {
+        return $x['value'];
+    }, $node->field_classes['und'])));
     entity_delete_multiple('field_collection_item', $removeEntities);
     node_save($node);
 
@@ -1555,6 +1720,7 @@ function studysauce_save_classes($node, &$events, $classes)
 
 function studysauce_rebuild_schedule($node, $entities, $added = array(), $renamed = array())
 {
+    set_time_limit(0);
     $events = array();
     $oldEvents = array();
 
@@ -1563,8 +1729,7 @@ function studysauce_rebuild_schedule($node, $entities, $added = array(), $rename
         ->fields('se', array('eid', 'title', 'nid', 'time_start', 'time_end', 'event_type', 'completed', 'moved', 'deleted'))
         ->condition('se.nid', $node->nid, '=')
         ->execute()->fetchAllAssoc('eid');
-    foreach($results as $eid => $r)
-    {
+    foreach ($results as $eid => $r) {
         $entity = new stdClass();
         $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $r->title;
         $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $r->event_type;
@@ -1582,14 +1747,13 @@ function studysauce_rebuild_schedule($node, $entities, $added = array(), $rename
     // TODO: make this more efficient, don't remove class items that haven't changed
     $classes = array();
     $others = array();
-    foreach($entities as $cid => $event)
-    {
-        if(isset($event->field_class_name['und']) && !empty($event->field_class_name['und']) &&
-            isset($event->field_day_of_the_week['und']) && is_array($event->field_day_of_the_week['und']) && !empty($event->field_day_of_the_week['und'][0]['value']))
-        {
-            if((!isset($event->field_event_type['und'][0]['value']) || $event->field_event_type['und'][0]['value'] == 'c'))
+    foreach ($entities as $cid => $event) {
+        if (isset($event->field_class_name['und']) && !empty($event->field_class_name['und']) &&
+            isset($event->field_day_of_the_week['und']) && is_array($event->field_day_of_the_week['und']) && !empty($event->field_day_of_the_week['und'][0]['value'])
+        ) {
+            if ((!isset($event->field_event_type['und'][0]['value']) || $event->field_event_type['und'][0]['value'] == 'c'))
                 $classes[$cid] = $event;
-            elseif($event->field_event_type['und'][0]['value'] == 'o')
+            elseif ($event->field_event_type['und'][0]['value'] == 'o')
                 $others[$cid] = $event;
         }
 
@@ -1598,42 +1762,42 @@ function studysauce_rebuild_schedule($node, $entities, $added = array(), $rename
     $saved = studysauce_remove_old_events($node, $oldEvents, $renamed);
 
     // we don't need manage removal of new entries, so add them after removing is done
-    foreach($added as $cid => $event)
-    {
-        if(isset($event->field_class_name['und']) && !empty($event->field_class_name['und']) &&
-            isset($event->field_day_of_the_week['und']) && is_array($event->field_day_of_the_week['und']) && !empty($event->field_day_of_the_week['und'][0]['value']))
-        {
-            if((!isset($event->field_event_type['und'][0]['value']) || $event->field_event_type['und'][0]['value'] == 'c'))
+    foreach ($added as $cid => $event) {
+        if (isset($event->field_class_name['und']) && !empty($event->field_class_name['und']) &&
+            isset($event->field_day_of_the_week['und']) && is_array($event->field_day_of_the_week['und']) && !empty($event->field_day_of_the_week['und'][0]['value'])
+        ) {
+            if ((!isset($event->field_event_type['und'][0]['value']) || $event->field_event_type['und'][0]['value'] == 'c'))
                 $classes[$cid] = $event;
-            elseif($event->field_event_type['und'][0]['value'] == 'o')
+            elseif ($event->field_event_type['und'][0]['value'] == 'o')
                 $others[$cid] = $event;
         }
     }
 
     // filter this type and find nearest from saved list
     $workingDeadlines = array();
-    foreach($saved as $eid => $event)
-        if($event->field_event_type['und'][0]['value'] == 'd' || $event->field_event_type['und'][0]['value'] == 'h' ||
-            $event->field_event_type['und'][0]['value'] == 'r')
+    foreach ($saved as $eid => $event)
+        if ($event->field_event_type['und'][0]['value'] == 'd' || $event->field_event_type['und'][0]['value'] == 'h' ||
+            $event->field_event_type['und'][0]['value'] == 'r'
+        )
             $workingDeadlines[$eid] = $event;
     studysauce_add_deadlines_and_holidays($node, $events, $workingDeadlines);
 
     // rebuild entire schedule
-    foreach($classes as $cid => $class)
-    {
+    foreach ($classes as $cid => $class) {
         $workingEvents = array();
-        foreach($saved as $eid => $event)
-            if($event->field_event_type['und'][0]['value'] == 'c' &&
-                $event->field_class_name['und'][0]['value'] == $class->field_class_name['und'][0]['value'])
+        foreach ($saved as $eid => $event)
+            if ($event->field_event_type['und'][0]['value'] == 'c' &&
+                $event->field_class_name['und'][0]['value'] == $class->field_class_name['und'][0]['value']
+            )
                 $workingEvents[$eid] = $event;
         studysauce_add_reoccurring_events($node, $events, $class, $workingEvents);
     }
-    foreach($others as $cid => $class)
-    {
+    foreach ($others as $cid => $class) {
         $workingEvents = array();
-        foreach($saved as $eid => $event)
-            if($event->field_event_type['und'][0]['value'] == 'o' &&
-                $event->field_class_name['und'][0]['value'] == $class->field_class_name['und'][0]['value'])
+        foreach ($saved as $eid => $event)
+            if ($event->field_event_type['und'][0]['value'] == 'o' &&
+                $event->field_class_name['und'][0]['value'] == $class->field_class_name['und'][0]['value']
+            )
                 $workingEvents[$eid] = $event;
         studysauce_add_reoccurring_events($node, $events, $class, $workingEvents);
     }
@@ -1642,50 +1806,87 @@ function studysauce_rebuild_schedule($node, $entities, $added = array(), $rename
     studysauce_add_meals_events($node, $events);
 
 
-    foreach($classes as $cid => $class)
+    // order classes by most days to least days
+    $labsLast = array();
+    foreach ($classes as $cid => $class)
     {
-        // set up pre-work
-        $workingEvents = array();
-        foreach($saved as $eid => $event)
-            if($event->field_event_type['und'][0]['value'] == 'p' &&
-                $event->field_class_name['und'][0]['value'] == $class->field_class_name['und'][0]['value'])
-                $workingEvents[$eid] = $event;
-        studysauce_add_prework_events($node, $events, $class, $workingEvents);
+        $difficulty = 2;
+        if(isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'tough')
+            $difficulty = 3;
+        if(isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'easy')
+            $difficulty = 1;
+
+        $priority = (count($labsLast) / 2.0) - count($class->field_day_of_the_week['und']) - $difficulty;
+        $labsLast[] = array('p', $cid, $priority);
+    }
+    foreach ($classes as $cid => $class)
+    {
+        $difficulty = 2;
+        if(isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'tough')
+            $difficulty = 3;
+        if(isset($class->field_study_difficulty['und'][0]['value']) && $class->field_study_difficulty['und'][0]['value'] == 'easy')
+            $difficulty = 1;
+
+        $priority = (count($labsLast) / 2.0) - count($class->field_day_of_the_week['und']) - $difficulty;
+        $labsLast[] = array('sr', $cid, $priority);
+    }
+    uasort($labsLast, function ($a, $b) {
+        return $a[2] - $b[2];
+    });
+
+    foreach ($labsLast as $i => $count)
+    {
+        if($count[0] == 'p')
+        {
+            $class = $classes[$count[1]];
+            // set up pre-work
+            $workingEvents = array();
+            foreach ($saved as $eid => $event)
+                if ($event->field_event_type['und'][0]['value'] == 'p' &&
+                    $event->field_class_name['und'][0]['value'] == $class->field_class_name['und'][0]['value']
+                )
+                    $workingEvents[$eid] = $event;
+            studysauce_add_prework_events($node, $events, $class, $workingEvents);
+        }
+        elseif($count[0] == 'sr')
+        {
+            $class = $classes[$count[1]];
+            // set up sr-sessions
+            $workingEvents = array();
+            foreach ($saved as $eid => $event)
+                if ($event->field_event_type['und'][0]['value'] == 'sr' &&
+                    $event->field_class_name['und'][0]['value'] == $class->field_class_name['und'][0]['value']
+                )
+                    $workingEvents[$eid] = $event;
+            studysauce_add_study_events($node, $events, $class, $workingEvents);
+        }
     }
 
-    foreach($classes as $cid => $class)
-    {
-        // set up sr-sessions
-        $workingEvents = array();
-        foreach($saved as $eid => $event)
-            if($event->field_event_type['und'][0]['value'] == 'sr' &&
-                $event->field_class_name['und'][0]['value'] == $class->field_class_name['und'][0]['value'])
-                $workingEvents[$eid] = $event;
-        studysauce_add_study_events($node, $events, $class, $workingEvents);
-    }
+    //foreach ($labsLast as $cid => $count)
+    //{
+    //}
 
     // if there are any changes render the free study
     $workingFree = array();
-    foreach($saved as $eid => $event)
-        if($event->field_event_type['und'][0]['value'] == 'f')
+    foreach ($saved as $eid => $event)
+        if ($event->field_event_type['und'][0]['value'] == 'f')
             $workingFree[$eid] = $event;
     studysauce_add_free_study_events($node, $events, $workingFree);
 
     // don't remove unused saved items because they have data attached, instead mark saved as deleted and hide in historical view
     $deletedIds = array_intersect(array_keys($saved), array_diff(array_keys($saved), array_keys($events)));
-    foreach($saved as $i => $s)
+    foreach ($saved as $i => $s)
         $events[$i] = $s;
-    if(count($deletedIds))
-    {
+    if (count($deletedIds)) {
         db_update('studysauce_events')
             ->fields(array('deleted' => 1))
-            ->condition ('eid', $deletedIds, 'IN')
+            ->condition('eid', $deletedIds, 'IN')
             ->execute();
     }
 
     // remove the changes events and save all
     $removeEvents = array_intersect(array_keys($oldEvents), array_diff(array_keys($oldEvents), array_keys($events)));
-    if(count($removeEvents))
+    if (count($removeEvents))
         db_delete('studysauce_events')->condition('eid', $removeEvents, 'IN')->execute();
     $query = db_insert('studysauce_events')->fields(array('title', 'nid', 'time_start', 'time_end', 'event_type', 'completed'));
     $update = db_update('studysauce_events');
@@ -1694,13 +1895,12 @@ function studysauce_rebuild_schedule($node, $entities, $added = array(), $rename
     $whenStart = '';
     $whenEnd = '';
     foreach ($events as $eid => $event) {
-        // skip meals events
-        if($event->field_event_type['und'][0]['value'] == 'm')
-            continue;
+        // TODO: skip meals events
+        //if ($event->field_event_type['und'][0]['value'] == 'm')
+        //    continue;
 
-        if(substr($eid, 0, 3) != 'new')
-        {
-            if(in_array($eid, $deletedIds))
+        if (substr($eid, 0, 3) != 'new') {
+            if (in_array($eid, $deletedIds))
                 continue;
             // update event
             $updateIds[] = $eid;
@@ -1719,15 +1919,14 @@ function studysauce_rebuild_schedule($node, $entities, $added = array(), $rename
             'completed' => 0
         ));
     }
-    if(count($updateIds))
-    {
+    if (count($updateIds)) {
         $update->condition('eid', $updateIds, 'IN')
             ->expression('time_start', 'CASE' . $whenStart . ' END')
             ->expression('time_end', 'CASE' . $whenEnd . ' END')
             ->expression('deleted', 0)
             ->execute();
     }
-    if(count($insertIds))
+    if (count($insertIds))
         $query->execute();
 }
 
@@ -1742,33 +1941,31 @@ function studysauce_move_calendar()
         ->propertyCondition('status', 1)
         ->range(0, 1)
         ->execute();
-    if (!empty($nodes['node']))
-    {
+    if (!empty($nodes['node'])) {
         $nodes = array_keys($nodes['node']);
         $nid = array_shift($nodes);
         $node = node_load($nid);
         $node->revision = 0;
-        if(isset($_POST['cid']) && isset($_POST['type']) &&
-            isset($_POST['start']) && isset($_POST['end']))
+        if (isset($_POST['cid']) && isset($_POST['type']) &&
+            isset($_POST['start']) && isset($_POST['end'])
+        )
             $_POST['classes'][] = array(
                 'cid' => $_POST['cid'],
                 'type' => $_POST['type'],
                 'start' => $_POST['start'],
                 'end' => $_POST['end']
             );
-        if(count($_POST['classes']) > 0)
-        {
+        if (count($_POST['classes']) > 0) {
 
-            foreach($_POST['classes'] as $i => $class)
-            {
+            foreach ($_POST['classes'] as $i => $class) {
                 $event = db_select('studysauce_events', 'se')
                     ->fields('se', array('eid', 'title', 'nid', 'time_start', 'time_end', 'event_type', 'completed'))
                     ->condition('se.eid', $class['cid'], '=')
                     ->condition('se.nid', $node->nid, '=')
                     ->execute()->fetchAssoc();
 
-                if($event)
-                {
+                if ($event) {
+                    $oldStart = strtotime($event['time_start']);
                     $newStart = strtotime(gmdate('Y-m-d H:i:s', strtotime($class['start'])));
 
                     db_update('studysauce_events')
@@ -1780,6 +1977,7 @@ function studysauce_move_calendar()
                         ->condition('nid', $node->nid, '=')
                         ->execute();
 
+                    $length = strtotime($class['end']) - strtotime($class['start']);
                     $diff = $newStart - strtotime($event['time_start']);
 
                     // move subsequent events of the same type
@@ -1790,30 +1988,40 @@ function studysauce_move_calendar()
                         ->condition('se.time_start', date('Y-m-d H:i:s', $newStart), '>')
                         ->condition('se.deleted', 0, '=')
                         ->condition('se.nid', $node->nid, '=')
+                        ->orderBy('se.time_start')
                         ->execute()->fetchAllAssoc('eid');
 
-                    foreach($events as $cid => $e)
+                    foreach ($events as $cid => $e)
                     {
                         // if more than a week has passed add a week to $newStart and test again
-                        if(strtotime($e->time_start) - $newStart > 60 * 60 * 24 * 8)
-                            $newStart += 60 * 60 * 24 * 7;
+                        if (strtotime($e->time_start) - $oldStart > 60 * 60 * 24 * 8)
+                            $oldStart += 60 * 60 * 24 * 7;
 
                         // make sure next event is about a week later
-                        if(strtotime($e->time_start) - $newStart > 60 * 60 * 24 * 6 &&
-                            date('H:i:s', strtotime($e->time_start) + $diff) == date('H:i:s', $newStart))
-                        {
+                        if (strtotime($e->time_start) - $oldStart > 60 * 60 * 24 * 6 &&
+                            strtotime($e->time_start) - $oldStart < 60 * 60 * 24 * 8 &&
+                            date('H:i:s', strtotime($e->time_start) + $diff) == date('H:i:s', $newStart)
+                        ) {
                             // get events for the day to make sure we are not overlapping
+                            $notBefore = strtotime($e->time_start) + $diff - 86400;
+                            $notAfter = strtotime($e->time_end) + $diff + 86400;
                             $possibleOverlaps = db_select('studysauce_events', 'se')
                                 ->fields('se', array('eid', 'title', 'nid', 'time_start', 'time_end', 'event_type', 'completed', 'moved', 'deleted'))
-                                ->condition('se.time_start', date('Y-m-d H:i:s', strtotime($e->time_start) - 86400), '>')
-                                ->condition('se.time_start', date('Y-m-d H:i:s', strtotime($e->time_start) + 86400), '<')
+                                ->condition('se.time_start', date('Y-m-d H:i:s', $notBefore), '>')
+                                ->condition('se.time_start', date('Y-m-d H:i:s', $notAfter), '<')
+                            // skip deadlines, reminders, and holidays
+                                ->condition('se.event_type', 'd', '!=') // skip all day events
+                                ->condition('se.event_type', 'r', '!=')
+                                ->condition('se.event_type', 'h', '!=')
+                                ->condition('se.event_type', 'm', '!=') // skip meals and sleep
+                                ->condition('se.event_type', 'z', '!=')
+                                ->condition('se.eid', $cid, '!=')
                                 ->condition('se.deleted', 0, '=')
                                 ->condition('se.nid', $node->nid, '=')
                                 ->execute()->fetchAllAssoc('eid');
 
                             $workingEvents = array();
-                            foreach($possibleOverlaps as $eid => $r)
-                            {
+                            foreach ($possibleOverlaps as $eid => $r) {
                                 $entity = new stdClass();
                                 $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $r->title;
                                 $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $r->event_type;
@@ -1827,30 +2035,61 @@ function studysauce_move_calendar()
                                 $workingEvents[$eid] = $entity;
                             }
 
-                            $entity = new stdClass();
-                            $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $e->title;
-                            $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $e->event_type;
-                            $entity->field_time[LANGUAGE_NONE][0] = array(
-                                'value' => date('Y-m-d H:i:s', strtotime($e->time_start) + $diff),
-                                'value2' => date('Y-m-d H:i:s', strtotime($e->time_end) + $diff)
-                            );
-                            $entity->field_user_moved[LANGUAGE_NONE][0]['value'] = $e->moved;
-                            $entity->field_deleted[LANGUAGE_NONE][0]['value'] = $e->deleted;
-                            $entity->item_id = $cid;
-                            $workingEvents[$cid] = $entity;
-
-                            $newTime = studysauce_remove_overlaps($node, $workingEvents, $cid);
-                            // save event change because it didn't move
-                            if($newTime[0] == date('Y-m-d H:i:s', strtotime($e->time_start) + $diff))
+                            // remove overlaps always moves something
+                            //$newTime = studysauce_remove_overlaps($node, $workingEvents, $cid);
+                            $first = reset($workingEvents);
+                            if($first)
                             {
-                                db_update('studysauce_events')
-                                    ->fields(array(
-                                        'time_start' => $newTime[0],
-                                        'time_end' => $newTime[1],
-                                        'moved' => true))
-                                    ->condition('eid', $cid, '=')
-                                    ->condition('nid', $node->nid, '=')
-                                    ->execute();
+                                // convert notbefore and notafter times to correct timezone
+                                $notBefore = date_timezone_set(date_timestamp_set(new DateTime('now', new DateTimeZone('UTC')), $notBefore), new DateTimeZone(date_default_timezone_get()))->getTimestamp();
+                                $notAfter = date_timezone_set(date_timestamp_set(new DateTime('now', new DateTimeZone('UTC')), $notAfter), new DateTimeZone(date_default_timezone_get()))->getTimestamp();
+                                $start = date_timezone_set(new DateTime($e->time_start, new DateTimeZone('UTC')), new DateTimeZone(date_default_timezone_get()))->getTimestamp();
+                                $end = date_timezone_set(new DateTime($e->time_end, new DateTimeZone('UTC')), new DateTimeZone(date_default_timezone_get()))->getTimestamp();
+
+                                $gapStart = new DateTime($first->field_time['und'][0]['value'], new DateTimeZone('UTC'));
+                                $gapStart->setTimezone(new DateTimeZone(date_default_timezone_get()));
+                                $gapStart->setTimestamp($notBefore);
+                                $gaps = array();
+                                foreach($workingEvents as $c => $event)
+                                {
+                                    $gapEnd = new DateTime($event->field_time['und'][0]['value'], new DateTimeZone('UTC'));
+                                    $gapEnd->setTimezone(new DateTimeZone(date_default_timezone_get()));
+                                    $gapEnd->setTimestamp(min($gapEnd->getTimestamp(), $notAfter));
+                                    $gap = $gapEnd->getTimestamp() - $gapStart->getTimestamp();
+
+                                    if($gap >= $length &&
+                                        $gapEnd->getTimestamp() > $notBefore &&
+                                        $gapStart->getTimestamp() < $notAfter
+                                    )
+                                        $gaps[$c] = clone $gapStart;
+
+                                    $gapStart = new DateTime($event->field_time['und'][0]['value2'], new DateTimeZone('UTC'));
+                                    $gapStart->setTimezone(new DateTimeZone(date_default_timezone_get()));
+                                    $gapStart->setTimestamp(max($gapStart->getTimestamp(), $notBefore));
+                                }
+
+                                // make sure one of the gaps overlaps the newTime
+                                foreach($gaps as $c => $d)
+                                {
+                                    $gapEnd = new DateTime($workingEvents[$c]->field_time['und'][0]['value'], new DateTimeZone('UTC'));
+                                    $gapEnd->setTimezone(new DateTimeZone(date_default_timezone_get()));
+                                    $gapEnd->setTimestamp(min($gapEnd->getTimestamp(), $notAfter));
+
+                                    if($d->getTimestamp() <= $start + $diff &&
+                                        $gapEnd->getTimestamp() >= $end + $diff)
+                                    {
+                                        // found a valid gap in the schedule so we are ok to move and save changes
+                                        db_update('studysauce_events')
+                                            ->fields(array(
+                                                'time_start' => date('Y-m-d H:i:s', strtotime($e->time_start) + $diff),
+                                                'time_end' => date('Y-m-d H:i:s', strtotime($e->time_end) + $diff),
+                                                'moved' => 1))
+                                            ->condition('eid', $cid, '=')
+                                            ->condition('nid', $node->nid, '=')
+                                            ->execute();
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -1861,7 +2100,7 @@ function studysauce_move_calendar()
         }
     }
 
-    global $studysauceExportClasses, $studysauceExportEvents;
+    global $studysauceExportEvents;
     print json_encode(array(
         'plan' => '<div>' . theme('studysauce-plans') . '</div>',
         'events' => $studysauceExportEvents,
@@ -1889,15 +2128,12 @@ function studysauce_save_calendar()
         ->propertyCondition('status', 1)
         ->range(0, 1)
         ->execute();
-    if (!empty($nodes['node']))
-    {
+    if (!empty($nodes['node'])) {
         $nodes = array_keys($nodes['node']);
         $nid = array_shift($nodes);
         $node = node_load($nid);
         $node->revision = 0;
-    }
-    else
-    {
+    } else {
         $node = new stdClass();
         $node->title = isset($user->mail) ? $user->mail : '';
         $node->type = 'schedule';
@@ -1910,35 +2146,36 @@ function studysauce_save_calendar()
     }
 
     // save profile
-    if(isset($_POST['university']) || isset($_POST['grades']) || isset($_POST['weekends']) ||
+    if (isset($_POST['university']) || isset($_POST['grades']) || isset($_POST['weekends']) ||
         isset($_POST['6-am-11-am']) || isset($_POST['11-am-4-pm']) || isset($_POST['4-pm-9-pm']) ||
-        isset($_POST['9-pm-2-am']))
-    {
-        if(isset($_POST['university']))
+        isset($_POST['9-pm-2-am'])
+    ) {
+        if (isset($_POST['university']))
             $node->field_university['und'][0]['value'] = $_POST['university'];
-        if(isset($_POST['grades']))
+        if (isset($_POST['grades']))
             $node->field_grades['und'][0]['value'] = $_POST['grades'];
-        if(isset($_POST['weekends']))
+        if (isset($_POST['weekends']))
             $node->field_weekends['und'][0]['value'] = $_POST['weekends'];
-        if(isset($_POST['6-am-11-am']))
+        if (isset($_POST['6-am-11-am']))
             $node->field_6_am_11_am['und'][0]['value'] = $_POST['6-am-11-am'];
-        if(isset($_POST['11-am-4-pm']))
+        if (isset($_POST['11-am-4-pm']))
             $node->field_11_am_4_pm['und'][0]['value'] = $_POST['11-am-4-pm'];
-        if(isset($_POST['4-pm-9-pm']))
+        if (isset($_POST['4-pm-9-pm']))
             $node->field_4_pm_9_pm['und'][0]['value'] = $_POST['4-pm-9-pm'];
-        if(isset($_POST['9-pm-2-am']))
+        if (isset($_POST['9-pm-2-am']))
             $node->field_9_pm_2_am['und'][0]['value'] = $_POST['9-pm-2-am'];
 
         node_save($node);
     }
 
     // save class
-    if(!isset($_POST['classes']) || !is_array($_POST['classes']))
+    if (!isset($_POST['classes']) || !is_array($_POST['classes']))
         $_POST['classes'] = array();
 
     // move single values in to an array so we can reuse the code from the plan page and the schedule page
-    if(isset($_POST['className']) && isset($_POST['type']) && isset($_POST['dotw']) &&
-        isset($_POST['start']) && isset($_POST['end']))
+    if (isset($_POST['className']) && isset($_POST['type']) && isset($_POST['dotw']) &&
+        isset($_POST['start']) && isset($_POST['end'])
+    )
         $_POST['classes'][] = array(
             'className' => $_POST['className'],
             'type' => $_POST['type'],
@@ -1946,50 +2183,45 @@ function studysauce_save_calendar()
             'start' => $_POST['start'],
             'end' => $_POST['end']
         );
-    if(count($_POST['classes']) > 0)
-    {
+    if (count($_POST['classes']) > 0) {
         $entities = array();
-        if(isset($node->field_classes[LANGUAGE_NONE]) && is_array($node->field_classes[LANGUAGE_NONE]))
-            $entities = entity_load('field_collection_item', array_map(function ($x) { return $x['value']; }, $node->field_classes[LANGUAGE_NONE]));
+        if (isset($node->field_classes[LANGUAGE_NONE]) && is_array($node->field_classes[LANGUAGE_NONE]))
+            $entities = entity_load('field_collection_item', array_map(function ($x) {
+                return $x['value'];
+            }, $node->field_classes[LANGUAGE_NONE]));
         list($added, $renamed) = studysauce_save_classes($node, $entities, $_POST['classes']);
 
-        if($isPaid && !$skipBuild)
+        if ($isPaid && !$skipBuild)
             studysauce_rebuild_schedule($node, $entities, $added, $renamed);
-    }
-    else
-    {
+    } else {
 
         // save class profile
-        $eids = array();
-        foreach ($node->field_classes[LANGUAGE_NONE] as $i => $class)
-            $eids[] = $class['value'];
-        foreach($_POST as $eid => $settings)
-        {
-            if(is_array($settings) && isset($settings['type']) && isset($settings['difficulty']) &&
-                in_array($eid, $eids))
-            {
-                $entity = entity_load('field_collection_item', array($eid));
-                if (!empty($entity))
-                {
-                    $entity[$eid]->field_study_type['und'][0]['value'] = $settings['type'];
-                    $entity[$eid]->field_study_difficulty['und'][0]['value'] = $settings['difficulty'];
-                    $entity[$eid]->save(true);
-                }
+        $entities = array();
+        if (isset($node->field_classes[LANGUAGE_NONE]) && is_array($node->field_classes[LANGUAGE_NONE]))
+            $entities = entity_load('field_collection_item', array_map(function ($x) {
+                return $x['value'];
+            }, $node->field_classes[LANGUAGE_NONE]));
+
+        foreach ($_POST as $eid => $settings) {
+            if (is_array($settings) && isset($settings['type']) && isset($settings['difficulty']) &&
+                isset($entities[$eid])
+            ) {
+                $entities[$eid]->field_study_type['und'][0]['value'] = $settings['type'];
+                $entities[$eid]->field_study_difficulty['und'][0]['value'] = $settings['difficulty'];
+                $entities[$eid]->save(true);
             }
         }
 
+        if ($isPaid && !$skipBuild)
+            studysauce_rebuild_schedule($node, $entities);
     }
 
-    if(isset($_POST['remove']))
-    {
+    if (isset($_POST['remove'])) {
         $events = array();
-        foreach($node->field_classes['und'] as $i => $c)
-        {
-            if($c['value'] != $_POST['remove'])
-            {
+        foreach ($node->field_classes['und'] as $i => $c) {
+            if ($c['value'] != $_POST['remove']) {
                 $events[] = $c;
-            }
-            else
+            } else
                 entity_delete('field_collection_item', $_POST['remove']);
         }
 
@@ -1997,9 +2229,11 @@ function studysauce_save_calendar()
         node_save($node);
 
         $entities = array();
-        if(isset($node->field_classes[LANGUAGE_NONE]) && is_array($node->field_classes[LANGUAGE_NONE]))
-            $entities = entity_load('field_collection_item', array_map(function ($x) { return $x['value']; }, $node->field_classes[LANGUAGE_NONE]));
-        if($isPaid && !$skipBuild)
+        if (isset($node->field_classes[LANGUAGE_NONE]) && is_array($node->field_classes[LANGUAGE_NONE]))
+            $entities = entity_load('field_collection_item', array_map(function ($x) {
+                return $x['value'];
+            }, $node->field_classes[LANGUAGE_NONE]));
+        if ($isPaid && !$skipBuild)
             studysauce_rebuild_schedule($node, $entities);
     }
 
@@ -2009,12 +2243,12 @@ function studysauce_save_calendar()
     $lastSDS = end($newSDS);
     list($awards) = studysauce_get_awards();
     list($times, $rows, $total, $hours) = _studysauce_get_metrics();
-    global $studysauceExportClasses, $studysauceExportEvents;
+    global $studysauceExportEvents;
     print json_encode(array(
         'schedule' => '<div>' . theme('studysauce-schedule') . '</div>',
         'plan' => '<div>' . theme('studysauce-plans') . '</div>',
         'events' => $studysauceExportEvents,
-        'classes' => $studysauceExportClasses,
+        'classes' => _studysauce_get_schedule_classes($user),
         'profile' => '<div>' . theme('studysauce-profile') . '</div>',
         'lastSDS' => $lastSDS,
         'awards' => $awards,
@@ -2028,15 +2262,13 @@ function studysauce_save_calendar()
 
 function studysauce_get_events($account = null, $lastOrderTime = null)
 {
-    if(!isset($account))
-    {
+    if (!isset($account)) {
         global $user;
         $account = user_load($user->uid);
     }
-    if(!isset($lastOrderTime) || empty($lastOrderTime))
-    {
+    if (!isset($lastOrderTime) || empty($lastOrderTime)) {
         $lastOrder = _studysauce_orders_by_uid($account->uid);
-        if(isset($lastOrder) && isset($lastOrder->created))
+        if (isset($lastOrder) && isset($lastOrder->created))
             $lastOrderTime = $lastOrder->created;
     }
 
@@ -2059,18 +2291,19 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
         if (!isset($node->field_classes[LANGUAGE_NONE]) || !is_array($node->field_classes[LANGUAGE_NONE]))
             return array(array(), array(), array());
 
-        $entities = entity_load('field_collection_item', array_map(function ($x) { return $x['value']; }, $node->field_classes[LANGUAGE_NONE]));
+        $entities = entity_load('field_collection_item', array_map(function ($x) {
+            return $x['value'];
+        }, $node->field_classes[LANGUAGE_NONE]));
 
-        // TODO: return classes, others, and events to avoid confusion
-        foreach ($entities as $eid => $entity)
-        {
+        // return classes, others, and events to avoid confusion
+        foreach ($entities as $eid => $entity) {
             if (isset($entity->field_class_name['und'][0]['value']) && !empty($entity->field_class_name['und'][0]['value']) &&
-                isset($entity->field_time['und'][0]['value']) && isset($entity->field_time['und'][0]['value2']))
-            {
+                isset($entity->field_time['und'][0]['value']) && isset($entity->field_time['und'][0]['value2'])
+            ) {
                 // this is use by schedule only, if everything is filled in display the event
-                if((!isset($entity->field_event_type['und'][0]['value']) || $entity->field_event_type['und'][0]['value'] == 'c'))
+                if ((!isset($entity->field_event_type['und'][0]['value']) || $entity->field_event_type['und'][0]['value'] == 'c'))
                     $classes[$eid] = $entity;
-                elseif($entity->field_event_type['und'][0]['value'] == 'o')
+                elseif ($entity->field_event_type['und'][0]['value'] == 'o')
                     $others[$eid] = $entity;
             }
         }
@@ -2079,8 +2312,7 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
             ->fields('se', array('eid', 'title', 'nid', 'time_start', 'time_end', 'event_type', 'completed', 'moved', 'deleted'))
             ->condition('se.nid', $node->nid, '=')
             ->execute()->fetchAllAssoc('eid');
-        foreach($results as $eid => $r)
-        {
+        foreach ($results as $eid => $r) {
             $entity = new stdClass();
             $entity->field_class_name[LANGUAGE_NONE][0]['value'] = $r->title;
             $entity->field_event_type[LANGUAGE_NONE][0]['value'] = $r->event_type;
@@ -2107,10 +2339,9 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
 function _studysauce_get_schedule_classes($account = null)
 {
     global $exportClasses;
-    if($exportClasses != null)
+    if ($exportClasses != null)
         return $exportClasses;
-    if($account == null)
-    {
+    if ($account == null) {
         global $user;
         $account = user_load($user->uid);
     }
@@ -2120,23 +2351,23 @@ function _studysauce_get_schedule_classes($account = null)
         ->propertyCondition('type', 'schedule')
         ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
         ->propertyCondition('status', 1)
-        ->range(0,1)
+        ->range(0, 1)
         ->execute();
-    if (!empty($entities['node']))
-    {
+    if (!empty($entities['node'])) {
         $nodes = array_keys($entities['node']);
         $nid = array_shift($nodes);
         $node = node_load($nid);
-        if(isset($node->field_classes[LANGUAGE_NONE]) && is_array($node->field_classes[LANGUAGE_NONE]))
-        {
-            $events = entity_load('field_collection_item', array_map(function ($x) { return $x['value']; }, $node->field_classes[LANGUAGE_NONE]));
+        if (isset($node->field_classes[LANGUAGE_NONE]) && is_array($node->field_classes[LANGUAGE_NONE])) {
+            $events = entity_load('field_collection_item', array_map(function ($x) {
+                return $x['value'];
+            }, $node->field_classes[LANGUAGE_NONE]));
 
-            foreach($events as $eid => $entity)
-            {
-                if(isset($entity->field_class_name['und'][0]['value']) && !empty($entity->field_class_name['und'][0]['value']) &&
+            foreach ($events as $eid => $entity) {
+                if (isset($entity->field_class_name['und'][0]['value']) && !empty($entity->field_class_name['und'][0]['value']) &&
                     (!isset($entity->field_event_type['und'][0]['value']) || $entity->field_event_type['und'][0]['value'] == 'c') &&
                     isset($entity->field_day_of_the_week['und']) && is_array($entity->field_day_of_the_week['und']) &&
-                    !empty($entity->field_day_of_the_week['und'][0]['value']))
+                    !empty($entity->field_day_of_the_week['und'][0]['value'])
+                )
                     $classes[$eid] = $entity->field_class_name['und'][0]['value'];
             }
         }

@@ -19,6 +19,7 @@ if(!isset($account))
             <li><a href="#uploads">Uploads</a></li>
             <li><a href="#plan">Plan</a></li>
         </ul>
+        <p style="line-height: 1px; font-size: 0; margin-bottom: 0;clear:both;">&nbsp;</p>
     </div>
 </div>
 

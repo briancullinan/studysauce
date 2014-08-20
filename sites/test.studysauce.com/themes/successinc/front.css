@@ -11,7 +11,7 @@
 
 .landing-home .header-wrapper
 {
-    background:url(images/SMU_blur.jpg) no-repeat fixed 50% -100px #00749f;
+    background:url(images/SMU_blur.jpg) no-repeat fixed 50% 0 #00749f !important;
 }
 
 .landing-home .page-top
@@ -19,6 +19,174 @@
     background: url("images/noise_gray.png") repeat scroll 0 0 #ffffff;
 }
 
+.page-partners .page-top
+{
+    background: url("images/noise.png") repeat scroll 0 0 #555;
+}
+
+.landing-home .page
+{
+    background:url("images/Stanford_blur.jpg") no-repeat fixed 50% 0 #00749F;
+    background-size: auto 120%; /* TODO fine tune this with stephen */
+    z-index:1;
+    position:relative;
+}
+
+.landing-home .page-top
+{
+    box-shadow: 0 -10px 10px rgba(0,0,0,.5);
+}
+
+.page-partners .page
+{
+    border-bottom: 10px solid #EF7E00;
+    border-top: 10px solid #EF7E00;
+}
+
+.page-partners .container > h1
+{
+    text-align: center;
+    color: #ff9900;
+    margin: 30px 0;
+    font-size: 32px;
+}
+.page-partners .feature-block.first-block,
+.page-partners .middle-block-wrapper,
+.page-partners .feature-block.third-block
+{
+    display: inline-block;
+    vertical-align: bottom;
+    width: 30%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: 0 -3px;
+}
+
+.page-partners .middle-block-wrapper
+{
+    width:40%;
+    padding: 0 3px;
+}
+
+.page-partners .feature-block
+{
+    position: relative;
+    background: url("images/noise.png") repeat scroll 0 0 #888;
+    color: #FFFFFF;
+}
+
+.page-partners .feature-block.second-block
+{
+    margin:0 18px;
+    padding-bottom:100px;
+}
+
+.page-partners .feature-block .feature-image-container
+{
+    margin: 0 auto;
+    width: 100%;
+    height: 96px;
+    position: relative;
+}
+
+.page-partners .feature-block .feature-image
+{
+    width: auto;
+    height: 96px;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    margin:10px;
+}
+
+.page-partners .feature-block.second-block .feature-image
+{
+    background-image: url(images/dashboard.png);
+}
+
+.page-partners .feature-block.first-block .feature-image
+{
+    background-image: url(images/incentives.png);
+}
+
+.page-partners .feature-block.third-block .feature-image
+{
+    background-image: url(images/plan_background.png);
+}
+
+.page-partners .feature-block ul
+{
+    list-style: none;
+    margin:0;
+    padding:15px;
+}
+
+.page-partners .feature-block li
+{
+    list-style: none;
+    margin: 15px 0;
+    padding: 0;
+    text-align: left;
+}
+
+.page-partners .feature-block h2
+{
+    color: #ffffff;
+    border-bottom: 4px solid #555;
+    padding:10px;
+    margin:0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.page-partners .second-block a.features-cta
+{
+    padding: 8px;
+    width: auto;
+    position: absolute;
+    bottom: 25px;
+    left: -15px;
+    display: block;
+    background-color: #FF9900;
+    color: #333333;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    right: -15px;
+}
+
+.page-partners .second-block a.features-cta:hover
+{
+    background-color: #EF7E00;
+}
+
+.page-partners .second-block a.features-cta:before
+{
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: -15px;
+    left: 0px;
+    border-bottom: 15px solid #993300;
+    border-left: 15px solid transparent;
+    border-right: 0px solid transparent;
+    content: "";
+}
+
+.page-partners .second-block a.features-cta:after
+{
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: -15px;
+    right: 0px;
+    border-bottom: 15px solid #993300;
+    border-left: 0px solid transparent;
+    border-right: 15px solid transparent;
+    content: "";
+}
+
+.page-partners .flexslider,
 .page-students2 .flexslider,
 .page-parents2 .flexslider,
 .page-students .flexslider,
@@ -27,10 +195,76 @@
 {
     box-shadow: none;
     display: block;
-    padding-top: 120px;
+    padding-top: 0px;
     padding-bottom: 120px;
     text-align: center;
     background: url(images/down_arrow_solid.png) no-repeat 50% bottom transparent;
+}
+
+.landing-home .footer h3
+{
+    color:#555555;
+}
+
+.landing-home h1,
+.landing-home .footer h1,
+.landing-home .subfooter h1
+{
+    color:#0099BE;
+    font-weight: bold;
+}
+
+.landing-home .flexslider h1
+{
+    color: #FFFFFF;
+    padding: 10px;
+    margin: -20px 0 70px 0;
+    border-radius: 10px;
+    font-size: 62px;
+    text-align: center;
+}
+
+.page-parents .two,
+.page-parents2 .two,
+.page-parents .one,
+.page-parents2 .one
+{
+    width: 50%;
+    display:inline-block;
+    margin-left:-100px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    padding-left:190px;
+    vertical-align: top;
+    text-align: center;
+}
+
+.page-parents .two h3,
+.page-parents2 .two h3,
+.page-parents .one h3,
+.page-parents2 .one h3
+{
+    padding-left:50px;
+    position: relative;
+    text-align: left;
+}
+
+.page-parents .two h3 span,
+.page-parents2 .two h3 span,
+.page-parents .one h3 span,
+.page-parents2 .one h3 span
+{
+    position: absolute;
+    top:0;
+    left:0;
+    font-size: 56px;
+}
+
+.page-parents .two .more,
+.page-parents2 .two .more,
+.page-parents .one .more,
+.page-parents2 .one .more
+{
 }
 
 .landing-home .banner .slides .highlighted-link
@@ -85,7 +319,7 @@
 {
     box-shadow: 0 -10px 10px rgba(0,0,0,.5);
     background: url("images/noise_white.png") repeat scroll 0 0 #ffffff;
-    padding:50px 0px;
+    padding:30px 0 50px 0;
 }
 
 .page-parents2 .did-you-know p.small,
@@ -93,7 +327,7 @@
 .page-parents .did-you-know p.small,
 .page-parents .did-you-know h1
 {
-    padding:0 0 0 190px;
+    padding:0 0 20px 190px;
 }
 
 .page-parents2 .did-you-know small,
@@ -122,6 +356,7 @@
 
 @media all and (max-width: 759px)
 {
+    .page-partners .flexslider,
     .page-students2 .flexslider,
     .page-parents2 .flexslider,
     .page-students .flexslider,

@@ -12,29 +12,22 @@ $classesNames = _studysauce_get_schedule_classes($account);
 list($times, $rows, $total, $hours) = _studysauce_get_metrics($account);
 
 // move dates automatically in empty account and demo accounts
-if(empty($times) || in_array('demo', $account->roles)):
+if(empty($times)):
 
     // display the empty metrics message
-    if(empty($times))
-    {
-        ?>
-        <script type="text/javascript">
-            jQuery(document).ready(function () {
-                jQuery('#metrics').addClass('empty');
-            });
-        </script>
-    <? }
+    ?>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('#metrics').addClass('empty');
+        });
+    </script>
+    <?php
 
+    // load times from fake data
+    $sample = theme('studysauce-metrics-sample');
+    $encoded = preg_replace('/<\/?script>/i', '', $sample);
+    list($times, $rows, $total, $hours) = json_decode($encoded);
     $classesNames = array();
-
-    // don't bother loading in demo account, just fix the dates
-    if(empty($times))
-    {
-        // load times from fake data
-        $sample = theme('studysauce-metrics-sample');
-        $encoded = preg_replace('/<\/?script>/i', '', $sample);
-        list($times, $rows, $total, $hours) = json_decode($encoded);
-    }
 
     $timeGroups = array();
     $times = (array)$times;
@@ -87,7 +80,15 @@ if(empty($times) || in_array('demo', $account->roles)):
         return $x;
     }, $times);
 
-endif; ?>
+endif;
+
+
+// TODO: build loading sample data in to metrics function and remove this
+global $exportMetricsClasses, $exportMetricsTimes;
+$exportMetricsClasses = array_values($classesNames);
+$exportMetricsTimes = $times;
+
+?>
 <div id="metrics-empty">
     <div class="middle-wrapper">
         <a href="#checkin" onclick="jQuery('#checkin').scrollintoview();"><h2>Check in to start tracking your study hours</h2></a>
@@ -95,6 +96,16 @@ endif; ?>
 </div>
 <h2>Study metrics</h2>
 <div class="centrify">
+    <div id="legend">
+        <ol>
+            <?php
+            foreach($classesNames as $cid => $c)
+            {
+                ?><li><span class="class<?php print array_search($cid, array_keys($classesNames)); ?>">&nbsp;</span><?php print $c; ?></li><?php
+            }
+            ?>
+        </ol>
+    </div>
     <div id="timeline">
         <h3>Study hours by week</h3>
         <h4 style="margin:5px 0; color:#555;"><?php print ($hours > 0 ? ('Goal: ' . $hours . ' hours') : '&nbsp;'); ?></h4>
@@ -103,14 +114,6 @@ endif; ?>
         <h3>Study hours by class</h3>
         <h4 style="margin:5px 0; color:#555;">Total study hours: <strong id="study-total"><?php print $total; ?></strong></h4>
     </div>
-    <ol>
-        <?php
-        foreach($classesNames as $cid => $c)
-        {
-            ?><li><span class="class<?php print array_search($cid, array_keys($classesNames)); ?>">&nbsp;</span><?php print $c; ?></li><?php
-        }
-        ?>
-    </ol>
 </div>
 <hr/>
 <script type="text/javascript">

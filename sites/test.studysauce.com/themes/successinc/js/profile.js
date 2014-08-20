@@ -87,9 +87,25 @@ jQuery(document).ready(function($) {
                 profileData[k] = that.find('input:checked').val();
             });
 
-            profile.addClass('building');
+
+            if(!studyPreferences.is(':visible') && !classProfile.is(':visible'))
+            {
+                profile.addClass('building').scrollintoview();
+                profile.find('.timer').pietimer('reset');
+                profile.find('.timer').pietimer({
+                    timerSeconds: 30,
+                    color: '#09B',
+                    fill: false,
+                    showPercentage: true,
+                    callback: function() {
+                    }
+                });
+                profile.find('.timer').pietimer('start');
+            }
+
             // skip building the schedule if we are in the middle of the buy funnel
-            if(window.location.pathname == '/profile')
+            // skip building if we still have to save schedule because it will do it then too
+            if(window.location.pathname == '/profile' || studyPreferences.is(':visible') || classProfile.is(':visible'))
                 profileData['skipBuild'] = true;
 
             $.ajax({
@@ -112,7 +128,7 @@ jQuery(document).ready(function($) {
                            else
                            {
                                // update calendar events
-                               window.planEvents = data.events;
+                               jQuery('#calendar').updatePlan(data.events);
 
                                // update plan tab
                                var plan = jQuery('#plan');
@@ -122,7 +138,8 @@ jQuery(document).ready(function($) {
 
                                // update profile tab
                                profile.removeClass('valid').addClass('invalid');
-                               profile.removeClass('building');
+                               if(!studyPreferences.is(':visible') && !classProfile.is(':visible'))
+                                   profile.removeClass('building');
                            }
                        },
                        error: function () {
@@ -160,7 +177,17 @@ jQuery(document).ready(function($) {
             scheduleData['9-pm-2-am'] = profile.find('.field-name-field-9-pm-2-am input:checked').val();
         }
 
-        profile.addClass('building');
+        profile.addClass('building').scrollintoview();
+        profile.find('.timer').pietimer('reset');
+        profile.find('.timer').pietimer({
+            timerSeconds: 60,
+            color: '#09B',
+            fill: false,
+            showPercentage: true,
+            callback: function() {
+            }
+        });
+        profile.find('.timer').pietimer('start');
 
         // skip building the schedule if we are in the middle of the buy funnel
         if(window.location.pathname == '/customization')
@@ -180,7 +207,7 @@ jQuery(document).ready(function($) {
                        else
                        {
                            // update calendar events
-                           window.planEvents = data.events;
+                           jQuery('#calendar').updatePlan(data.events);
 
                            // update plan tab
                            var plan = jQuery('#plan');

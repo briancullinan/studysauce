@@ -143,7 +143,7 @@ jQuery(document).ready(function() {
                 jQuery(this).val() != 'School' &&
                 jQuery(this).val() != 'Adviser')
             {
-                jQuery(this).removeClass('unfiltered').addClass('filtered');
+                jQuery(this).parent().removeClass('unfiltered').addClass('filtered');
                 jQuery(this).data('last', jQuery(this).val());
                 var i = jQuery(this).parents('th').index() + 1,
                     filter = jQuery(this).val();
@@ -163,7 +163,7 @@ jQuery(document).ready(function() {
             }
             else
             {
-                jQuery(this).removeClass('filtered').addClass('unfiltered');
+                jQuery(this).parent().removeClass('filtered').addClass('unfiltered');
                 jQuery(this).data('last', jQuery(this).val());
             }
         });

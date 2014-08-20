@@ -3,12 +3,6 @@ drupal_add_css(drupal_get_path('theme', 'successinc') .'/deadlines.css');
 drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
 ?>
 <h2>Upcoming deadlines</h2>
-<div class="sort-by">
-    <label>Sort by: </label>
-    <input type="radio" id="deadlines-by-date" name="deadlines-by" value="date" checked="checked"><label for="deadlines-by-date">Date</label>&nbsp;
-    <input type="radio" id="deadlines-by-class" name="deadlines-by" value="class"><label for="deadlines-by-class">Class</label>
-    <input type="checkbox" id="deadlines-historic"><label for="deadlines-historic">View historical</label>
-</div>
 
 <?php
 if(!isset($account))
@@ -25,7 +19,16 @@ $entities = $query->entityCondition('entity_type', 'node')
     ->execute();
 
 $rebuild = false;
-if (!empty($entities['node'])) {
+if (!empty($entities['node']))
+{
+    ?>
+    <div class="sort-by">
+        <label>Sort by: </label>
+        <input type="radio" id="deadlines-by-date" name="deadlines-by" value="date" checked="checked"><label for="deadlines-by-date">Date</label>&nbsp;
+        <input type="radio" id="deadlines-by-class" name="deadlines-by" value="class"><label for="deadlines-by-class">Class</label>
+        <input type="checkbox" id="deadlines-historic"><label for="deadlines-historic">View historical</label>
+    </div>
+    <?php
     $nodes = array_keys($entities['node']);
     $nid = array_shift($nodes);
     $node = node_load($nid);

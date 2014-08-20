@@ -35,13 +35,9 @@ if (!empty($nodes['node']))
         $strategies = $node->$field;
         if(isset($strategies['und'][0]['value']))
         {
-            foreach($strategies['und'] as $i => $s)
+            $strategies = entity_load('field_collection_item', array_map(function ($x) {return $x['value'];}, $strategies['und']));
+            foreach($strategies as $eid => $entity)
             {
-                $eid = $s['value'];
-                $entity = entity_load('field_collection_item', array($eid));
-                if(!isset($entity[$eid]))
-                    continue;
-                $entity = $entity[$eid];
                 if(!isset($entity->field_class_name['und'][0]['value']))
                     continue;
 
@@ -152,7 +148,7 @@ if (!empty($nodes['node']))
 
 }
 
-if(!empty($nodes['node']) && !empty($dates))
+if(!empty($dates))
 {
     // sort strategies by date and display strategies read-only
     foreach($dates as $t => $s)
@@ -187,7 +183,14 @@ if(!empty($nodes['node']) && !empty($dates))
                         <?php if(isset($result[$name][$strategy]['uploads'][0]['uri'])): ?>
                             <li>
                                 <div class="plup-thumb-wrapper">
+                                    <?php if(isset($result[$name][$strategy]['uploads'][0]['play'])): ?>
+                                    <video width="184" height="184" preload="auto" controls="controls" poster="<?php print $result[$name][$strategy]['uploads'][0]['uri']; ?>">
+                                        <source src="<?php print $result[$name][$strategy]['uploads'][0]['play']; ?>" type="video/webm" />
+                                    </video>
+                                    <?php endif;
+                                    if(!isset($result[$name][$strategy]['uploads'][0]['play'])): ?>
                                     <img src="<?php print $result[$name][$strategy]['uploads'][0]['uri']; ?>" title="">
+                                    <?php endif; ?>
                                 </div>
                             </li>
                         <?php else: ?>

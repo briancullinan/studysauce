@@ -2,7 +2,7 @@
 drupal_add_css(drupal_get_path('theme', 'successinc') .'/deadlines.css');
 drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
 ?>
-<h2>Enter important dates and we will send you reminders</h2>
+<h2>Enter important dates and we will send you email reminders</h2>
 
 <div class="row invalid" id="new-dates-row">
     <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">

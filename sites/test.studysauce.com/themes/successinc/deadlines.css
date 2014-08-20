@@ -67,6 +67,14 @@
     padding: 5px 0 5px 35px;
 }
 
+.page-dashboard #deadlines .field-name-field-assignment .read-only
+{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 5px 0 5px 0;
+}
+
 .page-dashboard #deadlines .edit .field-name-field-class-name .form-type-select
 {
     padding:5px 0;
@@ -78,6 +86,11 @@
 }
 
 .page-dashboard #deadlines .field-name-field-assignment
+{
+    width: 25%;
+}
+
+.page-dashboard #deadlines .row.edit .field-name-field-assignment
 {
     width: 25%;
     padding:5px 0;
@@ -167,6 +180,7 @@
 .page-dashboard #deadlines .sort-by
 {
     vertical-align: top;
+    position:relative;
 }
 
 .page-dashboard #deadlines .sort-by input
@@ -203,7 +217,8 @@
 
 .page-dashboard #deadlines .sort-by label:last-child
 {
-    float:right !important;
+    position:absolute;
+    right:0;
     padding-left: 25px;
     background: url('images/menu_icons_128.png') no-repeat -54px -2848px transparent;
     padding-top: 5px;
@@ -516,6 +531,10 @@
     text-align: right;
 }
 
+.page-dashboard #deadlines .row {
+    white-space: nowrap;
+}
+
 @media all and (min-width:980px) and (max-width: 1250px)
 {
 
@@ -567,21 +586,40 @@
         display:block;
     }
 
-    .page-dashboard #deadlines .field-name-field-class-name .read-only
+    .page-dashboard #deadlines .field-name-field-class-name
     {
-        position:absolute;
         color:#0099be;
         z-index:0;
+        width:50%;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        white-space: nowrap;
+        overflow:hidden;
+        text-overflow: ellipsis;
     }
 
-    .page-dashboard #deadlines .field-name-field-assignment .read-only
+    .page-dashboard #deadlines .row.edit .field-name-field-class-name
     {
         width:auto;
-        padding:5px 45px 5px 140px;
+        display:block;
+    }
+
+    .page-dashboard #deadlines .field-name-field-assignment
+    {
+        width:50%;
+        padding:0 45px 0 0;
         color:#0099be;
         cursor:pointer;
         position:relative;
         z-index:1;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    .page-dashboard #deadlines .row.edit .field-name-field-assignment
+    {
+        width:auto;
+        display:block;
     }
 
     .page-dashboard #deadlines .field-name-field-percent .read-only
@@ -592,6 +630,7 @@
         text-align: right;
         color:#0099be;
         z-index:0;
+        padding: 5px 0 5px 0;
     }
 
     .page-dashboard #deadlines .field-name-field-completed .read-only
@@ -627,17 +666,6 @@
         text-align: center;
     }
 
-    .page-dashboard #deadlines .field-name-field-class-name,
-    .page-dashboard #deadlines .field-name-field-assignment,
-    .page-dashboard #deadlines .field-name-field-completed
-    {
-        display:block;
-        vertical-align: top;
-        width: auto;
-        clear:both;
-        padding:0;
-    }
-
     .page-dashboard #deadlines .row.edit .field-name-field-due-date,
     .page-dashboard #deadlines .row.edit .field-name-field-reminder,
     .page-dashboard #deadlines .row.edit .field-name-field-percent,
@@ -645,7 +673,7 @@
     .page-dashboard #deadlines .field-name-field-reminder,
     .page-dashboard #deadlines .field-name-field-percent
     {
-        display:inline-block;
+        display:block;
         vertical-align: top;
         width: auto;
         padding:0;
@@ -678,6 +706,21 @@
         width: auto;
     }
 
+}
+
+@media all and (max-width:759px)
+{
+    .page-dashboard #deadlines .sort-by
+    {
+        display:none;
+    }
+
+    .page-dashboard #deadlines .sort-by label:last-child
+    {
+        float: none !important;
+        clear: both;
+        display: block;
+    }
 }
 
 @media all and (max-width:480px)

@@ -1,7 +1,7 @@
 <div id="timer-expire">
     <div>
         <h2>Another session is in the books</h2>
-        <p>You have completed another session, congrats.  <a href="#badges">Have some fun with your study efforts and try to unlock all of our study badges <span>here</span>.</a></p>
+        <p>You have completed another session, congrats.<?php /* TODO: remove:  <a href="#badges">Have some fun with your study efforts and try to unlock all of our study badges <span>here</span>.</a> */ ?></p>
         <p style="margin-bottom:0;" class="highlighted-link checkboxes"><a class="more" style="margin-bottom:0;" href="#break">Ok</a></p>
         <a href="#break" class="fancy-close">&nbsp;</a>
     </div>

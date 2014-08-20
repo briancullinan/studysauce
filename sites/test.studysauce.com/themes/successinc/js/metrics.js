@@ -17,6 +17,7 @@ jQuery(document).ready(function () {
 
     var m = [30, 0, 50, 0],
         w = 475 - m[1] - m[3],
+        w2 = 300 - m[1] - m[3],
         h = 300 - m[0] - m[2],
         h2 = 300;
 
@@ -36,28 +37,35 @@ jQuery(document).ready(function () {
         .attr("transform", "translate(" + m[1] + "," + m[0] + ")");
 
     var svg2 = d3.select("#pie-chart").append("svg")
-        .attr("width", w + m[1] + m[3])
+        .attr("width", w2 + m[1] + m[3])
         .attr("height", h2)
         .append("g");
     //.attr("transform", "translate(" + m[1] + "," + m[0] + ")");
 
     var history,
-        classes;
+        classes,
+        resizeTimeout = null;
 
     jQuery(window).resize(function () {
-        if (jQuery('#timeline').width() != jQuery('#timeline svg').width()) {
-            //if (jQuery(window).width() < 963) {
-            w = jQuery('#timeline').width() - m[1] - m[3];
-            h = (jQuery('#timeline').width() * 12 / 16) - m[0] - m[2];
-            h2 = (jQuery('#timeline').width() * 12 / 16);
-            d3.select('#timeline svg')
-                .attr("width", w + m[1] + m[3])
-                .attr("height", h + m[0] + m[2]);
-            d3.select('#pie-chart svg')
-                .attr("width", w + m[1] + m[3])
-                .attr("height", h2);
-            setTimeout(redraw, 1);
-        }
+        if(resizeTimeout != null)
+            clearInterval(resizeTimeout);
+        resizeTimeout = setInterval(function () {
+            if (jQuery('#timeline').width() != jQuery('#timeline svg').width())
+            {
+                //if (jQuery(window).width() < 963) {
+                w = jQuery('#timeline').width() - m[1] - m[3];
+                w2 = jQuery('#pie-chart').width() - m[1] - m[3];
+                h = (jQuery('#timeline').width() * 12 / 16) - m[0] - m[2];
+                h2 = (jQuery('#pie-chart').width() * 12 / 16);
+                d3.select('#timeline svg')
+                    .attr("width", w + m[1] + m[3])
+                    .attr("height", h + m[0] + m[2]);
+                d3.select('#pie-chart svg')
+                    .attr("width", w2 + m[1] + m[3])
+                    .attr("height", h2);
+                setTimeout(redraw, 1);
+            }
+        }, 100);
     });
 
 
@@ -66,7 +74,7 @@ jQuery(document).ready(function () {
         if (jQuery('#timeline').width() != jQuery('#timeline svg').width())
             jQuery(window).trigger('resize');
         else
-            setTimeout(redraw, 1);
+            setTimeout(redraw, 100);
     };
 
     jQuery('body').on('click', 'a[href="#metrics"]', function () {
@@ -297,15 +305,15 @@ jQuery(document).ready(function () {
             //    text = d3.select(this.parentNode).select('text'),
             //    x0 = x(d.data.key),
                 extraHeight = Math.min(jQuery(window).width() / 600, 1) * 50,
-                y0 = h2 - y(d.data.sumLength) + extraHeight;
+                y0 = Math.min(h2, w2);
             //this.parentNode.appendChild(text[0][0]);
 
-            var r = (h2 - extraHeight) / 2 - 20,
+            var r = y0 / 2,
                 a = Math.cos(Math.PI / 2),
-                xx = ((a) * w + (1 - a) * w / 2),
+                xx = ((a) * w2 + (1 - a) * w2 / 2),
                 yy = ((a) * h2 + (1 - a) * h2 / 2),
                 f = {
-                    innerRadius: Math.min(jQuery(window).width() / 480, 1) * 50, //r - 60 / (2 - a),
+                    innerRadius: r / 2, //Math.min(jQuery(window).width() / 480, 1) * 50, //r - 60 / (2 - a),
                     outerRadius: r,
                     startAngle: a * (Math.PI / 2 - y0 / r) + (1 - a) * d.startAngle,
                     endAngle: a * (Math.PI / 2) + (1 - a) * d.endAngle

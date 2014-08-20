@@ -26,12 +26,8 @@ $setup = studysauce_is_incentives_setup($account);
     class="step_<?php print $setup; ?> <?php print (empty($studyConnections) ? 'not-connected' : 'connected'); ?> <?php print (isset($parent) ? 'sponsored' : ''); ?>">
 
 <div id="student_step_1">
-    <h2 class="students_only student_step_1">Set goals and rewards, then get sponsored by your parents</h2>
-
-    <h2 class="parents_only student_step_1">Set goals and reward your student's study efforts</h2>
-
     <div class="grid_6 big-arrow">
-        <h3>The Science</h3>
+        <h3>The Science of Setting Goals</h3>
         <img src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/science.png"/>
 
         <p>According to the Incentive Theory of motivation, using rewards increases the likelihood of repeating

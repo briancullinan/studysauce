@@ -1,6 +1,8 @@
 <?php
 drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/profile.js');
 drupal_add_css(drupal_get_path('theme', 'successinc') . '/profile.css');
+drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.pietimer.js');
+drupal_add_css(drupal_get_path('theme', 'successinc') . '/css/pietimer.css');
 
 global $user;
 $lastOrder = _studysauce_orders_by_uid($user->uid);
@@ -31,13 +33,14 @@ if ($lastOrder || !empty($groups['node'])):
 
     <div class="building-schedule">
         <div class="middle-wrapper">
-            <h2>Please wait while we build your personalized study plan.</h2>
+            <h2>Just a moment while we build your plan.
+                <div class="timer"></div></h2>
         </div>
     </div>
 
 
     <div class="study-preferences">
-        <h2>Please tell us more about your study preferences <span>1/2</span></h2>
+        <h2>Please tell us more about your study preferences</h2>
         <?php /*    <div class="field-type-text field-name-field-university field-widget-text-textfield form-wrapper">
         <label for="schedule-university">School name</label>
         <input class="text-full form-text required" type="text" id="schedule-university" name="schedule-university"
@@ -165,11 +168,12 @@ if ($lastOrder || !empty($groups['node'])):
                     <label class="option" for="schedule-9-pm-2-am-5">5 </label>
                 </div>
             </div>
+            <p style="margin-bottom:0;line-height:1px;clear:both;">&nbsp;</p>
         </div>
     </div>
     <hr/>
     <div class="class-profile">
-        <h2>Tell us a little more about your classes <span>2/2</span></h2>
+        <h2>Tell us a little more about your classes</h2>
 
         <div class="field-name-type-of-studying">
             <h2>What is the primary type of studying you expect to do in this class? <span>Q: 1/2</span></h2>
@@ -189,9 +193,6 @@ if ($lastOrder || !empty($groups['node'])):
                             <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?>
                         </div>
                     </div>
-                    <label class="mobile-only">What is the primary type of studying you expect to do in this
-                        class?</label>
-
                     <div class="form-radios">
                         <input type="radio" id="study-type-class-<?php print $eid; ?>-memorization"
                                name="study-type-class-<?php print $eid; ?>" value="memorization" class="form-radio"
@@ -211,9 +212,10 @@ if ($lastOrder || !empty($groups['node'])):
                     </div>
                 </div>
             <?php } ?>
+            <p style="margin-bottom:0;line-height:1px;clear:both;">&nbsp;</p>
         </div>
         <div class="field-name-difficulty-level">
-            <h2>How difficult will this class be?</h2>
+            <h2>How difficult will this class be? <span>Q: 2/2</span></h2>
             <label>Easy</label>
             <label>Average</label>
             <label>Tough</label>
@@ -230,8 +232,6 @@ if ($lastOrder || !empty($groups['node'])):
                             <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?>
                         </div>
                     </div>
-                    <label class="mobile-only">How difficult will this class be? <span>Q: 2/2</span></label>
-
                     <div class="form-radios">
                         <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-easy"
                                name="study-difficulty-class-<?php print $eid; ?>" value="easy" class="form-radio"
@@ -248,8 +248,8 @@ if ($lastOrder || !empty($groups['node'])):
                     </div>
                 </div>
             <?php } ?>
+            <p style="margin-bottom:0;line-height:1px;clear:both;">&nbsp;</p>
         </div>
-        <h3>Tip - you can change your answers later</h3>
     </div>
     <hr/>
     <?php
@@ -271,13 +271,13 @@ if ($lastOrder || !empty($groups['node'])):
 
     ?>
     <div class="field-name-field-profile-question-mindset">
-        <h2>Which of the following do you agree with most? <span>Q: 1/5</span></h2>
+        <h2>Which do you agree with more? <span>Q: 1/5</span></h2>
         <input type="radio" name="profile-question-mindset" id="profile-question-mindset-answer-1" value="born"
             <?php print (isset($node->field_mindset['und'][0]['value']) && $node->field_mindset['und'][0]['value'] == 'born' ? 'checked="checked"' : ''); ?>>
-        <label class="option" for="profile-question-mindset-answer-1">People are born smart.</label>
+        <label class="option" for="profile-question-mindset-answer-1">Some people are born good at academics.</label>
         <input type="radio" name="profile-question-mindset" id="profile-question-mindset-answer-2" value="practice"
             <?php print (isset($node->field_mindset['und'][0]['value']) && $node->field_mindset['und'][0]['value'] == 'practice' ? 'checked="checked"' : ''); ?>>
-        <label class="option" for="profile-question-mindset-answer-2">People become smart through practice.</label>
+        <label class="option" for="profile-question-mindset-answer-2">People become good at academics through experience and building skills.</label>
     </div>
     <div class="field-name-field-profile-question-time-management">
         <h2>How do you manage your time studying for exams? <span>Q: 2/5</span></h2>
@@ -322,10 +322,11 @@ if ($lastOrder || !empty($groups['node'])):
         <input type="radio" name="profile-question-education" id="profile-question-education-answer-4" value="junior"
             <?php print (isset($node->field_education['und'][0]['value']) && $node->field_education['und'][0]['value'] == 'junior' ? 'checked="checked"' : ''); ?>>
         <label class="option" for="profile-question-education-answer-4">High school Junior</label>
-        <input type="radio" name="profile-question-education" id="profile-question-education-answer-5" value="senior"
-            <?php print (isset($node->field_education['und'][0]['value']) && $node->field_education['und'][0]['value'] == 'senior' ? 'checked="checked"' : ''); ?>>
-        <label class="option" for="profile-question-education-answer-5">High school Senior</label>
         */ ?>
+        <input type="radio" name="profile-question-education" id="profile-question-education-answer-5"
+               value="highschool"
+            <?php print (isset($node->field_education['und'][0]['value']) && $node->field_education['und'][0]['value'] == 'highschool' ? 'checked="checked"' : ''); ?>>
+        <label class="option" for="profile-question-education-answer-5">High school student</label>
         <input type="radio" name="profile-question-education" id="profile-question-education-answer-6"
                value="college-freshmen"
             <?php print (isset($node->field_education['und'][0]['value']) && $node->field_education['und'][0]['value'] == 'college-freshmen' ? 'checked="checked"' : ''); ?>>
@@ -334,13 +335,17 @@ if ($lastOrder || !empty($groups['node'])):
                value="college-sophomore"
             <?php print (isset($node->field_education['und'][0]['value']) && $node->field_education['und'][0]['value'] == 'college-sophomore' ? 'checked="checked"' : ''); ?>>
         <label class="option" for="profile-question-education-answer-7">College Sophomore</label>
+        <input type="radio" name="profile-question-education" id="profile-question-education-answer-junior"
+               value="college-junior"
+            <?php print (isset($node->field_education['und'][0]['value']) && $node->field_education['und'][0]['value'] == 'college-junior' ? 'checked="checked"' : ''); ?>>
+        <label class="option" for="profile-question-education-answer-junior">College Junior</label>
         <input type="radio" name="profile-question-education" id="profile-question-education-answer-8"
                value="college-senior"
             <?php print (isset($node->field_education['und'][0]['value']) && $node->field_education['und'][0]['value'] == 'college-senior' ? 'checked="checked"' : ''); ?>>
-        <label class="option" for="profile-question-education-answer-8">College Junior/Senior</label>
+        <label class="option" for="profile-question-education-answer-8">College Senior</label>
         <input type="radio" name="profile-question-education" id="profile-question-education-answer-9" value="graduate"
             <?php print (isset($node->field_education['und'][0]['value']) && $node->field_education['und'][0]['value'] == 'graduate' ? 'checked="checked"' : ''); ?>>
-        <label class="option" for="profile-question-education-answer-9">College graduate</label>
+        <label class="option" for="profile-question-education-answer-9">Graduate student</label>
     </div>
     <div class="field-name-field-profile-question-study-much">
         <h2>How much do you study per day? <span>Q: 5/5</span></h2>
@@ -372,6 +377,7 @@ if ($lastOrder || !empty($groups['node'])):
                 <a href="#premium"><h2>Upgrade to premium to discover your unique study profile.</h2></a>
                 <a class="more-parents" href="#parents"
                    onclick="jQuery('#profile').addClass('bill-my-parents-only'); return false;">Bill my parents</a>
+                <a href="#premium" class="more">Go Premium</a>
 
                 <div class="bill-my-parents">
                     <h3>Send an email to have someone prepay for Study Sauce. We will then alert you when your account

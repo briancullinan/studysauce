@@ -267,7 +267,7 @@ jQuery(document).ready(function() {
                                jQuery('#home-tasks-checklist').attr('checked', 'checked');
 
                            // update awards such as pulse detected for setting up a class
-                           if (typeof data.awards != 'undefined') {
+                           /*if (typeof data.awards != 'undefined') {
                                var lastAward = null;
                                for (var i in data.awards) {
                                    if (data.awards[i] != false && jQuery('#badges #' + i).is('.not-awarded')) {
@@ -283,7 +283,7 @@ jQuery(document).ready(function() {
                                    jQuery('#badges').relocateAward(lastAward, '#goals > .pane-content');
                                else if (lastAward != null)
                                    jQuery('#badges').relocateAward(lastAward, '#badges > .pane-content');
-                           }
+                           }*/
                        }
                    });
         }

@@ -43,74 +43,42 @@
 <?php endif; ?>
 
 <!-- #header-wrapper -->
-<div id="header-wrapper" class="clearfix">
+<div id="header-wrapper" class="header-wrapper clearfix">
 
-    <!-- #header -->
-    <div id="header" class="clearfix">
-        <div class="container_12">
+    <div class="header" id="header">
 
-            <!-- #header-inside -->
-            <div id="header-inside" class="clearfix">
+        <?php if ($site_name): ?>
+            <div id="site-name">
+                <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
+                    <img src="/sites/studysauce.com/themes/successinc/logo 4 trans 2.png" height="48"
+                         width="48" alt=""/><b>Study</b> Sauce</a>
 
-                <div class="grid_5">
-                    <div class="mt-grid-fix">
-
-                        <!-- #header-inside-left -->
-                        <div id="header-inside-left">
-
-                            <?php if ($logo): ?>
-                                <div id="logo">
-                                    <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home">
-                                        <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>"/> </a>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if ($site_name): ?>
-                                <div id="site-name">
-                                    <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><img
-                                            src="/sites/studysauce.com/themes/successinc/logo 4 trans 2.png" height="48"
-                                            width="48" alt=""/><b>Study</b> Sauce</a>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if ($site_slogan): ?>
-                                <div id="site-slogan">
-                                    <?php print $site_slogan; ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if ($page['header']) : ?>
-                                <?php print render($page['header']); ?>
-                            <?php endif; ?>
-
-                        </div>
-                        <!-- EOF: #header-inside-left -->
-
-                    </div>
-                </div>
-
-                <?php if ($page['navigation']) : ?>
-                    <div class="grid_7">
-                        <div class="mt-grid-fix">
-
-                            <!-- #header-inside-right -->
-                            <div id="header-inside-right">
-                                <div id="main-navigation" class="clearfix">
-                                    <?php print drupal_render($page['navigation']); ?>
-                                </div>
-                            </div>
-                            <!-- EOF: #header-inside-right -->
-
-                        </div>
+                <?php if ($site_slogan): ?>
+                    <div id="site-slogan">
+                        <?php print $site_slogan; ?>
                     </div>
                 <?php endif; ?>
 
             </div>
-            <!-- EOF: #header-inside -->
+        <?php endif; ?>
 
-        </div>
+        <?php if ($page['navigation']) : ?>
+            <div class="grid_7">
+                <div class="mt-grid-fix">
+
+                    <!-- #header-inside-right -->
+                    <div id="header-inside-right">
+                        <div id="main-navigation" class="clearfix">
+                            <?php print drupal_render($page['navigation']); ?>
+                        </div>
+                    </div>
+                    <!-- EOF: #header-inside-right -->
+
+                </div>
+            </div>
+        <?php endif; ?>
+
     </div>
-    <!-- EOF: #header -->
 
     <!-- #banner -->
     <?php if ($page['banner']): ?>
@@ -178,14 +146,7 @@
 
                                 <?php print render($page['help']); ?>
 
-                                <?php if (arg(0) == 'welcome'): ?>
-                                    <h1 class="page-title" style="margin:0;margin:0 auto;">
-                                        <ul class="guide">
-                                            <li><span><span><img src="/sites/studysauce.com/themes/successinc/correct_b.png"
-                                                                 style="margin-bottom:-5px"/></span>Done</span></li>
-                                        </ul>
-                                    </h1>
-                                <?php elseif ((arg(0) == 'node' && arg(1) == '89') ||
+                                <?php if ((arg(0) == 'node' && arg(1) == '89') ||
                                     (arg(0) == 'node' && arg(1) == '13') ||
                                     (arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'schedule') ||
                                     (arg(0) == 'user' && arg(1) == 'register') ||
@@ -302,50 +263,9 @@
 <?php endif; ?>
 
 <?php if ($page['sub_footer_first'] || $page['sub_footer_second'] || $page['sub_footer_third']): ?>
-    <div id="subfooter" class="clearfix">
-        <div class="container_12">
-
-            <!-- #subfooter-inside -->
-            <div id="subfooter-inside" class="clearfix">
-                <div class="grid_4">
-                    <div class="mt-grid-fix">
-                        <!-- #subfooter-first -->
-                        <?php if ($page['sub_footer_first']): ?>
-                            <div class="subfooter-area">
-                                <?php print render($page['sub_footer_first']); ?>
-                            </div>
-                        <?php endif; ?>
-                        <!-- EOF: #subfooter-first -->
-                    </div>
-                </div>
-                <div class="grid_4">
-                    <div class="mt-grid-fix">
-                        <!-- #subfooter-second -->
-                        <?php if ($page['sub_footer_second']): ?>
-                            <div class="subfooter-area">
-                                <?php print render($page['sub_footer_second']); ?>
-                            </div>
-                        <?php endif; ?>
-                        <!-- EOF: #subfooter-second -->
-                    </div>
-                </div>
-                <div class="grid_4">
-                    <div class="mt-grid-fix">
-                        <!-- #footer-bottom-right -->
-                        <?php if ($page['sub_footer_third']): ?>
-                            <div class="subfooter-area">
-                                <?php print render($page['sub_footer_third']); ?>
-                            </div>
-                        <?php endif; ?>
-                        <!-- EOF: #footer-bottom-right -->
-                    </div>
-                    <?php print 'Copyright ' . date('Y'); ?>
-                </div>
-            </div>
-            <!-- EOF: #subfooter-inside -->
-
-        </div>
-    </div><!-- EOF:#footer-bottom -->
+    <div id="subfooter" class="subfooter">
+        <?php print theme('studysauce-footer'); ?>
+    </div>
 <?php endif; ?>
 <!-- Google Code for Remarketing Tag -->
 <!--------------------------------------------------

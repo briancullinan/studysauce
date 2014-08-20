@@ -4,7 +4,7 @@
 {
     position: absolute;
     top: 0;
-    right: 40%;
+    right: 50%;
     width: auto;
     height: 100%;
     margin-right: -15%;
@@ -60,13 +60,14 @@
 }
 
 
-@media all and (max-width:1442px)
+@media all and (min-width:1442px)
 {
 
     .page-path-about-us .content img,
     #about-us img
     {
         right:50%;
+        left:0;
     }
 }
 

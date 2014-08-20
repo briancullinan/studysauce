@@ -16,17 +16,23 @@ function studysauce_save_partner()
         if(isset($account->field_partners['und'][0]['value']) &&
             ($old = entity_load('field_collection_item', array($account->field_partners['und'][0]['value']))) &&
             isset($old[$account->field_partners['und'][0]['value']]->field_email['und'][0]['value']) &&
-            $old[$account->field_partners['und'][0]['value']]->field_email['und'][0]['value'] == $_POST['email'])
+            // check if new email address matches old email address
+            $old[$account->field_partners['und'][0]['value']]->field_email['und'][0]['value'] == $_POST['email'] &&
+            // check if invite was sent within the last day
+            date_timezone_set(new DateTime($old[$account->field_partners['und'][0]['value']]->field_sent['und'][0]['value'], new DateTimeZone('UTC')), new DateTimeZone(date_default_timezone_get()))->getTimestamp() > time() - 86400)
         {
+            // copy old code because email is the same
+            $code = $old[$account->field_partners['und'][0]['value']]->field_code['und'][0]['value'];
             $shouldEmail = false;
         }
+        else
+            $code = md5(microtime());
 
         $entity = entity_create('field_collection_item', array('field_name' => 'field_partners'));
-        $entity->setHostEntity('user', $account);
         $entity->field_first_name['und'][0]['value'] = $_POST['first'];
         $entity->field_last_name['und'][0]['value'] = $_POST['last'];
         $entity->field_email['und'][0]['value'] = $_POST['email'];
-        $entity->field_code['und'][0]['value'] = md5(microtime());
+        $entity->field_code['und'][0]['value'] = $code;
 
         if(isset($_POST['permissions']))
             $entity->field_permissions['und'] = array_map(function ($x) { return array('value' => $x); }, explode(',', $_POST['permissions']));
@@ -71,8 +77,8 @@ function studysauce_save_partner()
             $message['body'] = theme('studysauce-email', array(
                 'message' => implode('<br />', $sentMessage),
                 'greeting' => 'Hello ' . $entity->field_first_name['und'][0]['value'] . ' ' . $entity->field_last_name['und'][0]['value'] . ',',
-                'link' => l('If you are prepared to help ' . $account->field_first_name[LANGUAGE_NONE][0]['value'] . ', click here to join Study Sauce and learn more about how we help students achieve their academic goals.', '<front>', array(
-                    'query' => array('partner_code' => $entity->field_code['und'][0]['value'], 'destination' => '#goals'),
+                'link' => l('If you are prepared to help ' . $account->field_first_name[LANGUAGE_NONE][0]['value'] . ', click here to join Study Sauce and learn more about how we help students achieve their academic goals.', 'partners', array(
+                    'query' => array('partner_code' => $entity->field_code['und'][0]['value']),
                     'absolute' => true,
                     'attributes' => array('style' => 'color:#FF9900;')))));
 
@@ -83,10 +89,16 @@ function studysauce_save_partner()
         }
 
         // remove other partners from user account
+        if(isset($account->field_partners['und']) && !empty($account->field_partners['und']))
+            entity_delete_multiple('field_collection_item', array_map(function ($x) {return $x['value'];}, $account->field_partners['und']));
+
+        $entity->setHostEntity('user', $account);
+        $entity->save(true);
+
         $edit = array();
-        $edit['field_partners']['und'] = array();
+        $edit['field_partners']['und'] = array(array('value' => $entity->item_id, 'entity' => $entity));
+
         user_save($account, $edit);
-        $entity->save();
     }
 
     print json_encode($result);

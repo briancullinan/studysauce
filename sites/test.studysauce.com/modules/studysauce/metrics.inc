@@ -1,5 +1,93 @@
 <?php
 
+function studysauce_clean_checkins($classes)
+{
+    $checkins = array();
+    $checkouts = array();
+    $countI = 0;
+    foreach($classes as $i => $class)
+    {
+        if(isset($class->field_class_name[LANGUAGE_NONE][0]['value']) &&
+            !empty($class->field_class_name[LANGUAGE_NONE][0]['value']) &&
+            (!isset($class->field_event_type['und'][0]['value']) || $class->field_event_type['und'][0]['value'] == 'c'))
+        {
+
+            if(isset($class->field_checkin[LANGUAGE_NONE]) &&
+                is_array($class->field_checkin[LANGUAGE_NONE]))
+            {
+                foreach($class->field_checkin[LANGUAGE_NONE] as $j => $checkin)
+                {
+
+                    // Create a list of valid checkin times for all classes
+                    if(empty($checkin['value']))
+                        continue;
+
+                    $time = strtotime(trim($checkin['value']));
+                    if($time == 0)
+                        continue;
+                    $checkins[$time] = $countI;
+
+                    // add checkout times
+                    if(isset($checkin['value2']) && !empty($checkin['value2']) &&
+                        strtotime(trim($checkin['value2'])) > 0)
+                    {
+                        $checkouts[strtotime(trim($checkin['value2']))] = $countI;
+                    }
+                    $checkouts[min(time(), $time + 3600)] = $countI;
+                }
+            }
+
+            $countI++;
+        }
+    }
+
+    ksort($checkins);
+
+    // if the checkin time is before the last checkout time then change the checkout time to match checkin time,
+    //    they switched classes in the middle of the session
+    $resultCheckouts = array();
+    foreach($checkins as $i => $class)
+    {
+        $diffs = array();
+        foreach(($checkins + $checkouts) as $k => $c)
+            $diffs[$k] = $k - $i;
+
+        asort($diffs);
+
+        foreach($diffs as $t => $length)
+            if($length > 0)
+            {
+                if($length < 60)
+                    $length = 60;
+
+                $resultCheckouts[$t] = $length;
+                break;
+            }
+    }
+
+    // Clean the list of checkins:
+    //    1) exclude checkins too close to each other < 60 seconds
+    //    2) create list of checkouts based on checkin times or assume 3600 seconds passed
+    /*$lastClass = -1;
+    $lastTime = 0;
+    $clean = array();
+    foreach($checkins as $t => $c)
+    {
+        if($lastTime > 0 && $t - $lastTime < 60 && $lastClass == $c)
+            continue;
+        else
+            $clean[$t] = $c;
+
+        $lastTime = $t;
+        $lastClass = $c;
+    }
+    $checkins = $clean;
+*/
+    reset($checkouts);
+
+    return array(0 => $checkins, 1 => $resultCheckouts, 2 => $classes, 'checkins' => $checkins, 'checkouts' => $resultCheckouts);
+}
+
 function _studysauce_get_metrics($account = null)
 {
     if($account == null)
@@ -35,7 +123,6 @@ function _studysauce_get_metrics($account = null)
         'seconds' => 'sec',
         'second' => 'sec'
     );
-    reset($checkouts);
     $times = array();
     $timeGroups = array();
     $rows = array();

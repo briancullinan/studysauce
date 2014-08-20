@@ -4,6 +4,8 @@ drupal_add_css(drupal_get_path('theme', 'successinc') .'/schedule.css');
 drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/jquery.timeentry.pack.js');
 drupal_add_library('system', 'ui.datepicker');
 drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/jquery.scrollintoview.js');
+drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.pietimer.js');
+drupal_add_css(drupal_get_path('theme', 'successinc') . '/css/pietimer.css');
 
 if(drupal_get_path_alias(current_path()) == 'schedule' ||
     drupal_get_path_alias(current_path()) == 'schedule2')
@@ -27,11 +29,12 @@ list($events, $classes, $others) = studysauce_get_events();
 
 <div class="building-schedule">
     <div class="middle-wrapper">
-        <h2>Please wait while we build your personalized study plan.</h2>
+        <h2>Just a moment while we build your plan.
+            <div class="timer"></div></h2>
     </div>
 </div>
 
-<h2>Enter your class + work schedule below</h2>
+<h2>Enter your class below</h2>
 <div class="field-type-text field-name-field-university field-widget-text-textfield form-wrapper">
     <label for="schedule-university">School name</label>
     <input class="text-full form-text required" type="text" id="schedule-university" name="schedule-university"
@@ -288,6 +291,8 @@ list($events, $classes, $others) = studysauce_get_events();
         print (drupal_get_path_alias(current_path()) == 'schedule' || drupal_get_path_alias(current_path()) == 'schedule2'
             ? 'Next'
             : 'Save'); ?></a>
+    <span class="overlaps-only">Error - classes cannot overlap</span>
+    <span class="invalid-only">Error - please make sure all class information is filled in</span>
 </p>
 
 <?php if(drupal_get_path_alias(current_path()) == 'schedule' ||
@@ -299,7 +304,6 @@ list($events, $classes, $others) = studysauce_get_events();
         });
     </script>
 <?php endif; ?>
-
 <hr style="margin-bottom:0;line-height: 1px;clear: both;" />
 <p style="margin-bottom:0;">&nbsp;</p>
 <h2>Enter work or other recurring obligations here</h2>
@@ -405,16 +409,16 @@ list($events, $classes, $others) = studysauce_get_events();
                 <div class="field-type-list-text field-name-field-recurring field-widget-options-buttons form-wrapper">
                     <label>Recurring</label>
                     <div class="read-only">
-                        <span class="<?php print (!in_array('monthly', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Weekly</span>
-                        <span class="<?php print (in_array('monthly', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Monthly</span><br />
+                        <span class="<?php print (in_array('weekly', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Weekly</span>
+                        <?php /* <span class="<?php print (in_array('monthly', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Monthly</span><br /> */ ?>
                     </div>
                     <div class="form-checkboxes form-type-checkbox">
                         <input type="checkbox" name="schedule-reoccurring-<?php print $eid; ?>" id="other-schedule-weekly-<?php print $eid; ?>"
-                               value="weekly" class="form-checkbox" <?php print (!in_array('monthly', $daysOfTheWeek) ? 'checked="checked"' : ''); ?>/>
+                               value="weekly" class="form-checkbox" <?php print (in_array('weekly', $daysOfTheWeek) ? 'checked="checked"' : ''); ?>/>
                         <label for="other-schedule-weekly-<?php print $eid; ?>">Weekly</label>
-                        <input type="checkbox" name="schedule-reoccurring-<?php print $eid; ?>" id="other-schedule-monthly-<?php print $eid; ?>"
+                        <?php /*<input type="checkbox" name="schedule-reoccurring-<?php print $eid; ?>" id="other-schedule-monthly-<?php print $eid; ?>"
                                value="monthly" class="form-checkbox" <?php print (in_array('monthly', $daysOfTheWeek) ? 'checked="checked"' : ''); ?>/>
-                        <label for="other-schedule-monthly-<?php print $eid; ?>">Monthly</label>
+                        <label for="other-schedule-monthly-<?php print $eid; ?>">Monthly</label> */ ?>
                     </div>
                 </div>
             </div>
@@ -514,10 +518,10 @@ list($events, $classes, $others) = studysauce_get_events();
                 <div class="field-name-field-recurring">
                     <label>Recurring</label>
                     <div class="form-checkboxes form-type-checkbox">
-                        <input type="radio" name="schedule-reoccurring" id="other-schedule-weekly" value="weekly" class="form-checkbox" checked="checked" />
+                        <input type="checkbox" name="schedule-reoccurring" id="other-schedule-weekly" value="weekly" class="form-checkbox" checked="checked" />
                         <label for="other-schedule-weekly">Weekly</label>
-                        <input type="radio" name="schedule-reoccurring" id="other-schedule-monthly" value="monthly" class="form-checkbox" />
-                        <label for="other-schedule-monthly">Monthly</label>
+                        <?php /* <input type="checkbox" name="schedule-reoccurring" id="other-schedule-monthly" value="monthly" class="form-checkbox" />
+                        <label for="other-schedule-monthly">Monthly</label> */ ?>
                     </div>
                 </div>
             </div>
@@ -559,6 +563,8 @@ list($events, $classes, $others) = studysauce_get_events();
         print (drupal_get_path_alias(current_path()) == 'schedule' || drupal_get_path_alias(current_path()) == 'schedule2'
             ? 'Next'
             : 'Save'); ?></a>
+    <span class="overlaps-only">Error - classes cannot overlap</span>
+    <span class="invalid-only">Error - please make sure all class information is filled in</span>
 </p>
 
 <p style="margin-bottom:0;clear:both;line-height: 1px">&nbsp;</p>

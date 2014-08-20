@@ -1,10 +1,12 @@
 <?php
+drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/quiz.js');
+
 global $user;
 $user = user_load($user->uid);
 $classes = _studysauce_get_schedule_classes();
-global $user;
 
 $lastOrder = _studysauce_orders_by_uid($user->uid);
+$groups = og_get_groups_by_user();
 
 $quizSubmissions = array();
 $quiz = db_select('webform_submissions', 's')
@@ -75,10 +77,71 @@ if(isset($user->field_partners['und'][0]['value']))
 ?>
 <div id="study-quiz">
     <div>
-        <?php
-        $quiz = node_load(17);
-        webform_node_view($quiz, 'full');
-        print theme_webform_view($quiz->content); ?>
+        <div class="form-item webform-component webform-component-radios webform-component--study-place">
+            <label for="edit-submitted-study-place">1.  I always study in the same place <span class="form-required" title="This field is required.">*</span></label>
+            <div class="form-radios"><div class="form-item form-type-radio form-item-submitted-study-place">
+                    <input type="radio" id="edit-submitted-study-place-1" name="submitted[study_place]" value="True" class="form-radio">  <label class="option" for="edit-submitted-study-place-1">True </label>
+
+                </div>
+                <div class="form-item form-type-radio form-item-submitted-study-place">
+                    <input type="radio" id="edit-submitted-study-place-2" name="submitted[study_place]" value="False" class="form-radio">  <label class="option" for="edit-submitted-study-place-2">False </label>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-item webform-component webform-component-radios webform-component--underlining">
+            <label for="edit-submitted-underlining">2.  I underline and highlight materials to help me remember information <span class="form-required" title="This field is required.">*</span></label>
+            <div class="form-radios"><div class="form-item form-type-radio form-item-submitted-underlining">
+                    <input type="radio" id="edit-submitted-underlining-1" name="submitted[underlining]" value="True" class="form-radio">  <label class="option" for="edit-submitted-underlining-1">True </label>
+
+                </div>
+                <div class="form-item form-type-radio form-item-submitted-underlining">
+                    <input type="radio" id="edit-submitted-underlining-2" name="submitted[underlining]" value="False" class="form-radio">  <label class="option" for="edit-submitted-underlining-2">False </label>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-item webform-component webform-component-radios webform-component--same-subject">
+            <label for="edit-submitted-same-subject">3.  I focus on one subject until I am sure I understand everything <span class="form-required" title="This field is required.">*</span></label>
+            <div class="form-radios"><div class="form-item form-type-radio form-item-submitted-same-subject">
+                    <input type="radio" id="edit-submitted-same-subject-1" name="submitted[same_subject]" value="True" class="form-radio">  <label class="option" for="edit-submitted-same-subject-1">True </label>
+
+                </div>
+                <div class="form-item form-type-radio form-item-submitted-same-subject">
+                    <input type="radio" id="edit-submitted-same-subject-2" name="submitted[same_subject]" value="False" class="form-radio">  <label class="option" for="edit-submitted-same-subject-2">False </label>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-item webform-component webform-component-radios webform-component--laying-down">
+            <label for="edit-submitted-laying-down">4.  I frequently study while lying down or in a comfortable place <span class="form-required" title="This field is required.">*</span></label>
+            <div class="form-radios"><div class="form-item form-type-radio form-item-submitted-laying-down">
+                    <input type="radio" id="edit-submitted-laying-down-1" name="submitted[laying_down]" value="True" class="form-radio">  <label class="option" for="edit-submitted-laying-down-1">True </label>
+
+                </div>
+                <div class="form-item form-type-radio form-item-submitted-laying-down">
+                    <input type="radio" id="edit-submitted-laying-down-2" name="submitted[laying_down]" value="False" class="form-radio">  <label class="option" for="edit-submitted-laying-down-2">False </label>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-item webform-component webform-component-radios webform-component--longer-sessions">
+            <label for="edit-submitted-longer-sessions">5.  I prefer longer study sessions to power through material <span class="form-required" title="This field is required.">*</span></label>
+            <div class="form-radios"><div class="form-item form-type-radio form-item-submitted-longer-sessions">
+                    <input type="radio" id="edit-submitted-longer-sessions-1" name="submitted[longer_sessions]" value="True" class="form-radio">  <label class="option" for="edit-submitted-longer-sessions-1">True </label>
+
+                </div>
+                <div class="form-item form-type-radio form-item-submitted-longer-sessions">
+                    <input type="radio" id="edit-submitted-longer-sessions-2" name="submitted[longer_sessions]" value="False" class="form-radio">  <label class="option" for="edit-submitted-longer-sessions-2">False </label>
+
+                </div>
+            </div>
+        </div>
+        <div class="highlighted-link form-actions">
+            <a href="#submit-quiz" class="webform-submit button-primary more form-submit">Submit</a>
+            <a href="#" onclick="jQuery('#home').removeClass('study-quiz-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
+            <p style="margin-bottom:0;line-height: 1px; clear:both;">&nbsp;</p>
+        </div>
     </div>
 </div>
 <div id="parent_home" class="parents_only">
@@ -142,7 +205,7 @@ if(isset($user->field_partners['und'][0]['value']))
                 <label for="home-reminders"><a href="#deadlines"><span>Set up deadline reminders</span></a></label><br />
                 <input id="home-plan" name="home-plan" type="checkbox" readonly="readonly"
                     <?php print (!empty($lastOrder) ? 'checked="checked"' : ''); ?> />
-                <label for="home-plan"><a href="#premium"><span>Get a personalized study plan</span> <sup class="premium">Premium</sup></a></label><br />
+                <label for="home-plan"><a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout"><span>Get a personalized study plan</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></a></label><br />
                 <input id="home-checkin" name="home-checkin" type="checkbox" readonly="readonly"
                     <?php print (count($checkins) > 0 ? 'checked="checked"' : ''); ?> />
                 <label for="home-checkin"><a href="#checkin"><span>Check in when you study</span></a></label>
@@ -171,7 +234,7 @@ if(isset($user->field_partners['und'][0]['value']))
             <p>
                 <input id="home-profile" name="home-profile" type="checkbox" readonly="readonly"
                     <?php print (isset($node->field_grades['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-profile"><a href="#profile"><span>Take the learning diagnostic</span> <sup class="premium">Premium</sup></a></label><br />
+                <label for="home-profile"><a href="#profile"><span>Take the learning diagnostic</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></a></label><br />
                 <input id="home-goals" name="home-goals" type="checkbox" readonly="readonly"
                     <?php print (isset($b->field_hours['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-goals"><a href="#goals"><span>Create your study goals</span></a></label><br />
@@ -180,16 +243,16 @@ if(isset($user->field_partners['und'][0]['value']))
                 <label for="home-partner"><a href="#partner"><span>Invite an accountability partner</span></a></label><br />
                 <input id="home-spaced" name="home-spaced" type="checkbox" readonly="readonly"
                     <?php print (isset($strategies->field_spaced_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-spaced"><a href="#plan"><span>Complete a spaced repetition study session</span> <sup class="premium">Premium</sup></a></label><br />
+                <label for="home-spaced"><a href="#plan"><span>Complete a spaced repetition study session</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></a></label><br />
                 <input id="home-active" name="home-active" type="checkbox" readonly="readonly"
                     <?php print (isset($strategies->field_active_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-active"><span>Complete an active recall exercise</span> <sup class="premium">Premium</sup></label><br />
+                <label for="home-active"><span>Complete an active recall exercise</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></label><br />
                 <input id="home-teach" name="home-teach" type="checkbox" readonly="readonly"
                     <?php print (isset($strategies->field_teach_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-teach"><span>Complete a teaching video</span> <sup class="premium">Premium</sup></label><br />
+                <label for="home-teach"><span>Complete a teaching video</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></label><br />
                 <?php /* <input id="home-friend" name="home-friend" type="checkbox" readonly="readonly"
                     />
-                <label for="home-friend">Ask a friend a question <sup class="premium">Premium</sup></label> */ ?>
+                <label for="home-friend">Ask a friend a question<?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></label> */ ?>
             </p>
         </li>
     </ol>

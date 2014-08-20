@@ -76,10 +76,11 @@ if(isset($groups['node']))
                     print $user->mail;
             }
             ?></strong><br />
-        <a href="#badges" class="students_only">&nbsp;</a>&nbsp;
-        <!--<a href="#invite" class="<?php print (empty($partner) ? 'not-connected' : 'connected'); ?>">&nbsp;</a>&nbsp;-->
+        <?php /* <a href="#badges" class="students_only">&nbsp;</a>&nbsp;
+        <a href="#invite" class="<?php print (empty($partner) ? 'not-connected' : 'connected'); ?>">&nbsp;</a>&nbsp;-->
         <!--<a href="#mail">Mail</a>&nbsp;-->
         <!--<?php print l('account', 'user/' . $GLOBALS['user']->uid . '/edit', array('attributes' => array('class' => 'user-account'))); ?>&nbsp;-->
+        <?php */ ?>
         <?php print l('logout', 'user/logout'); ?>
     </div>
 </div>

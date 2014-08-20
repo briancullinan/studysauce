@@ -37,7 +37,6 @@ function studysauce_group_save()
                 continue;
 
             $entity = entity_create('field_collection_item', array('field_name' => 'field_invites'));
-            $entity->setHostEntity('user', $account);
             $entity->field_first_name['und'][0]['value'] = $u['first'];
             $entity->field_last_name['und'][0]['value'] = $u['last'];
             $entity->field_email['und'][0]['value'] = $u['email'];
@@ -51,10 +50,12 @@ function studysauce_group_save()
             $message['subject'] = 'Welcome to Study Sauce!';
             $sentMessage = array();
             $sentMessage[] = 'You have been invited to Study Sauce by ' . $account->field_first_name['und'][0]['value'] . ' ' . $account->field_last_name['und'][0]['value'] . '.  Your account has been prepaid.  Please click the link below to activate your account.';
+            $sentMessage[] = '';
+            $sentMessage[] = '';
             $message['body'] = theme('studysauce-email', array(
                 'message' => implode('<br />', $sentMessage),
                 'greeting' => 'Hello ' . $entity->field_first_name['und'][0]['value'] . ' ' . $entity->field_last_name['und'][0]['value'] . ',',
-                'link' => l('Set up my Study Sauce account.', 'students', array(
+                'link' => l('Set up my Study Sauce account.', 'user/register', array(
                     'query' => array('invite_code' => $entity->field_code['und'][0]['value']),
                     'absolute' => true,
                     'attributes' => array('style' => '-webkit-appearance: none; margin: 0; text-decoration:none; text-align: left; padding: 10px 25px; color: #1d1d1d; font-weight: 800; font-size: 18px; line-height: 150%; border-radius: 4px; -webkit-border-radius: 4px; background: #FF9900; border-bottom: 3px solid #993300; text-shadow: 0px 1px 2px rgba(255,255,255,0.5);')))));
@@ -64,11 +65,23 @@ function studysauce_group_save()
 
             $entity->field_sent['und'][0]['value'] = date('Y-m-d H:i:s', time());
 
-            $entity->save();
+            $entity->setHostEntity('user', $account);
+            $entity->save(true);
+
+            $edit = array();
+            if(isset($account->field_invites['und']) && !empty($account->field_invites['und']))
+                $edit['field_invites']['und'] = $account->field_invites['und'];
+            $edit['field_invites']['und'][] = array('value' => $entity->item_id, 'entity' => $entity);
+
+            user_save($account, $edit);
+
         }
     }
 
-
+    print json_encode(array(
+        'import' => theme('studysauce-adviser-import')
+    ));
+    drupal_exit();
 }
 
 function studysauce_form_user_login_alter(&$form, &$form_state)
@@ -84,13 +97,15 @@ function studysauce_form_user_register_form_alter(&$form, &$form_state)
 function studysauce_user_login()
 {
     global $user;
+    $account = user_load($user->uid);
     // do not enter by funnel if the user was invited as an accountability partner
-    if(isset($user->mail))
+    // TODO: only do this for new accounts
+    if(isset($account->mail))
     {
         $partnerQuery = new EntityFieldQuery();
         $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
             ->propertyCondition('field_name', 'field_partners')
-            ->fieldCondition('field_email', 'value', $user->mail)
+            ->fieldCondition('field_email', 'value', $account->mail)
             ->execute();
 
         // check for partner code in session
@@ -102,29 +117,35 @@ function studysauce_user_login()
                 ->fieldCondition('field_code', 'value', $_SESSION['studysauce']['partner_code'])
                 ->execute();
 
-            // TODO: update inviters email address
+            // update inviters email address
             if(isset($partners['field_collection_item']))
                 foreach($partners['field_collection_item'] as $eid => $p)
                 {
                     $e = entity_load('field_collection_item', array($eid));
-                    $e[$eid]->field_email['und'][0]['value'] = $user->mail;
-                    $e[$eid]->save();
+                    $host = $e[$eid]->hostEntity();
+                    if(isset($host) && $account->uid != $host->uid)
+                    {
+                        $e[$eid]->field_email['und'][0]['value'] = $account->mail;
+                        $e[$eid]->save();
+                    }
                 }
         }
     }
 
 
-    if(!in_array('adviser', $user->roles) && !in_array('master adviser', $user->roles) && (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])))
+    if(!in_array('adviser', $account->roles) && !in_array('master adviser', $account->roles) &&
+        (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])) &&
+        isset($account->field_parent_student['und'][0]['value']) && $account->field_parent_student['und'][0]['value'] != 'parent')
     {
 
         // check if the user was invited by an adviser and put the user in that group
         $isBeingAdvised = array();
-        if(isset($user->mail))
+        if(isset($account->mail))
         {
             $partnerQuery = new EntityFieldQuery();
             $invites = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
                 ->propertyCondition('field_name', 'field_invites')
-                ->fieldCondition('field_email', 'value', $user->mail)
+                ->fieldCondition('field_email', 'value', $account->mail)
                 ->execute();
 
             // check for invite code in session
@@ -144,10 +165,10 @@ function studysauce_user_login()
                 {
                     $inviteEntity = entity_load('field_collection_item', array($i));
                     // re-associate invite email and sign up email by modifying the invite record
-                    if($inviteEntity[$i]->field_email['und'][0]['value'] != $user->mail)
+                    if($inviteEntity[$i]->field_email['und'][0]['value'] != $account->mail)
                     {
                         $inviteEntity[$i]->revision = 1;
-                        $inviteEntity[$i]->field_email['und'][0]['value'] = $user->mail;
+                        $inviteEntity[$i]->field_email['und'][0]['value'] = $account->mail;
                         $inviteEntity[$i]->save();
                     }
                     $adviserUser = $inviteEntity[$i]->hostEntity();
@@ -161,7 +182,7 @@ function studysauce_user_login()
         }
 
         // check if they are a customer
-        $lastOrder = _studysauce_orders_by_uid($user->uid);
+        $lastOrder = _studysauce_orders_by_uid($account->uid);
         $groups = og_get_groups_by_user();
 
         // if the user is being advised but hasn't been added to the group
@@ -179,7 +200,7 @@ function studysauce_user_login()
                     // Add the user to the group
                     og_group('node', $gid, array(
                         'entity type'       => 'user',
-                        'entity'        => $user
+                        'entity'        => $account
                     ));
                 }
             }
@@ -194,7 +215,7 @@ function studysauce_user_login()
             $query = new EntityFieldQuery();
             $nodes = $query->entityCondition('entity_type', 'node')
                 ->propertyCondition('type', 'profile')
-                ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+                ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
                 ->propertyCondition('status', 1)
                 ->range(0, 1)
                 ->execute();
@@ -222,7 +243,7 @@ function studysauce_user_login()
                     $query = new EntityFieldQuery();
                     $nodes = $query->entityCondition('entity_type', 'node')
                         ->propertyCondition('type', 'schedule')
-                        ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+                        ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
                         ->propertyCondition('status', 1)
                         ->range(0, 1)
                         ->execute();
@@ -421,64 +442,10 @@ function studysauce_save_user($account = null, &$edit = array())
     if(substr($account->mail, -strlen('@internal.example.org')) != '@internal.example.org')
         if(isset($_POST['parent-student']) && $_POST['parent-student'] == 'student')
         {
-            $msg = <<< EOHTML
-Congratulations on taking the first step to improving your study effectiveness!  To get the most out of Study Sauce, we recommend a few key things to do.
-
-1. Enter your important deadlines and we will send you reminders to stay on track.
-
-2. Check in when you study and we will guide you through the best study techniques.
-
-3. Set up study goals and rewards.
-
-As always, we are happy to help with any questions that you might have.  Just email us at admin@studysauce.com.
-EOHTML;
-
-            $body = theme('studysauce-email', array(
-                'message' => implode('<br />', explode("\n", $msg)),
-                'greeting' => 'Dear ' . (isset($account->field_first_name[LANGUAGE_NONE][0]['value'])
-                        ? $account->field_first_name[LANGUAGE_NONE][0]['value']
-                        : 'student') . ','));
-
-            $new_message = drupal_mail('studysauce', 'welcome', $account->mail, language_default(), array(), variable_get('site_mail', ''), FALSE);
-
-            $new_message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
-            $new_message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('welcome-student'))));
-            $new_message['subject'] = 'Welcome to Study Sauce';
-            $new_message['body'] = str_replace('admin@studysauce.com', '<a href="mailto:admin@studysauce.com" style="color:#FF9900;">admin@studysauce.com</a>', $body);
-
-            $system = drupal_mail_system('studysauce', 'welcome');
-            $new_message['result'] = $system->mail($new_message);
-
+            studysauce_welcome_student($account);
         }
         elseif(isset($_POST['parent-student']) && $_POST['parent-student'] == 'parent')
         {
-            $msg = <<< EOHTML
-Thank you for joining Study Sauce.  To get the most out of our service, we recommend a few key things to do.
-
-1. Send an invitation to your student to join and learn the best study methods.
-
-2. Give your student a little extra motivation. Incentive psychology works, try it!
-
-3. Purchase a personalized study plan for your student. We guarantee a higher GPA or your money back.
-
-As always, we are happy to help with any questions that you might have. Just email us at admin@studysauce.com.
-EOHTML;
-
-            $body = theme('studysauce-email', array(
-                'message' => implode('<br />', explode("\n", $msg)),
-                'greeting' => 'Dear ' . (isset($account->field_first_name[LANGUAGE_NONE][0]['value']) && isset($account->field_last_name[LANGUAGE_NONE][0]['value'])
-                        ? $account->field_first_name[LANGUAGE_NONE][0]['value'] . ' ' . $account->field_last_name[LANGUAGE_NONE][0]['value']
-                        : 'parent') . ','));
-
-            $new_message = drupal_mail('studysauce', 'welcome', $account->mail, language_default(), array(), variable_get('site_mail', ''), FALSE);
-
-            $new_message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
-            $new_message['headers']['X-SMTPAPI'] = preg_replace('/(.{1,72})(\s)/i', "\1\n   ", json_encode(array('category' => array('welcome-parent'))));
-            $new_message['subject'] = 'Welcome to Study Sauce';
-            $new_message['body'] = str_replace('admin@studysauce.com', '<a href="mailto:admin@studysauce.com" style="color:#FF9900;">admin@studysauce.com</a>', $body);
-
-            $system = drupal_mail_system('studysauce', 'welcome');
-            $new_message['result'] = $system->mail($new_message);
 
         }
 

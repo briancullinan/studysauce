@@ -779,7 +779,7 @@ body.file-drag .group-achievement .plup-filelist
 #achievements .grid_3
 {
     text-align: left;
-    height: 232px;
+    min-height: 232px;
     border: 3px solid transparent;
     margin:-3px !important;
     display:inline-block;
@@ -1151,11 +1151,11 @@ body.file-drag .group-achievement .plup-filelist
         background: url("images/menu_icons_64.png") no-repeat scroll transparent;
         text-align: center;
         padding:0 0 48px 0;
-        height:48px;
+        height:96px;
         background-position:50% -736px;
         width: auto;
         display:block;
-        box-sizing: content-box;
+        box-sizing: border-box;
         -moz-box-sizing: border-box;
     }
 
@@ -1234,6 +1234,25 @@ body.file-drag .group-achievement .plup-filelist
         vertical-align: top;
         display:inline-block;
     }
+
+    #achievements .grid_3 img,
+    #achievements .grid_3 p,
+    #achievements .grid_6 img,
+    #achievements .grid_6 p
+    {
+        margin:4px auto;
+        display:inline-block;
+        float:none;
+        vertical-align: bottom;
+        text-align: left;
+    }
+
+    .page-dashboard #goals #achievements .grid_3,
+    .page-dashboard #goals #achievements .grid_6
+    {
+        text-align: center;
+    }
+
 }
 
 @media all and (max-width: 480px)

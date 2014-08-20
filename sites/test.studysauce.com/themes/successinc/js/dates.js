@@ -23,6 +23,7 @@ jQuery(document).ready(function($) {
 
     deadlines.on('click', 'a[href="#add-deadline"]', function (evt) {
         evt.preventDefault();
+        deadlines.find('a[href="#add-deadline"]').hide();
         var count = deadlines.find('.row').length,
             addDeadline = deadlines.find('#new-dates-row').last(),
             newDeadline = addDeadline.clone().attr('id', '').addClass('edit').insertBefore(addDeadline);
@@ -34,8 +35,10 @@ jQuery(document).ready(function($) {
                 that.attr('name', that.attr('name') + count);
             newDeadline.find('label[for="' + oldId + '"]').attr('for', oldId + count);
         });
+        deadlines.find('.highlighted-link').detach().insertAfter(newDeadline);
         newDeadline.scrollintoview().datesFunc();
         deadlines.addClass('edit-date-only');
+        jQuery(window).trigger('scroll');
     });
 
     deadlines.on('click', 'a[href="#remove-reminder"]', function (evt) {
@@ -53,7 +56,7 @@ jQuery(document).ready(function($) {
                            .replaceWith(jQuery(data.reminders).find('.row, .head, a[href="#add-deadline"]'));
 
                        // update calendar events
-                       window.planEvents = data.events;
+                       jQuery('#calendar').updatePlan(data.events);
 
                        // update plan tab
                        var plan = jQuery('#plan');
@@ -63,6 +66,7 @@ jQuery(document).ready(function($) {
 
                        if(deadlines.find('.row').not('#new-dates-row').length == 0)
                            deadlines.find('a[href="#add-deadline"]').first().trigger('click');
+                       jQuery(window).trigger('scroll');
                    }
                });
     });
@@ -97,6 +101,7 @@ jQuery(document).ready(function($) {
         deadlines.find('.head, .row').not('#new-dates-row').not(deadlines.find('#new-dates-row').prevUntil(':not(.row)')).replaceWith(rows);
     });
 
+    /*
     // move the save button to the current row if the window is smaller that the content length
     jQuery(window).scroll(function () {
         if(jQuery(window).height() < deadlines.height())
@@ -105,7 +110,7 @@ jQuery(document).ready(function($) {
             var closest = {};
             var keys = [];
             deadlines.find('.row.edit').add(deadlines.find('.row').last()).each(function () {
-                var center = Math.abs(jQuery(window).height() / 2 - (jQuery(this).offset().top - jQuery(window).scrollTop()));
+                var center = Math.abs(jQuery(window).height() - 180 - (jQuery(this).offset().top - jQuery(window).scrollTop()));
                 closest[center] = jQuery(this);
                 keys[keys.length] = center;
             });
@@ -118,7 +123,7 @@ jQuery(document).ready(function($) {
     jQuery(window).resize(function () {
         jQuery(window).trigger('scroll');
     });
-
+    */
 
     deadlines.on('click', 'a[href="#save-dates"]', function (evt) {
         evt.preventDefault();
@@ -160,9 +165,19 @@ jQuery(document).ready(function($) {
                            deadlines.find('.row, .head, a[href="#add-deadline"]')
                                .replaceWith(jQuery(data.reminders).find('.row, .head, a[href="#add-deadline"]'));
                            invalids.insertBefore(deadlines.find('#new-dates-row'));
+                           if(invalids.length > 0)
+                           {
+                               deadlines.find('.highlighted-link').detach().insertAfter(invalids.last());
+                               deadlines.find('a[href="#add-deadline"]').hide();
+                           }
+                           else
+                           {
+                               deadlines.find('.highlighted-link').detach().insertAfter(deadlines.find('.row').last());
+                               deadlines.find('a[href="#add-deadline"]').show();
+                           }
 
                            // update calendar events
-                           window.planEvents = data.events;
+                           jQuery('#calendar').updatePlan(data.events);
 
                            // update plan tab
                            var plan = jQuery('#plan');
@@ -186,8 +201,10 @@ jQuery(document).ready(function($) {
 
     deadlines.on('click', 'a[href="#edit-reminder"]', function (evt) {
         evt.preventDefault();
-        jQuery(this).parents('.row').addClass('edit').scrollintoview().datesFunc();
+        var row = jQuery(this).parents('.row');
+        row.addClass('edit').scrollintoview().datesFunc();
         jQuery('#deadlines').addClass('edit-date-only');
+        deadlines.find('.highlighted-link').detach().insertAfter(row);
     });
 
     $.fn.datesFunc = function () {

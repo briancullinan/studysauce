@@ -6,9 +6,10 @@ var calendar = null,
 function resizeCalendar(calendarView) {
     if(!jQuery('#plan').is('.fullcalendar'))
         return;
-    if(calendarView.name === 'agendaWeek' || calendarView.name === 'agendaDay') {
+    if(calendarView.name === 'agendaWeek' || calendarView.name === 'agendaDay')
+    {
         // if height is too big for these views, then scrollbars will be hidden
-        calendarView.setHeight(9999);
+        calendarView.setHeight(jQuery(this).find('.fc-slats').outerHeight() + jQuery(this).find('.fc-day-grid').outerHeight() + jQuery(this).find('.fc-widget-header').outerHeight() + 8);
     }
 }
 
@@ -345,7 +346,7 @@ jQuery(document).ready(function () {
                         if(typeof window.strategies[eid]['teach'].uploads[0].play != 'undefined')
                         {
                             thumb = '<video width="184" height="184" preload="auto" controls="controls" poster="' + window.strategies[eid]['teach'].uploads[0].uri + '">' +
-                                    '<source src="' + window.strategies[eid]['teach'].uploads[0].play + '" type="video/webm" />';
+                                    '<source src="' + window.strategies[eid]['teach'].uploads[0].play + '" type="video/webm" /></video>';
                             $('#plan-' + eid + '-plupload').addClass('uploaded');
                         }
                         $('#plan-' + eid + '-plupload').find('img[src*="empty-play.png"]').remove();
@@ -566,7 +567,7 @@ jQuery(document).ready(function () {
         if(!row.is('.selected'))
             row.find('.strategy-spaced, .strategy-active, .strategy-teach, .strategy-other, .strategy-prework').hide();
         else
-            row.find('.strategy-spaced:visible, .strategy-active:visible, .strategy-teach:visible, .strategy-other:visible, .strategy-prework:visible').first().scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
+            row.find('.mini-checkin:visible, .strategy-spaced:visible, .strategy-active:visible, .strategy-teach:visible, .strategy-other:visible, .strategy-prework:visible').first().scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
     });
 
     var date = new Date(),
@@ -575,10 +576,41 @@ jQuery(document).ready(function () {
         initialize = function () {
             if (!isInitialized)
             {
+                // find min an max time
+                var early = -1,
+                    morning = 10,
+                    late = 18;
+                for(var eid in window.planEvents)
+                {
+                    var s = new Date(window.planEvents[eid].start),
+                        e = new Date(window.planEvents[eid].end);
+                    window.planEvents[eid].start = s;
+                    window.planEvents[eid].end = e;
+
+                    if(window.planEvents[eid].allDay ||
+                        window.planEvents[eid].className.indexOf('event-type-z') > -1 ||
+                        window.planEvents[eid].className.indexOf('event-type-m') > -1)
+                        continue;
+                    if(e.getHours() < 5 && e.getHours() > early)
+                        early = e.getHours();
+                    if(e.getHours() > late)
+                        late = e.getHours();
+                    if(s.getHours() > 3 && s.getHours() < morning)
+                        morning = s.getHours();
+                }
+
+                // use early morning as end time
+                var min,max;
+                if(early > -1)
+                    max = (24 + early + 1) + ':00:00';
+                else
+                    max = (late + 1) + ':00:00';
+                min = morning + ':00:00';
+
                 calendar = $('#calendar').fullCalendar(
                     {
-                        viewDisplay: resizeCalendar,
-                        windowResize: resizeCalendar,
+                        minTime: min,
+                        maxTime: max,
                         titleFormat: 'MMMM',
                         editable: true,
                         draggable: true,
@@ -589,8 +621,8 @@ jQuery(document).ready(function () {
                         slotEventOverlap: false,
                         slotMinutes: 15,
                         firstHour: new Date().getHours(),
-                        eventRender: function (event, element) {
-                            element.find('.fc-event-title').html(event.title);
+                        eventRender: function (event, element, view) {
+                            element.find('.fc-title').html(event.title);
                             return true;
                         },
                         header: {
@@ -600,14 +632,43 @@ jQuery(document).ready(function () {
                         },
                         defaultView: 'agendaWeek',
                         selectable: false,
-                        events: function (start, end, callback) {
-                            var events = [];
+                        events: function (start, end, timezone, callback) {
+                            var events = [],
+                                s = (start.unix() - 86400) * 1000,
+                                e = (end.unix() + 86400) * 1000;
+                            //var early = 0,
+                            //    morning = 9,
+                            //    late = 18;
                             for(var eid in window.planEvents)
                             {
-                                window.planEvents[eid].start = new Date(window.planEvents[eid].start);
-                                window.planEvents[eid].end = new Date(window.planEvents[eid].end);
-                                events[events.length] = window.planEvents[eid];
+                                if(window.planEvents[eid].start.getTime() > s && window.planEvents[eid].end.getTime() < e)
+                                {
+                                    events[events.length] = window.planEvents[eid];
+
+                            //        if(window.planEvents[eid].allDay)
+                            //            continue;
+                            //        if(e.getHours() < 5 && e.getHours() > early)
+                            //            early = e.getHours();
+                            //        if(e.getHours() > late)
+                            //            late = e.getHours();
+                            //        if(s.getHours() > 5 && s.getHours() < morning)
+                            //            morning = s.getHours();
+                                }
                             }
+                            //var newMin,newMax;
+                            //if(early > 0)
+                            //    newMax = (24 + early) + ':00:00';
+                            //else
+                            //    newMax = (late) + ':00:00';
+                            //newMin = morning + ':00:00';
+                            //if(newMin != min)
+                            //{
+                            //    $('#calendar').fullCalendar('option', 'minTime', min = newMin);
+                            //}
+                            //if(newMax != max)
+                            //{
+                            //    $('#calendar').fullCalendar('option', 'maxTime', max = newMax);
+                            //}
 
                             callback(events);
                         },
@@ -619,13 +680,13 @@ jQuery(document).ready(function () {
 
                         },
                         eventDragStart: function (event, jsEvent, ui, view) {
-                            original = new Date(event.start.getTime());
+                            original = new Date(event.start.unix() * 1000);
                         },
                         eventDragStop: function (event, jsEvent, ui, view) {
                         },
-                        eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc) {
+                        eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
 
-                            if(allDay)
+                            if(event.allDay)
                             {
                                 revertFunc();
                                 return;
@@ -686,6 +747,13 @@ jQuery(document).ready(function () {
                                        success: function (data) {
                                            // update calendar events
                                            window.planEvents = data.events;
+                                           for(var eid in window.planEvents)
+                                           {
+                                               var s = new Date(window.planEvents[eid].start),
+                                                   e = new Date(window.planEvents[eid].end);
+                                               window.planEvents[eid].start = s;
+                                               window.planEvents[eid].end = e;
+                                           }
                                            if(calendar != null && typeof calendar.fullCalendar != 'undefined')
                                                calendar.fullCalendar('refetchEvents');
                                        }
@@ -696,10 +764,6 @@ jQuery(document).ready(function () {
                 //calendar.find('.fc-agenda-slots tr:nth-child(4n-3) .fc-agenda-axis').eq(new Date().getHours()).scrollintoview({padding: {top:120,bottom:500,left:0,right:0}});
 
                 isInitialized = true;
-                jQuery('#plan').on('click', '.sort-by a[href="#expand"]', function () {
-                    jQuery('#plan').toggleClass('fullcalendar');
-                    $('#calendar').fullCalendar('render');
-                });
             }
         },
         d = date.getDate(),
@@ -718,6 +782,30 @@ jQuery(document).ready(function () {
         initialize();
         if($('#calendar:visible').length > 0)
             $('#calendar').fullCalendar('refetchEvents');
+    });
+
+    jQuery.fn.updatePlan = function(events)
+    {
+        window.planEvents = events;
+        $('#calendar').fullCalendar('destroy');
+        isInitialized = false;
+        if(jQuery('#plan:visible').length > 0)
+        {
+            setTimeout(initialize, 1000);
+        }
+    };
+
+    plans.on('click', '.sort-by a[href="#expand"]', function () {
+        if(plans.is('.fullcalendar'))
+        {
+            plans.removeClass('fullcalendar');
+            $('#calendar').fullCalendar('option', 'height', 500);
+        }
+        else
+        {
+            plans.addClass('fullcalendar');
+            $('#calendar').fullCalendar('option', 'height', 'auto');
+        }
     });
 });
 

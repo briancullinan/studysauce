@@ -56,7 +56,7 @@
     background-color: #eeeeee;
 }
 
-.page-dashboard #plan .fc-event-title
+.page-dashboard #plan .fc-title
 {
     white-space: nowrap;
     overflow:hidden;
@@ -64,12 +64,15 @@
     display: block;
 }
 
-.page-dashboard #plan .fc-event-title h4
+.page-dashboard #plan .fc-title h4
 {
     margin:0;
     text-align: center;
     font-size: 14px;
     color: #FFFFFF;
+    width: auto;
+    display: inline-block;
+    float:right;
 }
 
 .page-dashboard #plan .fc-agenda-axis
@@ -81,6 +84,35 @@
 {
     height:10px;
     line-height: 10px;
+}
+
+.page-dashboard #plan .fc-slats td
+{
+    height: 1em;
+}
+
+.page-dashboard #plan .fc-event.event-type-m
+{
+    border: 3px solid #FF9900;
+    color: #009999;
+    /*display:none;*/
+}
+
+.page-dashboard #plan .fc-event.event-type-z
+{
+    border: 3px solid #112277;
+    color: #1133AA;
+    /*display:none;*/
+}
+
+.page-dashboard #plan .fc-event.event-type-z h4
+{
+    color: #1133AA;
+}
+
+.page-dashboard #plan .fc-event.event-type-m h4
+{
+    color: #FF1100;
 }
 
 .page-dashboard #plan .event-type-c,
@@ -107,7 +139,7 @@
     background-color:#EEEEEE;
 }
 
-.page-dashboard #plan .fc-event-title small
+.page-dashboard #plan .fc-title small
 {
     display:none;
 }
@@ -359,7 +391,12 @@
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     display: block;
+    text-align: center;
+}
 
+.page-dashboard #plan .plupload .plup-list img
+{
+    margin:0 auto;
 }
 
 .page-dashboard #plan .plupload .plup-list li
@@ -597,17 +634,58 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
     border-top-style: none;
 }
 
-.page-dashboard #plan .fc-event-vert .fc-event-bg
+.page-dashboard #plan .fc-event .fc-bg
 {
     display:none;
 }
 
-.page-dashboard #plan .fc-event-vert .fc-event-time
+.page-dashboard #plan .fc-event .fc-time
 {
     display:none;
 }
 
-.page-dashboard #plan .ui-resizable-handle
+.page-dashboard #plan .fc-button
+{
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: rgb(245, 245, 245);
+    background-image: linear-gradient(rgb(255, 255, 255), rgb(230, 230, 230));
+    background-origin: padding-box;
+    background-repeat: repeat-x;
+    background-size: auto;
+}
+
+.page-dashboard #plan .fc-button:hover
+{
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: rgb(230, 230, 230);
+    background-image: linear-gradient(rgb(255, 255, 255), rgb(230, 230, 230));
+    background-origin: padding-box;
+    background-position: 0px -15px;
+    background-repeat: repeat-x;
+    background-size: auto;
+}
+
+.page-dashboard #plan .fc-button-group > *.fc-button:active
+{
+    margin: 0 0 0 -1px;
+    box-shadow: none;
+}
+
+.page-dashboard #plan .fc-button:active
+{
+    margin: 0 0 0 .75em;
+    box-shadow: none;
+}
+
+.page-dashboard #plan .fc-button.fc-state-disabled
+{
+    background-image: none;
+    background-color: #e6e6e6;
+}
+
+.page-dashboard #plan .fc-resizer
 {
     display: none !important;
 }
@@ -799,8 +877,7 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
 
 .page-dashboard #plan .row .field-name-field-class-name
 {
-    position: absolute;
-    width: 25%;
+    width: 50%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     top:0;
@@ -809,6 +886,7 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
     text-overflow: ellipsis;
 }
 
+.page-dashboard #plan .row .field-name-field-assignment .read-only,
 .page-dashboard #plan .row .field-name-field-class-name .read-only
 {
     text-overflow: ellipsis;
@@ -818,8 +896,8 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
 
 .page-dashboard #plan .field-name-field-assignment
 {
-    width: 100%;
-    padding:5px 25% 5px 25%;
+    width: 50%;
+    padding:5px 45px 5px 0;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
 }
@@ -847,6 +925,23 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     top:0;
+}
+
+.page-dashboard #plan .field-name-field-completed .read-only span
+{
+    display: inline-block;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    background: url('images/menu_icons_128.png') no-repeat 50% -2854px transparent;
+    font-size: 14px;
+    width: 50px;
+    text-align: center;
+}
+
+.page-dashboard #plan .field-name-field-completed .read-only span.checked
+{
+    background-position: 50% -2741px;
 }
 
 .page-dashboard #plan .field-name-field-completed input[type="checkbox"]
@@ -877,7 +972,7 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
     .page-dashboard #plan .selected .mini-checkin
     {
         left: 100%;
-        margin-left:-200px;
+        margin-left:-165px;
     }
 
     .page-dashboard #plan .pane-content > h2
@@ -886,6 +981,11 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
     }
 
     .page-dashboard #plan .full-only
+    {
+        display:none;
+    }
+
+    .page-dashboard #plan .sort-by a[href="#expand"]
     {
         display:none;
     }
@@ -932,6 +1032,35 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
 
 @media all and (max-width:759px)
 {
+    .page-dashboard #deadlines .sort-by
+    {
+        display:none;
+    }
+
+    .page-dashboard #plan .head, .page-dashboard #plan .row
+    {
+        display:none;
+    }
+    .page-dashboard #plan.show-historic .head,
+    .page-dashboard #plan.show-historic .row,
+    .page-dashboard #plan .head.mobile,
+    .page-dashboard #plan .row.mobile
+    {
+        display:block;
+    }
+
+    .page-dashboard #plan .strategy-notes,
+    .page-dashboard #plan .strategy-teach iframe, .page-dashboard #plan .plupload
+    {
+        width:auto;
+        display:block;
+        margin:0 auto;
+    }
+
+    .page-dashboard #plan a[href="#expand"]
+    {
+        display:none;
+    }
 
     .page-dashboard #plan .selected .mini-checkin
     {
@@ -941,7 +1070,7 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
 
     .page-dashboard #plan .plupload
     {
-        width:80%;
+        max-width:80%;
     }
 
     .page-dashboard #plan .field-select-strategy select

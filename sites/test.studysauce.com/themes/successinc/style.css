@@ -73,17 +73,6 @@ h3 {
     font-weight: bold;
 }
 
-.landing-home .footer h3
-{
-    color:#555555;
-}
-
-.landing-home h1
-{
-    color:#0099BE;
-    font-weight: bold;
-}
-
 h4 {
     font-size: 16px;
     font-weight: bold;
@@ -226,6 +215,22 @@ img {
     .team-member .image-shadow, .view-showcases .image-shadow {
         margin-bottom: 0;
     }
+}
+
+.clearfix:after
+{
+    line-height: 0;
+    font-size: 0;
+}
+
+iframe[name="google_conversion_frame"]
+{
+    height: 0;
+    visibility: collapse;
+    /* display: none; */
+    line-height: 0;
+    font-size: 0;
+    float: left;
 }
 
 @media all and (max-width: 759px) {
@@ -570,7 +575,7 @@ img {
 
     .page-dashboard #sds-messages > div,
     .page-dashboard #checklist > div,
-    .page-dashboard #study-quiz form > div,
+    .page-dashboard #study-quiz > div,
     .page-dashboard #study-quiz .webform-confirmation
     {
         margin:5% auto !important;
@@ -674,12 +679,6 @@ img {
 .landing-home #banner {
     padding-bottom: 10px;
     min-height: 145px;
-}
-
-.page-top,
-#page-top {
-    background: #555555;
-    padding:5px;
 }
 
 .parent-student-selection .page-top,
@@ -1932,12 +1931,14 @@ ul.company-info li.last {
 .page-dashboard #new-award > div,
 .page-dashboard #welcome > div,
 .page-dashboard #checklist > div,
-.page-dashboard #study-quiz form > div,
+.page-dashboard #study-quiz > div,
 .page-dashboard #study-quiz .webform-confirmation,
 .page-dashboard #mozart-effect > div,
 .page-dashboard #empty-schedule a,
 .page-dashboard #schedule .building-schedule h2,
 .page-dashboard #profile .building-schedule h2,
+.page-path-customization2 .building-schedule h2,
+.browser-not-supported > div > div,
 .page-dashboard .first-time-message,
 .page-dashboard #empty-dates a,
 .page-dashboard #metrics-empty a,
@@ -1954,7 +1955,47 @@ ul.company-info li.last {
     text-align:left;
 }
 
-.page-dashboard .middle-wrapper
+.browser-not-supported a
+{
+    display:inline-block;
+    height: 128px;
+    width: 128px;
+    background: url(images/menu_icons_128.png) no-repeat left -6016px transparent;
+    vertical-align: bottom;
+}
+
+.browser-not-supported a[href*="chrome"]
+{
+    background-position: left -6144px;
+}
+
+.browser-not-supported a[href*="safari"]
+{
+    background-position: left -6272px;
+}
+
+.browser-not-supported a[href*="microsoft"]
+{
+    background-position: left -6400px;
+    position:relative;
+}
+
+.browser-not-supported a[href*="microsoft"]:after
+{
+    content: "Click to upgrade";
+    padding-top: 70px;
+    line-height: 0px;
+    height: auto;
+    width: 128px;
+    display: block;
+    background: url(images/menu_icons_128.png) no-repeat left -6556px transparent;
+    position: absolute;
+    top: 100%;
+}
+
+.middle-wrapper,
+.page-dashboard .middle-wrapper,
+.page-path-customization2 .middle-wrapper
 {
     position:absolute;
     top:50%;
@@ -1962,10 +2003,19 @@ ul.company-info li.last {
     width:100%;
 }
 
+.page-dashboard #schedule .building-schedule .middle-wrapper,
+.page-dashboard #profile .building-schedule .middle-wrapper
+{
+    position:fixed;
+    margin-left:110px;
+}
+
 .page-dashboard #plan .buy-plan .highlighted-link,
 .page-dashboard #profile .buy-plan .highlighted-link,
+.browser-not-supported > div,
 .page-dashboard #schedule .building-schedule h2,
 .page-dashboard #profile .building-schedule h2,
+.page-path-customization2 .building-schedule h2,
 .page-dashboard #metrics-empty a,
 .page-dashboard #empty-dates a,
 .page-dashboard #empty-schedule a
@@ -1988,6 +2038,7 @@ ul.company-info li.last {
     .page-dashboard .page .pane-content
     {
         min-height: 300px;
+        padding:10px;
     }
 }
 
@@ -1996,8 +2047,10 @@ ul.company-info li.last {
 .page-dashboard #metrics-empty h2,
 .page-dashboard #empty-dates h2,
 .page-dashboard #empty-schedule h2,
+.browser-not-supported h2,
 .page-dashboard #schedule .building-schedule h2,
-.page-dashboard #profile .building-schedule h2
+.page-dashboard #profile .building-schedule h2,
+.page-path-customization2 .building-schedule h2
 {
     text-align: center;
 }
@@ -2009,7 +2062,7 @@ ul.company-info li.last {
 
 .page-dashboard #sds-messages > div,
 .page-dashboard #checklist > div,
-.page-dashboard #study-quiz form > div
+.page-dashboard #study-quiz > div
 {
     max-width: 550px;
 }
@@ -2336,6 +2389,12 @@ label {
     border: 1px solid #666666;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
+}
+
+.chatboxtextarea[readonly], input.form-text[readonly], textarea[readonly]
+{
+    opacity: .75;
+    background-color: #EEE;
 }
 
 input.form-text {
@@ -3491,7 +3550,7 @@ ul.contextual-links li a:hover {
 .not-logged-in.page-user-register #main,
 .not-logged-in.page-user #main
 {
-    max-width: 400px;
+    max-width: 550px;
     margin:0 auto;
 }
 
@@ -3521,8 +3580,6 @@ ul.contextual-links li a:hover {
     display:none;
 }
 
-.uc-store-address-field .form-item-panes-billing-billing-first-name,
-.uc-store-address-field .form-item-panes-billing-billing-last-name,
 .webform-component--your-first-name,
 .webform-component--your-last-name,
 .webform-component--student-first-name,
@@ -3680,8 +3737,8 @@ ul.contextual-links li a:hover {
 
 .two-column-guide span.incentives
 {
-    background: url(images/menu_icons_48.png) no-repeat top left;
-    background-position:0 -912px;
+    background: url(images/tips_icons_64.png) no-repeat top left;
+    background-position:-10px -3084px;
 }
 
 .page-dashboard #plan a.support,
@@ -4124,19 +4181,6 @@ hr
 .page-node-14 #page-top
 {
     display:none;
-}
-
-.landing-home .page
-{
-    background:url("images/Stanford_blur.jpg") no-repeat fixed 50% 0 #00749F;
-    background-size: auto 120%; /* TODO fine tune this with stephen */
-    z-index:1;
-    position:relative;
-}
-
-.landing-home .page-top
-{
-    box-shadow: 0 -10px 10px rgba(0,0,0,.5);
 }
 
 .page-home .footer
@@ -4821,15 +4865,20 @@ tbody
 {
     display:none;
 }
-
+.page-path-customization2.building .building-schedule
+{
+    display:block;
+}
 .page-dashboard #profile .buy-plan:before,
 .page-dashboard.parent #metrics .parents_only:before,
 .page-dashboard.parent #checkin .parents_only:before,
 .page-dashboard #study-quiz:before,
 .page-dashboard #schedule:before,
 .page-dashboard #plan .buy-plan:before,
+.browser-not-supported:before,
 .page-dashboard #schedule .building-schedule:before,
 .page-dashboard #profile .building-schedule:before,
+.page-path-customization2 .building-schedule:before,
 .page-dashboard #metrics-empty:before,
 .page-dashboard #empty-schedule:before,
 .page-dashboard #empty-dates:before,
@@ -4857,7 +4906,7 @@ tbody
 
 .page-dashboard #plan .buy-plan:before
 {
-    background-color:transparent;
+    background-color:rgba(255,255,255,.25);
     z-index: 40;
 }
 
@@ -4872,6 +4921,7 @@ tbody
     display:block;
 }
 
+.page-partners #node-11,
 .page-students2 #node-11,
 .page-parents2 #node-11,
 .page-students #node-11,
@@ -4883,6 +4933,7 @@ tbody
     display:none;
 }
 
+.page-partners #node-11 h2,
 .page-students2 #node-11 h2,
 .page-parents2 #node-11 h2,
 .page-students #node-11 h2,
@@ -4898,8 +4949,10 @@ tbody
 .page-dashboard.parent #checkin .parents_only h2,
 .page-dashboard.parent #checkin .parents_only a,
 .page-dashboard.parent #checkin .parents_only,
+.browser-not-supported,
 .page-dashboard #schedule .building-schedule,
 .page-dashboard #profile .building-schedule,
+.page-path-customization2 .building-schedule,
 .page-dashboard #empty-schedule,
 .page-dashboard #empty-dates,
 .page-dashboard #mozart-effect,
@@ -4923,6 +4976,18 @@ tbody
     z-index:10;
     text-align: center;
     margin:0;
+}
+
+.browser-not-supported,
+.browser-not-supported .middle-wrapper
+{
+    position:fixed;
+    text-align: center;
+}
+
+.browser-not-supported
+{
+    z-index: 1000;
 }
 
 .page-dashboard.parent #metrics .parents_only span,

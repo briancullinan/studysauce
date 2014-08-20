@@ -7,7 +7,7 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
     var selectedAward = null,
         isClosing = false;
 
-    function bubbleResize() {
+    /*function bubbleResize() {
         var that = $(this);
         var bubble = that.nextUntil('a');
         var thisArrow = bubble.find('.awardArrow');
@@ -15,7 +15,7 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
         var thisPosition = that.offset();
         var thisAlignX = thisPosition.left - $('#badges .awards').offset().left + (that.outerWidth()/2) - (thisArrow.width() / 2);
         thisArrow.css('margin-left', thisAlignX);
-    }
+    }*/
 
     function setBindings()
     {
@@ -28,34 +28,13 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
                 jQuery(this).prop('checked', jQuery(this).data('origState'));
         });
 
-        jQuery('body').on('click', 'a[href="#study-quiz"]', function (evt) {
-            evt.preventDefault();
-            jQuery('#home').addClass('study-quiz-only').scrollintoview();
-        });
-
-        jQuery('body').on('click', 'a[href="#badges"]', function (evt) {
+        /*jQuery('body').on('click', 'a[href="#badges"]', function (evt) {
             evt.preventDefault();
             jQuery('body').removeClass(footerOnly).addClass('awards-only');
             window.location.hash = '#badges';
             jQuery(window).trigger('scroll');
             bubbleResize.call(jQuery('#badges .awards > a.selected'));
-        });
-
-        jQuery('#study-quiz').on('click', 'a[href="#retry"]', function (evt) {
-            evt.preventDefault();
-            jQuery('#study-quiz #webform-ajax-wrapper-17').load('/quiz #node-17 #webform-ajax-wrapper-17 > *', function () {
-                Drupal.attachBehaviors();
-                jQuery('#tips').scrollintoview();
-                //Drupal.ajax['edit-webform-ajax-submit-17'] = new Drupal.ajax('edit-webform-ajax-submit-17', jQuery('#study-quiz input#edit-webform-ajax-submit-17'), {"callback":"webform_ajax_callback","wrapper":"webform-ajax-wrapper-17","progress":{"message":"","type":"throbber"},"event":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Submit"}});
-            });
-        });
-
-        jQuery('#study-quiz').on('mousedown', 'input[type="submit"]', function () {
-            jQuery('#home-tasks-quiz, #home-quiz').attr('checked', 'checked');
-            if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
-                jQuery('#home-tasks-checklist').attr('checked', 'checked');
-            return true;
-        });
+        });*/
 
         jQuery('#main-menu a').each(function () {
             var that = jQuery(this);
@@ -135,6 +114,10 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
                     .load(url + ' #page .content', function () {
                               pane.find('.pane-content').removeClass('loading');
                           });
+
+                // TODO: use script loader from userlist
+                if(x == 'contact')
+                    jQuery.getScript('/' + pathToTheme + '/js/contact.js');
                 if(x == 'about-us')
                     $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', '/' + pathToTheme + '/about.css') );
                 jQuery(window).trigger('scroll');
@@ -166,7 +149,7 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
             }
         });
 
-        jQuery('#badges').on('click', '.awards > a', function (evt) {
+        /*jQuery('#badges').on('click', '.awards > a', function (evt) {
             evt.preventDefault();
             var that = selectedAward = jQuery(this),
                 description = null;
@@ -186,13 +169,13 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
                 .parents('.panel-pane').scrollintoview();
         });
 
-        jQuery('#badges .awards > a.not-awarded').first().trigger('click');
+        jQuery('#badges .awards > a.not-awarded').first().trigger('click'); */
     }
 
     function setPrototypeFunctions()
     {
         // by default show description for next unawarded
-        $.fn.relocateAward = function (award, panel)
+        /*$.fn.relocateAward = function (award, panel)
         {
             if(award == '' && selectedAward != null)
                 selectedAward.trigger('click');
@@ -214,7 +197,7 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
                                       awardObj.trigger('click').scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
                 jQuery('.new-award-only').removeClass('new-award-only');
             });
-        };
+        };*/
 
         if(typeof Drupal.ajax != 'undefined')
         {
@@ -225,10 +208,10 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
             };
         }
 
-        if(typeof window.initialAward != 'undefined')
+        /*if(typeof window.initialAward != 'undefined')
         {
             jQuery('#badges').relocateAward(window.initialAward, '#badges > .pane-content');
-        }
+        }*/
     }
 
     jQuery(document).ready(function($) {
@@ -242,6 +225,26 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
 
         setBindings();
         setPrototypeFunctions();
+
+
+        jQuery(window).scroll(function () {
+            if(jQuery('#main-menu').length == 0)
+                return;
+            jQuery('#main-menu a').removeClass('skrollable-between');
+            jQuery('.page .panel-pane .pane-content').each(function () {
+                var that = jQuery(this),
+                    menu = jQuery('#main-menu li:visible a[href="#' + that.parent().attr('id') + '"]');
+                if(menu.length == 0)
+                    return;
+                if(that.offset().top <= menu.offset().top +
+                    (jQuery(window).width() <= 759
+                        ? 140
+                        : 0) &&
+                    that.offset().top + that.height() >= menu.offset().top + menu.height())
+                    menu.addClass('skrollable-between');
+            });
+        });
+
 
         // move arrow when window resizes
         $(window).on('resize', function (evt) {
@@ -304,24 +307,6 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
             jQuery('body').removeClass(footerOnly).addClass('user-profile-only');
             window.location.hash = '#user-profile';
             jQuery(window).trigger('scroll');
-        });
-
-        jQuery(window).scroll(function () {
-            if(jQuery('#main-menu').length == 0)
-                return;
-            jQuery('#main-menu a').removeClass('skrollable-between');
-            jQuery('.page .panel-pane .pane-content').each(function () {
-                var that = jQuery(this),
-                    menu = jQuery('#main-menu li:visible a[href="#' + that.parent().attr('id') + '"]');
-                if(menu.length == 0)
-                    return;
-                if(that.offset().top <= menu.offset().top +
-                                       (jQuery(window).width() <= 759
-                                           ? 140
-                                           : 0) &&
-                   that.offset().top + that.height() >= menu.offset().top + menu.height())
-                    menu.addClass('skrollable-between');
-            });
         });
 
         jQuery(window).resize(function () {

@@ -3,7 +3,6 @@ description = Provides custom functionality for Study Sauce
 dependencies[] = uc_cart_links
 dependencies[] = uc_cart
 dependencies[] = uc_credit
-dependencies[] = webform
 ; Information added by drupal.org packaging script on 2012-02-05
 version = "7.x-1.0-alpha1"
 core = "7.x"
