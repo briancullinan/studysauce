@@ -146,10 +146,6 @@
 
                             <?php print render($page['help']); ?>
 
-                            <?php if ($title): ?>
-                                <h1 class="page-title"><?php print $title; ?></h1>
-                            <?php endif; ?>
-
                         </div>
                         <!-- EOF: #highlighted -->
                     </div>
@@ -379,7 +375,7 @@ Remarketing tags may not be associated with personally identifiable information 
 <?php elseif (arg(0) == 'welcome'): ?>
     <!-- Facebook Code for Conversion Tracking -->
     <script type="text/javascript"> var fb_param = {};
-        fb_param.pixel_id = '6008770262329';
+        fb_param.pixel_id = '6008770262329'; // Conversion
         fb_param.value = '0.00';
         fb_param.currency = 'USD';
         (function () {

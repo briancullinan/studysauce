@@ -135,7 +135,6 @@ jQuery(document).ready(function() {
 
         // All fiels from queue has been uploaded
         uploader.bind('UploadComplete', function(up, files) {
-            $('#goals-plupload').find('.plup-list').sortable('refresh'); // Refresh sortable
             $('#goals-plupload').find('.plup-drag-info').show(); // Show info
         });
     }

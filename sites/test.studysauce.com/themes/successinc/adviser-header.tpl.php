@@ -1,21 +1,19 @@
 <?php
 global $user;
 $user = user_load($user->uid);
-if(isset($user->field_partners['und'][0]['value']))
-{
-    $partner = entity_load('field_collection_item', array($user->field_partners['und'][0]['value']));
-    $partner = $partner[$user->field_partners['und'][0]['value']];
-    if(!isset($partner->field_permissions['und']) || !is_array($partner->field_permissions['und']))
-        $partner->field_permissions['und'] = array();
-    $permissions = array_map(function ($x) { return $x['value']; }, $partner->field_permissions['und']);
-}
-
+$lastOrder = _studysauce_orders_by_uid($user->uid);
 ?>
 <div class="header-wrapper header">
     <div id="site-name">
         <a title="Home" href="/">
             <img width="48" height="48" alt="" src="/<?php print drupal_get_path('theme', 'successinc'); ?>/images/Study_Sauce_Logo.png"><strong>Study</strong> Sauce</a>
     </div>
+    <?php if(!in_array('adviser', $user->roles) && !in_array('master adviser', $user->roles) &&
+        empty($lastOrder)): ?>
+        <div id="partner-upgrade-message" class="highlighted-link">
+            <a class="more" href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout">Sponsor student</a>
+        </div>
+    <?php endif; ?>
     <div id="welcome-message">Welcome <strong>
         <?php
         if ($user->uid > 0)

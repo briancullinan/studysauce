@@ -93,11 +93,11 @@ if(!empty($invites))
             continue;
 
         // skip users who have signed up
-        if(in_array($invite->field_email['und'][0]['value'], $emails))
-            continue;
+        //if(in_array($invite->field_email['und'][0]['value'], $emails))
+        //    continue;
 
         // skip duplicate invites because they can be invited more than once
-        $dupe = $invite->field_email['und'][0]['value'] . $invite->field_first_name['und'][0]['value'] . $invite->field_last_name['und'][0]['value'];
+        $dupe = $invite->field_email['und'][0]['value'] . (isset($invite->field_first_name['und'][0]['value']) ? $invite->field_first_name['und'][0]['value'] : '') . (isset($invite->field_last_name['und'][0]['value']) ? $invite->field_last_name['und'][0]['value'] : '');
         if(in_array($dupe, $dupes))
             continue;
         $dupes[] = $dupe;
@@ -107,11 +107,11 @@ if(!empty($invites))
         <div class="row <?php print ($first ? 'first' : ''); ?>">
             <div class="field-name-field-first-name">
                 <label>First name</label>
-                <div class="read-only"><?php print $invite->field_first_name['und'][0]['value']; ?></div>
+                <div class="read-only"><?php print (isset($invite->field_first_name['und'][0]['value']) ? $invite->field_first_name['und'][0]['value'] : ''); ?></div>
             </div>
             <div class="field-name-field-last-name">
                 <label>Last name</label>
-                <div class="read-only"><?php print $invite->field_last_name['und'][0]['value']; ?></div>
+                <div class="read-only"><?php print (isset($invite->field_last_name['und'][0]['value']) ? $invite->field_last_name['und'][0]['value'] : ''); ?></div>
             </div>
             <div class="field-name-field-email">
                 <label>Email</label>

@@ -497,6 +497,11 @@
         margin:5px 0 0;
     }
 
+    .page-dashboard #main-menu a[href="#userlist"] span
+    {
+        background-position: 50% -352px;
+    }
+
     .page-dashboard #main-menu a[href="#home"] span
     {
         background-position: 50% -352px;

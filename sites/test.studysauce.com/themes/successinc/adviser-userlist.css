@@ -111,6 +111,11 @@
     table-layout: fixed;
 }
 
+#userlist td.empty
+{
+    white-space: normal;
+}
+
 #userlist td a
 {
     overflow:hidden;

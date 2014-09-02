@@ -212,3 +212,7 @@ body.file-drag #account-plupload .plup-filelist
     max-height: none !important;
 }
 
+#account .form-item-current-pass.passwordError input
+{
+    border: 2px solid #FF1100;
+}

@@ -7,6 +7,7 @@
     display:block;
     vertical-align: middle;
     text-align: center;
+    white-space: nowrap;
 }
 
 .guide li
@@ -252,22 +253,22 @@
         margin-top:-35px;
     }
 
-    .page-path-profile .guide li:nth-child(1)
+    .guide li:nth-child(1)
     {
         margin-bottom:20px;
     }
 
-    .page-path-profile .guide li:nth-child(3) > span > span
+    .guide li:nth-child(3) > span > span
     {
         margin-bottom:20px;
     }
 
-    .page-path-profile .guide li:nth-child(5)
+    .guide li:nth-child(5)
     {
         margin-bottom:20px;
     }
 
-    .page-path-profile .guide li:nth-child(7) > span > span
+    .guide li:nth-child(7) > span > span
     {
         margin-bottom:20px;
     }

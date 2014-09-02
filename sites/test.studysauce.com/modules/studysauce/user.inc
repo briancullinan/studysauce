@@ -2,6 +2,7 @@
 
 function studysauce_group_save()
 {
+    set_time_limit(0);
     // add user invites to adviser account
     global $user;
     $account = user_load($user->uid);
@@ -33,8 +34,8 @@ function studysauce_group_save()
 
             $query->condition(db_or()->condition($sentAnd)->condition($remAnd));
             $entities = $query->execute()->fetchAllAssoc('field_invites_value');
-            if (!empty($entities))
-                continue;
+            //if (!empty($entities))
+            //    continue;
 
             $entity = entity_create('field_collection_item', array('field_name' => 'field_invites'));
             $entity->field_first_name['und'][0]['value'] = $u['first'];
@@ -52,10 +53,15 @@ function studysauce_group_save()
             $sentMessage[] = 'You have been invited to Study Sauce by ' . $account->field_first_name['und'][0]['value'] . ' ' . $account->field_last_name['und'][0]['value'] . '.  Your account has been prepaid.  Please click the link below to activate your account.';
             $sentMessage[] = '';
             $sentMessage[] = '';
+            $sentMessage[] = 'Once you create your account, you will answer a short survey about your study preferences which we will use to build your personalized study tools.';
+            $sentMessage[] = '';
+            $sentMessage[] = '';
+            $sentMessage[] = 'If you have any questions at all during the process, please feel free to contact Stephen Houghton.  I can be reached by email at stephen@studysauce.com or by phone at 480-331-8570.';
+            $sentMessage[] = '';
             $message['body'] = theme('studysauce-email', array(
                 'message' => implode('<br />', $sentMessage),
                 'greeting' => 'Hello ' . $entity->field_first_name['und'][0]['value'] . ' ' . $entity->field_last_name['und'][0]['value'] . ',',
-                'link' => l('Set up my Study Sauce account.', 'user/register', array(
+                'link' => l('Set up my Study Sauce account.', 'adviserprepaid', array(
                     'query' => array('invite_code' => $entity->field_code['und'][0]['value']),
                     'absolute' => true,
                     'attributes' => array('style' => '-webkit-appearance: none; margin: 0; text-decoration:none; text-align: left; padding: 10px 25px; color: #1d1d1d; font-weight: 800; font-size: 18px; line-height: 150%; border-radius: 4px; -webkit-border-radius: 4px; background: #FF9900; border-bottom: 3px solid #993300; text-shadow: 0px 1px 2px rgba(255,255,255,0.5);')))));
@@ -65,12 +71,13 @@ function studysauce_group_save()
 
             $entity->field_sent['und'][0]['value'] = date('Y-m-d H:i:s', time());
 
+            $edit = array();
+            if(isset($account->field_invites['und']) && !empty($account->field_invites['und']))
+                $edit['field_invites']['und'] = array_values($account->field_invites['und']);
+
             $entity->setHostEntity('user', $account);
             $entity->save(true);
 
-            $edit = array();
-            if(isset($account->field_invites['und']) && !empty($account->field_invites['und']))
-                $edit['field_invites']['und'] = $account->field_invites['und'];
             $edit['field_invites']['und'][] = array('value' => $entity->item_id, 'entity' => $entity);
 
             user_save($account, $edit);
@@ -91,7 +98,73 @@ function studysauce_form_user_login_alter(&$form, &$form_state)
 
 function studysauce_form_user_register_form_alter(&$form, &$form_state)
 {
+    $form['#validate'][] = 'studysauce_user_associate';
     $form['#validate'][] = 'studysauce_user_login';
+}
+
+function studysauce_user_associate()
+{
+    global $user;
+    $account = user_load($user->uid);
+
+    //only do this for new accounts
+    if(!isset($account->mail) || empty($account->mail) || $user->uid == 0)
+        return;
+
+    // check for partner code in session
+    if(isset($_SESSION['studysauce']['partner_code']))
+    {
+        $partnerQuery = new EntityFieldQuery();
+        $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+            ->propertyCondition('field_name', 'field_partners')
+            ->fieldCondition('field_code', 'value', $_SESSION['studysauce']['partner_code'])
+            ->execute();
+
+        // update inviters email address
+        if(isset($partners['field_collection_item']) && !empty($partners['field_collection_item']))
+            foreach($partners['field_collection_item'] as $eid => $p)
+            {
+                $e = entity_load('field_collection_item', array($eid));
+                $host = $e[$eid]->hostEntity();
+                if(isset($host) &&
+                    $e[$eid]->field_email['und'][0]['value'] != $account->mail &&
+                    $account->uid != $host->uid)
+                {
+                    $e[$eid]->revision = 1;
+                    $e[$eid]->field_email['und'][0]['value'] = $account->mail;
+                    $e[$eid]->save();
+                }
+            }
+    }
+
+    // check for invite code in session
+    if(isset($_SESSION['studysauce']['invite_code']))
+    {
+        $partnerQuery = new EntityFieldQuery();
+        $invites = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+            ->propertyCondition('field_name', 'field_invites')
+            ->fieldCondition('field_code', 'value', $_SESSION['studysauce']['invite_code'])
+            ->execute();
+
+        // re-associate invite email and sign up email by modifying the invite record
+        if(isset($invites['field_collection_item']) && !empty($invites['field_collection_item']))
+            foreach($invites['field_collection_item'] as $i => $inv)
+            {
+                $inviteEntity = entity_load('field_collection_item', array($i));
+                $adviserUser = $inviteEntity[$i]->hostEntity();
+                if(isset($adviserUser) &&
+                    $inviteEntity[$i]->field_email['und'][0]['value'] != $account->mail &&
+                    $account->uid != $adviserUser->uid)
+                {
+                    $inviteEntity[$i]->revision = 1;
+                    $inviteEntity[$i]->field_email['und'][0]['value'] = $account->mail;
+                    $inviteEntity[$i]->save();
+                }
+            }
+    }
+
+
+    // TODO: the same thing for anonymous order invites
 }
 
 function studysauce_user_login()
@@ -99,45 +172,14 @@ function studysauce_user_login()
     global $user;
     $account = user_load($user->uid);
     // do not enter by funnel if the user was invited as an accountability partner
-    // TODO: only do this for new accounts
-    if(isset($account->mail))
-    {
-        $partnerQuery = new EntityFieldQuery();
-        $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
-            ->propertyCondition('field_name', 'field_partners')
-            ->fieldCondition('field_email', 'value', $account->mail)
-            ->execute();
 
-        // check for partner code in session
-        if(!isset($partners['field_collection_item']) && isset($_SESSION['studysauce']['partner_code']))
-        {
-            $partnerQuery = new EntityFieldQuery();
-            $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
-                ->propertyCondition('field_name', 'field_partners')
-                ->fieldCondition('field_code', 'value', $_SESSION['studysauce']['partner_code'])
-                ->execute();
-
-            // update inviters email address
-            if(isset($partners['field_collection_item']))
-                foreach($partners['field_collection_item'] as $eid => $p)
-                {
-                    $e = entity_load('field_collection_item', array($eid));
-                    $host = $e[$eid]->hostEntity();
-                    if(isset($host) && $account->uid != $host->uid)
-                    {
-                        $e[$eid]->field_email['und'][0]['value'] = $account->mail;
-                        $e[$eid]->save();
-                    }
-                }
-        }
-    }
-
+    //only do this for new accounts
+    if(!isset($account->mail) || empty($account->mail) || $user->uid == 0)
+        return;
 
     if(!in_array('adviser', $account->roles) && !in_array('master adviser', $account->roles) &&
-        (!isset($partners['field_collection_item']) || empty($partners['field_collection_item'])) &&
-        isset($account->field_parent_student['und'][0]['value']) && $account->field_parent_student['und'][0]['value'] != 'parent')
+        !in_array('partner', $account->roles) && !in_array('parent', $account->roles))
     {
-
         // check if the user was invited by an adviser and put the user in that group
         $isBeingAdvised = array();
         if(isset($account->mail))
@@ -149,36 +191,19 @@ function studysauce_user_login()
                 ->execute();
 
             // check for invite code in session
-            if(!isset($invites['field_collection_item']) && isset($_SESSION['studysauce']['invite_code']))
-            {
-                $partnerQuery = new EntityFieldQuery();
-                $invites = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
-                    ->propertyCondition('field_name', 'field_invites')
-                    ->fieldCondition('field_code', 'value', $_SESSION['studysauce']['invite_code'])
-                    ->execute();
-            }
-
-            // get if host entity is an adviser
-            if(isset($invites['field_collection_item']))
-            {
+            if(isset($invites['field_collection_item']) && !empty($invites['field_collection_item']))
                 foreach($invites['field_collection_item'] as $i => $inv)
                 {
                     $inviteEntity = entity_load('field_collection_item', array($i));
-                    // re-associate invite email and sign up email by modifying the invite record
-                    if($inviteEntity[$i]->field_email['und'][0]['value'] != $account->mail)
+                    if(($adviserUser = $inviteEntity[$i]->hostEntity()) != null)
                     {
-                        $inviteEntity[$i]->revision = 1;
-                        $inviteEntity[$i]->field_email['und'][0]['value'] = $account->mail;
-                        $inviteEntity[$i]->save();
-                    }
-                    $adviserUser = $inviteEntity[$i]->hostEntity();
-                    $account = user_load($adviserUser->uid);
-                    if(in_array('adviser', $account->roles) || in_array('master adviser', $account->roles))
-                    {
-                        $isBeingAdvised[] = $account;
+                        $adviser = user_load($adviserUser->uid);
+                        if(in_array('adviser', $adviser->roles) || in_array('master adviser', $adviser->roles))
+                        {
+                            $isBeingAdvised[] = $adviser;
+                        }
                     }
                 }
-            }
         }
 
         // check if they are a customer
@@ -211,63 +236,7 @@ function studysauce_user_login()
 
         if(isset($groups['node']) || $lastOrder)
         {
-            // check if buy funnel is complete
-            $query = new EntityFieldQuery();
-            $nodes = $query->entityCondition('entity_type', 'node')
-                ->propertyCondition('type', 'profile')
-                ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
-                ->propertyCondition('status', 1)
-                ->range(0, 1)
-                ->execute();
-            if (empty($nodes['node']))
-                $GLOBALS['studysauce-goto'] = 'profile';
-            else
-            {
-                // check if questions are answered and return to exact step
-                $nodes = array_keys($nodes['node']);
-                $nid = array_shift($nodes);
-                $node = node_load($nid);
-                if(!isset($node->field_mindset['und'][0]['value']) || !isset($node->field_time_management['und'][0]['value']) ||
-                    !isset($node->field_devices['und'][0]['value']) || !isset($node->field_education['und'][0]['value']) ||
-                    !isset($node->field_study_much['und'][0]['value']))
-                    $GLOBALS['studysauce-goto'] = 'profile';
-            }
-
-            if(!isset($GLOBALS['studysauce-goto']))
-            {
-                $classes = _studysauce_get_schedule_classes();
-                if(!count($classes))
-                    $GLOBALS['studysauce-goto'] = 'schedule';
-                else
-                {
-                    $query = new EntityFieldQuery();
-                    $nodes = $query->entityCondition('entity_type', 'node')
-                        ->propertyCondition('type', 'schedule')
-                        ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
-                        ->propertyCondition('status', 1)
-                        ->range(0, 1)
-                        ->execute();
-
-                    $nodes = array_keys($nodes['node']);
-                    $nid = array_shift($nodes);
-                    $node = node_load($nid);
-                    if(!isset($node->field_weekends['und'][0]['value']))
-                        $GLOBALS['studysauce-goto'] = 'customization';
-                }
-
-                if(!isset($GLOBALS['studysauce-goto']))
-                {
-                    foreach($classes as $e => $class)
-                    {
-                        $entity = entity_load('field_collection_item', array($e));
-                        if(isset($entity[$e]) && !isset($entity[$e]->field_study_difficulty['und'][0]['value']))
-                            $GLOBALS['studysauce-goto'] = 'customization2';
-                    }
-                }
-
-            }
-
-            // TODO: change this when we need to check for completion of different versions of the profile form
+            $GLOBALS['studysauce-goto'] = studysauce_funnel_progress();
         }
     }
 
@@ -275,10 +244,94 @@ function studysauce_user_login()
         $GLOBALS['studysauce-goto'] = '<front>';
 }
 
+function studysauce_funnel_progress()
+{
+    global $user;
+    $account = user_load($user->uid);
+
+    // check if buy funnel is complete
+    $query = new EntityFieldQuery();
+    $nodes = $query->entityCondition('entity_type', 'node')
+        ->propertyCondition('type', 'profile')
+        ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
+        ->propertyCondition('status', 1)
+        ->range(0, 1)
+        ->execute();
+    if (empty($nodes['node']))
+        return 'profile';
+    else
+    {
+        // check if questions are answered and return to exact step
+        $nodes = array_keys($nodes['node']);
+        $nid = array_shift($nodes);
+        $node = node_load($nid);
+        if(!isset($node->field_mindset['und'][0]['value']) || !isset($node->field_time_management['und'][0]['value']) ||
+            !isset($node->field_devices['und'][0]['value']) || !isset($node->field_education['und'][0]['value']) ||
+            !isset($node->field_study_much['und'][0]['value']))
+            return 'profile';
+    }
+
+    $classes = _studysauce_get_schedule_classes();
+    if(!count($classes))
+        return 'schedule';
+    else
+    {
+        $query = new EntityFieldQuery();
+        $nodes = $query->entityCondition('entity_type', 'node')
+            ->propertyCondition('type', 'schedule')
+            ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
+            ->propertyCondition('status', 1)
+            ->range(0, 1)
+            ->execute();
+
+        $nodes = array_keys($nodes['node']);
+        $nid = array_shift($nodes);
+        $node = node_load($nid);
+        if(!isset($node->field_weekends['und'][0]['value']))
+            return 'customization';
+    }
+
+    foreach($classes as $e => $class)
+    {
+        $entity = entity_load('field_collection_item', array($e));
+        if(isset($entity[$e]) && !isset($entity[$e]->field_study_difficulty['und'][0]['value']))
+            return 'customization2';
+    }
+
+    // TODO: change this when we need to check for completion of different versions of the profile form
+    return '<front>';
+}
+
+function studysauce_create_order($account)
+{
+    global $user;
+    $order = uc_order_new($account->uid, 'completed');
+    uc_order_comment_save($order->order_id, $user->uid, t('Order created programmatically.'), 'admin');
+    $product = node_load(13);
+    uc_product_load(array($product->nid => $product));
+    $attribute = uc_attribute_load(4);
+    $option = uc_attribute_option_load(14);
+    if(is_string($product->data))
+        $product->data = unserialize($product->data);
+    $product->data['attributes']['Payment Option'][14] = 'Yearly';
+    $product->module = 'uc_recurring_order';
+    //$product->price =
+    $product->order = $order;
+    $product->order_uid = $order->uid;
+    $product->qty = 1;
+    $product->price = 99.99;
+    $order->products[] = $product;
+    $products = uc_recurring_product_get_recurring_products_in_order($order);
+    uc_order_module_invoke('load', $order, NULL);
+    $order->line_items = uc_order_load_line_items($order);
+    uc_order_save($order);
+}
+
 function studysauce_drupal_goto_alter(&$path, &$options, &$http_response_code)
 {
     // don't modify goto if it leads to a product page
-    if(strpos($path, 'cart/add') !== false || strpos($path, 'cart/checkout') !== false)
+    if(strpos($path, '<front>') === false && $path != '/' && $path != '' &&
+        strpos($path, 'user') === false && strpos($path, 'node') === false)
         return;
     if(isset($GLOBALS['studysauce-goto']))
     {
@@ -351,7 +404,12 @@ function studysauce_connector_login($connector_name, $cid = NULL, $consumer = NU
         }
     }
 
-    return _connector_log_in($connector_name, $cid, $consumer, $access_token, $request_token);
+    $result = _connector_log_in($connector_name, $cid, $consumer, $access_token, $request_token);
+    if($result)
+    {
+        studysauce_user_associate();
+    }
+    return $result;
 }
 
 function studysauce_save_user($account = null, &$edit = array())
@@ -372,18 +430,31 @@ function studysauce_save_user($account = null, &$edit = array())
         return;
     }
 
+    $password_error = false;
     if(isset($_POST['first']) && isset($_POST['last']) && isset($_POST['email']))
     {
         $oldEmail = false;
         $edit['field_first_name']['und'][0]['value'] = $_POST['first'];
         $edit['field_last_name']['und'][0]['value'] = $_POST['last'];
-        if(strcmp($account->mail, $_POST['email']) <> 0)
+        if(strcmp($account->mail, $_POST['email']) <> 0 &&
+            isset($_POST['pass']) && !empty($_POST['pass']))
         {
-            $edit['mail'] = $_POST['email'];
-            $oldEmail = $account->mail;
+            require_once DRUPAL_ROOT . '/' . variable_get('password_inc', 'includes/password.inc');
+            if(user_check_password($_POST['pass'], $account))
+            {
+                $edit['mail'] = $_POST['email'];
+                $oldEmail = $account->mail;
+            }
         }
-        if(isset($_POST['pass']) && !empty($_POST['pass']))
-            $edit['pass'] = $_POST['pass'];
+        if(isset($_POST['pass']) && !empty($_POST['pass']) &&
+            isset($_POST['newPass']) && !empty($_POST['newPass']))
+        {
+            require_once DRUPAL_ROOT . '/' . variable_get('password_inc', 'includes/password.inc');
+            if(user_check_password($_POST['pass'], $account))
+                $edit['pass'] = $_POST['newPass'];
+            else
+                $password_error = true;
+        }
 
         user_save($account, $edit);
 
@@ -420,33 +491,54 @@ function studysauce_save_user($account = null, &$edit = array())
                 }
             }
         }
+
+        print json_encode(array(
+            'password_error' => $password_error
+        ));
     }
 
     if(isset($_POST['picture'][0]))
     {
-        $file = file_load($_POST['picture'][0]['fid']);
-        $fileName = isset($_POST['picture'][0]['rename']) ? $_POST['picture'][0]['rename'] : $file->filename;
+        /*$fileName = isset($_POST['picture'][0]['rename']) ? $_POST['picture'][0]['rename'] : $file->filename;
         $location = 'public:///';
         $filePath = $location . $fileName;
         if ($file->uri !== $filePath) {
             file_prepare_directory($location, FILE_CREATE_DIRECTORY);
             file_move($file, $filePath);
-        }
+        }*/
+        $file = file_load($_POST['picture'][0]['fid']);
         $edit = array();
         $edit['picture'] = $file;
 
         user_save($account, $edit);
     }
 
+    // add user to partner role
+    $partnerQuery = new EntityFieldQuery();
+    $partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
+        ->propertyCondition('field_name', 'field_partners')
+        ->fieldCondition('field_email', 'value', $account->mail)
+        ->execute();
+    if(isset($partners['field_collection_item']) && !empty($partners['field_collection_item']) &&
+        !in_array('partner', $account->roles))
+    {
+        if ($role = user_role_load_by_name('partner'))
+        {
+            $account->roles[$role->rid] = 'partner';
+            $edit['roles'][$role->rid] = 'partner';
+        }
+    }
+
     // if parent selected jump down below, everything else assume student
     if(substr($account->mail, -strlen('@internal.example.org')) != '@internal.example.org')
-        if(isset($_POST['parent-student']) && $_POST['parent-student'] == 'student')
+        if(!in_array('parent', $account->roles) && !in_array('partner', $account->roles) &&
+            (!isset($edit['roles']) || (!in_array('parent', $edit['roles']) && !in_array('partner', $edit['roles']))))
         {
             studysauce_welcome_student($account);
         }
-        elseif(isset($_POST['parent-student']) && $_POST['parent-student'] == 'parent')
+        elseif(in_array('partner', $account->roles) || (isset($edit['roles']) && in_array('partner', $edit['roles'])))
         {
-
+            studysauce_welcome_partner($account);
         }
 
 }

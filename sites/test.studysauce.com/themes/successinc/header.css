@@ -105,11 +105,23 @@
     -moz-box-sizing: border-box;
 }
 
+#partner-upgrade-message
+{
+    margin:0 auto;
+    width:100%;
+    min-width:250px;
+    display:inline-block;
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    padding-left: 220px;
+}
+
 .header-wrapper .view-music-player
 {
     height: 1px;
     width: 1px;
-    overflow:hidden;
 }
 
 #partner-message span
@@ -219,6 +231,7 @@
         background-position:right -1798px;
     }
 
+    .page-dashboard #partner-upgrade-message,
     .page-dashboard #partner-message,
     .page-dashboard #welcome-message
     {

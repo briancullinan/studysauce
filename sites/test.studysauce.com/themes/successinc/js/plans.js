@@ -62,24 +62,46 @@ jQuery(document).ready(function () {
     };
 
     plans.on('change', '.sort-by input[type="radio"]', function (evt) {
-        var headings = {};
+        var headings = {},
+            that = jQuery(this);
         jQuery('#plan .head').each(function () {
             var head = jQuery(this);
             head.nextUntil('.head,p:last-of-type').each(function () {
                 var row = jQuery(this),
                     that = row.find('.field-name-field-class-name .read-only');
-                if(typeof headings[that.text()] == 'undefined')
-                    headings[that.text()] = row;
+                if(typeof headings[that.text().trim()] == 'undefined')
+                    headings[that.text().trim()] = row;
                 else
-                    headings[that.text()] = jQuery.merge(headings[that.text()], row);
-                that.text(head.text());
+                    headings[that.text().trim()] = jQuery.merge(headings[that.text().trim()], row);
+                that.text(head.text().trim());
             });
         });
         var rows = [];
-        for(var h in headings)
+        if(that.val() == 'class')
         {
-            var hidden = headings[h].filter('.row:not(.hide)').length == 0;
-            rows = jQuery.merge(rows, jQuery.merge(jQuery('<div class="head ' + (hidden ? 'hide' : '') + '">' + h + '</div>'), headings[h].detach()));
+            var keys = [];
+
+            for(var i = 0; i < window.classNames.length; i++)
+                if(typeof headings[window.classNames[i]] != 'undefined')
+                    keys[keys.length] = window.classNames[i];
+
+            for(var k in headings)
+                if(keys.indexOf(k) == -1)
+                    keys[keys.length] = k;
+
+            for(var j = 0; j < keys.length; j++)
+            {
+                var hidden = headings[keys[j]].filter('.row:not(.hide)').length == 0;
+                rows = jQuery.merge(rows, jQuery.merge(jQuery('<div class="head ' + (hidden ? 'hide' : '') + '">' + keys[j] + '</div>'), headings[keys[j]].detach()));
+            }
+        }
+        else
+        {
+            for(var h in headings)
+            {
+                var hidden = headings[h].filter('.row:not(.hide)').length == 0;
+                rows = jQuery.merge(rows, jQuery.merge(jQuery('<div class="head ' + (hidden ? 'hide' : '') + '">' + h + '</div>'), headings[h].detach()));
+            }
         }
         plans.find('.head, .row').replaceWith(rows);
     });
@@ -328,7 +350,6 @@ jQuery(document).ready(function () {
 
                 // All fiels from queue has been uploaded
                 uploader.bind('UploadComplete', function(up, files) {
-                    $('#plan-' + eid + '-plupload').find('.plup-list').sortable('refresh'); // Refresh sortable
                     $('#plan-' + eid + '-plupload').find('.plup-drag-info').show(); // Show info
                 });
 

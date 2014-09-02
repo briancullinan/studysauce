@@ -22,6 +22,7 @@ $email_base = 'https://www.studysauce.com/sites/studysauce.com/themes/successinc
         <?php print $message; ?>
     </p>
 
+    <?php if(!isset($link) || $link !== false): ?>
     <p style="font-family: 'Ubuntu',Helvetica Neue,Arial,sans-serif; font-size: 16px; color: #555555; ">
         <?php if (isset($link)): ?>
             <?php print $link; ?>
@@ -31,6 +32,7 @@ $email_base = 'https://www.studysauce.com/sites/studysauce.com/themes/successinc
                                       target="_blank">click here.</a>
         <?php endif; ?>
     </p>
+    <?php endif; ?>
 
     <p style="font-family: 'Ubuntu',Helvetica Neue,Arial,sans-serif; font-size: 16px; color: #555555; ">
         <br/><br/>

@@ -107,7 +107,7 @@ function _studysauce_get_metrics($account = null)
 
     $hours = _studysauce_get_incentives_hours($account);
     if(!isset($checkins) || !is_array($checkins) || !isset($checkouts) || !is_array($checkouts))
-        return array(array(), '', '0 hours', $hours);
+        return array(array(), '', '0 hours', '0 hours');
 
     $shortTimeIntervals = array(
         'years' => 'yr',
@@ -178,6 +178,10 @@ function _studysauce_get_metrics($account = null)
         $total .= ' hours';
     else
         $total .= ' hour';
+    if($hours <> 1)
+        $hours .= ' hours';
+    else
+        $hours .= ' hour';
 
     return array($times, $rowsOutput, $total, $hours);
 }

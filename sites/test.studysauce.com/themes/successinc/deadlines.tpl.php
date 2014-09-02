@@ -128,13 +128,16 @@ foreach ($entities as $eid => $reminder)
     if(!isset($reminder->field_due_date['und'][0]['value']))
         continue;
     $time = strtotime($reminder->field_due_date['und'][0]['value']);
-    if($headStr != date('j F', $time))
+    $newHeadStr = date('j F', $time) . ' <span>' . date('Y') . '</span>';
+    if($headStr != $newHeadStr)
     {
-        $headStr = date('j F', $time);
-        ?><div class="head <?php
-    print ($time < strtotime(date('Y/m/d')) - 86400 ? 'hide' : ''); ?>"><?php print $headStr; ?></div><?
+        $headStr = $newHeadStr;
+        ?><div class="head <?php print ($time < strtotime(date('Y/m/d')) - 86400 ? 'hide' : ''); ?>"><?php print $headStr; ?></div><?
     }
-    $reminders = array_map(function ($x) { return $x['value']; }, $reminder->field_reminder['und']);
+    if(isset($reminder->field_reminder['und']))
+        $reminders = array_map(function ($x) { return $x['value']; }, $reminder->field_reminder['und']);
+    else
+        $reminders = array();
     $classI = array_search($reminder->field_class_name['und'][0]['value'], array_values($classes));
     ?>
     <div class="row <?php
@@ -158,22 +161,22 @@ foreach ($entities as $eid => $reminder)
             </div>
         </div>
         <div class="field-type-text field-name-field-assignment field-widget-text-textfield form-wrapper">
-            <div class="read-only"><label>Assignment</label><?php print htmlspecialchars($reminder->field_assignment['und'][0]['value'], ENT_QUOTES); ?></div>
+            <label>Assignment</label>
+            <div class="read-only"><?php print htmlspecialchars($reminder->field_assignment['und'][0]['value'], ENT_QUOTES); ?></div>
             <div class="form-item form-type-textfield">
-                <label for="edit-field-reminders-und-1-field-assignment-und-0-value">Assignment </label>
                 <input class="text-full form-text jquery_placeholder-processed" placeholder="Paper, exam, project, etc."
                        type="text" name="dates-assignment" value="<?php print htmlspecialchars($reminder->field_assignment['und'][0]['value'], ENT_QUOTES); ?>" size="60" maxlength="255">
             </div>
         </div>
         <div class="field-type-list-integer field-name-field-reminder field-widget-options-buttons form-wrapper">
-            <div class="read-only"><label>Reminders</label>
+            <label>Reminders</label>
+            <div class="read-only">
                 <span class="<?php print (in_array(1209600, $reminders) ? 'checked' : 'unchecked'); ?>">2 wk</span>
                 <span class="<?php print (in_array(604800, $reminders) ? 'checked' : 'unchecked'); ?>">1 wk</span>
                 <span class="<?php print (in_array(345600, $reminders) ? 'checked' : 'unchecked'); ?>">4 days</span>
                 <span class="<?php print (in_array(172800, $reminders) ? 'checked' : 'unchecked'); ?>">2 days</span>
                 <span class="<?php print (in_array(86400, $reminders) ? 'checked' : 'unchecked'); ?>">1 day</span></div>
             <div class="form-item form-type-checkboxes">
-                <label>Reminders </label>
                 <div class="form-checkboxes">
                     <div class="form-item form-type-checkbox">
                         <input type="checkbox" id="dates-reminder-1209600-<?php print $eid; ?>"
@@ -210,9 +213,9 @@ foreach ($entities as $eid => $reminder)
         </div>
         <div class="field-type-datetime field-name-field-due-date field-widget-date-popup form-wrapper">
             <div class="form-item form-type-date-popup">
+                <label for="dates-due">Due date </label>
                 <div class="date-padding">
                     <div class="form-item form-type-textfield">
-                        <label for="dates-due">Due date </label>
                         <input class="date-clear form-text jquery_placeholder-processed"
                                placeholder="Enter date"
                                type="text"
@@ -224,9 +227,9 @@ foreach ($entities as $eid => $reminder)
         </div>
         <?php if($reminder->field_class_name['und'][0]['value'] != 'Nonacademic'): ?>
         <div class="field-type-number-integer field-name-field-percent field-widget-number form-wrapper">
-            <div class="read-only"><label>% of grade</label><?php print $reminder->field_percent['und'][0]['value']; ?>%</div>
+            <label>% of grade</label>
+            <div class="read-only"><?php print $reminder->field_percent['und'][0]['value']; ?>%</div>
             <div class="form-item form-type-textfield">
-                <label for="dates-percent">% of grade </label>
                 <input type="text" name="dates-percent" value="<?php print $reminder->field_percent['und'][0]['value']; ?>" size="12" maxlength="10" class="form-text">
             </div>
         </div>

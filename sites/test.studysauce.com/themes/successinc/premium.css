@@ -10,6 +10,29 @@
     font-weight: bold;
 }
 
+.page-dashboard #premium.bill_step_2_only .buy-plan .highlighted-link > a,
+.page-dashboard #premium.bill-my-parents-only .buy-plan .highlighted-link > a
+{
+    display:none;
+}
+
+.page-dashboard #premium.bill_step_2_only .buy-plan .bill-my-parents,
+.page-dashboard #premium.bill-my-parents-only .buy-plan .bill_step_2
+{
+    display:none;
+}
+
+.page-dashboard #premium.bill_step_2_only .bill_step_2
+{
+    display: block;
+}
+
+.page-dashboard #premium.bill_step_2_only .buy-plan,
+.page-dashboard #premium.bill-my-parents-only .buy-plan
+{
+    display:block;
+}
+
 .page-dashboard #premium .did-you-know h1
 {
     text-align: center;

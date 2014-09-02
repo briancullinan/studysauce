@@ -151,7 +151,7 @@ array_multisort($dates, SORT_NUMERIC, SORT_DESC, $accessed);
         }
 
         if (!count($accessed)):
-            ?><tr><td colspan="<?php print (count($adviserGroups) > 1 ? 5 : 4); ?>"><h3 style="text-align: center">Your student(s) have no data yet. Invite them from the "Invite students"
+            ?><tr><td class="empty" colspan="<?php print (count($adviserGroups) > 1 ? 5 : 4); ?>"><h3 style="text-align: center">Your student(s) have no data yet. Invite them from the "Invite students"
             tab to the left or encourage them to log in and use Study Sauce.</h3></td></tr><?php
         endif;
 

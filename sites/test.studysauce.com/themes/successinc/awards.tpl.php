@@ -1,8 +1,6 @@
 <?php
 global $user;
 $user = user_load($user->uid);
-if($user->field_parent_student['und'][0]['value'] == 'parent')
-    return;
 list($awards, $lastAward) = studysauce_get_awards();
 ?>
 <div id="new-award">

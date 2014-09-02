@@ -170,7 +170,6 @@ function studysauce_save_dates()
         $nodes = array_keys($nodes['node']);
         $nid = array_shift($nodes);
         $node = node_load($nid);
-        $node->revision = 1;
     }
     else
     {
@@ -180,7 +179,6 @@ function studysauce_save_dates()
         $node->language = LANGUAGE_NONE; // Or e.g. 'en' if locale is enabled
         $node->uid = $user->uid;
         $node->status = 1; //(1 or 0): published or not
-        $node->revision = 1;
         node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
         $node = node_submit($node); // Prepare node for saving
         node_save($node);
@@ -236,12 +234,12 @@ function studysauce_save_dates()
                 $entity->field_reminder_sent['und'] = array();
 
             if(!isset($date['eid']) || !isset($reminders[$date['eid']]))
-                $reminders[$entity->item_id] = $entity;
-
-            $entity->save(true);
+            {
+                $reminders['new' . count($reminders)] = $entity;
+            }
         }
 
-        $node->field_reminders['und'] = array_map(function ($x) {return array('value' => $x->item_id, 'entity' => $x);}, $reminders);
+        $node->field_reminders['und'] = array_map(function ($x) {return array('value' => $x->item_id, 'entity' => $x);}, array_values($reminders));
     }
 
     if(isset($_POST['remove']))

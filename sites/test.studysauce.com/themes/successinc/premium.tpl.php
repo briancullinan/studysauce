@@ -145,6 +145,41 @@ drupal_add_css(drupal_get_path('theme', 'successinc') .'/premium.css');
     </div>
 
 </div>
+
+<div class="buy-plan">
+    <div class="middle-wrapper">
+        <div class="bill-my-parents">
+            <h3>Send an email to have someone prepay for Study Sauce.  We will then alert you when your account has been activated.</h3>
+            <div class="form-item webform-component webform-component-textfield webform-component--student-first-name">
+                <label>Parent's first name</label>
+                <input type="text" name="invite-first" size="60" maxlength="128" class="form-text required"
+                       value="">
+            </div>
+            <div class="form-item webform-component webform-component-textfield webform-component--student-last-name">
+                <label>Parent's last name</label>
+                <input type="text" name="invite-last" size="60" maxlength="128" class="form-text required"
+                       value="">
+            </div>
+            <div class="form-item webform-component webform-component-email">
+                <label>Parent's email</label>
+                <input class="email form-text form-email required" type="email" name="invite-email" size="60"
+                       value="">
+            </div>
+            <div style="text-align: right;">
+                <a href="#bill-send" class="more">Send</a></div>
+            <a href="#" onclick="jQuery('#premium').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;"
+               class="fancy-close">&nbsp;</a>
+        </div>
+        <div class="bill_step_2">
+            <h2>Thanks!</h2>
+            <h3>We will let you know when your account has been activated.</h3>
+            <div style="text-align: right;">
+                <a href="#" onclick="jQuery('#premium').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;" class="more">Close</a></div>
+            <a href="#" onclick="jQuery('#premium').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;"
+               class="fancy-close">&nbsp;</a>
+        </div>
+    </div>
+</div>
 <?php /*
 <h2>Get better grades <span>&amp;</span> Unlock your potential</h2>
 <p class="highlighted-link"><a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout" class="more">Go Premium</a></p>
@@ -154,7 +189,7 @@ drupal_add_css(drupal_get_path('theme', 'successinc') .'/premium.css');
     <div class="did-you-know-container">
         <img width="165" src="/sites/test.studysauce.com/themes/successinc/did_you_know_620x310.png" style="float:left;">
         <h1>Your parents can sponsor you.</h1>
-        <div class="one highlighted-link"><a class="more-parents" href="#plan" onclick="jQuery('#plan').addClass('bill-my-parents-only');">Bill my parents</a></div>
+        <div class="one highlighted-link"><a class="more-parents" href="#premium" onclick="jQuery('#premium').addClass('bill-my-parents-only'); return false;">Bill my parents</a></div>
     </div>
 </div>
 <h2>Give it a shot, Study Sauce will help you...</h2>

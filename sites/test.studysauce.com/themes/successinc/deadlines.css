@@ -8,6 +8,11 @@
     clear:both;
 }
 
+.page-dashboard #deadlines .head span
+{
+    display:none;
+}
+
 .page-dashboard #deadlines .row
 {
     position: relative;
@@ -72,7 +77,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding: 5px 0 5px 0;
 }
 
 .page-dashboard #deadlines .edit .field-name-field-class-name .form-type-select
@@ -88,6 +92,7 @@
 .page-dashboard #deadlines .field-name-field-assignment
 {
     width: 25%;
+    padding:5px 0;
 }
 
 .page-dashboard #deadlines .row.edit .field-name-field-assignment
@@ -576,9 +581,14 @@
         margin: 0 10px -10px 10px;
     }
 
-    .page-dashboard #deadlines .read-only label
+    .page-dashboard #deadlines .form-wrapper > label
     {
         display:none !important;
+    }
+
+    .page-dashboard #deadlines .edit .form-wrapper > label
+    {
+        display:block !important;
     }
 
     .page-dashboard #deadlines label:not(.option)
@@ -596,6 +606,7 @@
         white-space: nowrap;
         overflow:hidden;
         text-overflow: ellipsis;
+        cursor:pointer;
     }
 
     .page-dashboard #deadlines .row.edit .field-name-field-class-name
@@ -607,7 +618,7 @@
     .page-dashboard #deadlines .field-name-field-assignment
     {
         width:50%;
-        padding:0 45px 0 0;
+        padding:5px 45px 5px 0;
         color:#0099be;
         cursor:pointer;
         position:relative;

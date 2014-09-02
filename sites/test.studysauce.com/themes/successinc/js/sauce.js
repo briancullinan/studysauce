@@ -66,12 +66,12 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
             }
         });
 
-        jQuery('#profile, #plan').on('click', 'a[href="#bill-send"]', function (evt) {
+        jQuery('#profile, #plan, #premium').on('click', 'a[href="#bill-send"]', function (evt) {
             evt.preventDefault();
             var billing = jQuery(this).parents('.bill-my-parents'),
                 tab = jQuery(this).parents('.panel-pane');
 
-            $.ajax({
+            jQuery.ajax({
                 url: 'billing/send',
                 type: 'POST',
                 dataType: 'json',

@@ -1,6 +1,6 @@
 <?php
 global $user;
-if(isset($user->field_parent_student['und'][0]['value']) && $user->field_parent_student['und'][0]['value'] == 'parent'): ?>
+if(in_array('parent', $user->roles)): ?>
     <h1>Choose your student's plan</h1>
 <?php else: ?>
     <h1>Choose your plan</h1>

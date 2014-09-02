@@ -4,6 +4,7 @@
 function studysauce_get_awards()
 {
     global $user;
+    $account = user_load($user->uid);
 
     $newAwards = array();
     $awards = array(
@@ -141,7 +142,7 @@ function studysauce_get_awards()
     $query = new EntityFieldQuery();
     $entities = $query->entityCondition('entity_type', 'node')
         ->propertyCondition('type', 'schedule')
-        ->propertyCondition('title', isset($user->mail) ? $user->mail : '')
+        ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
         ->propertyCondition('status', 1)
         ->range(0,1)
         ->execute();
@@ -366,7 +367,7 @@ function studysauce_get_awards()
 
     if(isset($conn[0]))
     {
-        $awards['setup-linked'] = date('F jS, Y', max($conn[0]->created, $user->created));
+        $awards['setup-linked'] = date('F jS, Y', max($conn[0]->created, $account->created));
     }
 
     if($parent)
@@ -377,9 +378,9 @@ function studysauce_get_awards()
     // loop through awards and figure out which ones are new
     $userBadges = array();
 
-    if(isset($user->field_badges[LANGUAGE_NONE][0]['value']))
+    if(isset($account->field_badges[LANGUAGE_NONE][0]['value']))
     {
-        foreach($user->field_badges[LANGUAGE_NONE] as $i => $award)
+        foreach($account->field_badges[LANGUAGE_NONE] as $i => $award)
         {
             $changes['field_badges'][LANGUAGE_NONE][]['value'] = $award['value'];
             $userBadges[] = $award['value'];
@@ -390,7 +391,7 @@ function studysauce_get_awards()
     $quizSubmissions = array();
     $quiz = db_select('webform_submissions', 's')
         ->fields('s', array('sid', 'submitted'))
-        ->condition('uid', $user->uid, '=')
+        ->condition('uid', $account->uid, '=')
         ->condition('nid', 17, '=')
         ->execute();
     while(($sub = $quiz->fetchAssoc()) && isset($sub['sid']))
@@ -431,7 +432,7 @@ function studysauce_get_awards()
     }
 
     if(count($newAwards))
-        user_save($user, $changes);
+        user_save($account, $changes);
 
     return array($awards, end($newAwards));
 }

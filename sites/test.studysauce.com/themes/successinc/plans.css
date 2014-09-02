@@ -54,6 +54,7 @@
 {
     border:none;
     background-color: #eeeeee;
+    color: #555;
 }
 
 .page-dashboard #plan .fc-title
@@ -62,6 +63,14 @@
     overflow:hidden;
     text-overflow: ellipsis;
     display: block;
+    padding-right:60px;
+}
+
+.page-dashboard #plan .event-type-d .fc-title,
+.page-dashboard #plan .event-type-h .fc-title,
+.page-dashboard #plan .event-type-p .fc-title
+{
+    padding-right:80px;
 }
 
 .page-dashboard #plan .fc-title h4
@@ -71,8 +80,8 @@
     font-size: 14px;
     color: #FFFFFF;
     width: auto;
-    display: inline-block;
-    float:right;
+    position: absolute;
+    right:0;
 }
 
 .page-dashboard #plan .fc-agenda-axis
@@ -713,9 +722,27 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
     background: #000000;
 }
 
+.page-dashboard #plan .event-type-d.fc-event
+{
+    border: 3px solid #555555;
+}
+
 .page-dashboard #plan .cidf .class
 {
     background: #555555;
+}
+
+.page-dashboard #plan .class0.fc-event,
+.page-dashboard #plan .class1.fc-event,
+.page-dashboard #plan .class2.fc-event,
+.page-dashboard #plan .class3.fc-event,
+.page-dashboard #plan .class4.fc-event,
+.page-dashboard #plan .class5.fc-event,
+.page-dashboard #plan .class6.fc-event,
+.page-dashboard #plan .class7.fc-event,
+.page-dashboard #plan .class8.fc-event
+{
+    color: #FFF;
 }
 
 .page-dashboard #plan .class0.fc-event,

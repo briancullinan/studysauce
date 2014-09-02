@@ -44,25 +44,29 @@ global $user;
 </div>
 <?php
 $lastOrder = _studysauce_orders_by_uid($user->uid);
+$product = $lastOrder != null && is_array($lastOrder->products) ? array_pop($lastOrder->products) : null;
+$attributes = $product != null && isset($product->data['attributes'])
+    ? $product->data['attributes']
+    : array();
+$yearly = !empty($attributes) && ($attributes = array_pop($attributes)) == 'Yearly' || ($attributes = array_pop($attributes)) == 'Yearly';
 $groups = og_get_groups_by_user();
-$advised = (in_array('adviser', $user->roles) || in_array('master adviser', $user->roles)) ||
-    isset($groups['node']);
+$advised = (in_array('adviser', $user->roles) || in_array('master adviser', $user->roles)) || isset($groups['node']);
 ?>
 <div class="form-item form-type-radios field-name-account-type">
     <label>Account type:</label>
     <div class="form-checkboxes">
         <input readonly="readonly" type="radio" value="free" name="account-type" id="account-type-free" <?php print(!$lastOrder && !$advised ? 'checked="checked"' : ''); ?> />
         <label for="account-type-free">Free</label>
-        <input readonly="readonly" type="radio" value="monthly" name="account-type" id="account-type-monthly" <?php print(isset($lastOrder) && is_object($lastOrder) && floatval($lastOrder->order_total) == floatval(10) ? 'checked="checked"' : ''); ?> />
+        <input readonly="readonly" type="radio" value="monthly" name="account-type" id="account-type-monthly" <?php print(isset($lastOrder) && !$yearly ? 'checked="checked"' : ''); ?> />
         <label for="account-type-monthly">Monthly</label>
-        <input readonly="readonly" type="radio" value="yearly" name="account-type" id="account-type-yearly" <?php print($advised || (isset($lastOrder) && is_object($lastOrder) && floatval($lastOrder->order_total)) > floatval(10) ? 'checked="checked"' : ''); ?> />
+        <input readonly="readonly" type="radio" value="yearly" name="account-type" id="account-type-yearly" <?php print($advised || (isset($lastOrder) && $yearly) ? 'checked="checked"' : ''); ?> />
         <label for="account-type-yearly">Annual</label>
     </div>
 </div>
 <div class="form-item form-type-radios field-name-account-renewal">
     <label>Next renewal:</label>
     <label><?php print ($lastOrder
-            ? (floatval($lastOrder->order_total) == 9.99000
+            ? (!$yearly
                 ? (date('m', intval($lastOrder->created)) == 12
                     ? ((date('Y', intval($lastOrder->created)) + 1) . '-1-' . date('-d', intval($lastOrder->created)))
                     : (date('Y-', intval($lastOrder->created)) . (date('m', intval($lastOrder->created)) + 1) . '-' . date('d', intval($lastOrder->created))))
@@ -71,8 +75,6 @@ $advised = (in_array('adviser', $user->roles) || in_array('master adviser', $use
 </div>
 <br />
 <?php
-$lastOrder = _studysauce_orders_by_uid($user->uid);
-$groups = og_get_groups_by_user();
 if(!isset($groups['node']) && !$lastOrder): ?>
 <div class="highlighted-link form-actions form-wrapper"><a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout" class="more">Upgrade</a></div>
 <?php endif; ?>

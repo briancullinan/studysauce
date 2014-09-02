@@ -108,7 +108,7 @@ $exportMetricsTimes = $times;
     </div>
     <div id="timeline">
         <h3>Study hours by week</h3>
-        <h4 style="margin:5px 0; color:#555;"><?php print ($hours > 0 ? ('Goal: ' . $hours . ' hours') : '&nbsp;'); ?></h4>
+        <h4 style="margin:5px 0; color:#555;"><?php print ($hours > 0 ? ('Goal: ' . $hours) : '&nbsp;'); ?></h4>
     </div>
     <div id="pie-chart">
         <h3>Study hours by class</h3>

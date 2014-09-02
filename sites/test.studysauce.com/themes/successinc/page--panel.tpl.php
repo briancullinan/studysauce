@@ -146,24 +146,6 @@
 
                                 <?php print render($page['help']); ?>
 
-                                <?php if ((arg(0) == 'node' && arg(1) == '89') ||
-                                    (arg(0) == 'node' && arg(1) == '13') ||
-                                    (arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'schedule') ||
-                                    (arg(0) == 'user' && arg(1) == 'register') ||
-                                    (arg(0) == 'cart' && arg(1) == 'checkout')
-                                ): ?>
-                                    <h1 class="page-title" style="margin:0;margin:0 auto;">
-                                        <ul class="guide">
-                                            <li><span><span>1</span>Basic information</span></li>
-                                            <li><span><span>2</span>Select plan</span></li>
-                                            <li><span><span>3</span>Payment</span></li>
-                                            <li><span><span>4</span>Create schedule</span></li>
-                                        </ul>
-                                    </h1>
-                                <?php elseif ($title && $title != 'Landing page'): ?>
-                                    <h1 class="page-title"><?php print $title; ?></h1>
-                                <?php endif; ?>
-
                             </div>
                             <!-- EOF: #highlighted -->
                         </div>

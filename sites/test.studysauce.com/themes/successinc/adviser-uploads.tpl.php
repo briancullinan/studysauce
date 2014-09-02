@@ -186,6 +186,14 @@ if(!empty($dates))
                                     <?php if(isset($result[$name][$strategy]['uploads'][0]['play'])): ?>
                                     <video width="184" height="184" preload="auto" controls="controls" poster="<?php print $result[$name][$strategy]['uploads'][0]['uri']; ?>">
                                         <source src="<?php print $result[$name][$strategy]['uploads'][0]['play']; ?>" type="video/webm" />
+                                        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="184" height="184" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0">
+                                            <param name="movie" value="<?php print $result[$name][$strategy]['uploads'][0]['play']; ?>" />
+                                            <param name="autoplay" value="false" />
+                                            <param name="wmode" value="transparent" />
+                                            <object class="video-object" type="application/x-shockwave-flash" data="<?php print $result[$name][$strategy]['uploads'][0]['play']; ?>" width="184" height="184">
+                                                <?php print t('No video? Get the !plugin', array('!plugin' => l(t('Adobe Flash plugin'), url('http://get.adobe.com/flashplayer/')))); ?>
+                                            </object>
+                                        </object>
                                     </video>
                                     <?php endif;
                                     if(!isset($result[$name][$strategy]['uploads'][0]['play'])): ?>

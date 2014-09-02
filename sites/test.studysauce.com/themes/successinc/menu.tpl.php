@@ -2,11 +2,7 @@
 global $user;
 $user = user_load($user->uid);
 // find people we are accountable to by searching partners field
-$partnerQuery = new EntityFieldQuery();
-$partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
-    ->propertyCondition('field_name', 'field_partners')
-    ->fieldCondition('field_email', 'value', $user->mail)
-    ->execute();
+
 $groups = og_get_groups_by_user();
 $lastOrder = _studysauce_orders_by_uid($user->uid);
 
@@ -19,7 +15,7 @@ if(in_array('adviser', $user->roles) || in_array('master adviser', $user->roles)
             <li><a href="#account">Account information</a></li>
         </ul>
     </ul>
-<?php elseif(isset($partners['field_collection_item']) && !empty($partners['field_collection_item'])): ?>
+<?php elseif(in_array('partner', $user->roles) || in_array('parent', $user->roles)): ?>
     <ul>
         <li><a href="#userlist"><span>&nbsp;</span>Home</a></li>
         <li><a href="#settings"><span>&nbsp;</span>Settings</a>

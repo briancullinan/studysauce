@@ -15,6 +15,9 @@ Date.prototype.getFirstDayOfWeek = function () {
 
 jQuery(document).ready(function () {
 
+    var timeline = jQuery('#timeline'),
+        piechart = jQuery('#pie-chart');
+
     var m = [30, 0, 50, 0],
         w = 475 - m[1] - m[3],
         w2 = 300 - m[1] - m[3],
@@ -50,20 +53,20 @@ jQuery(document).ready(function () {
         if(resizeTimeout != null)
             clearInterval(resizeTimeout);
         resizeTimeout = setInterval(function () {
-            if (jQuery('#timeline').width() != jQuery('#timeline svg').width())
+            if (timeline.width() != timeline.find('svg').width())
             {
                 //if (jQuery(window).width() < 963) {
-                w = jQuery('#timeline').width() - m[1] - m[3];
-                w2 = jQuery('#pie-chart').width() - m[1] - m[3];
-                h = (jQuery('#timeline').width() * 12 / 16) - m[0] - m[2];
-                h2 = (jQuery('#pie-chart').width() * 12 / 16);
+                w = timeline.width() - m[1] - m[3];
+                w2 = piechart.width() - m[1] - m[3];
+                h = (timeline.width() * 12 / 16) - m[0] - m[2];
+                h2 = (piechart.width() * 12 / 16);
                 d3.select('#timeline svg')
                     .attr("width", w + m[1] + m[3])
                     .attr("height", h + m[0] + m[2]);
                 d3.select('#pie-chart svg')
                     .attr("width", w2 + m[1] + m[3])
                     .attr("height", h2);
-                setTimeout(redraw, 1);
+                setTimeout(redraw, 100);
             }
         }, 100);
     });
@@ -71,7 +74,7 @@ jQuery(document).ready(function () {
 
     jQuery.fn.updateMetrics = function (newHistory) {
         updateHistory(newHistory);
-        if (jQuery('#timeline').width() != jQuery('#timeline svg').width())
+        if (timeline.width() != timeline.find('svg').width())
             jQuery(window).trigger('resize');
         else
             setTimeout(redraw, 100);
@@ -83,10 +86,10 @@ jQuery(document).ready(function () {
 
     if (typeof window.initialHistory != 'undefined') {
         updateHistory(window.initialHistory);
-        if (jQuery('#timeline').width() != jQuery('#timeline svg').width())
+        if (timeline.width() != timeline.find('svg').width())
             jQuery(window).trigger('resize');
         else
-            setTimeout(redraw, 1);
+            setTimeout(redraw, 200);
     }
 
     function updateHistory(newHistory) {

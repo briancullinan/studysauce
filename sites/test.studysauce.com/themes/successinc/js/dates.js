@@ -2,7 +2,7 @@
 jQuery(document).ready(function($) {
 
     var deadlines = $('#deadlines');
-    deadlines.on('click', '.row .field-name-field-assignment .read-only', function () {
+    deadlines.on('click', '.row:not(.edit) > div:not(.field-name-field-reminder,.field-name-field.completed)', function (evt) {
         jQuery(this).parents('.row').toggleClass('selected');
     });
 
@@ -79,26 +79,63 @@ jQuery(document).ready(function($) {
     });
 
     deadlines.on('change', '.sort-by input[type="radio"]', function (evt) {
-        var headings = {};
+        var headings = {},
+            that = jQuery(this);
         jQuery('#deadlines .head').each(function () {
             var head = jQuery(this);
             head.nextUntil('*:not(.row)').each(function () {
                 var row = jQuery(this),
                     that = row.find('.field-name-field-class-name .read-only');
-                if(typeof headings[that.text().substring(1)] == 'undefined')
-                    headings[that.text().substring(1)] = row;
+                if(typeof headings[that.text().trim()] == 'undefined')
+                    headings[that.text().trim()] = row;
                 else
-                    headings[that.text().substring(1)] = jQuery.merge(headings[that.text().substring(1)], row);
-                that.html(that.html().replace(that.text().substring(1), head.text()));
+                    headings[that.text().trim()] = jQuery.merge(headings[that.text().trim()], row);
+                that.html(that.html().replace(that.text().trim(), head.text().trim()));
             });
         });
         var rows = [];
-        for(var h in headings)
+        // sort headings by class name
+        if(that.val() == 'class')
         {
-            var hidden = headings[h].filter('.row:not(.hide)').length == 0;
-            rows = jQuery.merge(rows, jQuery.merge(jQuery('<div class="head ' + (hidden ? 'hide' : '') + '">' + h + '</div>'), headings[h].detach()));
+            var keys = [];
+
+            for(var i = 0; i < window.classNames.length; i++)
+                if(typeof headings[window.classNames[i]] != 'undefined')
+                    keys[keys.length] = window.classNames[i];
+
+            for(var k in headings)
+                if(keys.indexOf(k) == -1)
+                    keys[keys.length] = k;
+
+            for(var j = 0; j < keys.length; j++)
+            {
+                var hidden = headings[keys[j]].filter('.row:not(.hide)').length == 0;
+                rows = jQuery.merge(rows, jQuery.merge(jQuery('<div class="head ' + (hidden ? 'hide' : '') + '">' + keys[j] + '</div>'), headings[keys[j]].detach()));
+            }
+        }
+        else
+        {
+            var keys = [];
+            for(var h in headings)
+                keys[keys.length] = Date.parse(h);
+
+            keys.sort();
+            var monthNames = [ "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December" ];
+
+            for(var j = 0; j < keys.length; j++)
+            {
+                var d = new Date(keys[j]),
+                    h = d.getDate() + ' ' + monthNames[d.getMonth()] + ' ' + d.getFullYear();
+                var hidden = headings[h].filter('.row:not(.hide)').length == 0;
+                rows = jQuery.merge(rows, jQuery.merge(jQuery('<div class="head ' + (hidden ? 'hide' : '') + '">' + d.getDate() + ' ' + monthNames[d.getMonth()] + ' <span>' + d.getFullYear() + '</span></div>'), headings[h].detach()));
+            }
         }
         deadlines.find('.head, .row').not('#new-dates-row').not(deadlines.find('#new-dates-row').prevUntil(':not(.row)')).replaceWith(rows);
+        // reassign first row
+        deadlines.find('.first').removeClass('first');
+        deadlines.find('.row:not(.hide,#new-dates-row)').first().addClass('first');
+        deadlines.find('.row.hide').first().addClass('first');
     });
 
     /*

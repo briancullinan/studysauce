@@ -11,7 +11,7 @@ jQuery(document).ready(function($) {
         jQuery(this).each(function () {
             var row = $(this).closest('.row');
             if(row.find('.field-name-field-class-name input').val().trim() == '' &&
-                row.find('.field-name-field-day-of-the-week .form-type-checkboxes .form-type-checkbox input:checked').length == 0 &&
+                row.find('.field-name-field-day-of-the-week .form-type-checkboxes .form-type-checkbox input:not([value="weekly"]):checked').length == 0 &&
                 row.find('.field-name-field-time input[name="schedule-value-date"]').val().trim() == '' &&
                 row.find('.field-name-field-time input[name="schedule-value2-date"]').val().trim() == '')
                 row.removeClass('invalid').addClass('valid blank');
@@ -42,7 +42,7 @@ jQuery(document).ready(function($) {
 
             row.find('input[name="schedule-value-time"], input[name="schedule-value2-time"]')
                 .timeEntry({
-                               defaultTime: new Date(0, 0, 0, (new Date()).getHours(), 0, 0),
+                               defaultTime: new Date(0, 0, 0, 6, 0, 0),
                                ampmNames: ['am', 'pm'],
                                fromTo: false,
                                show24Hours: false,
@@ -50,22 +50,36 @@ jQuery(document).ready(function($) {
                                spinnerImage: '',
                                timeSteps: [1,1,"1"]
                            });
-            row.find('input[name="schedule-value-time"], input[name="schedule-value2-time"]').keypress(function (evt) {
+            row.find('input[name="schedule-value-time"], input[name="schedule-value2-time"]').keypress(function (event) {
+                var that = jQuery(this),
+                    other = that.parents('.row').find('input[name="schedule-value-time"]').timeEntry('getTime').getTime();
                 var chr = String.fromCharCode(event.charCode === undefined ? event.keyCode : event.charCode);
                 if (chr < ' ') {
                     return true;
                 }
-                var ampmSet = jQuery(this).data('ampmSet') || false;
+                var ampmSet = that.data('ampmSet') || false;
                 if(chr.toLowerCase() == 'a' || chr.toLowerCase() == 'p')
-                    jQuery(this).data('ampmSet', true);
+                    that.data('ampmSet', true);
                 else if (chr >= '0' && chr <= '9' && !ampmSet)
                 {
-                    var time = jQuery(this).timeEntry('getTime');
+                    var time = that.timeEntry('getTime');
                     var hours = time.getHours();
                     if(hours < 8)
-                        jQuery(this).timeEntry('setTime', new Date(0, 0, 0, hours + 12, time.getMinutes(), 0));
-                    else if(hours >= 20)
-                        jQuery(this).timeEntry('setTime', new Date(0, 0, 0, hours - 12, time.getMinutes(), 0));
+                        that.timeEntry('setTime', new Date(0, 0, 0, hours + 12, time.getMinutes(), 0));
+                    else if(hours >= 20 && (that.is('[name="schedule-value-time"]') ||
+                        (new Date(0, 0, 0, hours - 12, time.getMinutes(), 0)).getTime() > other))
+                        that.timeEntry('setTime', new Date(0, 0, 0, hours - 12, time.getMinutes(), 0));
+
+                    // check the length in between to see if its longer than 12 hours
+                    /*if(that.is('[name="schedule-value2-time"]') &&
+                        that.timeEntry('getTime').getTime() -  > 3600*12 ||
+                        that.timeEntry('getTime').getTime() - that.parents('.row').find('input[name="schedule-value-time"]').timeEntry('getTime').getTime() < 0)
+                    {
+                        //if(that.timeEntry('getTime').getTime() >= 12)
+                        //    that.timeEntry('setTime', new Date(0, 0, 0, hours - 12, time.getMinutes(), 0));
+                        if(that.timeEntry('getTime').getTime() < 12)
+                            that.timeEntry('setTime', new Date(0, 0, 0, hours + 12, time.getMinutes(), 0));
+                    }*/
                 }
             });
 
@@ -137,6 +151,10 @@ jQuery(document).ready(function($) {
 
     };
 
+    // set default value for university name
+    if(schedule.find('.field-name-field-university input').val().trim() != '')
+        schedule.find('.field-name-field-university input').prop('defaultValue', schedule.find('.field-name-field-university input').val().trim());
+
     schedule.on('click', 'a[href="#edit-class"]', function (evt) {
         evt.preventDefault();
         schedule.removeClass('edit-class-only edit-other-only').addClass('edit-class-only');
@@ -154,7 +172,6 @@ jQuery(document).ready(function($) {
     function updateTabs(data, row)
     {
         // update calendar events
-
         jQuery('#calendar').updatePlan(data.events);
 
         // reset edit mode
@@ -191,18 +208,10 @@ jQuery(document).ready(function($) {
         if (typeof data.lastSDS != 'undefined')
             jQuery('#sds-messages .' + data.lastSDS).addClass('show');
 
-        // update metrics key
-        if (data.times.length != 0)
+        window.classNames = [];
+        for(var eid in data.classes)
         {
-            window.classNames = [];
-            var mc = 0;
-            jQuery('#metrics ol li').remove();
-            for(var eid in data.classes)
-            {
-                window.classNames[window.classNames.length] = data.classes[eid];
-                jQuery('#metrics ol').append('<li><span class="class' + mc + '">&nbsp;</span>' + data.classes[eid] + '</li>');
-                mc++;
-            }
+            window.classNames[window.classNames.length] = data.classes[eid];
         }
 
         // update metrics
@@ -210,12 +219,34 @@ jQuery(document).ready(function($) {
         jQuery('#checkins-list').append(data.rows);
         if(typeof $.fn.updateMetrics != 'undefined')
         jQuery('#metrics').updateMetrics(data.times);
-        if (data.times.length == 0)
+        if (data.empty)
+        {
             jQuery('#metrics').addClass('empty');
+
+            // update metrics classes
+            var mc = 0;
+            jQuery('#metrics ol li').remove();
+            for(var eid in data.metricsClasses)
+            {
+                jQuery('#metrics ol').append('<li><span class="class' + mc + '">&nbsp;</span>' + data.metricsClasses[eid] + '</li>');
+                mc++;
+            }
+        }
         else
+        {
             jQuery('#metrics').removeClass('empty');
-        jQuery('#study-total').text(data.total);
-        jQuery('#timeline > h4').html(data.hours > 0 ? ('Goal: ' + data.hours + ' hours') : '&nbsp;');
+
+            // update metrics key
+            var mc = 0;
+            jQuery('#metrics ol li').remove();
+            for(var eid in data.classes)
+            {
+                jQuery('#metrics ol').append('<li><span class="class' + mc + '">&nbsp;</span>' + data.metricsClasses[eid] + '</li>');
+                mc++;
+            }
+        }
+        jQuery('#study-total').text(data.empty ? data.total : '5.9 hours');
+        jQuery('#timeline > h4').html('Goal: ' + (data.hours > 0 ? data.hours : (data.empty ? '20 hours' : '&nbsp;')));
 
         // update checkin buttons
         jQuery('#checkin .classes a').remove();

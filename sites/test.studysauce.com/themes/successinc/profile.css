@@ -14,11 +14,6 @@
     display:none;
 }
 
-.page-dashboard #profile .class-profile > h3:last-child
-{
-    display: none;
-}
-
 .page-dashboard #profile .bill_step_2
 {
     display:none;
@@ -50,6 +45,11 @@
     right:0;
     background: url(images/profile_background.jpg) no-repeat 50% 50% #FFFFFF;
     background-size: cover;
+}
+
+.page-dashboard #profile .class-profile > h3:last-child
+{
+    display: none;
 }
 
 .page-path-customization2 #page
@@ -545,7 +545,6 @@
         z-index: 1;
         background: url('images/menu_icons_128.png') no-repeat 50% -2854px transparent;
         font-size: 14px;
-        width: 50px;
         text-align: center;
     }
 

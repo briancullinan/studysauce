@@ -134,7 +134,6 @@ jQuery(document).ready(function($) {
 
     // All fiels from queue has been uploaded
     uploader.bind('UploadComplete', function(up, files) {
-        partnerUpload.find('.plup-list').sortable('refresh'); // Refresh sortable
         partnerUpload.find('.plup-drag-info').show(); // Show info
     });
 

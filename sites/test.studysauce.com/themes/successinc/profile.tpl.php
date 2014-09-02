@@ -385,18 +385,18 @@ if ($lastOrder || !empty($groups['node'])):
 
                     <div
                         class="form-item webform-component webform-component-textfield webform-component--student-first-name">
-                        <label>First name</label>
+                        <label>Parent's first name</label>
                         <input type="text" name="invite-first" size="60" maxlength="128" class="form-text required"
                                value="">
                     </div>
                     <div
                         class="form-item webform-component webform-component-textfield webform-component--student-last-name">
-                        <label>Last name</label>
+                        <label>Parent's last name</label>
                         <input type="text" name="invite-last" size="60" maxlength="128" class="form-text required"
                                value="">
                     </div>
                     <div class="form-item webform-component webform-component-email">
-                        <label>Friend's email</label>
+                        <label>Parent's email</label>
                         <input class="email form-text form-email required" type="email" name="invite-email" size="60"
                                value="">
                     </div>

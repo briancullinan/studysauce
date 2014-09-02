@@ -33,6 +33,42 @@ jQuery(document).ready(function() {
 
     var account = jQuery('#account');
 
+    var accountFunc = function () {
+        var valid = true,
+            email = account.find('.form-item-mail input').prop('defaultValue');
+
+        if(account.find('.form-item-mail input').val().trim() == '' ||
+            account.find('.field-name-field-first-name input').val() == '' ||
+            account.find('.field-name-field-last-name input').val() == '' ||
+            (account.find('.form-item-mail input').val().trim() != email &&
+                account.find('.form-item-current-pass input').val().trim() == '') ||
+            (account.find('.form-item-pass input').val().trim() != '' &&
+                account.find('.form-item-current-pass input').val().trim() == ''))
+            valid = false;
+
+        if(!valid)
+            account.removeClass('valid').addClass('invalid');
+        else
+            account.removeClass('invalid').addClass('valid');
+    };
+
+    // set default value for email
+    if((/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}\b/i).test(account.find('.form-item-mail input').val()))
+        account.addClass('invalid').find('.form-item-mail input').prop('defaultValue', account.find('.form-item-mail input').val().trim());
+
+    account.on('change', '.field-name-field-first-name input, .field-name-field-last-name input, .form-item-mail input, ' +
+                         '.form-item-current-pass input, .form-item-pass input', function () {
+        accountFunc();
+    });
+    account.on('keyup', '.field-name-field-first-name input, .field-name-field-last-name input, .form-item-mail input, ' +
+        '.form-item-current-pass input, .form-item-pass input', function () {
+        accountFunc();
+    });
+    account.on('keydown', '.field-name-field-first-name input, .field-name-field-last-name input, .form-item-mail input, ' +
+        '.form-item-current-pass input, .form-item-pass input', function () {
+        accountFunc();
+    });
+
     account.find('.field-name-account-type input').each(function () {
         jQuery(this).data('origState', jQuery(this).prop('checked'));
     });
@@ -87,11 +123,11 @@ jQuery(document).ready(function() {
             url: jQuery('#account-upload-path').val(),
             urlstream_upload: false
         });
+        uploader.init();
         jQuery('#account-plupload-select').click(function(e) {
             uploader.start();
             e.preventDefault();
         });
-        uploader.init();
 
         uploader.bind('FilesAdded', function(up, files) {
             accountUpload.find('.plup-drag-info').hide(); // Hide info
@@ -161,12 +197,32 @@ jQuery(document).ready(function() {
             new_element.trigger('formUpdated');
 
             // trigger save
-            account.find('a[href="#save-account"]').first().trigger('click');
+            account.removeClass('invalid').addClass('valid');
+            var inputs = account.find('input[name^="account-plupload"]'),
+                uploads = [];
+
+            jQuery.each(inputs, function () {
+                var matches = (/\[([0-9]+)\]\[([a-z]+)\]/ig).exec(jQuery(this).attr('name'));
+                if(typeof uploads[parseInt(matches[1])] == 'undefined')
+                    uploads[parseInt(matches[1])] = {};
+                uploads[parseInt(matches[1])][matches[2]] = jQuery(this).val();
+            });
+            jQuery.ajax({
+                url:'/user/save',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    picture: uploads
+                },
+                success: function (data) {
+                    account.removeClass('valid').addClass('invalid');
+                }
+            })
+
         });
 
         // All fiels from queue has been uploaded
         uploader.bind('UploadComplete', function(up, files) {
-            accountUpload.find('.plup-list').sortable('refresh'); // Refresh sortable
             accountUpload.find('.plup-drag-info').show(); // Show info
         });
     }
@@ -189,6 +245,9 @@ jQuery(document).ready(function() {
     account.on('click', 'a[href="#save-account"]', function (evt) {
         evt.preventDefault();
 
+        if(account.is('.invalid'))
+            return;
+
         var inputs = account.find('input[name^="account-plupload"]'),
             uploads = [];
 
@@ -199,6 +258,7 @@ jQuery(document).ready(function() {
             uploads[parseInt(matches[1])][matches[2]] = jQuery(this).val();
         });
 
+        account.find('.form-item-current-pass').removeClass('passwordError');
         jQuery.ajax({
             url:'/user/save',
             type: 'POST',
@@ -212,8 +272,16 @@ jQuery(document).ready(function() {
                 picture: uploads
             },
             success: function (data) {
+                if(data.password_error)
+                {
+                    account.find('.form-item-current-pass').addClass('passwordError');
+                }
+                account.find('.form-item-current-pass input').val('');
+                account.find('.form-item-pass input').val('');
+                account.removeClass('valid').addClass('invalid');
             }
         })
     });
+
 
 });

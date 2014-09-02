@@ -1923,6 +1923,10 @@ ul.company-info li.last {
     text-align: right;
 }
 
+.landing-home .buy-plan .bill_step_2,
+.landing-home .buy-plan .bill-my-parents,
+.page-dashboard #premium .buy-plan .bill_step_2,
+.page-dashboard #premium .buy-plan .bill-my-parents,
 .page-dashboard #plan .buy-plan .highlighted-link,
 .page-dashboard #profile .buy-plan .highlighted-link,
 .page-dashboard .group-achievement > div,
@@ -2003,13 +2007,42 @@ ul.company-info li.last {
     width:100%;
 }
 
+.landing-home .buy-plan .middle-wrapper
+{
+    position:fixed;
+    z-index: 50;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.page-dashboard #metrics #metrics-empty .middle-wrapper,
+.page-dashboard #premium .buy-plan .middle-wrapper,
 .page-dashboard #schedule .building-schedule .middle-wrapper,
 .page-dashboard #profile .building-schedule .middle-wrapper
 {
     position:fixed;
-    margin-left:110px;
+    padding-left:220px;
+    z-index: 50;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
+@media all and (max-width: 759px)
+{
+    .page-dashboard #metrics #metrics-empty .middle-wrapper,
+    .landing-home .buy-plan .middle-wrapper,
+    .page-dashboard #premium .buy-plan .middle-wrapper,
+    .page-dashboard #schedule .building-schedule .middle-wrapper,
+    .page-dashboard #profile .building-schedule .middle-wrapper
+    {
+        padding-left: 0;
+    }
+}
+
+.landing-home .buy-plan .bill_step_2,
+.landing-home .buy-plan .bill-my-parents,
+.page-dashboard #premium .buy-plan .bill_step_2,
+.page-dashboard #premium .buy-plan .bill-my-parents,
 .page-dashboard #plan .buy-plan .highlighted-link,
 .page-dashboard #profile .buy-plan .highlighted-link,
 .browser-not-supported > div,
@@ -2026,6 +2059,13 @@ ul.company-info li.last {
     z-index: 50;
 }
 
+.page-path-customization2 .building-schedule h2,
+.page-dashboard #profile .building-schedule h2,
+.page-dashboard #schedule .building-schedule h2,
+.landing-home.bill-my-parents-only .buy-plan .bill_step_2,
+.landing-home.bill-my-parents-only .buy-plan .bill-my-parents,
+.page-dashboard #premium.bill-my-parents-only .buy-plan .bill_step_2,
+.page-dashboard #premium.bill-my-parents-only .buy-plan .bill-my-parents,
 .page-dashboard #plan.bill-my-parents-only .buy-plan .highlighted-link,
 .page-dashboard #profile.bill-my-parents-only .buy-plan .highlighted-link
 {
@@ -2037,12 +2077,13 @@ ul.company-info li.last {
 
     .page-dashboard .page .pane-content
     {
-        min-height: 300px;
         padding:10px;
     }
 }
 
 .page-dashboard #plan .middle-wrapper h2,
+.landing-home .buy-plan h2,
+.page-dashboard #premium .buy-plan h2,
 .page-dashboard #profile .buy-plan h2,
 .page-dashboard #metrics-empty h2,
 .page-dashboard #empty-dates h2,
@@ -2168,6 +2209,8 @@ input[type="button"]:hover {
     text-shadow: 0px 1px 2px rgba(255,255,255,.5);
 }
 
+#account.invalid .highlighted-link .more,
+#account.invalid .highlighted-link .more:hover,
 #import.invalid .highlighted-link .more,
 #import.invalid .highlighted-link .more:hover,
 #plan .saved .highlighted-link .more,
@@ -3304,6 +3347,7 @@ div.messages.warning {
     width:auto;
 }
 
+.page-billmyparents.page-home .flex-caption,
 .page-parents.page-home .flex-caption
 {
     bottom: 10px;
@@ -3311,6 +3355,7 @@ div.messages.warning {
     margin-right: 10px;
 }
 
+.page-billmyparents.page-home .flex-caption h2.mobile,
 .page-parents.page-home .flex-caption h2.mobile
 {
     display:none;
@@ -3581,18 +3626,28 @@ ul.contextual-links li a:hover {
 }
 
 .webform-component--your-first-name,
-.webform-component--your-last-name,
 .webform-component--student-first-name,
-.webform-component--student-last-name,
 .webform-component--parent-first-name,
-.webform-component--parent-last-name,
-.webform-component--parents-last-name,
 .webform-component--parents-first-name,
 #user-profile .form-type-password
 {
     width: 50%;
     margin: 0 -2px;
-    padding: 0 2px !important;
+    padding-right: 3px;
+    display: inline-block;
+    vertical-align: bottom;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.webform-component--your-last-name,
+.webform-component--student-last-name,
+.webform-component--parent-last-name,
+.webform-component--parents-last-name
+{
+    width: 50%;
+    margin: 0 -2px;
+    padding-left: 3px;
     display: inline-block;
     vertical-align: bottom;
     -moz-box-sizing: border-box;
@@ -4841,6 +4896,8 @@ tbody
     text-align:right;
 }
 
+.landing-home .buy-plan,
+.page-dashboard #premium .buy-plan,
 .page-dashboard #home #connections,
 .page-dashboard #home #user_profile,
 .page-dashboard #home #welcome,
@@ -4869,6 +4926,8 @@ tbody
 {
     display:block;
 }
+.landing-home .buy-plan:before,
+.page-dashboard #premium .buy-plan:before,
 .page-dashboard #profile .buy-plan:before,
 .page-dashboard.parent #metrics .parents_only:before,
 .page-dashboard.parent #checkin .parents_only:before,
@@ -4910,9 +4969,16 @@ tbody
     z-index: 40;
 }
 
+.landing-home .buy-plan:before
+{
+    position:fixed;
+}
+
+.landing-home .buy-plan:before,
+.page-dashboard #premium .buy-plan:before,
 .page-dashboard #profile .buy-plan:before
 {
-    z-index: 0;
+    z-index: 40;
 }
 
 .page-dashboard.parent #metrics .parents_only h2,
@@ -4921,6 +4987,9 @@ tbody
     display:block;
 }
 
+.page-parentinvite #node-11,
+.page-prepaid #node-11,
+.page-billmyparents #node-11,
 .page-partners #node-11,
 .page-students2 #node-11,
 .page-parents2 #node-11,
@@ -4933,6 +5002,9 @@ tbody
     display:none;
 }
 
+.page-parentinvite #node-11 h2,
+.page-prepaid #node-11 h2,
+.page-billmyparents #node-11 h2,
 .page-partners #node-11 h2,
 .page-students2 #node-11 h2,
 .page-parents2 #node-11 h2,

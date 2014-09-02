@@ -144,14 +144,6 @@ div.landing-position
         margin-bottom:10px;
     }
 
-    .page-dashboard #plan .highlighted-link
-    {
-        text-align: center !important;
-        float:none !important;
-        position:static !important;
-        top:0 !important;
-        margin-bottom:0 !important;
-    }
 }
 
 #promoted .more-link a, .view-showcases .more-link a
@@ -440,6 +432,7 @@ body.page-home #scr .grid_6:nth-of-type(5)
     top:0 !important;
 }
 
+.page-billmyparents.page-home .flexslider,
 .page-parents.page-home .flexslider
 {
     margin-top:30px !important;
@@ -471,11 +464,13 @@ body.page-home #scr .grid_6:nth-of-type(5)
     display: inline-block !important;
 }
 
+.page-billmyparents.page-home .flex-caption h2.mobile,
 .page-parents.page-home .flex-caption h2.mobile
 {
     display: block !important;
 }
 
+.page-billmyparents.page-home .flex-caption h2.non-mobile,
 .page-parents.page-home .flex-caption h2.non-mobile
 {
     display:none;
@@ -485,6 +480,7 @@ body.page-home #scr .grid_6:nth-of-type(5)
 {
 }
 
+.page-billmyparents.landing-home .banner .highlighted-link,
 .page-parents.landing-home .banner .highlighted-link
 {
     padding:30px 0 40px !important;

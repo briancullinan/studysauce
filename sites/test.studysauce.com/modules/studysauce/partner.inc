@@ -69,6 +69,7 @@ function studysauce_save_partner()
             $sentMessage[] = $account->field_first_name[LANGUAGE_NONE][0]['value'] . ' wants to invite you to become an accountability partner.';
             $sentMessage[] = '';
             $sentMessage[] = 'Research shows that simply writing down goals makes them more likely to be achieved. Having an accountability partner greatly increases the probability of achievement. All students have ups and downs in school and finding someone to help motivate and challenge them along the way can be invaluable.';
+            $sentMessage[] = '';
             $sentMessage[] = 'You can work out the specific expectations with ' . $account->field_first_name[LANGUAGE_NONE][0]['value'] . ', but a good accountability partner tends to have the following attributes:';
             $sentMessage[] = '<ul style="font-family: \'Ubuntu\',Helvetica Neue,Arial,sans-serif; font-size: 16px; color: #555555;"><li>Will challenge a student (needs more than just encouragement)</li>';
             $sentMessage[] = '<li>Will celebrate student successes</li>';

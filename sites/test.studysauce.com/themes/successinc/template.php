@@ -203,27 +203,35 @@ function successinc_preprocess_maintenance_page(&$variables)
  */
 function successinc_process_html(&$vars)
 {
-
     global $user;
+
     $account = user_load($user->uid);
     $classes = explode(' ', $vars['classes']);
+
+    if(current_path() == 'adviserprepaid')
+        $classes[] = 'page-user-register';
+    if(current_path() == 'userprepaid')
+        $classes[] = 'page-user';
+
     $classes[] = theme_get_setting('sitename_font_family');
     $classes[] = theme_get_setting('slogan_font_family');
     $classes[] = theme_get_setting('headings_font_family');
     $classes[] = theme_get_setting('paragraph_font_family');
     if (arg(1) == '67' || arg(1) == '90' || arg(1) == '103' || arg(1) == '104')
         $classes[] = 'page-node-landing';
-    if (!empty($account->field_parent_student) && $account->field_parent_student['und'][0]['value'] == 'student')
-        $classes[] = 'student';
-    if (!empty($account->field_parent_student) && $account->field_parent_student['und'][0]['value'] == 'parent')
+    if (in_array('parent', $account->roles))
         $classes[] = 'parent';
+    elseif (in_array('partner', $account->roles))
+        $classes[] = 'partner';
+    else
+        $classes[] = 'student';
 
 
     $lastOrder = _studysauce_orders_by_uid($account->uid);
     $groups = og_get_groups_by_user();
     if(in_array('adviser', $account->roles) || in_array('master adviser', $account->roles))
         $classes[] = 'adviser-user';
-    elseif(isset($partners['field_collection_item']) && !empty($partners['field_collection_item']))
+    elseif(in_array('partner', $account->roles) || in_array('parent', $account->roles))
         $classes[] = 'partner-user';
     elseif (isset($groups['node']) || $lastOrder)
         $classes[] = 'paid-user';
@@ -431,12 +439,38 @@ if (drupal_is_front_page() && $user->uid != 0) {
     drupal_add_css(drupal_get_path('theme', 'successinc') . '/invite.css');
     drupal_add_css(drupal_get_path('theme', 'successinc') . '/user-parent-student.css');
 } elseif (drupal_is_front_page() || arg(0) == 'parents' || arg(0) == 'students' ||
-    arg(0) == 'parents2' || arg(0) == 'students2' || arg(0) == 'partners'
+    arg(0) == 'parents2' || arg(0) == 'students2' || arg(0) == 'partners' || arg(0) == 'billmyparents' ||
+    arg(0) == 'prepaid' || arg(0) == 'parentinvite'
 ) {
     drupal_add_css(drupal_get_path('theme', 'successinc') . '/front.css');
 
     $parallax = <<<EOJS
 jQuery(document).ready(function () {
+
+    jQuery('body').on('click', 'a[href="#bill-send"]', function (evt) {
+        evt.preventDefault();
+        var billing = jQuery(this).parents('.bill-my-parents'),
+            tab = jQuery('body');
+
+        jQuery.ajax({
+            url: 'student/send',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                first: billing.find('input[name="invite-first"]').val(),
+                last: billing.find('input[name="invite-last"]').val(),
+                email: billing.find('input[name="invite-email"]').val()
+            },
+            success: function (data) {
+                billing.find('input[name="invite-first"]').val('');
+                billing.find('input[name="invite-last"]').val('');
+                billing.find('input[name="invite-email"]').val('');
+                tab.removeClass('bill-my-parents-only').addClass('bill_step_2_only');
+            }
+        });
+    });
+
+
     jQuery(window).scroll(function () {
         var distance = jQuery('.header-wrapper').height(),
             offset = Math.min(jQuery(window).scrollTop() / distance, 1);
@@ -459,7 +493,7 @@ EOJS;
         $exp = <<<EOJS
 // <!-- Google Analytics Content Experiment code -->
 function utmx_section(){}function utmx(){}(function(){var
-k='76175055-0',d=document,l=d.location,c=d.cookie;
+k='76175055-4',d=document,l=d.location,c=d.cookie;
 if(l.search.indexOf('utm_expid='+k)>0)return;
 function f(n){if(c){var i=c.indexOf(n+'=');if(i>-1){var j=c.
 indexOf(';',i);return escape(c.substring(i+n.length+1,j<0?c.
@@ -481,7 +515,7 @@ EOJS;
         $exp = <<<EOJS
 // <!-- Google Analytics Content Experiment code -->
 function utmx_section(){}function utmx(){}(function(){var
-k='76175055-1',d=document,l=d.location,c=d.cookie;
+k='76175055-5',d=document,l=d.location,c=d.cookie;
 if(l.search.indexOf('utm_expid='+k)>0)return;
 function f(n){if(c){var i=c.indexOf(n+'=');if(i>-1){var j=c.
 indexOf(';',i);return escape(c.substring(i+n.length+1,j<0?c.
@@ -492,6 +526,7 @@ length:j))}}}var x=f('__utmx'),xx=f('__utmxx'),h=l.hash;d.write(
 valueOf()+(h?'&utmxhash='+escape(h.substr(1)):'')+
 '" type="text/javascript" charset="utf-8"><\/sc'+'ript>')})();
 // <!-- End of Google Analytics Content Experiment code -->
+
 
 EOJS;
 
@@ -513,7 +548,8 @@ jQuery(document).ready(function () {
            '<p style="margin:0 auto;display:inline-block;margin-bottom: 100px;"><a href="https://www.google.com/chrome/browser/">&nbsp;</a><a href="https://www.mozilla.org/en-US/firefox/new/">&nbsp;</a><a href="http://support.apple.com/downloads/#safari">&nbsp;</a><a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">&nbsp;</a></p>' +
          '</div></div></div>'));
     }
-    if(isAndroid)
+    jQuery.browser.chrome = /chrom(e|ium)/.test(navigator.userAgent.toLowerCase());
+    if(isAndroid && !jQuery.browser.chrome)
     {
         jQuery('body').append(jQuery('<div class="browser-not-supported"><div class="middle-wrapper"><div style="margin:0 auto;text-align:center;">' +
          '<h2>Your browser is not supported</h2>' +
@@ -547,6 +583,28 @@ drupal_add_html_head(array(
         'property' => 'og:image',
         'content' => url(drupal_get_path('theme', 'successinc') . '/images/studysauce-google-page.png', array('absolute' => true)),
     )), 'facebook_image_meta');
+
+// Facebook tracking
+if(current_path() == 'welcome' || drupal_get_path_alias(current_path()) == 'profile')
+{
+    $tracker = <<< EOJS
+    // <!-- Facebook Code for Conversion Tracking -->
+    var fb_param = {};
+        fb_param.pixel_id = '6008770262329'; // Conversion
+        fb_param.value = '0.00';
+        fb_param.currency = 'USD';
+        (function () {
+            var fpw = document.createElement('script');
+            fpw.async = true;
+            fpw.src = 'https://connect.facebook.net/en_US/fp.js';
+            var ref = document.getElementsByTagName('script')[0];
+            ref.parentNode.insertBefore(fpw, ref);
+        })();
+EOJS;
+
+    drupal_add_js($tracker, array('type' => 'inline', 'scope' => 'footer'));
+}
+
 
 
 

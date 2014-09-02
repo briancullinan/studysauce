@@ -4944,15 +4944,12 @@ $.extend(TimeGrid.prototype, {
 		// constrain. because minTime/maxTime might be customized
         if(slatCoverage < 0)
         {
-            slatCoverage = (48 * this.slotDuration + time - this.minTime) / this.slotDuration;
+            slatCoverage = (24 * 3600000/this.slotDuration * this.slotDuration + time - this.minTime) / this.slotDuration;
             slatCoverage = Math.max(0, slatCoverage);
             slatCoverage = Math.min(this.slatEls.length, slatCoverage);
 
             slatIndex = Math.floor(slatCoverage); // an integer index of the furthest whole slot
 
-            //slatCoverage = (this.maxTime - time) / this.slotDuration - this.minTime / this.slotDuration;
-            //slatCoverage = Math.max(0, slatCoverage);
-            //slatCoverage = Math.min(this.slatEls.length, slatCoverage);
         }
         else
         {

@@ -60,7 +60,7 @@ $setup = studysauce_is_incentives_setup($account);
  */ ?>
 
 <div id="goals-brag" class="required-fields group-achievement field-group-div">
-    <div><h3>Send your sponsors a photo of yourself and remind them your are studying hard</h3>
+    <div><h3>Let your sponsor know about your study achievement.</h3>
 
         <div class="field-type-image field-name-field-photo-evidence field-widget-image-plupload form-wrapper">
             <div class="form-item form-type-plupload-file">

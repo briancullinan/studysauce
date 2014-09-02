@@ -76,9 +76,9 @@ function studysauce_checkin()
     print json_encode(array(
         'lastSDS' => $lastSDS,
         'rows' => $rows,
-        'times' => $exportMetricsTimes,
         'total' => $total,
         'hours' => $hours,
+        'times' => $exportMetricsTimes,
         'classes' => $exportMetricsClasses,
         //'awards' => $awards,
         'eid' => isset($_POST['eid']) ? $_POST['eid'] : null

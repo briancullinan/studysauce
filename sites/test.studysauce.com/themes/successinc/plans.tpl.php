@@ -31,16 +31,11 @@ if($lastOrder || !empty($groups['node']))
 else
 {
     // adjust times for demo accounts
-    if(!$lastOrder && empty($groups['node']))
-    {
-        $sample = theme('studysauce-plan-sample');
-        $encoded = preg_replace('/<\/?script>/i', '', $sample);
-        list($events, $classes, $others) = json_decode($encoded);
-    }
-    else
-        list($events, $classes, $others) = array(array(), array(), array());
+    $sample = theme('studysauce-plan-sample');
+    $encoded = preg_replace('/<\/?script>/i', '', $sample);
+    list($events, $classes, $others) = json_decode($encoded);
 
-            // convert classes to numeric array
+    // convert classes to numeric array
     $classes = array_map(function ($x) {
         $x->field_time = (array)$x->field_time;
         $x->field_time['und'][0] = (array)$x->field_time['und'][0];
@@ -109,17 +104,17 @@ foreach($events as $i => $x)
     elseif($x->field_event_type['und'][0]['value'] == 'r')
     {
         $label = 'REMINDER';
-        continue;
+        //continue;
     }
     elseif($x->field_event_type['und'][0]['value'] == 'm')
     {
         $label = 'MEAL';
-        continue;
+        //continue;
     }
     elseif($x->field_event_type['und'][0]['value'] == 'z')
     {
         $label = 'SLEEP';
-        continue;
+        //continue;
     }
 
     // set up dates recurrence
@@ -292,17 +287,17 @@ if(!$lastOrder && empty($groups['node'])): ?><div class="buy-plan"><?php endif;
                 <div class="bill-my-parents">
                     <h3>Send an email to have someone prepay for Study Sauce.  We will then alert you when your account has been activated.</h3>
                     <div class="form-item webform-component webform-component-textfield webform-component--student-first-name">
-                        <label>First name</label>
+                        <label>Parent's first name</label>
                         <input type="text" name="invite-first" size="60" maxlength="128" class="form-text required"
                                value="">
                     </div>
                     <div class="form-item webform-component webform-component-textfield webform-component--student-last-name">
-                        <label>Last name</label>
+                        <label>Parent's last name</label>
                         <input type="text" name="invite-last" size="60" maxlength="128" class="form-text required"
                                value="">
                     </div>
                     <div class="form-item webform-component webform-component-email">
-                        <label>Friend's email</label>
+                        <label>Parent's email</label>
                         <input class="email form-text form-email required" type="email" name="invite-email" size="60"
                                value="">
                     </div>
