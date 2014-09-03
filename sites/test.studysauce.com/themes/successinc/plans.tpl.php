@@ -104,17 +104,17 @@ foreach($events as $i => $x)
     elseif($x->field_event_type['und'][0]['value'] == 'r')
     {
         $label = 'REMINDER';
-        //continue;
+        continue;
     }
     elseif($x->field_event_type['und'][0]['value'] == 'm')
     {
         $label = 'MEAL';
-        //continue;
+        continue;
     }
     elseif($x->field_event_type['und'][0]['value'] == 'z')
     {
         $label = 'SLEEP';
-        //continue;
+        continue;
     }
 
     // set up dates recurrence

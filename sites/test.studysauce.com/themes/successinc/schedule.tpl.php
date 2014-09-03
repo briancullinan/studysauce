@@ -291,6 +291,7 @@ list($events, $classes, $others) = studysauce_get_events();
         print (drupal_get_path_alias(current_path()) == 'schedule' || drupal_get_path_alias(current_path()) == 'schedule2'
             ? 'Next'
             : 'Save'); ?></a>
+    <span class="invalid-times">Error - invalid class time</span>
     <span class="overlaps-only">Error - classes cannot overlap</span>
     <span class="invalid-only">Error - please make sure all class information is filled in</span>
 </p>
@@ -563,6 +564,7 @@ list($events, $classes, $others) = studysauce_get_events();
         print (drupal_get_path_alias(current_path()) == 'schedule' || drupal_get_path_alias(current_path()) == 'schedule2'
             ? 'Next'
             : 'Save'); ?></a>
+    <span class="invalid-times">Error - invalid class time</span>
     <span class="overlaps-only">Error - classes cannot overlap</span>
     <span class="invalid-only">Error - please make sure all class information is filled in</span>
 </p>

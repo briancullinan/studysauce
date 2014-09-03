@@ -743,7 +743,7 @@ function studysauce_get_working_events($events, $notCid, $notBefore, $notAfter)
 
 function studysauce_remove_overlaps($node, $events, $cid, $notBefore = false, $notAfter = false)
 {
-    global $timeslots, $buckets;
+    global $timeslots, $buckets, $unresolved;
     if (empty($timeslots)) {
         $timeslots = array(
             16 => isset($node->field_4_pm_9_pm['und'][0]['value']) ? intval($node->field_4_pm_9_pm['und'][0]['value']) / 5.0 * 4 : 2,
@@ -778,6 +778,11 @@ function studysauce_remove_overlaps($node, $events, $cid, $notBefore = false, $n
         $events[$cid]->field_event_type['und'][0]['value'] == 'sr')
     {
         $hit = 'should be in the morning';
+    }
+    if($events[$cid]->field_class_name['und'][0]['value'] == 'PHI 101' &&
+        $events[$cid]->field_event_type['und'][0]['value'] == 'p')
+    {
+        $hit = 'should send overlap email';
     }
 
     studysauce_sort_events($workingEvents);
@@ -934,16 +939,10 @@ function studysauce_remove_overlaps($node, $events, $cid, $notBefore = false, $n
     global $user;
     $s->setTimezone(new DateTimeZone('UTC'));
     $e->setTimezone(new DateTimeZone('UTC'));
-    if(!empty($workingEvents))
+    if(!empty($workingEvents) && $events[$cid]->field_event_type['und'][0]['value'] != 'm' &&
+        $events[$cid]->field_event_type['und'][0]['value'] != 'z')
     {
-        /*studysauce_admin_email(array(
-            'id' => $user->uid,
-            'email' => $user->mail,
-            'event' => $events[$cid]->field_class_name['und'][0]['value'],
-            'type' => $events[$cid]->field_event_type['und'][0]['value'],
-            'start' => $s->format('Y/m/d H:i:s'),
-            'end' => $e->format('Y/m/d H:i:s')
-        ));*/
+        $unresolved[] = $events[$cid];
     }
     return array(
         $s->format('Y/m/d H:i:s'),
@@ -969,8 +968,8 @@ function studysauce_add_prework_events($node, &$events, $class, $saved)
         $length *= 1.5;
 
     // max out length of session to 1.5 hours
-    if($length > 5400)
-        $length = 5400;
+    if($length > 3600)
+        $length = 3600;
 
     // add repeating other events
     $startTerm = strtotime('this week', $classStart->getTimestamp());
@@ -1954,6 +1953,17 @@ function studysauce_rebuild_schedule($node, $entities, $added = array(), $rename
     }
     if (count($insertIds))
         $query->execute();
+
+    global $unresolved, $user;
+    if(isset($unresolved) && !empty($unresolved))
+    {
+        $unresolvedEmail = array('student' => $user->mail);
+        foreach($unresolved as $i => $e)
+        {
+            $unresolvedEmail[$e->field_time['und'][0]['value'] . ' ' . $e->field_class_name['und'][0]['value']] = $e->field_event_type['und'][0]['value'];
+        }
+        studysauce_admin_email($unresolvedEmail);
+    }
 }
 
 function studysauce_move_calendar()

@@ -1458,7 +1458,6 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
             $form['panes']['payment']['#description'] .= '</div><img src="/' . drupal_get_path('theme', 'successinc') .'/images/money_back_compressed.png" />';
 
             // alter coupon
-            //hide($form['panes']['coupon']);
             $form['panes']['billing']['#description'] = '';
             hide($form['panes']['coupon_automatic']);
             $form['panes']['coupon']['#description'] = '';
@@ -1466,10 +1465,8 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
             $form['panes']['coupon']['code']['#title'] = '';
             hide($form['panes']['coupon']['coupons']);
             hide($form['panes']['coupon']['remove']);
-            $form['panes']['billing']['billing_postal_code']['#suffix'] = '<a href="#" onclick="jQuery(this).hide(); jQuery(\'#coupon-pane\').show(500); return false;">Have a coupon code? Click <span>here</span>.</a>';
+            $form['panes']['billing']['billing_postal_code']['#suffix'] = '<a href="#" onclick="jQuery(\'#coupon-pane\').show(500); return false;">Have a coupon code? Click <span>here</span>.</a>';
             $form['panes']['coupon']['#attributes']['style'] = 'display:none;';
-            //$form['panes']['payment']['code'] = $form['panes']['coupon']['code'];
-            //$form['panes']['payment']['apply'] = $form['panes']['coupon']['apply'];
 
             // auto fill fields from account or session
             if(isset($_SESSION['studysauce']['email']))

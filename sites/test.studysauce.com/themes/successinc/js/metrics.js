@@ -51,8 +51,8 @@ jQuery(document).ready(function () {
 
     jQuery(window).resize(function () {
         if(resizeTimeout != null)
-            clearInterval(resizeTimeout);
-        resizeTimeout = setInterval(function () {
+            clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function () {
             if (timeline.width() != timeline.find('svg').width())
             {
                 //if (jQuery(window).width() < 963) {

@@ -40,48 +40,55 @@ jQuery(document).ready(function($) {
                                 yearRange: '-3:+3'
                             });
 
-            row.find('input[name="schedule-value-time"], input[name="schedule-value2-time"]')
-                .timeEntry({
-                               defaultTime: new Date(0, 0, 0, 6, 0, 0),
-                               ampmNames: ['am', 'pm'],
-                               fromTo: false,
-                               show24Hours: false,
-                               showSeconds: false,
-                               spinnerImage: '',
-                               timeSteps: [1,1,"1"]
-                           });
-            row.find('input[name="schedule-value-time"], input[name="schedule-value2-time"]').keypress(function (event) {
-                var that = jQuery(this),
-                    other = that.parents('.row').find('input[name="schedule-value-time"]').timeEntry('getTime').getTime();
-                var chr = String.fromCharCode(event.charCode === undefined ? event.keyCode : event.charCode);
-                if (chr < ' ') {
-                    return true;
-                }
-                var ampmSet = that.data('ampmSet') || false;
-                if(chr.toLowerCase() == 'a' || chr.toLowerCase() == 'p')
-                    that.data('ampmSet', true);
-                else if (chr >= '0' && chr <= '9' && !ampmSet)
-                {
-                    var time = that.timeEntry('getTime');
-                    var hours = time.getHours();
-                    if(hours < 8)
-                        that.timeEntry('setTime', new Date(0, 0, 0, hours + 12, time.getMinutes(), 0));
-                    else if(hours >= 20 && (that.is('[name="schedule-value-time"]') ||
-                        (new Date(0, 0, 0, hours - 12, time.getMinutes(), 0)).getTime() > other))
-                        that.timeEntry('setTime', new Date(0, 0, 0, hours - 12, time.getMinutes(), 0));
+            if(!row.find('input[name="schedule-value-time"]').is('.hasTimeEntry'))
+            {
+                row.find('input[name="schedule-value-time"], input[name="schedule-value2-time"]')
+                    .timeEntry({
+                        defaultTime: new Date(0, 0, 0, 6, 0, 0),
+                        ampmNames: ['am', 'pm'],
+                        fromTo: false,
+                        show24Hours: false,
+                        showSeconds: false,
+                        spinnerImage: '',
+                        timeSteps: [1,1,"1"]
+                    }).on('keypress', function (event) {
+                        var that = jQuery(this),
+                            row = that.parents('.row'),
+                            from = row.find('input[name="schedule-value-time"]').timeEntry('getTime'),
+                            to = row.find('input[name="schedule-value2-time"]').timeEntry('getTime');
+                        var chr = String.fromCharCode(event.charCode === undefined ? event.keyCode : event.charCode);
+                        if (chr < ' ') {
+                            return;
+                        }
+                        var ampmSet = that.data('ampmSet') || false;
+                        if(chr.toLowerCase() == 'a' || chr.toLowerCase() == 'p')
+                            that.data('ampmSet', true);
+                        else if (chr >= '0' && chr <= '9' && !ampmSet)
+                        {
+                            var time = that.timeEntry('getTime');
+                            var hours = time.getHours();
+                            var newTime = time;
+                            if(hours < 7)
+                                newTime = new Date(0, 0, 0, hours + 12, time.getMinutes(), 0);
+                            // check the length in between to see if its longer than 12 hours
+                            else if(hours >= 19)
+                                newTime = new Date(0, 0, 0, hours - 12, time.getMinutes(), 0);
 
-                    // check the length in between to see if its longer than 12 hours
-                    /*if(that.is('[name="schedule-value2-time"]') &&
-                        that.timeEntry('getTime').getTime() -  > 3600*12 ||
-                        that.timeEntry('getTime').getTime() - that.parents('.row').find('input[name="schedule-value-time"]').timeEntry('getTime').getTime() < 0)
-                    {
-                        //if(that.timeEntry('getTime').getTime() >= 12)
-                        //    that.timeEntry('setTime', new Date(0, 0, 0, hours - 12, time.getMinutes(), 0));
-                        if(that.timeEntry('getTime').getTime() < 12)
-                            that.timeEntry('setTime', new Date(0, 0, 0, hours + 12, time.getMinutes(), 0));
-                    }*/
-                }
-            });
+                            if((that.is('[name="schedule-value-time"]') && to == null || newTime.getTime() < to.getTime()) ||
+                                (that.is('[name="schedule-value2-time"]') && from == null || newTime.getTime() > from.getTime()))
+                                that.timeEntry('setTime', newTime);
+                        }
+
+                    });
+            }
+
+            // check for invalid time entry
+            var from = row.find('input[name="schedule-value-time"]').timeEntry('getTime'),
+                to = row.find('input[name="schedule-value2-time"]').timeEntry('getTime');
+            if(from != null && to != null && (from.getTime() == to.getTime() || to.getTime() < from.getTime()))
+                row.addClass('invalid-time');
+            else
+                row.removeClass('invalid-time');
 
             // check if there are any overlaps with the other rows
             var startDate = new Date(row.find('input[name="schedule-value-date"]').val());
@@ -137,17 +144,39 @@ jQuery(document).ready(function($) {
             }
         });
 
-        if(window.location.pathname == '/schedule2' ||
-            (schedule.find('.row.invalid:visible').length == 0 && schedule.find('.field-name-field-university input').val().trim() != '' && schedule.find('.field-name-field-university input').val() != schedule.find('.field-name-field-university input').prop('defaultValue')) ||
-            (schedule.find('.field-name-field-university input').val().trim() != '' && schedule.find('.row.edit.valid:visible').length > 0 && schedule.find('.row.edit.invalid:visible').length == 0))
+        if(window.location.pathname == '/schedule2' &&
+            schedule.find('.row.edit.invalid:visible').length == 0 &&
+            schedule.find('.row.overlaps:visible').length == 0 &&
+            schedule.find('.row.invalid-time:visible').length == 0)
+            schedule.removeClass('invalid invalid-only').addClass('valid');
+        else if(window.location.pathname == '/schedule' &&
+            schedule.find('.row.edit.invalid:visible').length == 0 &&
+            schedule.find('.row.overlaps:visible').length == 0 &&
+            schedule.find('.row.invalid-time:visible').length == 0 &&
+            schedule.find('.row.edit.valid:visible').not('.blank').length > 0 &&
+            schedule.find('.field-name-field-university input').val().trim() != '')
+            schedule.removeClass('invalid invalid-only').addClass('valid');
+        else if(
+            schedule.find('.row.edit.invalid:visible').length == 0 &&
+            schedule.find('.row.overlaps:visible').length == 0 &&
+            schedule.find('.row.invalid-time:visible').length == 0 &&
+            schedule.find('.field-name-field-university input').val().trim() != '' &&
+                (schedule.find('.field-name-field-university input').val() != schedule.find('.field-name-field-university input').prop('defaultValue') ||
+                    schedule.find('.row.edit.valid:visible').not('.blank').length > 0))
             schedule.removeClass('invalid invalid-only').addClass('valid');
         else
             schedule.removeClass('valid').addClass('invalid');
 
-        if(schedule.find('.row.overlaps').filter(':visible').length > 0 || window.location.pathname != '/schedule2' && schedule.find('.row.overlaps').length > 0)
+        if(schedule.find('.row.overlaps:visible').length > 0 ||
+            (window.location.pathname != '/schedule2' && schedule.find('.row.overlaps').length > 0))
             schedule.addClass('overlaps');
         else
             schedule.removeClass('overlaps');
+
+        if(schedule.find('.row.invalid-time:visible').length > 0)
+            schedule.addClass('invalid-time');
+        else
+            schedule.removeClass('invalid-time');
 
     };
 

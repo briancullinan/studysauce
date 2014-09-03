@@ -1,4 +1,6 @@
 
+.page-path-schedule2 .invalid-times,
+.page-path-schedule .invalid-times,
 .page-path-schedule2 .invalid-only,
 .page-path-schedule .invalid-only,
 .page-path-schedule2 .overlaps-only,
@@ -7,6 +9,8 @@
     display:none;
 }
 
+.page-path-schedule2.invalid-time .invalid-times,
+.page-path-schedule.invalid-time .invalid-times,
 .page-path-schedule2.invalid-only .invalid-only,
 .page-path-schedule.invalid-only .invalid-only,
 .page-path-schedule2.overlaps .overlaps-only,
@@ -21,9 +25,11 @@
 body.page-path-schedule2 .guide ~ *,
 body.page-path-schedule2 .class-actions ~ script,
 body.page-path-schedule2 .class-actions ~ hr,
-body.page-path-schedule2 .class-actions ~ *.overlaps-only,
+body.page-path-schedule2 .class-actions ~ *.invalid-times,
 body.page-path-schedule2 .class-actions ~ *.invalid-only,
+body.page-path-schedule2 .class-actions ~ *.overlaps-only,
 body.page-path-schedule .class-actions ~ *,
+body.page-path-schedule .class-actions ~ *.invalid-times,
 body.page-path-schedule .class-actions ~ *.invalid-only,
 body.page-path-schedule .class-actions ~ *.overlaps-only
 {
@@ -49,8 +55,11 @@ body.page-path-schedule2 .class-actions ~ *
     vertical-align: top;
 }
 
+.page-path-schedule2 .row.invalid-time .field-name-field-time .read-only:nth-last-child(2),
+.page-path-schedule .row.invalid-time .field-name-field-time input,
 .page-path-schedule2 .row.overlaps .field-name-field-time .read-only:nth-last-child(2),
-.page-path-schedule .row.overlaps .field-name-field-time input {
+.page-path-schedule .row.overlaps .field-name-field-time input
+{
     border: 2px solid #FF1100;
     border-radius: 3px;
 }
