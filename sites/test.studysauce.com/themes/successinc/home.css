@@ -80,7 +80,7 @@ html,
     background-position: -54px -2737px;
 }
 
-.page-dashboard #home li h4
+.page-dashboard #home #student_home li h4
 {
     font-size: 22px;
     margin-top: 0;
@@ -91,17 +91,17 @@ html,
     text-align: center;
 }
 
-.page-dashboard #home li:nth-child(2) h4
+.page-dashboard #home #student_home li:nth-child(2) h4
 {
     background-color: #0099BE;
 }
 
-.page-dashboard #home li:nth-child(3) h4
+.page-dashboard #home #student_home li:nth-child(3) h4
 {
     background-color: #555555;
 }
 
-.page-dashboard #home li
+.page-dashboard #home #student_home li
 {
     display:inline-block;
     width:32%;
@@ -136,17 +136,17 @@ html,
     font-size:30px;
 }
 
-.page-dashboard #home li:nth-child(2)
+.page-dashboard #home #student_home li:nth-child(2)
 {
     border:3px solid #0099BE;
 }
 
-.page-dashboard #home li:nth-child(3)
+.page-dashboard #home #student_home li:nth-child(3)
 {
     border:3px solid #555555;
 }
 
-.page-dashboard #home li h4 span
+.page-dashboard #home #student_home li h4 span
 {
     display: inline-block;
     float: left;
@@ -188,29 +188,32 @@ html,
     display:block;
 }
 
-#study-quiz .webform-confirmation > .grid_6,
-#study-quiz .highlighted-link
+.webform-confirmation
 {
-    text-align: right;
-    margin:0;
+    max-width: 980px;
 }
 
-#study-quiz .webform-confirmation > .grid_6
-{
-    width:50%;
-}
-
-#study-quiz .webform-confirmation > .retry-link
-{
-    text-align: left;
-}
-
-#study-quiz .webform-confirmation .mobile-only
+.webform-confirmation .steps ol
 {
     display:none;
 }
 
-#study-quiz a[href="#retry"]
+.webform-confirmation > .grid_6
+{
+    width:50%;
+}
+
+.webform-confirmation > .retry-link
+{
+    text-align: left;
+}
+
+.webform-confirmation .mobile-only
+{
+    display:none;
+}
+
+.webform-confirmation a[href="#retry"]
 {
     background:url(images/restart.png) no-repeat left top transparent;
     display:inline-block;
@@ -454,20 +457,13 @@ html,
         clear:both;
     }
 
-    #study-quiz .webform-confirmation > .grid_6,
-    #study-quiz .highlighted-link
-    {
-        text-align: center;
-        width: auto;
-    }
-
     .page-dashboard #invite h3,
     .page-dashboard #invite .like-us
     {
         margin-right:0 !important;
     }
 
-    .page-dashboard.student #home li
+    .page-dashboard #home #student_home li
     {
         width:auto;
         height:auto;

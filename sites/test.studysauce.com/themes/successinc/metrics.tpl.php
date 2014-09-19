@@ -19,6 +19,7 @@ if(empty($times)):
     <script type="text/javascript">
         jQuery(document).ready(function () {
             jQuery('#metrics').addClass('empty');
+            jQuery('#metrics-empty').dialog();
         });
     </script>
     <?php
@@ -89,9 +90,9 @@ $exportMetricsClasses = array_values($classesNames);
 $exportMetricsTimes = $times;
 
 ?>
-<div id="metrics-empty">
-    <div class="middle-wrapper">
-        <a href="#checkin" onclick="jQuery('#checkin').scrollintoview();"><h2>Check in to start tracking your study hours</h2></a>
+<div class="fixed-centered empty-only">
+    <div id="metrics-empty" class="dialog">
+        <a href="#checkin"><h2>Check in to start tracking your study hours</h2></a>
     </div>
 </div>
 <h2>Study metrics</h2>

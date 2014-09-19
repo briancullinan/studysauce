@@ -492,11 +492,6 @@ body.page-home #scr .grid_6:nth-of-type(5)
     margin-bottom:-20px;
 }
 
-.page-dashboard #checklist .highlighted-link
-{
-    text-align: center !important;
-}
-
 .page-dashboard .subfooter
 {
     position: static !important;

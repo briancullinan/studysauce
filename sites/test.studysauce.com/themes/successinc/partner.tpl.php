@@ -99,6 +99,16 @@ if(isset($groups['node']))
         <?php endif; ?>
     </div>
 
+    <div class="fixed-centered modal">
+        <div id="partner-sent" class="dialog">
+            <h2>Thank you</h2>
+            <h3>We have sent the email invitation.  You will be notified once the invitation is accepted.</h3>
+            <div class="highlighted-link">
+                <a href="#close" class="more">Close</a></div>
+            <a href="#close">&nbsp;</a>
+        </div>
+    </div>
+
     <div class="partner-invite">
         <div
             class="form-item webform-component webform-component-textfield">
@@ -117,7 +127,7 @@ if(isset($groups['node']))
                    name="partner-email" size="60" placeholder="Email address">
         </div>
         <?php if(!$readonly): ?>
-            <div class="highlighted-link form-actions">
+            <div class="highlighted-link">
                 <a href="#partner-save" class="webform-submit button-primary more form-submit ajax-processed">Save</a></div>
         <?php endif; ?>
     </div>
@@ -181,44 +191,5 @@ if(isset($groups['node']))
     <p>Sure you can.  You can change your accountability partner or what they can see at any time.  Just use the edit function next to the photograph on the Accountability partner tab.</p>
 </div>
 <?php
-/*
-// find people we are accountable to by searching partners field
-$partnerQuery = new EntityFieldQuery();
-$partners = $partnerQuery->entityCondition('entity_type', 'field_collection_item')
-    ->propertyCondition('field_name', 'field_partners')
-    ->fieldCondition('field_email', 'value', $account->mail)
-    ->execute();
-if(isset($partners['field_collection_item']) && !empty($partners['field_collection_item']))
-{
-    ?><h2>You are accountable for the following students:</h2><?php
-    $partners = array_keys($partners['field_collection_item']);
-    foreach($partners as $p)
-    {
-        $partner = entity_load('field_collection_item', array($p));
-        $host = $partner[$p]->hostEntity();
-        $query = new EntityFieldQuery();
-        $nodes = $query->entityCondition('entity_type', 'node')
-            ->propertyCondition('type', 'schedule')
-            ->propertyCondition('title', isset($host->mail) ? $host->mail : '')
-            ->propertyCondition('status', 1)
-            ->range(0, 1)
-            ->execute();
-        if (!empty($nodes['node']))
-        {
-            $nodes = array_keys($nodes['node']);
-            $nid = array_shift($nodes);
-            $node = node_load($nid);
-        }
 
-        ?><div class="row">
-            <label style="display:inline;">Last accessed: </label>
-            <?php print date('d-M', $host->access); ?>
-            <label style="display:inline;">Name: </label>
-            <a href="#uid-<?php print $host->uid; ?>"><?php print $host->field_first_name['und'][0]['value']; ?> <?php print $host->field_last_name['und'][0]['value']; ?></a>
-            <label style="display:inline;">School: </label>
-            <?php print (!empty($nodes['node']) && isset($node->field_university['und'][0]['value']) && !empty($node->field_university['und'][0]['value']) ? $node->field_university['und'][0]['value'] : 'Not set'); ?>
-        </div><?php
-    }
-}
 
-*/

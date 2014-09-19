@@ -166,8 +166,5 @@ if (!isset($user->field_partner_advice['und'][0]['value']) || !$user->field_part
     $edit = array();
     $edit['field_partner_advice']['und'][0]['value'] = true;
     user_save($account, $edit);
-    ?>
-    <div id="first-time-messages"><?php
     print theme('studysauce-partner-instructions', array('account' => array_shift($users)));
-    ?></div><?php
 }

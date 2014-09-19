@@ -3,6 +3,46 @@ var calendar = null,
     youtubeReady = false,
     uploads = [];
 
+function showFirst(type)
+{
+    setTimeout(function () {
+        var row = jQuery('#plan .row.default-' + type + ':visible').first();
+        if(!row.is('.selected'))
+            row.find('.field-name-field-assignment').trigger('click');
+        row.scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
+    }, 500);
+}
+
+function videoPoller(fid, eid) {
+    jQuery.ajax({
+        url: '/aws/checkstatus',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            fid: fid
+        },
+        success: function (file) {
+            if(file == 'error')
+                return;
+            if(file != null && typeof file['src'] != 'undefined')
+            {
+                jQuery('#plan-' + eid + '-plupload').find('img[src*="empty-play.png"]').remove();
+                var thumb = '<video width="184" height="184" preload="auto" controls="controls" poster="https://s3-us-west-2.amazonaws.com/studysauce/' + file.thumb + '">' +
+                    '<source src="https://s3-us-west-2.amazonaws.com/studysauce/' + file.src + '" type="video/webm" />';
+                jQuery('#plan-' + eid + '-plupload').addClass('uploaded');
+                jQuery('#plan-' + eid + '-plupload').find('.plup-progress').hide();
+                jQuery('#plan-' + eid + '-plupload').find('.plup-list li').append('<div class="plup-thumb-wrapper">' + thumb + '</div>');
+                if(!jQuery('#plan-' + eid + '-plupload').find('video')[0].canPlayType('video/webm; codecs="vp8, vorbis"'))
+                {
+                    jQuery('<div><a href="https://tools.google.com/dlpage/webmmf/">Can\'t play the video? Click here to install.</a></div>').insertAfter(jQuery('#plan-' + eid + '-plupload').find('video'));
+                }
+            }
+            else
+                setTimeout('videoPoller("' + fid + '", "' + eid + '");', 5000);
+        }
+    });
+}
+
 function resizeCalendar(calendarView) {
     if(!jQuery('#plan').is('.fullcalendar'))
         return;
@@ -52,6 +92,37 @@ jQuery(document).ready(function () {
 
     var plans = jQuery('#plan');
     var $ = jQuery;
+
+    if(window.location.hash == '#plan-intro')
+    {
+        window.location = '#plan';
+        setTimeout(function () {
+            jQuery('#plan-intro-1').dialog();
+        }, 100);
+    }
+
+    plans.find('.sort-by label:last-child').tooltip({position:{my: 'center top+15', at:'center bottom'}, open: function (evt, ui) {
+        if(jQuery(ui.tooltip).offset().left + jQuery(ui.tooltip).width() < jQuery(this).offset().left)
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'left');
+            ui.tooltip.addClass('left');
+        }
+        else if(jQuery(ui.tooltip).offset().left > jQuery(this).offset().left + jQuery(this).width())
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'right');
+            ui.tooltip.addClass('right');
+        }
+        else if(jQuery(ui.tooltip).offset().top + jQuery(ui.tooltip).height() < jQuery(this).offset().top)
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'top');
+            ui.tooltip.addClass('top');
+        }
+        else if(jQuery(ui.tooltip).offset().top > jQuery(this).offset().top + jQuery(this).height())
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'bottom');
+            ui.tooltip.addClass('bottom');
+        }
+    }});
 
     $.propHooks.checked = {
         set: function (elem, value, name) {
@@ -118,11 +189,10 @@ jQuery(document).ready(function () {
             plans.removeClass('show-historic');
     });
 
-    plans.on('change', '.page-dashboard #plan .field-name-field-completed input', function () {
+    plans.on('change', '.field-name-field-completed input', function () {
         var that = jQuery(this),
             row = that.parents('.row'),
             event = window.planEvents[row.attr('id').substring(4)];
-
 
         $.ajax({
             url: '/node/save/completed',
@@ -243,7 +313,7 @@ jQuery(document).ready(function () {
                 var uploader = new plupload.Uploader({
                                                          alt_field: 0,
                                                          browse_button: 'plan-' + eid + '-select',
-                                                         chunk_size: '512K',
+                                                         chunk_size: '5MB',
                                                          container: 'plan-' + eid + '-plupload',
                                                          dragdrop: true,
                                                          drop_element: 'plan-' + eid + '-filelist',
@@ -256,7 +326,7 @@ jQuery(document).ready(function () {
                                                          flash_swf_url: '/sites/all/libraries/plupload/js/plupload.flash.swf',
                                                          image_style: 'achievement',
                                                          image_style_path: '/sites/studysauce.com/files/styles/achievement/temporary/',
-                                                         max_file_size: '512MB',
+                                                         max_file_size: '1024MB',
                                                          max_files: 1,
                                                          multipart: false,
                                                          multiple_queues: true,
@@ -303,6 +373,8 @@ jQuery(document).ready(function () {
                 uploader.bind('UploadProgress', function(up, file) {
                     // Refresh progressbar
                     $('#plan-' + eid + '-plupload').find('.plup-progress').progressbar({value: uploader.total.percent});
+                    if( $('#plan-' + eid + '-plupload').find('.plup-progress .progress-text').length == 0)
+                        jQuery('<div class="progress-text">uploading...</div>').insertBefore($('#plan-' + eid + '-plupload').find('.plup-progress .ui-progressbar-value'));
                 });
 
                 // Event after a file has been uploaded from queue
@@ -313,39 +385,33 @@ jQuery(document).ready(function () {
                     var delta = $('#plan-' + eid + '-plupload').find('.plup-list li').length;
                     var name = 'plan-plupload[' + delta + ']';
 
-                    // Plupload has weird error handling behavior so we have to check for errors here
-                    if (fileSaved.error_message) {
-                        $('#' + file.id + ' > .plup-filelist-message').append('<b>Error: ' + fileSaved.error_message + '</b>');
-                        up.refresh(); // Refresh for flash or silverlight
-                        return;
+                    // TODO: start poller to check transcode status
+                    if(typeof fileSaved['status'] != 'undefined')
+                    {
+                        $('#plan-' + eid + '-plupload').find('.plup-progress').progressbar({value: 0})
+                            .find('.ui-progressbar-value').prev().text('transcoding...');
+
+                        // Add image thumbnail into list of uploaded items
+                        $('#plan-' + eid + '-plupload').find('.plup-filelist #' + file.id).remove(); // Remove uploaded file from queue
+                        $('#plan-' + eid + '-plupload').find('.plup-list').append(
+                            '<li>' +
+                                '<input type="hidden" name="' + name + '[fid]" value="' + fileSaved.fid + '" />' +
+                                '</li>');
+                        // Bind remove functionality to uploaded file
+                        newStrategy.find('a[href="#save-strategy"]').first().trigger('click');
+
+                        setTimeout('videoPoller("' + fileSaved.fid + '", "' + eid + '");', 5000);
+                    }
+                    else
+                    {
+                        // Plupload has weird error handling behavior so we have to check for errors here
+                        if (fileSaved.error_message) {
+                            $('#' + file.id + ' > .plup-filelist-message').append('<b>Error: ' + fileSaved.error_message + '</b>');
+                            up.refresh(); // Refresh for flash or silverlight
+                            return;
+                        }
                     }
 
-                    $('#plan-' + eid + '-plupload').find('.plup-filelist #' + file.id).remove(); // Remove uploaded file from queue
-                    var thumb = '<video width="184" height="184" preload="auto" controls="controls" poster="' + fileSaved.secure_uri + '">' +
-                        '<source src="' + fileSaved.uri + '" type="video/webm" />';
-                    $('#plan-' + eid + '-plupload').addClass('uploaded');
-                    $('#plan-' + eid + '-plupload').find('.plup-progress').hide();
-                    // Add image thumbnail into list of uploaded items
-                    $('#plan-' + eid + '-plupload').find('.plup-list').append(
-                        '<li>' +
-                            //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
-                        '<div class="plup-thumb-wrapper">' + thumb + '</div>' +
-                        '<a class="plup-remove-item"></a>' +
-                        '<input type="hidden" name="' + name + '[fid]" value="' + fileSaved.fid + '" />' +
-                        '<input type="hidden" name="' + name + '[thumbnail]" value="' + fileSaved.thumbnail + '" />' +
-                        '<input type="hidden" name="' + name + '[rename]" value="' + file.name +'" />' +
-                        '</li>');
-                    // Bind remove functionality to uploaded file
-                    var new_element = $('input[name="'+ name +'[fid]"]');
-                    $('#plan-' + eid + '-plupload').find('img[src*="empty-play.png"]').remove();
-                    var remove_element = $(new_element).siblings('.plup-remove-item');
-                    plup_remove_item(remove_element);
-                    // Bind resize effect to inputs of uploaded file
-                    var text_element = $(new_element).siblings('input.form-text');
-                    plup_resize_input(text_element);
-                    // Tell Drupal that form has been updated
-                    new_element.trigger('formUpdated');
-                    newStrategy.find('a[href="#save-strategy"]').first().trigger('click');
                 });
 
                 // All fiels from queue has been uploaded
@@ -363,24 +429,12 @@ jQuery(document).ready(function () {
                     if(typeof window.strategies[eid]['teach'].uploads != 'undefined' &&
                         typeof window.strategies[eid]['teach'].uploads[0] != 'undefined')
                     {
-                        var thumb = '<img src="' + window.strategies[eid]['teach'].uploads[0].uri + '" title="teaching" />';
-                        if(typeof window.strategies[eid]['teach'].uploads[0].play != 'undefined')
-                        {
-                            thumb = '<video width="184" height="184" preload="auto" controls="controls" poster="' + window.strategies[eid]['teach'].uploads[0].uri + '">' +
-                                    '<source src="' + window.strategies[eid]['teach'].uploads[0].play + '" type="video/webm" /></video>';
-                            $('#plan-' + eid + '-plupload').addClass('uploaded');
-                        }
-                        $('#plan-' + eid + '-plupload').find('img[src*="empty-play.png"]').remove();
-
                         $('#plan-' + eid + '-plupload').find('.plup-list').append(
                             '<li>' +
-                                //'<div class="plup-thumb-wrapper"><img src="'+ Drupal.settings.plup[thisID].image_style_path + file.target_name + '" /></div>' +
-                                '<div class="plup-thumb-wrapper">' + thumb + '</div>' +
-                                '<a class="plup-remove-item"></a>' +
-                                '<input type="hidden" name="' + name + '[fid]" value="' + window.strategies[eid]['teach'].uploads[0].fid + '" />' +
-                                '<input type="hidden" name="' + name + '[thumbnail]" value="' + window.strategies[eid]['teach'].uploads[0].thumbnail + '" />' +
+                                '<input type="hidden" name="' + name + '[fid]" value="' + window.strategies[eid]['teach'].uploads[0].value + '" />' +
                                 '</li>');
-                        // Bind remove functionality to uploaded file
+
+                        setTimeout('videoPoller("' + window.strategies[eid]['teach'].uploads[0].value + '", "' + eid + '");', 100);
                     }
                 }
 
@@ -527,6 +581,7 @@ jQuery(document).ready(function () {
                 strategies[strategies.length] = strategy;
             }
 
+            that.removeClass('valid').addClass('invalid');
         });
 
         $.ajax({
@@ -541,22 +596,20 @@ jQuery(document).ready(function () {
                        strategies: strategies
                    },
                    success: function (data) {
-                       row.find('div[class^="strategy"]').removeClass('saved').addClass('unsaved');
+
                    }
                });
 
     });
 
     plans.on('keyup', 'div[class^="strategy"] input[type="text"], div[class^="strategy"] textarea', function () {
-        jQuery(this).parents('div[class^="strategy"]').removeClass('saved').addClass('unsaved');
+        jQuery(this).parents('div[class^="strategy"]').removeClass('invalid').addClass('valid');
     });
     plans.on('change', 'div[class^="strategy"] input[type="checkbox"], div[class^="strategy"] input[type="radio"], div[class^="strategy"] input[type="text"], div[class^="strategy"] textarea', function () {
-        jQuery(this).parents('div[class^="strategy"]').removeClass('saved').addClass('unsaved');
+        jQuery(this).parents('div[class^="strategy"]').removeClass('invalid').addClass('valid');
     });
 
-    plans.on('click', '.page-dashboard #plan .field-name-field-assignment,' +
-                                '.page-dashboard #plan .field-name-field-class-name,' +
-                                '.page-dashboard #plan .field-name-field-percent', function () {
+    plans.on('click', '.field-name-field-assignment,.field-name-field-class-name,.field-name-field-percent', function () {
         var row = $(this).parents('.row'),
             strategy = (/default-([a-z]*)(\s|$)/ig).exec(row.attr('class'))[1],
             eid = row.attr('id').substring(4),
@@ -657,47 +710,34 @@ jQuery(document).ready(function () {
                             var events = [],
                                 s = (start.unix() - 86400) * 1000,
                                 e = (end.unix() + 86400) * 1000;
-                            //var early = 0,
-                            //    morning = 9,
-                            //    late = 18;
                             for(var eid in window.planEvents)
                             {
                                 if(window.planEvents[eid].start.getTime() > s && window.planEvents[eid].end.getTime() < e)
                                 {
                                     events[events.length] = window.planEvents[eid];
-
-                            //        if(window.planEvents[eid].allDay)
-                            //            continue;
-                            //        if(e.getHours() < 5 && e.getHours() > early)
-                            //            early = e.getHours();
-                            //        if(e.getHours() > late)
-                            //            late = e.getHours();
-                            //        if(s.getHours() > 5 && s.getHours() < morning)
-                            //            morning = s.getHours();
                                 }
                             }
-                            //var newMin,newMax;
-                            //if(early > 0)
-                            //    newMax = (24 + early) + ':00:00';
-                            //else
-                            //    newMax = (late) + ':00:00';
-                            //newMin = morning + ':00:00';
-                            //if(newMin != min)
-                            //{
-                            //    $('#calendar').fullCalendar('option', 'minTime', min = newMin);
-                            //}
-                            //if(newMax != max)
-                            //{
-                            //    $('#calendar').fullCalendar('option', 'maxTime', max = newMax);
-                            //}
-
+                            if(events.length == 0)
+                            {
+                                plans.addClass('empty');
+                                plans.find('#empty-week').dialog();
+                            }
+                            else
+                            {
+                                plans.removeClass('empty');
+                                plans.find('#empty-week').dialog('hide');
+                            }
                             callback(events);
                         },
                         eventClick: function(calEvent, jsEvent, view) {
                             // var eid =  calEvent._id.substring(3);
                             // change the border color just for fun
                             if(plans.find('#eid-' + calEvent.cid).length > 0)
+                            {
+                                if(!plans.find('#eid-' + calEvent.cid).is('.selected'))
+                                    plans.find('#eid-' + calEvent.cid).find('.field-name-field-assignment').trigger('click');
                                 plans.find('#eid-' + calEvent.cid).scrollintoview({padding: {top:120,bottom:100,left:0,right:0}});
+                            }
 
                         },
                         eventDragStart: function (event, jsEvent, ui, view) {
@@ -829,6 +869,3 @@ jQuery(document).ready(function () {
         }
     });
 });
-
-//@ sourceURL=plans.js
-//# sourceURL=plans.js

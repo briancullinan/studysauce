@@ -3,12 +3,6 @@ jQuery(document).ready(function() {
 
     var quiz = jQuery('#study-quiz');
 
-
-    jQuery('body').on('click', 'a[href="#study-quiz"]', function (evt) {
-        evt.preventDefault();
-        jQuery('#home').addClass('study-quiz-only').scrollintoview();
-    });
-
     quiz.on('click', 'a[href="#retry"]', function (evt) {
         evt.preventDefault();
         quiz.children('.webform-confirmation').hide();
@@ -17,6 +11,9 @@ jQuery(document).ready(function() {
 
     quiz.on('click', 'a[href="#submit-quiz"]', function (evt) {
         evt.preventDefault();
+        if(quiz.is('.invalid'))
+            return;
+        quiz.addClass('invalid');
 
         jQuery('#home-tasks-quiz, #home-quiz').attr('checked', 'checked');
         var home = jQuery('#home');
@@ -38,13 +35,13 @@ jQuery(document).ready(function() {
                 window.location = '/#home';
 
                 // display results
-                quiz.find('.webform-confirmation').remove();
-                quiz.append(jQuery(data.results));
-                quiz.children('div').first().hide();
+                quiz.parent().find('.webform-confirmation').remove();
+                quiz.dialog('hide');
+                jQuery(data.results).insertAfter(quiz).dialog();
 
                 // reset checks
                 quiz.find('input[name="submitted[study_place]"]:checked, input[name="submitted[underlining]"]:checked, ' +
-                    'input[name="submitted[same_subject]"]:checked' +
+                    'input[name="submitted[same_subject]"]:checked,' +
                     'input[name="submitted[laying_down]"]:checked, input[name="submitted[longer_sessions]"]:checked').prop('checked', false);
             }
         });

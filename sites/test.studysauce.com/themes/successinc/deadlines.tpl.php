@@ -5,7 +5,7 @@ drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
 <h2>Enter important dates and we will send you email reminders</h2>
 
 <div class="row invalid" id="new-dates-row">
-    <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+    <div class="field-type-text field-name-field-class-name field-widget-text-textfield ">
         <div class="form-item form-type-select">
             <label>&nbsp;</label>
             <select class="text-full form-select" id="dates-class-name" name="dates-class-name" size="1">
@@ -27,14 +27,14 @@ drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
             </select>
         </div>
     </div>
-    <div class="field-type-text field-name-field-assignment field-widget-text-textfield form-wrapper">
+    <div class="field-type-text field-name-field-assignment field-widget-text-textfield ">
         <div class="form-item form-type-textfield">
             <label for="dates-assignment">Assignment </label>
             <input class="text-full form-text jquery_placeholder-processed" placeholder="Paper, exam, project, etc."
                    type="text" id="dates-assignment" name="dates-assignment" value="" size="60" maxlength="255">
         </div>
     </div>
-    <div class="field-type-list-integer field-name-field-reminder field-widget-options-buttons form-wrapper">
+    <div class="field-type-list-integer field-name-field-reminder field-widget-options-buttons ">
         <div class="form-item form-type-checkboxes">
             <label>Reminders </label>
             <div class="form-checkboxes">
@@ -71,7 +71,7 @@ drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
             </div>
         </div>
     </div>
-    <div class="field-type-datetime field-name-field-due-date field-widget-date-popup form-wrapper">
+    <div class="field-type-datetime field-name-field-due-date field-widget-date-popup ">
         <div class="form-item form-type-date-popup">
             <div class="date-padding">
                 <div class="form-item form-type-textfield">
@@ -85,18 +85,12 @@ drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
             </div>
         </div>
     </div>
-    <div class="field-type-number-integer field-name-field-percent field-widget-number form-wrapper">
+    <div class="field-type-number-integer field-name-field-percent field-widget-number ">
         <div class="form-item form-type-textfield">
             <label for="dates-percent">% of grade </label>
             <input type="text" id="dates-percent"
                    name="dates-percent" value="0" size="12" maxlength="10"
                    class="form-text">
-        </div>
-    </div>
-    <div class="field-type-list-boolean field-name-field-completed field-widget-options-onoff form-wrapper">
-        <div class="form-item form-type-checkbox">
-            <input type="checkbox" id="dates-completed" name="dates-completed" value="1" class="form-checkbox">
-            <label class="option" for="dates-completed">Completed </label>
         </div>
     </div>
 </div>
@@ -108,7 +102,7 @@ drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/dates.js');
     <label>Sort by: </label>
     <input type="radio" id="deadlines-by-date" name="deadlines-by" value="date" checked="checked"><label for="deadlines-by-date">Date</label>&nbsp;
     <input type="radio" id="deadlines-by-class" name="deadlines-by" value="class"><label for="deadlines-by-class">Class</label>
-    <input type="checkbox" id="deadlines-historic"><label for="deadlines-historic">View historical</label>
+    <input type="checkbox" id="deadlines-historic"><label for="deadlines-historic" title="Click here to see deadlines that have already passed.">Past deadlines</label>
 </div>
 
 <?php
@@ -144,7 +138,7 @@ foreach ($entities as $eid => $reminder)
     print (($time < strtotime(date('Y/m/d')) - 86400 && $first && !($first = false)) ||
             ($time >= strtotime(date('Y/m/d')) - 86400 && $firstVisible && !($firstVisible = false)) ? 'first' : ''); ?> <?php
     print ($time < strtotime(date('Y/m/d')) - 86400 ? 'hide' : ''); ?>" id="eid-<?php print $eid; ?>">
-        <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+        <div class="field-type-text field-name-field-class-name field-widget-text-textfield ">
             <div class="read-only"><span class="class<?php print $classI; ?>">&nbsp;</span><?php print htmlspecialchars($reminder->field_class_name['und'][0]['value'], ENT_QUOTES); ?></div>
             <div class="form-item form-type-select">
                 <label>&nbsp;</label>
@@ -160,7 +154,7 @@ foreach ($entities as $eid => $reminder)
                 </select>
             </div>
         </div>
-        <div class="field-type-text field-name-field-assignment field-widget-text-textfield form-wrapper">
+        <div class="field-type-text field-name-field-assignment field-widget-text-textfield ">
             <label>Assignment</label>
             <div class="read-only"><?php print htmlspecialchars($reminder->field_assignment['und'][0]['value'], ENT_QUOTES); ?></div>
             <div class="form-item form-type-textfield">
@@ -168,7 +162,7 @@ foreach ($entities as $eid => $reminder)
                        type="text" name="dates-assignment" value="<?php print htmlspecialchars($reminder->field_assignment['und'][0]['value'], ENT_QUOTES); ?>" size="60" maxlength="255">
             </div>
         </div>
-        <div class="field-type-list-integer field-name-field-reminder field-widget-options-buttons form-wrapper">
+        <div class="field-type-list-integer field-name-field-reminder field-widget-options-buttons ">
             <label>Reminders</label>
             <div class="read-only">
                 <span class="<?php print (in_array(1209600, $reminders) ? 'checked' : 'unchecked'); ?>">2 wk</span>
@@ -211,7 +205,7 @@ foreach ($entities as $eid => $reminder)
                 </div>
             </div>
         </div>
-        <div class="field-type-datetime field-name-field-due-date field-widget-date-popup form-wrapper">
+        <div class="field-type-datetime field-name-field-due-date field-widget-date-popup ">
             <div class="form-item form-type-date-popup">
                 <label for="dates-due">Due date </label>
                 <div class="date-padding">
@@ -226,7 +220,7 @@ foreach ($entities as $eid => $reminder)
             </div>
         </div>
         <?php if($reminder->field_class_name['und'][0]['value'] != 'Nonacademic'): ?>
-        <div class="field-type-number-integer field-name-field-percent field-widget-number form-wrapper">
+        <div class="field-type-number-integer field-name-field-percent field-widget-number ">
             <label>% of grade</label>
             <div class="read-only"><?php print $reminder->field_percent['und'][0]['value']; ?>%</div>
             <div class="form-item form-type-textfield">
@@ -234,12 +228,8 @@ foreach ($entities as $eid => $reminder)
             </div>
         </div>
         <?php endif; ?>
-        <div class="field-type-list-boolean field-name-field-completed field-widget-options-onoff form-wrapper">
+        <div class="field-type-list-boolean field-name-field-completed field-widget-options-onoff ">
             <div class="read-only"><a href="#edit-reminder">&nbsp;</a><a href="#remove-reminder">&nbsp;</a></div>
-            <div class="form-item form-type-checkbox">
-                <input type="checkbox" name="dates-completed" value="1" class="form-checkbox">
-                <label class="option" for="dates-completed">Completed </label>
-            </div>
         </div>
     </div>
 <?php
@@ -247,8 +237,8 @@ foreach ($entities as $eid => $reminder)
 }
 
 ?>
-<div id="empty-dates">
-    <div class="middle-wrapper">
+<div class="fixed-centered empty-only">
+    <div id="empty-dates" class="dialog">
         <a href="#schedule"><h2>Click here to set up your class schedule and get started.</h2><small>Then set important dates on the Deadlines tab.</small></a>
     </div>
 </div>
@@ -258,7 +248,8 @@ if (count($classes) == 0) :
     ?>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            jQuery('#deadlines,#checkin').addClass('empty edit-schedule');
+            jQuery('#deadlines,#checkin').addClass('empty');
+            jQuery('#empty-dates').dialog();
         });
     </script>
 <?php endif; ?>

@@ -53,7 +53,7 @@ jQuery(document).ready(function () {
         if(resizeTimeout != null)
             clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(function () {
-            if (timeline.width() != timeline.find('svg').width())
+            if (timeline.width() != timeline.find('svg').attr('width'))
             {
                 //if (jQuery(window).width() < 963) {
                 w = timeline.width() - m[1] - m[3];
@@ -70,7 +70,8 @@ jQuery(document).ready(function () {
             }
         }, 100);
     });
-
+    if(timeline.is(':visible'))
+        jQuery(window).trigger('resize');
 
     jQuery.fn.updateMetrics = function (newHistory) {
         updateHistory(newHistory);

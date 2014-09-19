@@ -1,7 +1,3 @@
-var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
-    footerOnly = footerLinks.join('-only ') + '-only' + ' user-profile-only awards-only uid-only',
-    menuOnly;
-
 (function($) {
 
     var selectedAward = null,
@@ -19,6 +15,40 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
 
     function setBindings()
     {
+        jQuery('.page-dashboard .header-wrapper a[href="/user/logout"],' +
+            '.page-dashboard #checkin .minplayer-default-play,' +
+            '.page-dashboard #checkin .minplayer-default-pause').tooltip({position:{my: 'center top+15', at:'center bottom'}, open: function (evt, ui) {
+            if(jQuery(ui.tooltip).offset().left + jQuery(ui.tooltip).width() < jQuery(this).offset().left)
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'left');
+                ui.tooltip.addClass('left');
+            }
+            else if(jQuery(ui.tooltip).offset().left > jQuery(this).offset().left + jQuery(this).width())
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'right');
+                ui.tooltip.addClass('right');
+            }
+            else if(jQuery(ui.tooltip).offset().top + jQuery(ui.tooltip).height() < jQuery(this).offset().top)
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'top');
+                ui.tooltip.addClass('top');
+            }
+            else if(jQuery(ui.tooltip).offset().top > jQuery(this).offset().top + jQuery(this).height())
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'bottom');
+                ui.tooltip.addClass('bottom');
+            }
+        }});
+
+        $(window).on('hashchange', function(){
+            _gaq.push(['_trackPageview', location.pathname + location.search  + location.hash]);
+            var allMenuItems = jQuery('#main-menu a[href="' + location.hash + '"], .subfooter a[href="/' + location.hash.substring(1) + '"], #subfooter  a[href="/' + location.hash.substring(1) + '"]');
+            if(allMenuItems.length > 0)
+            {
+                allMenuItems.first().trigger('click');
+            }
+        });
+
         jQuery('#home input[type="checkbox"]').each(function () {
             jQuery(this).data('origState', jQuery(this).prop('checked'));
         });
@@ -28,14 +58,6 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
                 jQuery(this).prop('checked', jQuery(this).data('origState'));
         });
 
-        /*jQuery('body').on('click', 'a[href="#badges"]', function (evt) {
-            evt.preventDefault();
-            jQuery('body').removeClass(footerOnly).addClass('awards-only');
-            window.location.hash = '#badges';
-            jQuery(window).trigger('scroll');
-            bubbleResize.call(jQuery('#badges .awards > a.selected'));
-        });*/
-
         jQuery('#main-menu a').each(function () {
             var that = jQuery(this);
             // check if panel exists, we still want to allow items that lead to other pages
@@ -43,7 +65,6 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
             {
                 jQuery('body').on('click', 'a[href="' + that.attr('href') + '"]', function (evt) {
                     var that = jQuery(this);
-                    jQuery('.new-award-only').filter(':visible').removeClass('new-award-only');
                     // only show last open menu in mobile mode if they click on subitems
                     that.parents('ol,ul').find('li').removeClass('last-open');
                     if(that.parent().find('ul').length > 0) // this menu has subitems
@@ -54,7 +75,8 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
                     }
                     else
                     {
-                        jQuery('body').removeClass(footerOnly).removeClass(menuOnly).removeClass('menu-open').addClass(that.attr('href').substring(1) + '-only');
+                        jQuery('body').removeClass('menu-open');
+                        jQuery('body .page .panel-pane').hide().filter(that.attr('href')).show();
                         that.parents('ol,ul').prev('a').addClass('selected').parent().addClass('last-open');
                     }
                     jQuery(window).trigger('scroll');
@@ -66,11 +88,16 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
             }
         });
 
+        jQuery('#profile, #plan, #premium').on('click', '.dialog[id*="bill"] a[href="#close"]', function () {
+            jQuery(this).parents('.panel-pane').find('.dialog[id*="upgrade"]').dialog();
+        });
         jQuery('#profile, #plan, #premium').on('click', 'a[href="#bill-send"]', function (evt) {
             evt.preventDefault();
-            var billing = jQuery(this).parents('.bill-my-parents'),
+            var billing = jQuery(this).parents('.dialog'),
                 tab = jQuery(this).parents('.panel-pane');
-
+            if(billing.is('.invalid'))
+                return;
+            billing.addClass('invalid');
             jQuery.ajax({
                 url: 'billing/send',
                 type: 'POST',
@@ -84,31 +111,37 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
                     billing.find('input[name="invite-first"]').val('');
                     billing.find('input[name="invite-last"]').val('');
                     billing.find('input[name="invite-email"]').val('');
-                    tab.removeClass('bill-my-parents-only').addClass('bill_step_2_only');
+                    billing.removeClass('invalid').dialog('hide');
+                    billing.next('.dialog').dialog();
                 }
             });
         });
 
         // setup footer menu loading
-        jQuery(footerLinks).each(function (i, x) {
-            jQuery('body').on('click', 'a[href="/' + x + '"], a[href="/' + x + '"]', function (evt) {
+        jQuery('.subfooter .secondary-menu a')
+            .map(function (i, x) { return jQuery(x).attr('href').substr(1); })
+            .each(function (i, x) {
+                // skip logout because we want that to redirect
+                if(x == 'user/logout')
+                    return true;
+            jQuery('body').on('click', 'a[href="/' + x + '"], a[href="#' + x + '"]', function (evt) {
                 evt.preventDefault();
 
                 // add a panel for us to load in to
-                var pane = jQuery('#' + x + '.panel-pane');
+                jQuery('body .page .panel-pane').hide();
+                var pane = jQuery('#' + x + '.panel-pane').show();
                 if(pane.length == 0)
                 {
                     pane = jQuery('<div id="' + x + '" class="panel-pane"><div class="pane-content" /></div>')
-                        .appendTo(jQuery('.page .grid_12 > div'))
+                        .appendTo(jQuery('.page .grid_12 > div')).show()
                         .on('click', 'a[href="/"]', function (evt) {
                                 evt.preventDefault();
-                                jQuery('body').removeClass(footerOnly).removeClass(menuOnly);
+                                jQuery('body .page .panel-pane').hide().first().show();
                             });
                 }
 
                 // load the panel content
                 var url = jQuery(this).attr('href');
-                jQuery('body').removeClass(footerOnly).removeClass(menuOnly).addClass(x + '-only');
                 window.location.hash = '#' + x;
                 pane.find('.pane-content').addClass('loading')
                     .load(url + ' #page .content', function () {
@@ -148,57 +181,10 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
                 window.open(href, 'like-us', 'height=500,width=550,location=no,menubar=no,status=no,toolbar=no,top=' + top + ',left=' + left);
             }
         });
-
-        /*jQuery('#badges').on('click', '.awards > a', function (evt) {
-            evt.preventDefault();
-            var that = selectedAward = jQuery(this),
-                description = null;
-            jQuery('#badges .awards > a').removeClass('selected');
-            that.addClass('selected');
-            jQuery('#badges .awards > div').removeClass('selected').css('display', 'inline-block');
-            if(that.is('.awarded'))
-                description = that.nextUntil('a').filter('.after-only').addClass('selected');
-            else
-                description = that.nextUntil('a').filter('.before-only').addClass('selected');
-            bubbleResize.call(that);
-        });
-
-        jQuery('body').on('click', '#new-award a.fancy-close', function (evt) {
-            evt.preventDefault();
-            jQuery('.new-award-only').removeClass('new-award-only')
-                .parents('.panel-pane').scrollintoview();
-        });
-
-        jQuery('#badges .awards > a.not-awarded').first().trigger('click'); */
     }
 
     function setPrototypeFunctions()
     {
-        // by default show description for next unawarded
-        /*$.fn.relocateAward = function (award, panel)
-        {
-            if(award == '' && selectedAward != null)
-                selectedAward.trigger('click');
-
-            jQuery('#badges .awards > a.not-awarded').first().trigger('click');
-            var awardObj = $('.awards a[href="#' + award + '"]'),
-                name = awardObj.text();
-            $('#new-award strong').text(name.trim());
-            $('#new-award')
-                // move award to right tab
-                .detach().appendTo($(panel).addClass('new-award-only'))
-                // set the icon on the award
-                .find('.badge').attr('class', 'badge').addClass(award);
-            if(panel != '')
-                $(panel).parent().scrollintoview();
-            $('#new-award').find('a[href="#badges"]')
-                .unbind('click')
-                .bind('click', function (evt) {
-                                      awardObj.trigger('click').scrollintoview({padding: {top:120,bottom:200,left:0,right:0}});
-                jQuery('.new-award-only').removeClass('new-award-only');
-            });
-        };*/
-
         if(typeof Drupal.ajax != 'undefined')
         {
             var DrupalError = Drupal.ajax.prototype.error;
@@ -207,11 +193,6 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
                     return DrupalError(response, uri);
             };
         }
-
-        /*if(typeof window.initialAward != 'undefined')
-        {
-            jQuery('#badges').relocateAward(window.initialAward, '#badges > .pane-content');
-        }*/
     }
 
     jQuery(document).ready(function($) {
@@ -219,12 +200,11 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
         if(typeof console.error != 'undefined')
             jQuery.error = console.error;
 
-        menuOnly = jQuery('#main-menu a').map(function (i, x) {return jQuery(x).attr('href').substring(1)}).get().join('-only ') + '-only';
-
         $.error = console.log;
 
         setBindings();
         setPrototypeFunctions();
+        $(window).trigger('hashchange');
 
 
         jQuery(window).scroll(function () {
@@ -257,42 +237,6 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
         // The calendar needs to be in view for sizing information.  This will not initialize when display:none;, so instead
         //   we will activate the calendar only once, when the menu is clicked, this assumes #hash detection works, and
         //   it triggers the menu clicking
-        $(window).on('hashchange', function(){
-            _gaq.push(['_trackPageview', location.pathname + location.search  + location.hash]);
-            if(jQuery('#main-menu a[href="' + location.hash + '"], .subfooter a[href="/' + location.hash.substring(1) + '"], #subfooter  a[href="/' + location.hash.substring(1) + '"]').length > 0)
-            {
-                jQuery('#main-menu a[href="' + location.hash + '"], .subfooter a[href="/' + location.hash.substring(1) + '"], #subfooter  a[href="/' + location.hash.substring(1) + '"]').trigger('click');
-            }
-        });
-        $(window).trigger('hashchange');
-
-        if(window.location.hash == '#welcome')
-        {
-            var welcome = jQuery('#welcome');
-            if(welcome.length == 0)
-                welcome = jQuery('<div id="welcome"><div>' +
-                                 '<a href="#" onclick="jQuery(\'#welcome\').remove(); return false;"></a>' +
-                                 '<a href="#" onclick="jQuery(\'#welcome\').remove(); return false;" class="fancy-close">&nbsp;</a>' +
-                                 '</div></div>');
-            var url = '/welcome';
-            if(jQuery('.field-name-field-parent-student .form-type-radio:gt(0) input[value="student"]:checked').length > 0 ||
-               jQuery('.field-name-field-parent-student input[type="hidden"]').val() == 'student')
-            {
-                // as a student it shows up on plan tab when they first purchase
-                //welcome.appendTo(jQuery('#plan > div'))
-                window.location.hash = '#plan';
-                jQuery('#plan').scrollintoview();
-            }
-            else
-            {
-                welcome.appendTo(jQuery('#home > div'))
-                window.location.hash = '#home';
-                jQuery('#home').scrollintoview();
-            }
-            welcome.addClass('loading').find('a').first().load(url + ' .page-inside .pane-content > *', function () {
-                welcome.removeClass('loading');
-            });
-        }
 
         jQuery('body').bind('dragover', function (evt) {
             jQuery('body').addClass('file-drag');
@@ -301,13 +245,6 @@ var footerLinks = ['terms', 'privacy', 'about-us', 'contact', 'refund'],
                 }).bind('drop', function (evt) {
                             jQuery('body').removeClass('file-drag');
                         });
-
-        jQuery('.page-dashboard .header-wrapper .user-account').click(function (evt) {
-            evt.preventDefault();
-            jQuery('body').removeClass(footerOnly).addClass('user-profile-only');
-            window.location.hash = '#user-profile';
-            jQuery(window).trigger('scroll');
-        });
 
         jQuery(window).resize(function () {
             jQuery(window).trigger('scroll');

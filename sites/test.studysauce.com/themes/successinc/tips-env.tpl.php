@@ -2,7 +2,7 @@
 drupal_add_css(drupal_get_path('theme', 'successinc') .'/tips.css');
 ?>
 
-<h2 class="highlighted-link">Environment study tips</h2>
+<h2>Environment study tips</h2>
 <div class="grid_6">
     <div>
         <h4>Alternating study location</h4>

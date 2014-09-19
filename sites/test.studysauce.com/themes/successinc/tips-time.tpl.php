@@ -2,7 +2,7 @@
 drupal_add_css(drupal_get_path('theme', 'successinc') .'/tips.css');
 ?>
 
-<h2 class="highlighted-link">Time management study tips</h2>
+<h2>Time management study tips</h2>
 <div class="grid_6">
     <div>
         <h4>Cramming</h4>

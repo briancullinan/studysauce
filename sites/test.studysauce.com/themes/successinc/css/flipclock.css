@@ -8,13 +8,13 @@
     box-sizing: border-box;
 }
 
-.flip-clock-wrapper a {
+.flip-clock-wrapper .flip a {
     cursor: pointer;
     text-decoration: none;
     color: #ccc;
 }
 
-.flip-clock-wrapper a:hover {
+.flip-clock-wrapper .flip a:hover {
     color: #fff;
 }
 

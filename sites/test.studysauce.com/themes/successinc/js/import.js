@@ -166,6 +166,9 @@ jQuery(document).ready(function($) {
         evt.preventDefault();
         var users = [],
             rows = importTab.find('.row.edit.valid').not('fieldset .row');
+        if(importTab.is('.invalid'))
+            return;
+        importTab.removeClass('valid').addClass('invalid');
         rows.each(function () {
             var that = jQuery(this);
             users[users.length] = {

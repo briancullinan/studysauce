@@ -1,0 +1,200 @@
+
+.dialog
+{
+    z-index: 101;
+    margin: 0 auto;
+    max-width: 550px;
+    padding: 20px;
+    background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
+    border-radius: 10px;
+    position: relative;
+    text-align: left;
+}
+
+.modal .dialog,
+dialog.modal
+{
+    display: none;
+}
+
+.panel-pane.modal .pane-content:before,
+.fixed-centered.modal:before
+{
+    height: 100%;
+    width: 100%;
+    content: "";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.75);
+    z-index: -1;
+}
+
+.panel-pane.modal .pane-content:before
+{
+    position: absolute;
+    z-index: 40;
+}
+.panel-pane.modal .fixed-centered.modal:before
+{
+    display:none;
+}
+
+/*
+.dialog > *:first-child,
+.dialog > *:first-of-type
+{
+    margin-top:0;
+}
+
+.dialog > *:last-child,
+.dialog > *:last-of-type
+{
+    margin-bottom:0;
+}
+*/
+
+.dialog > a[href="#close"]:last-child
+{
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    background: url("images/menu_icons_48.png") no-repeat scroll -10px -730px rgba(0, 0, 0, 0);
+    color: #FFF;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.dialog .highlighted-link
+{
+    position:relative;
+    clear:both;
+}
+
+.dialog .steps
+{
+    top: 50%;
+    margin-top: -10px;
+    position:absolute;
+    left:0;
+}
+
+.dialog .steps ol
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dialog .steps ol li
+{
+    border-radius: 100%;
+    display:inline-block;
+    height: 10px;
+    width: 10px;
+    list-style: none;
+    background: #555555;
+    margin: 0 10px;
+    vertical-align: middle;
+}
+
+.dialog .steps ol li.pop
+{
+    margin:-5px 10px;
+    height: 15px;
+    width: 15px;
+    background: #0099BE;
+}
+
+.dialog > h2 ~ a[href="#close"]:last-child
+{
+    top: 0;
+    right: 0;
+    background: none;
+}
+
+.dialog > h2 ~ a[href="#close"]:last-child:after
+{
+    content: "X"
+}
+
+.dialog > h2:first-child,
+.page-dashboard .page .panel-pane .dialog > h2:first-child
+{
+    margin: -20px -20px 20px -20px;
+    background-color: #0099BB;
+    padding: 10px 20px;
+    border-radius: 10px 10px 0 0;
+    /* border-bottom: 4px solid #555; */
+    color: #fff;
+}
+
+.fixed-centered
+{
+    position: fixed;
+    z-index: 97;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: auto;
+    margin-top: -175px;
+}
+
+.fixed-centered.modal
+{
+    z-index: 100;
+    display:none;
+}
+
+@media all and (max-width:759px)
+{
+
+    .dialog .steps
+    {
+        margin-top:0;
+        position:static;
+        top:0;
+    }
+
+    .dialog > h2:first-child, .page-dashboard .page .panel-pane .dialog > h2:first-child
+    {
+        margin:-10px -10px 10px -10px;
+        padding:10px;
+    }
+
+    .fixed-centered
+    {
+        top:0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        margin-top: 0 !important;
+    }
+
+    .page-dashboard .page .panel-pane .fixed-centered
+    {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .dialog
+    {
+        padding: 10px;
+        min-height: 100%;
+        position: absolute;
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+        max-width: none;
+    }
+
+}

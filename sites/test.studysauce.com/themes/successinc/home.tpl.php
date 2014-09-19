@@ -75,8 +75,8 @@ if(isset($user->field_partners['und'][0]['value']))
 }
 
 ?>
-<div id="study-quiz">
-    <div>
+<div class="fixed-centered modal">
+    <div id="study-quiz" class="dialog">
         <div class="form-item webform-component webform-component-radios webform-component--study-place">
             <label for="edit-submitted-study-place">1.  I always study in the same place <span class="form-required" title="This field is required.">*</span></label>
             <div class="form-radios"><div class="form-item form-type-radio form-item-submitted-study-place">
@@ -137,11 +137,10 @@ if(isset($user->field_partners['und'][0]['value']))
                 </div>
             </div>
         </div>
-        <div class="highlighted-link form-actions">
+        <div class="highlighted-link">
             <a href="#submit-quiz" class="webform-submit button-primary more form-submit">Submit</a>
-            <a href="#" onclick="jQuery('#home').removeClass('study-quiz-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
-            <p style="margin-bottom:0;line-height: 1px; clear:both;">&nbsp;</p>
         </div>
+        <a href="#close">&nbsp;</a>
     </div>
 </div>
 <div id="parent_home" class="parents_only">
@@ -178,7 +177,7 @@ if(isset($user->field_partners['und'][0]['value']))
             <input id="home-tasks-checklist" name="home-tasks-checklist" type="checkbox" readonly="readonly"
                 <?php print (count($classes) &&
                 studysauce_any_dates() &&
-                !empty($lastOrder) &&
+                    (!empty($lastOrder) || isset($groups['node'])) &&
                 count($checkins) > 1 &&
                 isset($node->field_touched_music['und'][0]['value']) &&
                 count($quizSubmissions) &&
@@ -204,7 +203,7 @@ if(isset($user->field_partners['und'][0]['value']))
                     <?php print (studysauce_any_dates() ? 'checked="checked"' : ''); ?> />
                 <label for="home-reminders"><a href="#deadlines"><span>Set up deadline reminders</span></a></label><br />
                 <input id="home-plan" name="home-plan" type="checkbox" readonly="readonly"
-                    <?php print (!empty($lastOrder) ? 'checked="checked"' : ''); ?> />
+                    <?php print (!empty($lastOrder) || isset($groups['node']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-plan"><a href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout"><span>Get a personalized study plan</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></a></label><br />
                 <input id="home-checkin" name="home-checkin" type="checkbox" readonly="readonly"
                     <?php print (count($checkins) > 0 ? 'checked="checked"' : ''); ?> />
@@ -239,17 +238,17 @@ if(isset($user->field_partners['und'][0]['value']))
                     <?php print (isset($b->field_hours['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-goals"><a href="#goals"><span>Create your study goals</span></a></label><br />
                 <input id="home-partner" name="home-partner" type="checkbox" readonly="readonly"
-                    <?php print (isset($partner->field_first_name['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
+                    <?php print (isset($partner->field_first_name['und'][0]['value']) || isset($groups['node']) ? 'checked="checked"' : ''); ?> />
                 <label for="home-partner"><a href="#partner"><span>Invite an accountability partner</span></a></label><br />
                 <input id="home-spaced" name="home-spaced" type="checkbox" readonly="readonly"
                     <?php print (isset($strategies->field_spaced_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-spaced"><a href="#plan"><span>Complete a spaced repetition study session</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></a></label><br />
+                <label for="home-spaced"><a href="#plan" onclick="showFirst('spaced');"><span>Complete a spaced repetition study session</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></a></label><br />
                 <input id="home-active" name="home-active" type="checkbox" readonly="readonly"
                     <?php print (isset($strategies->field_active_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-active"><span>Complete an active recall exercise</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></label><br />
+                <label for="home-active"><a href="#plan" onclick="showFirst('active');"><span>Complete an active recall exercise</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></a></label><br />
                 <input id="home-teach" name="home-teach" type="checkbox" readonly="readonly"
                     <?php print (isset($strategies->field_teach_strategies['und'][0]['value']) ? 'checked="checked"' : ''); ?> />
-                <label for="home-teach"><span>Complete a teaching video</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></label><br />
+                <label for="home-teach"><a href="#plan" onclick="showFirst('teach');"><span>Complete a teaching video</span><?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></a></label><br />
                 <?php /* <input id="home-friend" name="home-friend" type="checkbox" readonly="readonly"
                     />
                 <label for="home-friend">Ask a friend a question<?php if(!isset($groups['node']) && !$lastOrder): ?> <sup class="premium">Premium</sup><?php endif; ?></label> */ ?>

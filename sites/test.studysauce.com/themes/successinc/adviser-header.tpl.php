@@ -14,7 +14,7 @@ $lastOrder = _studysauce_orders_by_uid($user->uid);
             <a class="more" href="/cart/add/e-p13_q1_a4o13_s?destination=cart/checkout">Sponsor student</a>
         </div>
     <?php endif; ?>
-    <div id="welcome-message">Welcome <strong>
+    <div id="welcome-message"><span>Welcome </span><strong>
         <?php
         if ($user->uid > 0)
         {
@@ -27,5 +27,6 @@ $lastOrder = _studysauce_orders_by_uid($user->uid);
                 print $user->mail;
         }
         ?></strong>
+        <?php print l('logout', 'user/logout', array('attributes' => array('title' => 'Log out'))); ?>
     </div>
 </div>

@@ -247,6 +247,7 @@ jQuery(document).ready(function() {
 
         if(account.is('.invalid'))
             return;
+        account.removeClass('valid').addClass('invalid');
 
         var inputs = account.find('input[name^="account-plupload"]'),
             uploads = [];
@@ -278,7 +279,6 @@ jQuery(document).ready(function() {
                 }
                 account.find('.form-item-current-pass input').val('');
                 account.find('.form-item-pass input').val('');
-                account.removeClass('valid').addClass('invalid');
             }
         })
     });

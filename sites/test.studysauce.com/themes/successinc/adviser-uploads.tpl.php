@@ -102,24 +102,10 @@ if (!empty($nodes['node']))
                     $result[$name][$strategy]['notes'] = isset($entity->field_notes['und'][0]['value'])
                         ? $entity->field_notes['und'][0]['value']
                         : '';
-                    if(isset($entity->field_teaching['und'][0]['fid']))
+                    if(isset($entity->field_teaching['und'][0]['value']))
                     {
-                        $result[$name][$strategy]['uploads'][0]['fid'] = $entity->field_teaching['und'][0]['fid'];
-                        $result[$name][$strategy]['uploads'][0]['thumbnail'] = $entity->field_teaching['und'][0]['thumbnail'];
-                        $result[$name][$strategy]['uploads'][0]['uri'] = image_style_url('achievement', $entity->field_teaching['und'][0]['thumbnailfile']->uri);
-
-                        // Load the derived files
-                        $outputs = db_select('video_output', 'vo')
-                            ->fields('vo')
-                            ->condition('vo.original_fid', array($entity->field_teaching['und'][0]['fid']), 'IN')
-                            ->execute()->fetchAllAssoc('output_fid');
-                        foreach ($outputs as $outputfid => $output) {
-                            if ($output->original_fid == $entity->field_teaching['und'][0]['fid']) {
-                                $file = file_load($output->output_fid);
-                                if($file->filesize > 0)
-                                    $result[$name][$strategy]['uploads'][0]['play'] = check_plain(file_create_url($file->uri));
-                            }
-                        }
+                        $result[$name][$strategy]['uploads'][0]['value'] = $entity->field_teaching['und'][0]['value'];
+                        //$result[$name][$strategy]['uploads'][0]['thumbnail'] = $entity->field_teaching['und'][0]['thumbnail'];
                     }
                 }
                 elseif($strategy == 'spaced')

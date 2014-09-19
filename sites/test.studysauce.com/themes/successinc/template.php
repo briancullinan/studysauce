@@ -29,7 +29,7 @@ function successinc_preprocess_page(&$variables)
         $variables['theme_hook_suggestions'][] = 'page__panel';
 
         // add the panel page machine name to the template suggestions
-        $variables['theme_hook_suggestions'][] = 'page__' . $panel_page['name'];
+        $variables['theme_hook_suggestions'][] = 'page__' . str_replace('_', '', substr($panel_page['name'], 5));
         if (isset($layout[1]))
             $variables['theme_hook_suggestions'][] = 'page__panel_' . $layout[1];
 
@@ -403,23 +403,29 @@ if (theme_get_setting('scrolltop_display')) {
 }
 
 global $user;
+drupal_add_css(drupal_get_path('theme', 'successinc') . '/dialog.css');
 drupal_add_css(drupal_get_path('theme', 'successinc') . '/header.css');
 drupal_add_css(drupal_get_path('theme', 'successinc') . '/buy.css');
 drupal_add_css(drupal_get_path('theme', 'successinc') . '/funnel.css');
 drupal_add_js('window.pathToTheme=' . json_encode(path_to_theme()) . ';', 'inline');
 drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.scrollintoview.js');
+drupal_add_css(drupal_get_path('theme', 'successinc') . '/css/jquery-ui.min.css');
+drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery-ui.min.js');
+drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.browser.min.js');
+drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/dialog.js');
+drupal_add_library('system', 'ui.progressbar');
+drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/contact.js');
 
 if (drupal_is_front_page() && $user->uid != 0) {
 //    drupal_add_css(drupal_get_path('module', 'date') .'/date_api/date.css');
 //    drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/date_popup.js');
-    drupal_add_js(drupal_get_path('module', 'date') . '/date_popup/jquery.timeentry.pack.js');
     drupal_add_library('system', 'ui.datepicker');
     drupal_add_library('system', 'ui.draggable');
     drupal_add_library('system', 'ui.resizable');
     drupal_add_library('system', 'ui.droppable');
     drupal_add_library('system', 'ui.sortable');
-    drupal_add_library('system', 'ui.progressbar');
 
+    drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.jplayer.min.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/skrollr.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/flipclock/libs/prefixfree.min.js');
     drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/sauce.js');
@@ -449,9 +455,11 @@ jQuery(document).ready(function () {
 
     jQuery('body').on('click', 'a[href="#bill-send"]', function (evt) {
         evt.preventDefault();
-        var billing = jQuery(this).parents('.bill-my-parents'),
+        var billing = jQuery(this).closest('#bill-my-parents, .dialog, .bill-my-parents').first(),
             tab = jQuery('body');
-
+            if(billing.is('.invalid'))
+                return;
+            billing.addClass('invalid');
         jQuery.ajax({
             url: 'student/send',
             type: 'POST',
@@ -465,7 +473,8 @@ jQuery(document).ready(function () {
                 billing.find('input[name="invite-first"]').val('');
                 billing.find('input[name="invite-last"]').val('');
                 billing.find('input[name="invite-email"]').val('');
-                tab.removeClass('bill-my-parents-only').addClass('bill_step_2_only');
+                billing.removeClass('invalid').dialog('hide');
+                tab.find('div[id$="bill-2"].dialog').dialog();
             }
         });
     });
@@ -542,19 +551,19 @@ jQuery(document).ready(function () {
 
     if(jQuery.browser.msie && jQuery.browser.version < 11)
     {
-        jQuery('body').append(jQuery('<div class="browser-not-supported"><div class="middle-wrapper"><div style="margin:0 auto;text-align:center;">' +
+        jQuery('body').append(jQuery('<div class="fixed-centered modal"><div id="browser-not-supported" class="dialog">' +
          '<h2>Your browser is not supported</h2>' +
           '<p>Please upgrade to the latest version of Internet Explorer by click on the icon below, or use Firefox, Chrome or Safari.  Thank you!</p>' +
            '<p style="margin:0 auto;display:inline-block;margin-bottom: 100px;"><a href="https://www.google.com/chrome/browser/">&nbsp;</a><a href="https://www.mozilla.org/en-US/firefox/new/">&nbsp;</a><a href="http://support.apple.com/downloads/#safari">&nbsp;</a><a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">&nbsp;</a></p>' +
-         '</div></div></div>'));
+         '</div></div>'));
     }
     jQuery.browser.chrome = /chrom(e|ium)/.test(navigator.userAgent.toLowerCase());
     if(isAndroid && !jQuery.browser.chrome)
     {
-        jQuery('body').append(jQuery('<div class="browser-not-supported"><div class="middle-wrapper"><div style="margin:0 auto;text-align:center;">' +
+        jQuery('body').append(jQuery('<div class="fixed-centered modal"><div id="browser-not-supported" class="dialog">' +
          '<h2>Your browser is not supported</h2>' +
           '<p>Please use another mobile browser.  Thank you!</p>' +
-         '</div></div></div>'));
+         '</div></div>'));
     }
 });
 EOJS;

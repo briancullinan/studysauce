@@ -1,4 +1,24 @@
 
+.page-dashboard #profile .pane-content:before
+{
+    height: 100%;
+    width: 100%;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.50);
+    z-index: 40;
+}
+
+.page-dashboard.adviser-user #profile .pane-content:before,
+.page-dashboard.partner-user #profile .pane-content:before,
+.page-dashboard.paid-user #profile .pane-content:before
+{
+    display: none;
+}
+
 #profile h1
 {
     font-size: 72px;
@@ -8,33 +28,7 @@
     margin-bottom: 10px;
 }
 
-.page-dashboard #profile.bill_step_2_only .buy-plan .highlighted-link > a,
-.page-dashboard #profile.bill-my-parents-only .buy-plan .highlighted-link > a
-{
-    display:none;
-}
-
-.page-dashboard #profile .bill_step_2
-{
-    display:none;
-}
-
-.page-dashboard #profile.bill_step_2_only .bill_step_2
-{
-    display: block;
-}
-
-.page-dashboard #profile .buy-plan .bill-my-parents
-{
-    display:none;
-}
-
-.page-dashboard #profile.bill-my-parents-only .buy-plan .bill-my-parents
-{
-    display:block;
-}
-
-.page-dashboard #profile .buy-plan
+.page-dashboard #profile #profile-buy-plan
 {
     position: absolute;
     top:0;

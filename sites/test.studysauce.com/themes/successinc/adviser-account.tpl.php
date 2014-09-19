@@ -6,14 +6,14 @@ global $user;
 
 ?>
 <h2>User settings</h2>
-<div class="field-type-text field-name-field-first-name field-widget-text-textfield form-wrapper">
+<div class="field-type-text field-name-field-first-name field-widget-text-textfield">
     <div class="form-item form-type-textfield">
         <label>First name:</label>
         <input class="text-full form-text required" type="text" name="account-first-name"
                value="<?php print (isset($user->field_first_name['und'][0]['value']) ? $user->field_first_name['und'][0]['value'] : ''); ?>" size="60" maxlength="255">
     </div>
 </div>
-<div class="field-type-text field-name-field-last-name field-widget-text-textfield form-wrapper">
+<div class="field-type-text field-name-field-last-name field-widget-text-textfield">
     <div class="form-item form-type-textfield">
         <label>Last name:</label>
         <input class="text-full form-text required" type="text" name="account-last-name"
@@ -80,7 +80,7 @@ global $user;
     </div>
 </div>
 <br />
-<div class="highlighted-link form-actions form-wrapper">
+<div class="highlighted-link">
     <!--<a href="#cancel-account">Delete your account</a> --><a class="more form-submit ajax-processed" href="#save-account">Save</a>
 </div>
 <?php
@@ -115,7 +115,7 @@ $advised = (in_array('adviser', $user->roles) || in_array('master adviser', $use
 $lastOrder = _studysauce_orders_by_uid($user->uid);
 $groups = og_get_groups_by_user();
 if(!isset($groups['node']) && !$lastOrder): ?>
-<div class="highlighted-link form-actions form-wrapper"><a href="/buy" class="more">Upgrade</a></div>
+<div class="highlighted-link"><a href="/buy" class="more">Upgrade</a></div>
 <?php endif; ?>
 
 

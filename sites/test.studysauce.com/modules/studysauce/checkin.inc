@@ -18,7 +18,6 @@ function studysauce_checkin()
         $nodes = array_keys($entities['node']);
         $nid = array_shift($nodes);
         $node = node_load($nid);
-        $node->revision = 1;
 
         if(isset($_POST['touchedMusic']))
             $node->field_touched_music['und'][0]['value'] = 1;
@@ -66,23 +65,28 @@ function studysauce_checkin()
         }
     }
 
-    $newSDS = studysauce_get_sds_messages();
-    $lastSDS = end($newSDS);
+    if(!isset($_POST['touchedMusic']))
+    {
+        $newSDS = studysauce_get_sds_messages();
+        $lastSDS = end($newSDS);
 
-    list($times, $rows, $total, $hours) = _studysauce_get_metrics();
-    global $exportMetricsClasses, $exportMetricsTimes;
-    $metrics = theme('studysauce-metrics');
+        list($times, $rows, $total, $hours) = _studysauce_get_metrics();
+        global $exportMetricsClasses, $exportMetricsTimes;
+        $metrics = theme('studysauce-metrics');
 
-    print json_encode(array(
-        'lastSDS' => $lastSDS,
-        'rows' => $rows,
-        'total' => $total,
-        'hours' => $hours,
-        'times' => $exportMetricsTimes,
-        'classes' => $exportMetricsClasses,
-        //'awards' => $awards,
-        'eid' => isset($_POST['eid']) ? $_POST['eid'] : null
-    ));
+        print json_encode(array(
+            'lastSDS' => $lastSDS,
+            'rows' => $rows,
+            'total' => $total,
+            'hours' => $hours,
+            'times' => $exportMetricsTimes,
+            'classes' => $exportMetricsClasses,
+            //'awards' => $awards,
+            'eid' => isset($_POST['eid']) ? $_POST['eid'] : null
+        ));
+    }
+    else
+        print true;
     drupal_exit();
 }
 

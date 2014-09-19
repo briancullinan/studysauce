@@ -7,6 +7,29 @@ jQuery(document).ready(function($) {
 
     var schedule = $('#schedule, .page-path-schedule, .page-path-schedule2').first();
 
+    jQuery('.field-name-field-time input[title]').tooltip({position: {my: 'center top+15', at: 'center bottom'}, open: function (evt, ui) {
+        if(jQuery(ui.tooltip).offset().left + jQuery(ui.tooltip).width() < jQuery(this).offset().left)
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'left');
+            ui.tooltip.addClass('left');
+        }
+        else if(jQuery(ui.tooltip).offset().left > jQuery(this).offset().left + jQuery(this).width())
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'right');
+            ui.tooltip.addClass('right');
+        }
+        else if(jQuery(ui.tooltip).offset().top + jQuery(ui.tooltip).height() < jQuery(this).offset().top)
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'top');
+            ui.tooltip.addClass('top');
+        }
+        else if(jQuery(ui.tooltip).offset().top > jQuery(this).offset().top + jQuery(this).height())
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'bottom');
+            ui.tooltip.addClass('bottom');
+        }
+    }});
+
     $.fn.planFunc = function () {
         jQuery(this).each(function () {
             var row = $(this).closest('.row');
@@ -39,48 +62,53 @@ jQuery(document).ready(function($) {
                                 speed:'immediate',
                                 yearRange: '-3:+3'
                             });
+            row.find('input[name="schedule-value-time"][type="text"], input[name="schedule-value2-time"][type="text"]')
+                .filter(':not(.is-timeEntry)')
+                .timeEntry({
+                    defaultTime: new Date(0, 0, 0, 6, 0, 0),
+                    ampmNames: ['AM', 'PM'],
+                    ampmPrefix: ' ',
+                    fromTo: false,
+                    show24Hours: false,
+                    showSeconds: false,
+                    spinnerImage: '',
+                    timeSteps: [1,1,"1"]
+                })
+                .on('keypress', function (event) {
+                    var that = jQuery(this),
+                        row = that.parents('.row'),
+                        from = row.find('input[name="schedule-value-time"]').timeEntry('getTime'),
+                        to = row.find('input[name="schedule-value2-time"]').timeEntry('getTime');
 
-            if(!row.find('input[name="schedule-value-time"]').is('.hasTimeEntry'))
-            {
-                row.find('input[name="schedule-value-time"], input[name="schedule-value2-time"]')
-                    .timeEntry({
-                        defaultTime: new Date(0, 0, 0, 6, 0, 0),
-                        ampmNames: ['am', 'pm'],
-                        fromTo: false,
-                        show24Hours: false,
-                        showSeconds: false,
-                        spinnerImage: '',
-                        timeSteps: [1,1,"1"]
-                    }).on('keypress', function (event) {
-                        var that = jQuery(this),
-                            row = that.parents('.row'),
-                            from = row.find('input[name="schedule-value-time"]').timeEntry('getTime'),
-                            to = row.find('input[name="schedule-value2-time"]').timeEntry('getTime');
-                        var chr = String.fromCharCode(event.charCode === undefined ? event.keyCode : event.charCode);
-                        if (chr < ' ') {
-                            return;
-                        }
-                        var ampmSet = that.data('ampmSet') || false;
-                        if(chr.toLowerCase() == 'a' || chr.toLowerCase() == 'p')
-                            that.data('ampmSet', true);
-                        else if (chr >= '0' && chr <= '9' && !ampmSet)
-                        {
-                            var time = that.timeEntry('getTime');
-                            var hours = time.getHours();
-                            var newTime = time;
-                            if(hours < 7)
-                                newTime = new Date(0, 0, 0, hours + 12, time.getMinutes(), 0);
-                            // check the length in between to see if its longer than 12 hours
-                            else if(hours >= 19)
-                                newTime = new Date(0, 0, 0, hours - 12, time.getMinutes(), 0);
+                    if(that.data('processing'))
+                        return;
+                    that.data('processing', true);
 
-                            if((that.is('[name="schedule-value-time"]') && to == null || newTime.getTime() < to.getTime()) ||
-                                (that.is('[name="schedule-value2-time"]') && from == null || newTime.getTime() > from.getTime()))
-                                that.timeEntry('setTime', newTime);
-                        }
+                    var chr = String.fromCharCode(event.charCode === undefined ? event.keyCode : event.charCode);
+                    if (chr < ' ') {
+                        return;
+                    }
+                    var ampmSet = that.data('ampmSet') || false;
+                    if(chr.toLowerCase() == 'a' || chr.toLowerCase() == 'p')
+                        that.data('ampmSet', true);
+                    else if (chr >= '0' && chr <= '9' && !ampmSet)
+                    {
+                        var time = that.timeEntry('getTime');
+                        var hours = time.getHours();
+                        var newTime = time;
+                        if(hours < 7)
+                            newTime = new Date(0, 0, 0, hours + 12, time.getMinutes(), 0);
+                        // check the length in between to see if its longer than 12 hours
+                        else if(hours >= 19)
+                            newTime = new Date(0, 0, 0, hours - 12, time.getMinutes(), 0);
 
-                    });
-            }
+                        if((that.is('[name="schedule-value-time"]') && to == null || newTime.getTime() < to.getTime()) ||
+                            (that.is('[name="schedule-value2-time"]') && from == null || newTime.getTime() > from.getTime()))
+                            that.timeEntry('setTime', newTime);
+                    }
+
+                    that.data('processing', false);
+                });
 
             // check for invalid time entry
             var from = row.find('input[name="schedule-value-time"]').timeEntry('getTime'),
@@ -108,7 +136,9 @@ jQuery(document).ready(function($) {
                 // check if dates overlap
                 var startDate2 = new Date(that.find('input[name="schedule-value-date"]').val());
                 var endDate2 = new Date(that.find('input[name="schedule-value2-date"]').val());
-                if(startDate <= endDate2 || endDate >= startDate2)
+                if(isNaN(startDate.getTime()) || isNaN(endDate.getTime()) ||
+                    isNaN(startDate2.getTime()) || isNaN(endDate2.getTime()) ||
+                    startDate <= endDate2 || endDate >= startDate2)
                 {
                     // check if weekdays overlap
                     var dotwOverlaps = false,
@@ -161,8 +191,10 @@ jQuery(document).ready(function($) {
             schedule.find('.row.overlaps:visible').length == 0 &&
             schedule.find('.row.invalid-time:visible').length == 0 &&
             schedule.find('.field-name-field-university input').val().trim() != '' &&
-                (schedule.find('.field-name-field-university input').val() != schedule.find('.field-name-field-university input').prop('defaultValue') ||
-                    schedule.find('.row.edit.valid:visible').not('.blank').length > 0))
+                (schedule.find('.row.edit.valid:visible').not('.blank').length > 0 ||
+                    (schedule.find('.row.valid').not('.blank').length > 0 &&
+                        schedule.find('.field-name-field-university input').val() !=
+                            schedule.find('.field-name-field-university input').prop('defaultValue'))))
             schedule.removeClass('invalid invalid-only').addClass('valid');
         else
             schedule.removeClass('valid').addClass('invalid');
@@ -190,12 +222,7 @@ jQuery(document).ready(function($) {
         var that = $(this),
             row = that.parents('.row');
         row.addClass('edit').planFunc();
-    });
-
-    schedule.on('click', 'a[href="#cancel-class"]', function (evt) {
-        evt.preventDefault();
-        jQuery(this).parents('.row').removeClass('edit');
-        schedule.removeClass('edit-class-only edit-other-only').scrollintoview();
+        row.find('.field-name-field-time input[type="text"]').trigger('change');
     });
 
     function updateTabs(data, row)
@@ -230,7 +257,7 @@ jQuery(document).ready(function($) {
         var plan = jQuery('#plan');
         plan.find('.row, .head').remove();
         jQuery(data.plan).find('.row, .head')
-            .insertBefore(plan.find('.pane-content p').last());
+            .appendTo(plan.find('.pane-content'));
 
         // update SDS
         jQuery('#sds-messages .show').removeClass('show');
@@ -251,7 +278,7 @@ jQuery(document).ready(function($) {
         if (data.empty)
         {
             jQuery('#metrics').addClass('empty');
-
+            jQuery('#metrics-empty').dialog();
             // update metrics classes
             var mc = 0;
             jQuery('#metrics ol li').remove();
@@ -264,6 +291,7 @@ jQuery(document).ready(function($) {
         else
         {
             jQuery('#metrics').removeClass('empty');
+            jQuery('#metrics-empty').dialog('hide');
 
             // update metrics key
             var mc = 0;
@@ -288,14 +316,18 @@ jQuery(document).ready(function($) {
         }
         if(c > 0)
         {
-            jQuery('#checkin').removeClass('empty edit-schedule');
+            jQuery('#checkin').removeClass('empty');
+            jQuery('#empty-schedule').dialog('hide');
             jQuery('#deadlines').removeClass('empty');
+            jQuery('#empty-dates').dialog('hide');
             jQuery('#home-schedule').attr('checked', 'checked');
         }
         else
         {
-            jQuery('#checkin').addClass('empty edit-schedule');
+            jQuery('#checkin').addClass('empty');
+            jQuery('#empty-schedule').dialog();
             jQuery('#deadlines').addClass('empty');
+            jQuery('#empty-dates').dialog();
             jQuery('#checkin .classes').html('<a href="#class0" class="class0"><span>&nbsp;</span>Hist 135</a>' +
                                              '<a href="#class1" class="class1"><span>&nbsp;</span>Chem 151</a>' +
                                              '<a href="#class2" class="class2"><span>&nbsp;</span>Math 125</a>' +
@@ -318,23 +350,6 @@ jQuery(document).ready(function($) {
             }
         });
 
-        // update awards such as pulse detected for setting up a class
-        /*if (typeof data.awards != 'undefined' && typeof $.fn.relocateAward != 'undefined') {
-            var lastAward = null;
-            for (var i in data.awards) {
-                if (data.awards[i] != false && jQuery('#badges #' + i).is('.not-awarded')) {
-                    jQuery('#badges #' + i).removeClass('not-awarded').addClass('awarded');
-                    lastAward = i;
-                }
-            }
-
-            if (lastAward == 'setup-pulse')
-                jQuery('#badges').relocateAward(lastAward, '#schedule > .pane-content');
-            else if (lastAward != null)
-                jQuery('#badges').relocateAward(lastAward, '#badges > .pane-content');
-        }*/
-
-        // scroll back to tab they clicked edit on
     }
 
     schedule.on('click', 'a[href="#add-class"]', function (evt) {
@@ -342,7 +357,7 @@ jQuery(document).ready(function($) {
         var examples = ['HIST 101', 'CALC 120', 'MAT 200', 'PHY 110', 'BUS 300', 'ANT 350', 'GEO 400', 'BIO 250', 'CHM 180', 'PHIL 102', 'ENG 100'],
             count = schedule.find('.row').length,
             addClass = schedule.find('#add-class-dialog').last(),
-            newClass = addClass.clone().attr('id', '').addClass('edit').insertBefore(addClass);
+            newClass = addClass.clone().attr('id', '').addClass('edit').insertBefore(addClass).show();
         newClass.find('input[type="checkbox"], input[type="radio"]').each(function () {
             var that = jQuery(this),
                 oldId = that.attr('id');
@@ -353,6 +368,28 @@ jQuery(document).ready(function($) {
         });
         newClass.find('.field-name-field-class-name input')
             .attr('placeholder', examples[Math.floor(Math.random() * examples.length)]);
+        newClass.find('.field-name-field-time input[title]').tooltip({position: {my: 'center top+15', at: 'center bottom'}, open: function (evt, ui) {
+            if(jQuery(ui.tooltip).offset().left + jQuery(ui.tooltip).width() < jQuery(this).offset().left)
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'left');
+                ui.tooltip.addClass('left');
+            }
+            else if(jQuery(ui.tooltip).offset().left > jQuery(this).offset().left + jQuery(this).width())
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'right');
+                ui.tooltip.addClass('right');
+            }
+            else if(jQuery(ui.tooltip).offset().top + jQuery(ui.tooltip).height() < jQuery(this).offset().top)
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'top');
+                ui.tooltip.addClass('top');
+            }
+            else if(jQuery(ui.tooltip).offset().top > jQuery(this).offset().top + jQuery(this).height())
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'bottom');
+                ui.tooltip.addClass('bottom');
+            }
+        }});
         newClass.planFunc();
         schedule.removeClass('edit-other-only').addClass('edit-class-only');
     });
@@ -362,7 +399,7 @@ jQuery(document).ready(function($) {
         var examples = ['Work', 'Practice', 'Gym', 'Meeting'],
             count = schedule.find('.row').length,
             addOther = schedule.find('#add-other-dialog').last(),
-            newClass = addOther.clone().attr('id', '').addClass('edit').insertBefore(addOther);
+            newClass = addOther.clone().attr('id', '').addClass('edit').insertBefore(addOther).show();
         newClass.find('input[type="checkbox"], input[type="radio"]').each(function () {
             var that = jQuery(this),
                 oldId = that.attr('id');
@@ -374,6 +411,28 @@ jQuery(document).ready(function($) {
         newClass.find('.field-name-field-class-name input')
             .attr('placeholder', examples[Math.floor(Math.random() * examples.length)]);
         newClass.find('.field-name-field-recurring input[value="weekly"]').prop('checked', true);
+        newClass.find('.field-name-field-time input[title]').tooltip({position: {my: 'center top+15', at: 'center bottom'}, open: function (evt, ui) {
+            if(jQuery(ui.tooltip).offset().left + jQuery(ui.tooltip).width() < jQuery(this).offset().left)
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'left');
+                ui.tooltip.addClass('left');
+            }
+            else if(jQuery(ui.tooltip).offset().left > jQuery(this).offset().left + jQuery(this).width())
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'right');
+                ui.tooltip.addClass('right');
+            }
+            else if(jQuery(ui.tooltip).offset().top + jQuery(ui.tooltip).height() < jQuery(this).offset().top)
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'top');
+                ui.tooltip.addClass('top');
+            }
+            else if(jQuery(ui.tooltip).offset().top > jQuery(this).offset().top + jQuery(this).height())
+            {
+                jQuery(this).tooltip('option', 'tooltipClass', 'bottom');
+                ui.tooltip.addClass('bottom');
+            }
+        }});
         newClass.planFunc();
         schedule.removeClass('edit-class-only').addClass('edit-other-only');
     });
@@ -385,7 +444,7 @@ jQuery(document).ready(function($) {
     schedule.on('click', 'a[href="#remove-class"]', function (evt) {
         evt.preventDefault();
         var row = jQuery(this).parents('.row');
-        schedule.addClass('building');
+        schedule.find('#schedule-building').dialog();
         schedule.find('.timer').pietimer('reset');
         schedule.find('.timer').pietimer({
             timerSeconds: 30,
@@ -405,19 +464,27 @@ jQuery(document).ready(function($) {
                    },
                    success: function (data) {
                        updateTabs(data);
-                       schedule.removeClass('building');
+                       schedule.find('#schedule-building').dialog('hide')
                    }
                });
     });
 
     schedule.on('click', 'a[href="#save-class"]', function (evt) {
         evt.preventDefault();
-
+        if(schedule.find('.field-name-field-university input').val().trim() == '')
+            schedule.find('.field-name-field-university').addClass('error-empty');
+        else
+            schedule.find('.field-name-field-university').removeClass('error-empty');
         if(schedule.is('.invalid'))
         {
             schedule.addClass('invalid-only');
+            schedule.find('.row.edit.invalid .field-name-field-time input').each(function () {
+                if(jQuery(this).val().trim() == '')
+                    jQuery(this).parents('.row').addClass('invalid-time');
+            });
             return;
         }
+        schedule.removeClass('valid').addClass('invalid');
 
         var classes = [];
         schedule.find('.row.edit.valid:visible, .row.valid.edit:visible').each(function () {
@@ -438,17 +505,22 @@ jQuery(document).ready(function($) {
                 type: row.find('input[name="schedule-type"]').val()
             };
         });
-        schedule.addClass('building');
-        schedule.find('.timer').pietimer('reset');
-        schedule.find('.timer').pietimer({
-            timerSeconds: 60,
-            color: '#09B',
-            fill: false,
-            showPercentage: true,
-            callback: function() {
-            }
-        });
-        schedule.find('.timer').pietimer('start');
+
+        if(window.location.pathname != '/schedule' &&
+            window.location.pathname != '/schedule2')
+        {
+            schedule.find('#schedule-building').dialog();
+            schedule.find('.timer').pietimer('reset');
+            schedule.find('.timer').pietimer({
+                timerSeconds: 60,
+                color: '#09B',
+                fill: false,
+                showPercentage: true,
+                callback: function() {
+                }
+            });
+            schedule.find('.timer').pietimer('start');
+        }
 
         $.ajax({
                    url: '/node/save/schedule',
@@ -468,19 +540,18 @@ jQuery(document).ready(function($) {
                            window.location = '/customization';
                        else
                        {
-                           schedule.removeClass('valid').addClass('invalid');
                            updateTabs(data);
                        }
-                       schedule.removeClass('building');
+                       schedule.find('#schedule-building').dialog('hide')
                    },
                    error: function () {
-                       schedule.removeClass('building');
+                       schedule.find('#schedule-building').dialog('hide')
                    }
                });
     });
 
     var checkDate = function () {
-        var row = jQuery(this).parents('.row');
+        var row = jQuery(this).closest('.row');
         if(row.find('.field-name-field-class-name input').val() != '' &&
             row.find('.field-name-field-time input[name="schedule-value-date"]').val() == '' &&
             row.find('.field-name-field-time input[name="schedule-value2-date"]').val() == '' &&
@@ -495,10 +566,32 @@ jQuery(document).ready(function($) {
     };
     schedule.on('change', '.field-name-field-class-name input', checkDate);
     schedule.on('keyup', '.field-name-field-class-name input', checkDate);
-    schedule.on('keyup', '.field-name-field-class-name input, .field-name-field-time input[type="text"], .field-name-field-university input', function () {
+    schedule.on('change', '.field-name-field-time input', function () {
+        jQuery(this).parents('.row').nextUntil(':not(.row)').each(function () {
+            checkDate.apply(this);
+        });
+        if(jQuery(this).is('[type="time"]'))
+            jQuery(this).parent().find('input[type="text"]').timeEntry('setTime', jQuery(this).val());
+        if(jQuery(this).is('.is-timeEntry[type="text"]'))
+        {
+            var t = jQuery(this).timeEntry('getTime');
+            if(typeof t != 'undefined')
+                jQuery(this).parent().find('input[type="time"]').val((t.getHours() < 10
+                    ? ('0' + t.getHours())
+                    : t.getHours()) + ':' + (t.getMinutes() < 10
+                    ? ('0' + t.getMinutes())
+                    : t.getMinutes()) + ':00');
+        }
+    });
+    schedule.on('keyup', '.field-name-field-time input', function () {
+        jQuery(this).parents('.row').nextUntil(':not(.row)').each(function () {
+            checkDate.apply(this);
+        });
+    });
+    schedule.on('keyup', '.field-name-field-class-name input, .field-name-field-time input, .field-name-field-university input', function () {
         jQuery(this).parents('.row').planFunc();
     });
-    schedule.on('change', '.field-name-field-class-name input, .field-name-field-day-of-the-week input, .field-name-field-time input[type="text"], .field-name-field-university input', function () {
+    schedule.on('change', '.field-name-field-class-name input, .field-name-field-day-of-the-week input, .field-name-field-time input, .field-name-field-university input', function () {
         jQuery(this).parents('.row').planFunc();
     });
 

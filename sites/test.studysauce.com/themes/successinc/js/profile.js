@@ -3,6 +3,32 @@ jQuery(document).ready(function($) {
 
     var profile = $('#profile, .page-path-profile, .page-path-customization, .page-path-customization2').first();
 
+    jQuery('.field-name-type-of-studying label.option[title],' +
+        '.field-name-difficulty-level label.option[title],' +
+        '.class-profile .field-name-type-of-studying > label,' +
+        '.class-profile .field-name-difficulty-level > label').tooltip({position:{my: 'center top+15', at:'center bottom'}, open: function (evt, ui) {
+        if(jQuery(ui.tooltip).offset().left + jQuery(ui.tooltip).width() < jQuery(this).offset().left)
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'left');
+            ui.tooltip.addClass('left');
+        }
+        else if(jQuery(ui.tooltip).offset().left > jQuery(this).offset().left + jQuery(this).width())
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'right');
+            ui.tooltip.addClass('right');
+        }
+        else if(jQuery(ui.tooltip).offset().top + jQuery(ui.tooltip).height() < jQuery(this).offset().top)
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'top');
+            ui.tooltip.addClass('top');
+        }
+        else if(jQuery(ui.tooltip).offset().top > jQuery(this).offset().top + jQuery(this).height())
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'bottom');
+            ui.tooltip.addClass('bottom');
+        }
+    }});
+
     $.fn.profileFunc = function () {
         var valid = true,
             classProfile = profile.find('.class-profile'),
@@ -65,6 +91,9 @@ jQuery(document).ready(function($) {
             {
                 questions.hide();
                 jQuery(this).show();
+                // if the first on is unanswered, show info-dialog
+                if(jQuery(this).is('.field-name-field-profile-question-mindset'))
+                    jQuery('#profile-intro').dialog();
                 return false;
             }
         });
@@ -74,6 +103,7 @@ jQuery(document).ready(function($) {
         evt.preventDefault();
         if(profile.is('.invalid'))
             return;
+        profile.removeClass('valid').addClass('invalid');
 
         var classProfile = profile.find('.class-profile'),
             studyPreferences = profile.find('.study-preferences');
@@ -88,9 +118,10 @@ jQuery(document).ready(function($) {
             });
 
 
-            if(!studyPreferences.is(':visible') && !classProfile.is(':visible'))
+            if(!studyPreferences.is(':visible') && !classProfile.is(':visible') &&
+                window.location.pathname != '/profile')
             {
-                profile.addClass('building').scrollintoview();
+                profile.find('#profile-building').dialog();
                 profile.find('.timer').pietimer('reset');
                 profile.find('.timer').pietimer({
                     timerSeconds: 30,
@@ -134,16 +165,15 @@ jQuery(document).ready(function($) {
                                var plan = jQuery('#plan');
                                plan.find('.row, .head').remove();
                                jQuery(data.plan).find('.row, .head')
-                                   .insertBefore(plan.find('.pane-content p').last());
+                                   .appendTo(plan.find('.pane-content'));
 
                                // update profile tab
-                               profile.removeClass('valid').addClass('invalid');
                                if(!studyPreferences.is(':visible') && !classProfile.is(':visible'))
-                                   profile.removeClass('building');
+                                   profile.find('#profile-building').dialog('hide');
                            }
                        },
                        error: function () {
-                           profile.removeClass('building');
+                           profile.find('#profile-building').dialog('hide');
                        }
                    });
         }
@@ -177,17 +207,20 @@ jQuery(document).ready(function($) {
             scheduleData['9-pm-2-am'] = profile.find('.field-name-field-9-pm-2-am input:checked').val();
         }
 
-        profile.addClass('building').scrollintoview();
-        profile.find('.timer').pietimer('reset');
-        profile.find('.timer').pietimer({
-            timerSeconds: 60,
-            color: '#09B',
-            fill: false,
-            showPercentage: true,
-            callback: function() {
-            }
-        });
-        profile.find('.timer').pietimer('start');
+        if(window.location.pathname != '/customization')
+        {
+            profile.find('#profile-building').dialog();
+            profile.find('.timer').pietimer('reset');
+            profile.find('.timer').pietimer({
+                timerSeconds: 60,
+                color: '#09B',
+                fill: false,
+                showPercentage: true,
+                callback: function() {
+                }
+            });
+            profile.find('.timer').pietimer('start');
+        }
 
         // skip building the schedule if we are in the middle of the buy funnel
         if(window.location.pathname == '/customization')
@@ -203,7 +236,7 @@ jQuery(document).ready(function($) {
                        if(window.location.pathname == '/customization')
                            window.location = '/customization2';
                        else if(window.location.pathname == '/customization2')
-                           window.location = '/#plan';
+                           window.location = '/#plan-intro';
                        else
                        {
                            // update calendar events
@@ -213,15 +246,14 @@ jQuery(document).ready(function($) {
                            var plan = jQuery('#plan');
                            plan.find('.row, .head').remove();
                            jQuery(data.plan).find('.row, .head')
-                               .insertBefore(plan.find('.pane-content p').last());
+                               .appendTo(plan.find('.pane-content'));
 
                            // update profile tab
-                           profile.removeClass('valid').addClass('invalid');
-                           profile.removeClass('building');
+                           profile.find('#profile-building').dialog('hide');
                        }
                    },
                    error: function () {
-                       profile.removeClass('building');
+                       profile.find('#profile-building').dialog('hide');
                    }
                });
 

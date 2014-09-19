@@ -109,7 +109,7 @@ $endWeek = $startWeek + 604800 - 86400;
             for="schedule-by-date">Date</label>&nbsp;
         <input type="radio" id="schedule-by-class" name="schedule-by" value="class"><label
             for="schedule-by-class">Class</label>
-        <input type="checkbox" id="schedule-historic"><label for="schedule-historic">View historical</label>
+        <input type="checkbox" id="schedule-historic"><label for="schedule-historic">Past sessions</label>
     </div>
     <?php
     print theme('studysauce-adviser-strategies');
@@ -200,17 +200,17 @@ $endWeek = $startWeek + 604800 - 86400;
         print ('default-' . $session); ?> <?php
         print (isset($event->field_completed['und'][0]['value']) && $event->field_completed['und'][0]['value'] ? 'done' : ''); ?>"
              id="eid-<?php print $eid; ?>">
-            <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+            <div class="field-type-text field-name-field-class-name field-widget-text-textfield ">
                 <span class="class">&nbsp;</span>
                 <div class="read-only"><?php print htmlspecialchars($event->field_class_name['und'][0]['value'], ENT_QUOTES); ?></div>
             </div>
-            <div class="field-type-text field-name-field-assignment field-widget-text-textfield form-wrapper">
+            <div class="field-type-text field-name-field-assignment field-widget-text-textfield ">
                 <div class="read-only"><?php print htmlspecialchars($title, ENT_QUOTES); ?></div>
             </div>
-            <div class="field-type-number-integer field-name-field-percent field-widget-number form-wrapper">
+            <div class="field-type-number-integer field-name-field-percent field-widget-number ">
                 <div class="read-only"></div>
             </div>
-            <div class="field-type-list-boolean field-name-field-completed field-widget-options-onoff form-wrapper">
+            <div class="field-type-list-boolean field-name-field-completed field-widget-options-onoff ">
                 <div class="read-only">
                     <span class="<?php print (isset($event->field_completed['und'][0]['value']) && $event->field_completed['und'][0]['value'] ? 'checked' : ''); ?>">&nbsp;</span></div>
             </div>

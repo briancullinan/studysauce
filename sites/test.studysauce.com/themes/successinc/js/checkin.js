@@ -92,9 +92,9 @@ function checkinCallback(pos, eid, checkedIn) {
                         }
                         else {
                             that.addClass('checked-in');
-                            jQuery('#checkin,#plan').removeClass('checklist-only sds-message-only');
+                            jQuery('#checkin,#plan').find('#checklist,#sds-messages').removeClass('invalid').dialog('hide');
                             jQuery('#checkin .clock').startClock();
-                            jQuery('#checkin .flip-counter').scrollintoview({padding: {top: 120, bottom: 200, left: 0, right: 0}});
+                            //jQuery('#checkin .flip-counter').scrollintoview({padding: {top: 120, bottom: 200, left: 0, right: 0}});
                         }
 
                         // update SDS
@@ -124,34 +124,18 @@ function checkinCallback(pos, eid, checkedIn) {
                         // update metrics graphs
                         jQuery('#metrics').updateMetrics(data.times);
                         if (data.times.length == 0)
+                        {
                             jQuery('#metrics').addClass('empty');
+                            jQuery('#metrics-empty').dialog();
+                        }
                         else
+                        {
                             jQuery('#metrics').removeClass('empty');
+                            jQuery('#metrics-empty').dialog('hide');
+                        }
                         jQuery('#study-total').text(data.total);
                         jQuery('#timeline > h4').html(data.hours > 0 ? ('Goal: ' + data.hours + ' hours') : '&nbsp;');
 
-
-                        // update awards
-                        /*if (typeof data.awards != 'undefined') {
-                            var lastAward = null;
-                            for (var i in data.awards) {
-                                if (data.awards[i] != false && jQuery('#badges #' + i).is('.not-awarded')) {
-                                    jQuery('#badges #' + i).removeClass('not-awarded').addClass('awarded');
-                                    lastAward = i;
-                                }
-                            }
-
-                            if (lastAward == 'beginner-checkin' || lastAward == 'beginner-checklist' || lastAward == 'beginner-mix' ||
-                                lastAward == 'beginner-breaks' || lastAward == 'beginner-cram' || lastAward == 'beginner-chicken' ||
-                                lastAward == 'beginner-commuter' || lastAward == 'intermediate-flier' || lastAward == 'intermediate-cross' ||
-                                lastAward == 'intermediate-breaker' || lastAward == 'intermediate-cured' || lastAward == 'beginner-checklist' ||
-                                lastAward == 'advanced-magellan' || lastAward == 'advanced-bo' || lastAward == 'advanced-comber' ||
-                                lastAward == 'advanced-nocram')
-                                jQuery('#badges').relocateAward(lastAward, '#metrics > .pane-content');
-                            else if (lastAward != null)
-                                jQuery('#badges').relocateAward(lastAward, '#badges > .pane-content');
-                        }
-                        */
                     }
                 });
 }
@@ -166,7 +150,50 @@ function checkinClick(evt)
     jQuery('#checklist .no-checkboxes').hide();
     jQuery('#checklist .checkboxes').show();
     jQuery('#checklist .checkboxes input').removeAttr('checked');
-    panel.find('.pane-content').append(jQuery('#checklist, #sds-messages, #timer-expire').detach());
+
+    var sessionBegin = function (evt) {
+        evt.preventDefault();
+
+        // the default for timer expire is to go to metrics tab
+        panel.find('#timer-expire').off()
+            .on('click', 'a[href="#close"]', function (evt) {
+                evt.preventDefault();
+                var panel = jQuery(this).parents('#checkin,#plan');
+                panel.find('#timer-expire').dialog('hide');
+                if(panel.is('#checkin'))
+                    window.location = '#metrics';
+            });
+
+        if (jQuery('#sds-messages .show').length > 0)
+        {
+            panel.find('#sds-messages').dialog();
+        }
+        else
+        {
+            panel.find('#checklist').dialog();
+        }
+
+        jQuery('#checklist a[href="#study"], #sds-messages a[href="#study"]').off('click');
+        jQuery('#checklist a[href="#study"], #sds-messages a[href="#study"]').on('click', function (evt) {
+            evt.preventDefault();
+            var dialog = jQuery(this).parents('.dialog');
+            if(dialog.is('.invalid'))
+                return;
+            dialog.addClass('invalid');
+            jQuery('.minplayer-default-play').trigger('click');
+            //if(typeof navigator.geolocation != 'undefined')
+            //{
+            //    locationTimeout = setTimeout(callback, 2000);
+            //    navigator.geolocation.getCurrentPosition(callback, callback, {maximumAge: 3600000, timeout:1000});
+            //}
+            //else
+            checkinCallback(null, id, false);
+            that.scrollintoview({padding: {top: 120, bottom: 200, left: 0, right: 0}});
+        });
+    };
+
+    // move parent fixed-centered
+    panel.find('.pane-content').append(jQuery('#checklist, #sds-messages, #timer-expire').parents('.fixed-centered').detach());
     // if it is in session always display timer expire
     if (that.is('.checked-in'))
     {
@@ -175,9 +202,8 @@ function checkinClick(evt)
         clock = null;
         sessionStart = new Date().getTime() / 1000;
         setClock();
-        panel.addClass('timer-expire-only').scrollintoview();
+        panel.find('#timer-expire').dialog();
         checkinCallback(null, id, true);
-        return;
     }
     else if (jQuery('#checkin .classes a.checked-in, #plan .mini-checkin > a.checked-in').length > 0)
     {
@@ -186,38 +212,20 @@ function checkinClick(evt)
         clock = null;
         sessionStart = new Date().getTime() / 1000;
         setClock();
-        // show expire message
-        panel.addClass('timer-expire-only').scrollintoview();
 
         // switch off other checkin buttons
         var tmpThat = jQuery('#checkin .classes a.checked-in, #plan .mini-checkin > a.checked-in').first(),
-            tmpId = (/cid([0-9]+)(\s|$)/ig).exec(panel.is('#plan')
+            tmpId = (/cid([0-9]+)(\s|$)/ig).exec(tmpThat.parents('#checkin, #plan').is('#plan')
                 ? tmpThat.parents('.row').attr('class')
                 : tmpThat.attr('class'))[1];
         checkinCallback(null, tmpId, true);
-    }
 
-    if (jQuery('#sds-messages .show').length > 0)
-    {
-        panel.addClass('sds-message-only').scrollintoview();
+        // show expire message
+        panel.find('#timer-expire').off()
+            .on('click', 'a[href="#close"]', sessionBegin).dialog();
     }
     else
-    {
-        panel.addClass('checklist-only').scrollintoview();
-    }
-
-    jQuery('#checklist a[href="#study"], #sds-messages a[href="#study"]').off('click');
-    jQuery('#checklist a[href="#study"], #sds-messages a[href="#study"]').on('click', function (evt) {
-        evt.preventDefault();
-        jQuery('.minplayer-default-play').trigger('click');
-        //if(typeof navigator.geolocation != 'undefined')
-        //{
-        //    locationTimeout = setTimeout(callback, 2000);
-        //    navigator.geolocation.getCurrentPosition(callback, callback, {maximumAge: 3600000, timeout:1000});
-        //}
-        //else
-        checkinCallback(null, id, false);
-    });
+        sessionBegin(evt);
 }
 
 jQuery(document).ready(function ($) {
@@ -254,26 +262,7 @@ jQuery(document).ready(function ($) {
     jQuery('#checkin').on('click', '.classes a', checkinClick);
     jQuery('#plan').on('click', '.mini-checkin > a', checkinClick);
 
-    jQuery('#checkin,#plan').on('click', 'a[href="#break"]', function (evt) {
-        evt.preventDefault();
-        var panel = jQuery(this).parents('#checkin,#plan');
-        panel.removeClass('timer-expire-only');
-        if (!jQuery('#checkin').is('.checklist-only') && !jQuery('#checkin').is('.sds-message-only') &&
-            !jQuery('#plan').is('.checklist-only') && !jQuery('#plan').is('.sds-message-only') &&
-            !panel.is('#plan'))
-            window.location = '#metrics';
-    });
-
-    /*
-    jQuery('#checkin').on('click', '#timer-expire a[href="#badges"]', function (evt) {
-        jQuery('#checkin .classes a.checked-in').first().trigger('click');
-        jQuery('#checkin').removeClass('timer-expire-only').scrollintoview();
-    });
-    */
-
-    jQuery('#checkin').on('click', 'a[title="Play"], a[title="Pause"]', function () {
-        jQuery('.header-wrapper a[title="' + jQuery(this).attr('title') + '"]').trigger('click');
-        jQuery('#checkin').find('a[title="Play"], a[title="Pause"]').hide().not('a[title="' + jQuery(this).attr('title') + '"]').css('display', 'block');
+    jQuery('#checkin').on('click', 'a.minplayer-default-play, a.minplayer-default-pause', function () {
         if(jQuery('#checkin').find('input[name="touchedMusic"]').val() == 0)
             jQuery.ajax({
                             url: '/checkin',
@@ -298,7 +287,6 @@ jQuery(document).ready(function ($) {
         }
         sessionStart = new Date().getTime() / 1000;
         setClock();
-        jQuery('.minplayer-default-play').trigger('click');
         clock = setInterval(function () {
             setClock();
             if (new Date().getTime() / 1000 - sessionStart >= TIMER_SECONDS - 59) {

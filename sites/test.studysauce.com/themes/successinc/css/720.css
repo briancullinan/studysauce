@@ -456,11 +456,6 @@ body.page-node-landing #user-register-form
     padding:30px 10px !important;
 }
 
-body.page-node-landing .content > .highlighted-link
-{
-    margin-right:7px;
-}
-
 body.page-home #scr .grid_6,
 .two-column-guide .grid_6
 {

@@ -6,12 +6,6 @@
 
 .page-dashboard #new-award > div
 {
-    padding:0 !important;
-    margin:5% auto !important;
-}
-
-.page-dashboard #new-award > div > div
-{
     background:url(images/award_background.png) no-repeat 50% 0 transparent;
     border-radius: 10px;
     padding:20px;

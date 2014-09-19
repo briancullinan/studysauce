@@ -22,6 +22,58 @@ if(!isset($account))
 }
 $setup = studysauce_is_incentives_setup($account);
 ?>
+
+<div class="fixed-centered modal">
+    <div id="claim" class="dialog">
+        <h2>Let your sponsor know about your study achievement.</h2>
+        <div class="field-type-image field-name-field-photo-evidence field-widget-image-plupload ">
+            <div class="form-item form-type-plupload-file">
+                <div class="plupload" id="goals-plupload">
+                    <div class="plup-list-wrapper">
+                        <ul class="plup-list clearfix ui-sortable"></ul>
+                    </div>
+                    <div class="plup-filelist" id="goal-plupload-filelist">
+                        <table>
+                            <tbody>
+                            <tr class="plup-drag-info">
+                                <td>
+                                    <div class="drag-main">Click here to select files</div>
+                                    <div class="drag-more">
+                                        <div>You can upload up to <strong>1</strong> files.</div>
+                                        <div>Allowed files types: <strong>png gif jpg jpeg</strong>.</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="plup-bar clearfix">
+                        <input type="hidden" id="goal-upload-path" value="<?php print url('node/plup/goals', array('query' => array('plupload_token' => drupal_get_token('plupload-handle-uploads')))); ?>" />
+                        <a href="#goal-select" class="plup-select" id="goals-plupload-select">Add</a>
+                        <a hre="#goal-upload" class="plup-upload" id="goals-plupload-upload">Upload</a>
+                        <div class="plup-progress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field-type-text-long field-name-field-message field-widget-text-textarea ">
+            <div class="form-item form-type-textarea">
+                <label>Message </label>
+
+                <div class="form-textarea-wrapper resizable textarea-processed resizable-textarea"><textarea
+                        class="text-full form-textarea jquery_placeholder-processed" placeholder="Message"
+                        name="field_goals[und][0][field_message][und][0][value]" cols="60" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="highlighted-link">
+            <a href="#brag-done" class="more">Send</a>
+        </div>
+        <p style="clear:both;margin-bottom:0;line-height:0px;">&nbsp;</p>
+        <a href="#close">&nbsp;</a>
+    </div>
+</div>
+
 <div
     class="step_<?php print $setup; ?> <?php print (empty($studyConnections) ? 'not-connected' : 'connected'); ?> <?php print (isset($parent) ? 'sponsored' : ''); ?>">
 
@@ -59,62 +111,11 @@ $setup = studysauce_is_incentives_setup($account);
 
  */ ?>
 
-<div id="goals-brag" class="required-fields group-achievement field-group-div">
-    <div><h3>Let your sponsor know about your study achievement.</h3>
-
-        <div class="field-type-image field-name-field-photo-evidence field-widget-image-plupload form-wrapper">
-            <div class="form-item form-type-plupload-file">
-                <div class="plupload" id="goals-plupload">
-                    <div class="plup-list-wrapper">
-                        <ul class="plup-list clearfix ui-sortable"></ul>
-                    </div>
-                    <div class="plup-filelist" id="goal-plupload-filelist">
-                        <table>
-                            <tbody>
-                            <tr class="plup-drag-info">
-                                <td>
-                                    <div class="drag-main">Click here to select files</div>
-                                    <div class="drag-more">
-                                        <div>You can upload up to <strong>1</strong> files.</div>
-                                        <div>Allowed files types: <strong>png gif jpg jpeg</strong>.</div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="plup-bar clearfix">
-                        <input type="hidden" id="goal-upload-path" value="<?php print url('node/plup/goals', array('query' => array('plupload_token' => drupal_get_token('plupload-handle-uploads')))); ?>" />
-                        <a href="#goal-select" class="plup-select" id="goals-plupload-select">Add</a>
-                        <a hre="#goal-upload" class="plup-upload" id="goals-plupload-upload">Upload</a>
-                        <div class="plup-progress"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="field-type-text-long field-name-field-message field-widget-text-textarea form-wrapper">
-            <div class="form-item form-type-textarea">
-                <label>Message </label>
-
-                <div class="form-textarea-wrapper resizable textarea-processed resizable-textarea"><textarea
-                        class="text-full form-textarea jquery_placeholder-processed" placeholder="Message"
-                        name="field_goals[und][0][field_message][und][0][value]" cols="60" rows="5"></textarea>
-                </div>
-            </div>
-        </div>
-        <div class="highlighted-link form-actions">
-            <a href="#brag-done" class="more">Send</a>
-        </div>
-        <p style="clear:both;margin-bottom:0;line-height:0px;">&nbsp;</p>
-        <a href="#" onclick="jQuery('#goals').removeClass('achievement-only').scrollintoview(); return false;"
-           class="fancy-close">&nbsp;</a></div>
-</div>
-
 <div id="non-sponsored">
     <?php list($b, $m, $o) = _studysauce_unsponsored_goals($account); ?>
     <div class="row draggable odd <?php print (isset($b->item_id) ? ('gid' . $b->item_id) : ''); ?> <?php print (!isset($b->field_hours['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
         <div class="field-name-field-type"><strong>Study Hours</strong></div>
-        <div class="field-type-list-integer field-name-field-hours field-widget-options-select form-wrapper">
+        <div class="field-type-list-integer field-name-field-hours field-widget-options-select ">
             <div class="read-only"><label>Goal: </label>
                 <span><?php print (isset($b->field_hours['und'][0]['value']) ? $b->field_hours['und'][0]['value'] : 0); ?></span>
 
@@ -153,7 +154,7 @@ $setup = studysauce_is_incentives_setup($account);
                 <div class="description"><span>hours per week</span><span>hrs / wk</span></div>
             </div>
         </div>
-        <div class="field-type-text-long field-name-field-reward field-widget-text-textarea form-wrapper">
+        <div class="field-type-text-long field-name-field-reward field-widget-text-textarea ">
             <div class="read-only"><label>Reward: </label>
                 <a href="#edit-reward">&nbsp;</a>
                 <span><?php print (isset($b->field_reward['und'][0]['value']) ? $b->field_reward['und'][0]['value'] : ''); ?></span>
@@ -178,7 +179,7 @@ $setup = studysauce_is_incentives_setup($account);
     <?php if(isset($b->field_hours['und'][0]['value'])) : ?>
     <div class="row draggable even <?php print (isset($m->item_id) ? ('gid' . $m->item_id) : ''); ?> <?php print (!isset($m->field_grade['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
         <div class="field-name-field-type"><strong>Study Milestone</strong></div>
-        <div class="field-type-list-text field-name-field-grade field-widget-options-select form-wrapper">
+        <div class="field-type-list-text field-name-field-grade field-widget-options-select ">
             <div class="read-only">
                 <label>Goal: </label>
                 <span><?php print (isset($m->field_grade['und'][0]['value']) ? $m->field_grade['und'][0]['value'] : ''); ?></span>
@@ -222,7 +223,7 @@ $setup = studysauce_is_incentives_setup($account);
                 <div class="description"><span>grade on exam/paper</span><span>on exam/paper</span></div>
             </div>
         </div>
-        <div class="field-type-text-long field-name-field-reward field-widget-text-textarea form-wrapper">
+        <div class="field-type-text-long field-name-field-reward field-widget-text-textarea ">
             <div class="read-only"><label>Reward: </label>
                 <a href="#edit-reward">&nbsp;</a>
                 <span><?php print (isset($m->field_reward['und'][0]['value']) ? $m->field_reward['und'][0]['value'] : ''); ?></span>
@@ -249,7 +250,7 @@ $setup = studysauce_is_incentives_setup($account);
     if(isset($m->field_grade['und'][0]['value'])) : ?>
     <div class="row draggable odd <?php print (isset($o->item_id) ? ('gid' . $o->item_id) : ''); ?> <?php print (!isset($o->field_gpa['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
         <div class="field-name-field-type"><strong>Study Outcome</strong></div>
-        <div class="field-type-list-float field-name-field-gpa field-widget-options-select form-wrapper">
+        <div class="field-type-list-float field-name-field-gpa field-widget-options-select ">
             <div class="read-only"><label>Goal: </label>
                 <span><?php print (isset($o->field_gpa['und'][0]['value']) ? $o->field_gpa['und'][0]['value'] : ''); ?></span>
 
@@ -316,7 +317,7 @@ $setup = studysauce_is_incentives_setup($account);
                 <div class="description">Target GPA for the term</div>
             </div>
         </div>
-        <div class="field-type-text-long field-name-field-reward field-widget-text-textarea form-wrapper">
+        <div class="field-type-text-long field-name-field-reward field-widget-text-textarea ">
             <div class="read-only">
                 <label>Reward: </label>
                 <a href="#edit-reward">&nbsp;</a>

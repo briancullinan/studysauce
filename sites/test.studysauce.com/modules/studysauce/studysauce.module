@@ -108,7 +108,7 @@ function studysauce_menu_alter(&$items) {
 
     $items['node/plup/plan'] = array(
         'title' => 'Plupload upload page',
-        'page callback' => 'studysauce_upload_page',
+        'page callback' => 'studysauce_amazon_bucket_file',
         'access callback' => true,
         'type' => MENU_CALLBACK
     );
@@ -193,6 +193,13 @@ function studysauce_menu_alter(&$items) {
     $items['user/save/status'] = array(
         'title' => 'Save user status set by an adviser',
         'page callback' => 'studysauce_save_status',
+        'access callback' => true,
+        'type' => MENU_CALLBACK
+    );
+
+    $items['aws/checkstatus'] = array(
+        'title' => 'Just check to see if files exist in aws',
+        'page callback' => 'studysauce_amazon_file_exists',
         'access callback' => true,
         'type' => MENU_CALLBACK
     );
@@ -302,10 +309,227 @@ function studysauce_adviser()
     ));
 }
 
+function studysauce_amazon_file_exists()
+{
+    // 1. Instantiate the client.
+    try
+    {
+        $s3 = Aws\S3\S3Client::factory(array(
+            'key'    => 'AKIAIIESK4YKQTWYTU5Q',
+            'secret' => '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',
+        ));
+
+        // 2. Check if object exists in bucket
+        $result = $s3->getObject(array(
+            'Bucket'       => 'studysauce',
+            'Key'          => $_POST['fid']
+        ));
+    }
+    catch(Exception $ex)
+    {
+        drupal_json_output('error');
+    }
+
+    try
+    {
+        $result = $s3->getObject(array(
+            'Bucket'       => 'studysauce',
+            'Key'          => substr($_POST['fid'], 0, strrpos($_POST['fid'], '.')) . '.webm'
+        ));
+
+        $date = $result['LastModified'];
+        if($date)
+            drupal_json_output(array(
+                'thumb' => substr($_POST['fid'], 0, strrpos($_POST['fid'], '.')) . '-00001.png',
+                'src' => substr($_POST['fid'], 0, strrpos($_POST['fid'], '.')) . '.webm'
+            ));
+    }
+    catch(Exception $ex)
+    {
+        // just ignore because it isn't done generating
+        drupal_json_output(true);
+    }
+}
+
+function studysauce_amazon_bucket_file()
+{
+
+    drupal_add_http_header('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT', TRUE);
+    drupal_add_http_header('Last-Modified', gmdate("D, d M Y H:i:s") . ' GMT', TRUE);
+    drupal_add_http_header('Cache-Control', 'no-store, no-cache, must-revalidate post-check=0, pre-check=0', TRUE);
+    drupal_add_http_header('Pragma', 'no-cache', TRUE);
+
+// 5 minutes execution time
+    @set_time_limit(5 * 60);
+    // Uncomment this one to fake upload time
+    // usleep(5000);
+
+    // Get parameters
+    $chunk = isset($_REQUEST['chunk']) ? $_REQUEST['chunk'] : 0;
+    $chunks = isset($_REQUEST['chunks']) ? $_REQUEST['chunks'] : 0;
+    $filename = isset($_REQUEST['name']) ? $_REQUEST['name'] : '';
+
+    // Clean the fileName for security reasons
+    $extensions = 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp *';
+    $filename = file_munge_filename($filename, $extensions, FALSE);
+
+    // check database if file already exists
+    $query = db_select('studysauce_s3files', 's3');
+    $query->fields('s3', array('filename', 'upload_id', 'parts'));
+    $query->condition('s3.filename', $filename, '=');
+    $file = $query->execute()->fetchAssoc();
+    // Make sure the fileName is unique but only if chunking is disabled
+    if ($chunks < 2 && !empty($file))
+    {
+        $ext = strrpos($filename, '.');
+        $filename_a = substr($filename, 0, $ext);
+        $filename_b = substr($filename, $ext);
+
+        $count = 1;
+        $query = db_select('studysauce_s3files', 's3');
+        $query->fields('s3', array('filename', 'upload_id', 'parts'));
+        $query->condition('s3.filename', $filename_a . '_' . $count . $filename_b, '=');
+        $file = $query->execute()->fetchAssoc();
+        while (!empty($file))
+            $count++;
+
+        $filename = $filename_a . '_' . $count . $filename_b;
+    }
+
+
+    // Look for the content type header
+    if (isset($_SERVER['HTTP_CONTENT_TYPE']))
+    {
+        $contentType = $_SERVER['HTTP_CONTENT_TYPE'];
+    }
+
+    if (isset($_SERVER['CONTENT_TYPE']))
+    {
+        $contentType = $_SERVER['CONTENT_TYPE'];
+    }
+
+    // Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
+    // 1. Instantiate the client.
+    $s3 = Aws\S3\S3Client::factory(array(
+        'key'    => 'AKIAIIESK4YKQTWYTU5Q',
+        'secret' => '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',
+    ));
+
+    // 2. Create a new multipart upload and get the upload ID.
+    if($chunk == 0)
+    {
+        $result = $s3->createMultipartUpload(array(
+            'Bucket'       => 'studysauce',
+            'Key'          => $filename,
+            'StorageClass' => 'REDUCED_REDUNDANCY',
+            'ACL'          => 'public-read',
+            'Metadata'     => array()
+        ));
+        $uploadId = $result['UploadId'];
+
+        // save to database
+        $file = array();
+        $file['filename'] = $filename;
+        $file['upload_id'] = $uploadId;
+        $file['parts'] = array();
+
+        $query = db_insert('studysauce_s3files')->fields(array('filename', 'upload_id', 'url', 'parts', 'timestamp'));
+        $query->values(array(
+            'filename' => $filename,
+            'upload_id' => $uploadId,
+            'url' => '',
+            'parts' => serialize(array()),
+            'timestamp' => time()
+        ));
+        $query->execute();
+    }
+
+    if(is_string($file['parts']))
+        $file['parts'] = unserialize($file['parts']);
+
+    if (strpos($contentType, 'multipart') !== false)
+    {
+        if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name']))
+        {
+            $input = fopen($_FILES['file']['tmp_name'], 'rb');
+        }
+    }
+    else
+    {
+        $input = fopen("php://input", 'rb');
+    }
+
+    // 3. Upload the file in parts.
+    $part = '';
+    while ($buff = fread($input, 4096))
+        $part .= $buff;
+    $result = $s3->uploadPart(array(
+        'Bucket'     => 'studysauce',
+        'Key'        => $file['filename'],
+        'UploadId'   => $file['upload_id'],
+        'PartNumber' => count($file['parts']) + 1,
+        'Body'       => $part, // same size as client javascript uploader
+    ));
+    $file['parts'][] = array(
+        'PartNumber' => count($file['parts']) + 1,
+        'ETag'       => $result['ETag'],
+    );
+    fclose($input);
+
+    // save parts to database so we can finish later
+    $update = db_update('studysauce_s3files');
+    $update->fields(array('parts' => serialize($file['parts'])));
+    $update->condition('filename', $filename, '=');
+    $update->execute();
+
+    // 4. Complete multipart upload.
+    if ((isset($_GET['chunk']) && ($_GET['chunk'] + 1) == $_GET['chunks']) || (!isset($_GET['chunk'])))
+    {
+        $result = $s3->completeMultipartUpload(array(
+            'Bucket'   => 'studysauce',
+            'Key'      => $file['filename'],
+            'UploadId' => $file['upload_id'],
+            'Parts'    => $file['parts'],
+        ));
+        $url = $result['Location'];
+
+        // save location to database
+        $update = db_update('studysauce_s3files');
+        $update->condition('filename', $filename, '=');
+        $update->expression('url', $url);
+
+        // start the transcoder job
+        $client = Aws\ElasticTranscoder\ElasticTranscoderClient::factory(array(
+            'key'    => 'AKIAIIESK4YKQTWYTU5Q',
+            'secret' => '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',
+            'region'  => 'us-west-2'
+        ));
+
+        $result = $client->createJob(array(
+            // PipelineId is required
+            'PipelineId' => '1409877158303-aln6sp',
+            // Input is required
+            'Input' => array(
+                'Key' => $file['filename']
+            ),
+            'Output' => array(
+                'Key' => substr($file['filename'], 0, strrpos($file['filename'], '.')) . '.webm',
+                'ThumbnailPattern' => substr($file['filename'], 0, strrpos($file['filename'], '.')) . '-{count}',
+                'PresetId' => '1409937723140-yb0pjg'
+            )
+        ));
+
+        if($result['Job']['Status'] == 'Submitted')
+            drupal_json_output(array('status' => 'transcoding', 'fid' => $file['filename']));
+    }
+
+}
+
 /**
  * Plupload's upload function.
  */
-function studysauce_upload_page() {
+function studysauce_upload_page()
+{
 
     drupal_add_http_header('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT', TRUE);
     drupal_add_http_header('Last-Modified', gmdate("D, d M Y H:i:s") . ' GMT', TRUE);
@@ -421,6 +645,7 @@ function studysauce_upload_page() {
             // We build it as a temp but will deliver it as a public.
             $file->secure_uri = str_replace('system/temporary', variable_get('file_public_path', 'sites/default/files'), $file->secure_uri);
 
+            // TODO: remove this when amazon is done
             if(current_path() == 'node/plup/plan')
             {
                 module_load_include('utility.inc', 'video');
@@ -695,16 +920,17 @@ function _studysauce_get_incentives_hours($account = null)
     if(!isset($incentive))
         return 0;
 
-    foreach($incentive->field_goals[LANGUAGE_NONE] as $i => $goal)
-    {
-        $entity = entity_load('field_collection_item', array($goal['value']));
-        if($entity[$goal['value']]->field_type[LANGUAGE_NONE][0]['value'] == 'milestone')
-            $milestone = $entity[$goal['value']];
-        if($entity[$goal['value']]->field_type[LANGUAGE_NONE][0]['value'] == 'outcome')
-            $outcome = $entity[$goal['value']];
-        if($entity[$goal['value']]->field_type[LANGUAGE_NONE][0]['value'] == 'behavior')
-            $behavior = $entity[$goal['value']];
-    }
+    if(isset($incentive->field_goals[LANGUAGE_NONE]['0']['value']))
+        foreach($incentive->field_goals[LANGUAGE_NONE] as $i => $goal)
+        {
+            $entity = entity_load('field_collection_item', array($goal['value']));
+            if($entity[$goal['value']]->field_type[LANGUAGE_NONE][0]['value'] == 'milestone')
+                $milestone = $entity[$goal['value']];
+            if($entity[$goal['value']]->field_type[LANGUAGE_NONE][0]['value'] == 'outcome')
+                $outcome = $entity[$goal['value']];
+            if($entity[$goal['value']]->field_type[LANGUAGE_NONE][0]['value'] == 'behavior')
+                $behavior = $entity[$goal['value']];
+        }
 
     if(isset($behavior->field_hours[LANGUAGE_NONE][0]['value']))
         return intval($behavior->field_hours[LANGUAGE_NONE][0]['value']);
@@ -797,7 +1023,17 @@ function studysauce_get_last_achievement()
 function studysauce_init()
 {
     global $isInitted;
+    if($isInitted)
+        return;
     $isInitted = true;
+    include 'UniversalClassLoader.php';
+    $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
+    $loader->registerNamespaces(array(
+        'Aws' => __DIR__,
+        'Guzzle' => __DIR__,
+        'Symfony' => __DIR__
+    ));
+    $loader->register();
     module_load_include('inc', 'studysauce', 'studysauce.forms');
     module_load_include('inc', 'studysauce', 'plans');
     module_load_include('inc', 'studysauce', 'dates');
@@ -1372,6 +1608,46 @@ function studysauce_cron()
     }
 }
 
+function studysauce_free_order_bypass($form, &$form_state)
+{
+    if($form_state['build_info']['args'][0]->payment_method == 'free_order')
+    {
+        $errorMessages = drupal_get_messages('error');
+        $errors = form_get_errors();
+        form_clear_error();
+        $messages = array();
+        if($errors != null)
+            foreach($errors as $e => $error)
+            {
+                $messages[] = $error;
+
+                if($e == 'panes][billing][billing_street1' || $e == 'panes][billing][billing_city' ||
+                    $e == 'panes][billing][billing_zone' || $e == 'panes][billing][billing_postal_code' ||
+                    $e == 'panes][billing][billing_first_name' || $e == 'panes][billing][billing_last_name')
+                {
+
+                }
+                else
+                {
+                    form_set_error($e, $error);
+                }
+            }
+
+        if(isset($errorMessages['error']) && is_array($errorMessages['error']))
+            foreach($errorMessages['error'] as $error)
+            {
+                if(in_array($error, $messages) ||
+                    strpos($error, 'processing and renewing recurring fees cannot be found') > -1)
+                {
+
+                }
+                else
+                    drupal_set_message($error, 'error');
+            }
+    }
+}
+
+
 function studysauce_form_alter(&$form, &$form_state, $form_id) {
     global $user;
     $account = user_load($user->uid);
@@ -1391,7 +1667,7 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
             }
 
             if(strpos($_SERVER['HTTP_REFERER'], '/parents') > -1 || strpos($_SERVER['HTTP_REFERER'], '/billmyparents') > -1 ||
-                in_array('partner', $account->roles) || in_array('parent', $account->roles))
+                in_array('partner', $account->roles) || in_array('parent', $account->roles) || isset($_POST['panes']['customer']['student']))
             {
                 $form['panes']['customer']['#title'] = '';
                 $form['panes']['customer']['primary_email']['#title'] = '<b>My</b> e-mail address';
@@ -1493,13 +1769,17 @@ function studysauce_form_alter(&$form, &$form_state, $form_id) {
                 '#markup' => theme('studysauce-funnel'),
                 '#weight' => -100
             );
+
+            // if order is free, don't bother with contact information
+            $form['#validate'][] = 'studysauce_free_order_bypass';
+
             break;
         case 'user_register_form': // user register page
             $form['account']['pass']['#type'] = 'password';
-            $form['account']['pass']['#attributes'] = array('placeholder' => 'Password');
+            $form['account']['pass']['#attributes'] = array('placeholder' => 'Create a password     ');
             $form['account']['pass']['#title'] = '';
             $form['account']['pass']['#description'] = '';
-            $form['account']['mail']['#attributes'] = array('placeholder' => 'Email');
+            $form['account']['mail']['#attributes'] = array('placeholder' => 'Email      ');
             $form['account']['mail']['#title'] = '';
             $form['account']['mail']['#description'] = '';
 
@@ -1751,25 +2031,28 @@ function studysauce_get_sds_messages()
             $prev = 0;
             $switch = false;
             $breaks = false;
-            foreach($checkins as $time => $checkin)
+            if(count($checkins) > 1)
             {
-                if($prev > 0 && $time - $prev < 7200 && $checkins[$prev] != $checkins[$time])
+                foreach($checkins as $time => $checkin)
                 {
-                    $switch = true;
-                }
-
-                $j = 0;
-                $checkoutTimes = array_keys($checkouts);
-                do
-                {
-                    if($time - $checkoutTimes[$j] > 600 && $time - $checkoutTimes[$j] < 900)
+                    if($prev > 0 && $time - $prev < 7200 && $checkins[$prev] != $checkins[$time])
                     {
-                        $breaks = true;
+                        $switch = true;
                     }
-                    $j++;
-                } while(isset($checkoutTimes[$j]) && $checkoutTimes[$j] < $time);
 
-                $prev = $time;
+                    $j = 0;
+                    $checkoutTimes = array_keys($checkouts);
+                    do
+                    {
+                        if($time - $checkoutTimes[$j] > 600 && $time - $checkoutTimes[$j] < 900)
+                        {
+                            $breaks = true;
+                        }
+                        $j++;
+                    } while(isset($checkoutTimes[$j]) && $checkoutTimes[$j] < $time);
+
+                    $prev = $time;
+                }
             }
 
             if(count($checkins) == 4 && count($validLocations) > 2)
@@ -1866,6 +2149,12 @@ function studysauce_get_sds_messages()
  * TODO: should this be put in our module instead of theme directory?
  */
 function studysauce_theme_registry_alter(&$theme_registry) {
+    $theme_registry['studysauce-parents'] = array(
+        'template' => drupal_get_path('theme', 'successinc') . '/parents',
+        'theme path' => drupal_get_path('theme', 'successinc'),
+        'type' => 'module',
+        'preprocess functions' => array(),
+    );
     $theme_registry['studysauce-quiz-results'] = array(
         'template' => drupal_get_path('theme', 'successinc') . '/quiz-results',
         'theme path' => drupal_get_path('theme', 'successinc'),
@@ -2205,6 +2494,8 @@ function studysauce_onepagecheckout_form_submit($form, &$form_state)
         // set parent account because they entered from /parents
         if(isset($form_state['values']['panes']['customer']['student']))
             $_SESSION['invite_parent'] = $form_state['values']['panes']['customer']['student'];
+        if(isset($_POST['panes']['customer']['student']))
+            $_SESSION['invite_parent'] = $_POST['panes']['customer']['student'];
 
         $build = uc_cart_checkout_review();
 
@@ -2224,16 +2515,20 @@ function studysauce_onepagecheckout_form_submit($form, &$form_state)
         if ($new_form_state['redirect'] == 'cart/checkout/review') {
             // if we failed because of recurring, just remove and ignore it
             $errors = drupal_get_messages('error');
-            if(count($errors) == 1)
-            {
-                if(strpos(array_pop($errors['error']), 'could not process your recurring payment') > -1)
+            if(isset($errors['error']) && is_array($errors['error']))
+                foreach($errors['error'] as $error)
                 {
-                    $processNormal = true;
-                    unset($_SESSION['uc_checkout'][$new_form_state['uc_order']->order_id]['do_review']);
-                    $_SESSION['uc_checkout'][$new_form_state['uc_order']->order_id]['do_complete'] = TRUE;
-                    $form_state['redirect'] = $form_state['storage']['base_path'] . '/checkout/complete';
+                    if(strpos($error, 'could not process your recurring payment') > -1 ||
+                        strpos($error, 'processing and renewing recurring fees cannot be found') > -1)
+                    {
+                        $processNormal = true;
+                        unset($_SESSION['uc_checkout'][$new_form_state['uc_order']->order_id]['do_review']);
+                        $_SESSION['uc_checkout'][$new_form_state['uc_order']->order_id]['do_complete'] = TRUE;
+                        $form_state['redirect'] = $form_state['storage']['base_path'] . '/checkout/complete';
+                    }
+                    else
+                        drupal_set_message($error, 'error');
                 }
-            }
             // There's an error, so pretend the user clicked back.
             if(!$processNormal)
             {

@@ -1,16 +1,15 @@
-<div id="timer-expire">
-    <div>
+<div class="fixed-centered modal">
+    <div id="timer-expire" class="dialog">
         <h2>Another session is in the books</h2>
         <p>You have completed another session, congrats.<?php /* TODO: remove:  <a href="#badges">Have some fun with your study efforts and try to unlock all of our study badges <span>here</span>.</a> */ ?></p>
-        <p style="margin-bottom:0;" class="highlighted-link checkboxes"><a class="more" style="margin-bottom:0;" href="#break">Ok</a></p>
-        <a href="#break" class="fancy-close">&nbsp;</a>
+        <div class="highlighted-link checkboxes"><a class="more" href="#close">Ok</a></div>
+        <a href="#close">&nbsp;</a>
     </div>
 </div>
-<div id="sds-messages">
-    <div>
+<div class="fixed-centered modal">
+    <div id="sds-messages" class="dialog">
+        <h2 class="full-only"><span class="full-only">Your study tip for this session</span><span class="mobile-only">Study tip</span></h2>
         <div class="icon">&nbsp;</div>
-        <h2 class="full-only">Your study tip for this session</h2>
-        <h2 class="mobile-only">Study tip</h2>
         <div class="multiple-locations">
             <h3>Use different study locations</h3>
             <p>Changing location has shown a significant improvement in memory retention in studies done by cognitive scientists.  According to the researchers, the brain associates the material being learned with the environment that the studier is in.  Varied environments allow the brain more opportunities to associate the material with something unique - which in turn increases the likelihood of retention.</p>
@@ -80,7 +79,7 @@
             <p>The Boy Scouts' motto rings true for studying too.  Try to gather all the materials needed for your study session before you start to focus.  Interrupting your session to search for things will drag down your productivity.  Another helpful tool is to be clear about what you need to accomplish in the study session.  That will keep you focused on the task at hand during your session.</p>
         </div>
         <p style="margin-bottom:0;" class="highlighted-link checkboxes"><a style="margin-bottom:0;" class="more" href="#study">Continue to session</a></p>
-        <a href="#" onclick="jQuery('#checkin,#plan').removeClass('sds-message-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
+        <a href="#close">&nbsp;</a>
     </div>
     <?php
     $newSDS = studysauce_get_sds_messages();
@@ -95,8 +94,8 @@
         </script>
     <?php } ?>
 </div>
-<div id="checklist">
-    <div>
+<div class="fixed-centered modal">
+    <div id="checklist" class="dialog">
         <h2>Pilots run through a flight checklist to make sure they are focused and ready to go. We have built a study version for you below.</h2>
         <ol class="checkboxes">
             <li><input type="checkbox" name="mobile" id="mobile" /><label for="mobile">Turn mobile device to airplane mode</label></li>
@@ -115,11 +114,11 @@
             <li>Get ready to study for 1 hour, then you can take a short break</li>
         </ol>
         <p class="highlighted-link checkboxes"><a class="more" href="#study">Continue to session</a></p>
-        <a href="#" onclick="jQuery('#checklist input').prop('checked', false); jQuery('#checkin,#plan').removeClass('checklist-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
+        <a href="#close">&nbsp;</a>
     </div>
 </div>
-<div id="empty-schedule">
-    <div class="middle-wrapper">
+<div class="fixed-centered empty-only">
+    <div id="empty-schedule" class="dialog">
         <a href="#schedule"><h2>Click here to set up your class schedule and get started.</h2><small>Then checkin whenever you study using the Check in tab.</small></a>
     </div>
 </div>
@@ -129,7 +128,8 @@ if(empty($classes)):
     ?>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            jQuery('#checkin').addClass('empty edit-schedule');
+            jQuery('#checkin').addClass('empty');
+            jQuery('#empty-schedule').dialog();
         });
     </script>
     <div class="parents_only">
@@ -138,7 +138,7 @@ if(empty($classes)):
 <?php endif; ?>
 <h2>Check in.  Listen to Mozart.  Track your progress.</h2>
 
-<p class="grid_6 classes <?php print (empty($classes) ? 'empty' : 'not-empty'); ?>"><?php
+<p class="grid_6 classes"><?php
     if(!empty($classes)):
         $classI = 0;
         foreach($classes as $cid => $class)
@@ -531,36 +531,21 @@ if(empty($classes)):
             </a></li>
     </ul>
     <input name="touchedMusic" type="hidden" value="<?php print (_studysauce_get_touched() ? '1' : '0'); ?>" />
-    <div class="view view-music-player view-id-music_player view-display-id-block_1 view-dom-id-f009bb8f0cf162ede10141f63716e5af jquery-once-1-processed">
-        <div class="view-content">
-            <div class="osmplayer-default player-ui mediafront-processed minplayer-player-html5" style="width: 100%; height: 256px;">
-                <div class="minplayer-default player-ui" style="right: 0px;">
-                    <div class="minplayer-default-loader-wrapper">
-                        <div class="minplayer-default-big-play ui-state-default"><span></span></div>
-                        <div class="minplayer-default-loader" style="display: none;">&nbsp;</div>
-                        <div class="minplayer-default-preview ui-widget-content no-image" style="display: block;"></div>
-                    </div>
-                    <div class="minplayer-default-controls ui-widget-header minplayer-controls-volume-horizontal"
-                          style="display: block;">
-                        <div class="minplayer-default-controls-left">
-                            <a class="minplayer-default-play minplayer-default-button ui-state-default ui-corner-all" title="Play">
-                                <span class="ui-icon ui-icon-play"></span>
-                            </a>
-                            <a class="minplayer-default-pause minplayer-default-button ui-state-default ui-corner-all" title="Pause">
-                                <span class="ui-icon ui-icon-pause"></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="player-ui">
+        <div class="minplayer-default-big-play ui-state-default">
+            <a class="minplayer-default-play minplayer-default-button ui-state-default ui-corner-all" title="Toggle music on/off">
+                <span class="ui-icon ui-icon-play"></span>
+            </a>
+            <a class="minplayer-default-pause minplayer-default-button ui-state-default ui-corner-all" title="Toggle music on/off">
+                <span class="ui-icon ui-icon-pause"></span>
+            </a>
         </div>
     </div>
-
-    <h4 style="text-align:center;"><a href="#" onclick="jQuery('#checkin').addClass('mozart-only').scrollintoview(); return false;" style="color:#0099be;">The Mozart Effect&reg;</a></h4>
+    <h4 style="text-align:center;"><a href="#mozart-effect">The Mozart Effect&reg;</a></h4>
 </div>
-<div id="mozart-effect">
-    <div>
-        <h3 style="margin-top:0;">The Mozart Effect&reg;</h3>
+<div class="fixed-centered modal">
+    <div id="mozart-effect" class="dialog">
+        <h2>The Mozart Effect&reg;</h2>
         <p>There is conflicting research about the benefits of listening to Mozart as a method for improving brain performance. Our best advice is to give it a shot and see if it works for you.</p>
         <h3>Resources:</h3>
         <p style="margin-bottom:0;">
@@ -568,7 +553,7 @@ if(empty($classes)):
             <a href="http://lrs.ed.uiuc.edu/students/lerch1/edpsy/mozart_effect.html#The%20Mozart" target="_blank">Donna Lerch's article looking into several studies</a><br />
             <a href="https://musopen.org/" target="_blank">Music provided by MusOpen</a>
         </p>
-        <a href="#" onclick="jQuery('#checkin').removeClass('mozart-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
+        <a href="#close">&nbsp;</a>
     </div>
 </div>
 <p style="clear: both;margin:30px 0 0 0;"><a href="#schedule"><span>Edit schedule</span></a></p>

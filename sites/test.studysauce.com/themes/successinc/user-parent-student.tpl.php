@@ -3,7 +3,7 @@
         <p>Welcome to <span>Study Sauce</span></p>
     </div>
 </div>
-<div class="field-type-list-text field-name-field-parent-student field-widget-options-buttons form-wrapper">
+<div class="field-type-list-text field-name-field-parent-student field-widget-options-buttons ">
     <div class="form-item form-type-radios form-item-field-parent-student-und">
         <label for="edit-field-parent-student-und">Please select the option below that best describes
             you. </label>

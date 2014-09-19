@@ -84,7 +84,7 @@ function studysauce_save_goals()
     if(isset($_POST['type']) && isset($_POST['value']) && isset($_POST['reward']))
     {
         $entities = array();
-        if (is_array($node->field_goals[LANGUAGE_NONE]))
+        if (isset($node->field_goals[LANGUAGE_NONE]['0']['value']))
         {
             foreach ($node->field_goals[LANGUAGE_NONE] as $i => $goal)
             {
@@ -137,7 +137,6 @@ function studysauce_save_goals()
                     $eid = $goal['value'];
                     $entity = entity_load('field_collection_item', array($eid));
                     // create a new achievement entity
-                    $entity[$eid]->revision = 1;
                     if(isset($_POST['uploads']))
                     {
                         $entity[$eid]->field_photo_evidence['und'][0]['fid'] = $_POST['uploads'][0]['fid'];
@@ -189,8 +188,6 @@ function studysauce_save_goals()
         }
 
     }
-
-    node_save($node);
 
     $achievementContent = _studysauce_get_achievements();
     list($awards) = studysauce_get_awards();

@@ -24,6 +24,7 @@ jQuery(document).ready(function($) {
         evt.preventDefault();
         if(invites.is('.invalid'))
             return;
+        invites.removeClass('valid').addClass('invalid');
 
         $.ajax({
                    url: 'invite/send',
@@ -38,7 +39,6 @@ jQuery(document).ready(function($) {
                        invites.find('input[name="invite-first"]').val('');
                        invites.find('input[name="invite-last"]').val('');
                        invites.find('input[name="invite-email"]').val('');
-                       invites.removeClass('valid').addClass('invalid');
                    }
                });
     });

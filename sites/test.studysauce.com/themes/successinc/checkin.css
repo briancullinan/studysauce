@@ -1,4 +1,27 @@
 
+.page-dashboard #checkin.empty .pane-content:before
+{
+    height: 100%;
+    width: 100%;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.50);
+    z-index: 40;
+}
+
+.page-dashboard #checkin .empty-only
+{
+    display: none;
+}
+
+.page-dashboard #checkin.empty .empty-only
+{
+    display: block;
+}
+
 .page-dashboard #checkin p.classes
 {
     text-align: center;
@@ -10,6 +33,43 @@
     float: right;
 }
 
+#checklist ol.checkboxes
+{
+    list-style: none;
+}
+
+#timer-expire a[href="#badges"]
+{
+    color: #666666;
+}
+
+#timer-expire a[href="#badges"] span
+{
+    color: #FF9900;
+}
+
+#checklist label
+{
+    cursor: pointer;
+    margin-left:-50px;
+    padding-left:50px;
+    font-weight:normal;
+    background:url(images/menu_icons_128.png) no-repeat -40px -2854px transparent;
+    font-size:20px;
+}
+
+#checklist .no-checkboxes li
+{
+    font-weight:normal;
+    font-size:20px;
+    margin-top:1em;
+}
+
+#checklist input:checked + label
+{
+    background-position:-40px -2741px;
+}
+
 .page-dashboard #checkin .clock,
 .page-dashboard #checkin .classes
 {
@@ -18,23 +78,18 @@
     margin: 0;
 }
 
-.page-dashboard #sds-messages > div h2
-{
-    padding-left:128px;
-}
-
-.page-dashboard #sds-messages > div > div
+.page-dashboard #sds-messages > div
 {
     display:none;
     padding-left:128px;
 }
 
-.page-dashboard #sds-messages > div > div.show
+.page-dashboard #sds-messages > div.show
 {
     display: block;
 }
 
-.page-dashboard #sds-messages > div > div.icon
+.page-dashboard #sds-messages > div.icon
 {
     display:block;
     height: 128px;
@@ -45,6 +100,34 @@
     margin-top: -64px;
     padding-left: 0;
     background:url(images/menu_icons_128.png) no-repeat 10px -2050px transparent;
+}
+
+.page-dashboard #sds-messages h2 .mobile-only
+{
+    display:none;
+}
+
+@media all and (max-width: 980px)
+{
+    .page-dashboard #sds-messages > div.icon
+    {
+        display:none;
+    }
+
+    .page-dashboard #sds-messages h2 .full-only
+    {
+        display:none;
+    }
+
+    .page-dashboard #sds-messages h2 .mobile-only
+    {
+        display:block;
+    }
+
+    .page-dashboard #sds-messages > div
+    {
+        padding-left:0;
+    }
 }
 
 .flip-clock-divider,
@@ -310,20 +393,31 @@
 
 .page-dashboard #checkin .minplayer-default-play
 {
+    position:absolute;
+    margin-top:-32px;
+    top:50%;
+    left:-64px;
     background:url(images/menu_icons_64.png) no-repeat 0 -2431px transparent;
     height:64px;
     width:64px;
     border:0;
     transition:none;
+    cursor: pointer;
 }
 
 .page-dashboard #checkin .minplayer-default-pause
 {
+    position:absolute;
+    margin-top:-32px;
+    top:50%;
+    left:-64px;
     background:url(images/menu_icons_64.png) no-repeat 0 -2368px transparent;
     height:64px;
     width:64px;
     border:0;
     transition:none;
+    cursor: pointer;
+    display:none;
 }
 
 .page-dashboard #checkin .minplayer-default-controls
@@ -388,15 +482,16 @@
 
 .page-dashboard #checkin .minplayer-default-big-play
 {
-    display:block !important;
+    display:block;
     height:256px;
     width:170px;
-    margin-top:-128px;
-    margin-left:-85px;
+    margin: 0 auto;
     background:url(images/mozart.png) no-repeat 0 0 transparent;
     box-shadow: none;
     -moz-box-shadow:none;
     -webkit-box-shadow:none;
+    position:relative;
+    border:none;
 }
 
 .page-dashboard #checkin .osmplayer-default-playlist,
@@ -416,7 +511,7 @@
     display:none !important;
 }
 
-.page-dashboard .page #checkin p.classes.empty
+.page-dashboard .page #checkin.empty p.classes
 {
     height:450px;
     overflow: hidden;
@@ -455,12 +550,9 @@
 
     .page-dashboard #checkin .minplayer-default-big-play
     {
-        background:url(images/menu_icons_128.png) no-repeat 43px -4992px transparent;
+        background:url(images/menu_icons_128.png) no-repeat -20px -4992px transparent;
         height:128px;
-        width:150px;
-        margin-left:-75px;
-        margin-top:-64px;
-        padding-left:65px;
+        width:100px;
     }
 
     .page-dashboard #checkin .minplayer-default-controls-left
@@ -491,7 +583,7 @@
 @media all and (max-width: 759px)
 {
 
-    .page-dashboard .page #checkin p.classes.empty,
+    .page-dashboard .page #checkin.empty p.classes,
     .page-dashboard.parent .page #checkin p.classes
     {
         height: 150px;

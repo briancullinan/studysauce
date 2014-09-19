@@ -63,8 +63,50 @@ if(isset($groups['node']))
             <?php endif; ?>
         </div>
     </div>
-    <?php print views_embed_view('music_player', 'block_1'); ?>
-    <div id="welcome-message">Welcome <strong><?php
+    <?php
+    $view = views_get_view('music_player');
+    $result = views_get_view_result('music_player', 'block_1', array());
+    $links = array_map(function ($x) {return $x->field_field_media_url[0]['rendered']['#markup'];}, $result);
+    ?>
+    <div id="jquery_jplayer"></div>
+    <script type="text/javascript">
+        window.musicLinks = <?php print json_encode($links); ?>;
+        window.musicIndex = 0;
+        jQuery(document).ready(function () {
+            jQuery('.minplayer-default-play').on('click', function () {
+                var index = window.musicIndex++;
+                jQuery('#jquery_jplayer').jPlayer("setMedia", {
+                    mp3: window.musicLinks[index],
+                    m4a: window.musicLinks[index].substr(0, window.musicLinks[index].length - 4) + '.mp4',
+                    oga: window.musicLinks[index].substr(0, window.musicLinks[index].length - 4) + '.ogg'
+                });
+            });
+
+            window.currentAudio = jQuery('#jquery_jplayer').jPlayer({
+                swfPath: '/sites/test.studysauce.com/themes/successinc/js',
+                solution: 'html, flash',
+                supplied: 'mp3, m4a, oga',
+                preload: 'metadata',
+                volume: 0.8,
+                muted: false,
+                cssSelectorAncestor: '.page-dashboard #checkin',
+                cssSelector: {
+                    play: '.minplayer-default-play',
+                    pause: '.minplayer-default-pause'
+                }
+            });
+            jQuery("#jquery_jplayer").bind(jQuery.jPlayer.event.ended, function(event) {
+                var index = window.musicIndex++;
+                jQuery('#jquery_jplayer').jPlayer("setMedia", {
+                    mp3: window.musicLinks[index],
+                    m4a: window.musicLinks[index].substr(0, window.musicLinks[index].length - 4) + '.mp4',
+                    oga: window.musicLinks[index].substr(0, window.musicLinks[index].length - 4) + '.ogg'
+                });
+                jQuery(this).jPlayer("play");
+            });
+        });
+    </script>
+    <div id="welcome-message"><span>Welcome </span><strong><?php
             if ($user->uid > 0)
             {
                 $user = user_load($user->uid);
@@ -75,12 +117,7 @@ if(isset($groups['node']))
                 else
                     print $user->mail;
             }
-            ?></strong><br />
-        <?php /* <a href="#badges" class="students_only">&nbsp;</a>&nbsp;
-        <a href="#invite" class="<?php print (empty($partner) ? 'not-connected' : 'connected'); ?>">&nbsp;</a>&nbsp;-->
-        <!--<a href="#mail">Mail</a>&nbsp;-->
-        <!--<?php print l('account', 'user/' . $GLOBALS['user']->uid . '/edit', array('attributes' => array('class' => 'user-account'))); ?>&nbsp;-->
-        <?php */ ?>
-        <?php print l('logout', 'user/logout'); ?>
+            ?></strong>
+        <?php print l('logout', 'user/logout', array('attributes' => array('title' => 'Log out'))); ?>
     </div>
 </div>

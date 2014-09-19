@@ -165,24 +165,10 @@
 }
 */
 
-.page-dashboard #goals .field-name-field-type,
-.page-dashboard #goals .field-name-field-hours,
-.page-dashboard #goals .field-name-field-gpa,
-.page-dashboard #goals .field-name-field-grade,
-.page-dashboard #goals .field-name-field-reward,
-.page-dashboard #goals .row .form-actions
+.page-dashboard #goals .row > *
 {
     display:inline-block;
     vertical-align: top;
-}
-
-.page-dashboard #goals .group-achievement .form-actions
-{
-    margin-top: 1em;
-    display: block;
-    clear: both;
-    text-align: right;
-    margin-bottom: 0;
 }
 
 .page-dashboard #goals .field-name-field-hours,
@@ -428,12 +414,6 @@
     transition:left 0.3s linear;
 }
 
-.page-dashboard #goals #invite-sent a
-{
-    display:block;
-    text-align: center;
-}
-
 .page-dashboard #goals .step_1 .field-add-more-submit,
 .page-dashboard #goals .student_step_1,
 .page-dashboard #goals .student_step_2,
@@ -460,13 +440,6 @@
 {
     display:block;
     clear:both;
-}
-
-/*.page-dashboard.student #goals .step_1 .field-name-field-reward,
-.page-dashboard.student #goals .step_2 .field-name-field-reward*/
-.page-dashboard #goals .step_2 .form-actions
-{
-    display:none;
 }
 
 .page-dashboard #goals #parent-sponsored .grid_8
@@ -580,11 +553,6 @@
     margin:0;
 }
 
-.page-dashboard #student_step_2 .highlighted-link
-{
-    text-align: right;
-}
-
 .page-dashboard #student_step_2 .highlighted-link p
 {
     text-align: justify;
@@ -608,37 +576,26 @@
     display:none;
 }
 
-.plup-thumb-wrapper
-{
-    line-height: 0;
-}
-
-.group-achievement .field-name-field-reward-codes,
-.node-incentive-form .group-achievement
-{
-    display:none;
-}
-
-.group-achievement .field-name-field-message,
-.group-achievement .field-name-field-photo-evidence
+#claim .field-name-field-message,
+#claim .field-name-field-photo-evidence
 {
     width:50%;
     float:left;
 }
 
-.group-achievement .plup-filelist
+#claim .plup-filelist
 {
     border-top:0;
 }
 
-.group-achievement .plup-list
+#claim .plup-list
 {
     list-style-type: none;
     margin: 20px;
     padding: 0;
 }
 
-.group-achievement .plup-list li
+#claim .plup-list li
 {
     padding:0;
     margin:0;
@@ -646,34 +603,34 @@
     background:none;
 }
 
-.group-achievement .plup-bar
+#claim .plup-bar
 {
     padding:0;
     height:auto;
     background:none;
 }
 
-.group-achievement .plup-list li
+#claim .plup-list li
 {
     display:none;
 }
 
-.group-achievement .plup-list li:last-child
+#claim .plup-list li:last-child
 {
     display:block;
 }
 
-.group-achievement .plup-thumb-wrapper
+#claim .plup-thumb-wrapper
 {
     text-align: center;
 }
 
-.group-achievement .plup-thumb-wrapper img
+#claim .plup-thumb-wrapper img
 {
     margin:0 auto;
 }
 
-.group-achievement .plup-select
+#claim .plup-select
 {
     position:absolute;
     top:0;
@@ -683,20 +640,21 @@
     line-height: 0;
     color:transparent;
     font-size: 0;
+    z-index: 10;
 }
 
-body.file-drag .group-achievement .plup-filelist
+body.file-drag #claim .plup-filelist
 {
     z-index: 2000;
 }
 
-.group-achievement .plup-remove-file,
-.group-achievement .plup-remove-item
+#claim .plup-remove-file,
+#claim .plup-remove-item
 {
     z-index: 100;
 }
 
-.group-achievement .drag-main
+#claim .drag-main
 {
     position:absolute;
     top:50%;
@@ -709,35 +667,40 @@ body.file-drag .group-achievement .plup-filelist
     text-align: center;
 }
 
-.group-achievement .drag-more,
-.group-achievement .plup-filelist-size,
-.group-achievement .plup-filelist-message,
-.group-achievement .plup-filelist-remove,
-.group-achievement .plup-select div
+#goals-plupload:hover .drag-main
+{
+    color:#02CEE8;
+}
+
+#claim .drag-more,
+#claim .plup-filelist-size,
+#claim .plup-filelist-message,
+#claim .plup-filelist-remove,
+#claim .plup-select div
 {
     display:none;
 }
 
-.group-achievement .plup-bar .plup-upload
+#claim .plup-bar .plup-upload
 {
     display:none !important;
 }
 
-.group-achievement .plupload,
-.group-achievement .plupload-container
+#claim .plupload,
+#claim .plupload-container
 {
     min-height:200px;
 }
 
-.group-achievement .plup-filelist-file
+#claim .plup-filelist-file
 {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
 
-.group-achievement .plup-filelist,
-.group-achievement .plupload.html5
+#claim .plup-filelist,
+#claim .plupload.html5
 {
     height: 100% !important;
     width: 100% !important;
@@ -748,7 +711,7 @@ body.file-drag .group-achievement .plup-filelist
     max-height: none !important;
 }
 
-.group-achievement textarea
+#claim textarea
 {
     height:170px;
 }
@@ -833,7 +796,6 @@ body.file-drag .group-achievement .plup-filelist
 .page-dashboard #goals .step_3 .field-name-field-hours .form-item,
 .page-dashboard #goals .step_2 .field-name-field-reward .form-item,
 .page-dashboard #goals .step_3 .field-name-field-reward .form-item,
-.page-dashboard #goals #parent-sponsored .form-actions .form-submit,
 .page-dashboard #goals .row .highlighted-link a[href="#save-incentive"],
 .page-dashboard #goals .row a[href="#cancel-incentive"]
 {
@@ -850,7 +812,6 @@ body.file-drag .group-achievement .plup-filelist
 .page-dashboard #goals .step_2 .edit .field-name-field-reward .form-item,
 .page-dashboard #goals .step_3 .edit .field-name-field-reward .form-item,
 .page-dashboard #goals .step_1 td .form-actions .form-submit,
-.page-dashboard #goals #parent-sponsored .edit .form-actions .form-submit,
 .page-dashboard #goals .row.edit .highlighted-link a[href="#save-incentive"],
 .page-dashboard #goals .row.edit a[href="#cancel-incentive"]
 {
@@ -913,14 +874,6 @@ body.file-drag .group-achievement .plup-filelist
     .page-dashboard #goals .field-name-field-grade,
     .page-dashboard #goals .field-name-field-reward
     {
-    }
-
-    .page-dashboard.student .sponsored #parent-sponsored tr:first-child .form-actions,
-    .page-dashboard #goals .field-name-field-goals tr .form-actions
-    {
-        display:block;
-        margin-top:1em;
-        margin-left: 0;
     }
 
     .page-dashboard #goals #parent-sponsored .grid_8
@@ -1027,22 +980,6 @@ body.file-drag .group-achievement .plup-filelist
     .page-dashboard #goals .form-item .description span:last-child
     {
         display:inline;
-    }
-
-    .page-dashboard #goals #invite .form-actions,
-    .page-dashboard #goals .form-actions
-    {
-        float:none;
-        text-align: center;
-        clear:both;
-        margin-top:1em;
-        margin-left: 0;
-    }
-
-    .page-dashboard.student #goals .row:first-child .form-actions
-    {
-        margin-left: 0;
-        margin-top:12px;
     }
 
     .page-dashboard #goals select

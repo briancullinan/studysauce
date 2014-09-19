@@ -41,10 +41,6 @@ body { min-width:960px; }
 
 .flex-caption { background:#000000; }
 
-.yoxview-image-item { margin: 0 5px 10px 5px; width:110px; }
-
-.node-mt-showcase .yoxview-image-item { width:293px; }
-
 ul.company-info li { display:inline; }
 
 .breadcrumb .breadcrumb-separator { margin: 0 10px; }

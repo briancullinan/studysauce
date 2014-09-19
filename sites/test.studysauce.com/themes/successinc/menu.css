@@ -45,107 +45,6 @@
     background:none;
 }
 
-.page-dashboard #main-menu li.highlighted-link
-{
-    display:none;
-}
-
-.page-dashboard.plan-only #home,
-.page-dashboard.metrics-only #home,
-.page-dashboard.checkin-only #home,
-.page-dashboard.deadlines-only #home,
-.page-dashboard.badges-only #home,
-.page-dashboard.goals-only #home,
-.page-dashboard.account-only #home,
-.page-dashboard.schedule-only #home,
-.page-dashboard.profile-only #home,
-.page-dashboard.tips-only #home,
-.page-dashboard.invite-only #home,
-.page-dashboard.partner-only #home,
-.page-dashboard.terms-only #home,
-.page-dashboard.privacy-only #home,
-.page-dashboard.about-us-only #home,
-.page-dashboard.contact-only #home,
-.page-dashboard.refund-only #home,
-.page-dashboard.premium-only #home,
-.page-dashboard.tips-time-only #home,
-.page-dashboard.tips-env-only #home,
-.page-dashboard.tips-strategy-only #home,
-.page-dashboard.userlist-only #home,
-.page-dashboard.account-only #userlist,
-.page-dashboard.uid-only #userlist,
-.page-dashboard.uid-only #home,
-.page-dashboard.import-only #userlist,
-.page-dashboard.import-only #home
-{
-    display:none;
-}
-
-.page-dashboard.import-only .user-pane
-{
-    display:none !important;
-}
-
-.page-dashboard #home,
-.page-dashboard.plan-only #plan,
-.page-dashboard.metrics-only #metrics,
-.page-dashboard.checkin-only #checkin,
-.page-dashboard.deadlines-only #deadlines,
-.page-dashboard.badges-only #badges,
-.page-dashboard.goals-only #goals,
-.page-dashboard.account-only #account,
-.page-dashboard.profile-only #profile,
-.page-dashboard.schedule-only #schedule,
-.page-dashboard.tips-only #tips,
-.page-dashboard.invite-only #invite,
-.page-dashboard.partner-only #partner,
-.page-dashboard.premium-only #premium,
-.page-dashboard.tips-time-only #tips-time,
-.page-dashboard.tips-env-only #tips-env,
-.page-dashboard.tips-strategy-only #tips-strategy,
-.page-dashboard #userlist,
-.page-dashboard.import-only #import,
-.page-dashboard.uid-only .panel-pane.user-pane,
-
-.page-dashboard.awards-only #badges,
-.page-dashboard #checkin.checklist-only #checklist,
-.page-dashboard #plan.checklist-only #checklist,
-.page-dashboard #metrics.empty #metrics-empty,
-.page-dashboard #checkin.mozart-only #mozart-effect,
-.page-dashboard #schedule.building .building-schedule,
-.page-dashboard #profile.building .building-schedule,
-.page-dashboard #checkin.empty #empty-schedule,
-.page-dashboard #deadlines.empty #empty-dates,
-.page-dashboard .study-quiz-only #study-quiz,
-.page-dashboard #goals.invite-sent-only #invite-sent,
-.page-dashboard #checkin.sds-message-only #sds-messages,
-.page-dashboard #plan.sds-message-only #sds-messages,
-.page-dashboard .new-award-only #new-award,
-.page-dashboard #home.welcome-only #welcome,
-.page-dashboard.terms-only .page #terms,
-.page-dashboard.about-us-only .page #about-us,
-.page-dashboard.contact-only .page #contact,
-.page-dashboard.privacy-only .page #privacy,
-.page-dashboard.refund-only .page #refund,
-.page-dashboard.user-profile-only #user-profile,
-.page-dashboard #goals.achievement-only .group-achievement,
-.page-dashboard #checkin.timer-expire-only #timer-expire,
-.page-dashboard #plan.timer-expire-only #timer-expire,
-.page-dashboard #deadlines.class-names-only .field-name-field-class-names
-{
-    display:block;
-}
-
-.page-dashboard #checkin.timer-expire-only #checklist,
-.page-dashboard #checkin.sds-message-only .new-award-only #sds-messages,
-.page-dashboard #checkin.timer-expire-only #sds-messages,
-.page-dashboard #plan.timer-expire-only #checklist,
-.page-dashboard #plan.sds-message-only .new-award-only #sds-messages,
-.page-dashboard #plan.timer-expire-only #sds-messages
-{
-    display:none;
-}
-
 .page-dashboard #main-menu a.skrollable-after,
 .page-dashboard #main-menu a
 {
@@ -271,12 +170,6 @@
 
 @media all and (max-width: 759px) {
 
-    .page-dashboard #schedule .building-schedule .middle-wrapper,
-    .page-dashboard #profile .building-schedule .middle-wrapper
-    {
-        margin-left: auto !important;
-    }
-
     .page-dashboard #main-menu a[href="#environment"]
     {
         letter-spacing: -1px;
@@ -315,6 +208,11 @@
         display:none;
         margin-top:56px;
         overflow: visible;
+    }
+
+    .page-dashboard #main-menu ul
+    {
+        z-index:109;
     }
 
     .page-dashboard.menu-open #main-menu ul

@@ -308,8 +308,8 @@
     margin-right:-10px;
 }
 
-#uc-cart-checkout-form #comments-pane,
-#uc-cart-checkout-form #cart-pane
+.uc-cart-checkout-form #comments-pane,
+.uc-cart-checkout-form #cart-pane
 {
     display:none;
 }
@@ -423,13 +423,6 @@
 .payment-details-credit label
 {
     padding-top:0 !important;
-}
-
-.uc-cart-checkout-form .form-actions
-{
-    clear:right;
-    padding-right:5px;
-    margin:5px 0;
 }
 
 #billing-pane,

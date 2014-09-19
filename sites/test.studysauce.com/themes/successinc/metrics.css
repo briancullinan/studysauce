@@ -15,24 +15,32 @@
     overflow:hidden;
 }
 
+.page-dashboard #metrics.empty .pane-content:before
+{
+    height: 100%;
+    width: 100%;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.50);
+    z-index: 40;
+}
+
+.page-dashboard #metrics .empty-only
+{
+    display: none;
+}
+
+.page-dashboard #metrics.empty .empty-only
+{
+    display: block;
+}
+
 .page-dashboard #metrics .centrify
 {
     margin:0 auto;
-}
-
-.page-dashboard #checkin.empty #metrics.empty #metrics-empty a
-{
-    display:none;
-}
-
-.page-dashboard #metrics-empty img
-{
-    position:absolute;
-    top:0;
-    width: 100%;
-    height: auto;
-    left:0;
-    z-index: -2;
 }
 
 .page-dashboard #metrics #timeline
@@ -108,7 +116,7 @@
     max-width: 600px;
 }
 
-.page-dashboard .empty #checkins-list
+.page-dashboard #metrics.empty #checkins-list
 {
     max-height: 200px;
 }

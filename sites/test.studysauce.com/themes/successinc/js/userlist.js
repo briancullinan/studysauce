@@ -172,15 +172,15 @@ jQuery(document).ready(function() {
     userlist.on('click', 'a[href^="#uid-"]', function (evt) {
         evt.preventDefault();
         var uid = jQuery(this).attr('href').substring(5);
+        jQuery('body').find('.page .panel-pane').hide();
         jQuery('.user-pane').remove();
         var pane = jQuery('#uid-' + uid + '.panel-pane');
         if(pane.length == 0)
         {
             pane = jQuery('<div id="uid-' + uid + '" class="panel-pane user-pane"><div class="pane-content" /></div>')
-                .appendTo(jQuery('.page .grid_12 > div'));
+                .appendTo(jQuery('.page .grid_12 > div')).show();
         }
 
-        jQuery('body').removeClass('home-only,userlist-only').addClass('uid-only');
         window.location.hash = '#uid-' + uid;
 
         pane.find('.pane-content').addClass('loading');

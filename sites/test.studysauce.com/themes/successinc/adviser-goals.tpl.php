@@ -35,7 +35,7 @@ if(isset($b->item_id)): ?>
     <div id="non-sponsored">
         <div class="row draggable odd <?php print (isset($b->item_id) ? ('gid' . $b->item_id) : ''); ?> <?php print (!isset($b->field_hours['und'][0]['value']) ? 'edit unsaved' : ''); ?>">
             <div class="field-name-field-type"><strong>Study Hours</strong></div>
-            <div class="field-type-list-integer field-name-field-hours field-widget-options-select form-wrapper">
+            <div class="field-type-list-integer field-name-field-hours field-widget-options-select ">
                 <div class="read-only"><label>Goal: </label>
                     <span><?php print (isset($b->field_hours['und'][0]['value']) ? $b->field_hours['und'][0]['value'] : 0); ?></span>
 
@@ -74,7 +74,7 @@ if(isset($b->item_id)): ?>
                     <div class="description"><span>hours per week</span><span>hrs / wk</span></div>
                 </div>
             </div>
-            <div class="field-type-text-long field-name-field-reward field-widget-text-textarea form-wrapper">
+            <div class="field-type-text-long field-name-field-reward field-widget-text-textarea ">
                 <div class="read-only"><label>Reward: </label>
                     <span><?php print (isset($b->field_reward['und'][0]['value']) ? $b->field_reward['und'][0]['value'] : ''); ?></span>
                 </div>
@@ -91,7 +91,7 @@ if(isset($b->item_id)): ?>
         <?php if(isset($b->field_hours['und'][0]['value']) && isset($m->field_grade['und'][0]['value'])) : ?>
             <div class="row draggable even <?php print (isset($m->item_id) ? ('gid' . $m->item_id) : ''); ?>">
                 <div class="field-name-field-type"><strong>Study Milestone</strong></div>
-                <div class="field-type-list-text field-name-field-grade field-widget-options-select form-wrapper">
+                <div class="field-type-list-text field-name-field-grade field-widget-options-select ">
                     <div class="read-only">
                         <label>Goal: </label>
                         <span><?php print (isset($m->field_grade['und'][0]['value']) ? $m->field_grade['und'][0]['value'] : ''); ?></span>
@@ -135,7 +135,7 @@ if(isset($b->item_id)): ?>
                         <div class="description"><span>grade on exam/paper</span><span>on exam/paper</span></div>
                     </div>
                 </div>
-                <div class="field-type-text-long field-name-field-reward field-widget-text-textarea form-wrapper">
+                <div class="field-type-text-long field-name-field-reward field-widget-text-textarea ">
                     <div class="read-only"><label>Reward: </label>
                         <span><?php print (isset($m->field_reward['und'][0]['value']) ? $m->field_reward['und'][0]['value'] : ''); ?></span>
                     </div>
@@ -154,7 +154,7 @@ if(isset($b->item_id)): ?>
         if(isset($m->field_grade['und'][0]['value']) && isset($o->field_gpa['und'][0]['value'])) : ?>
             <div class="row draggable odd <?php print (isset($o->item_id) ? ('gid' . $o->item_id) : ''); ?>">
                 <div class="field-name-field-type"><strong>Study Outcome</strong></div>
-                <div class="field-type-list-float field-name-field-gpa field-widget-options-select form-wrapper">
+                <div class="field-type-list-float field-name-field-gpa field-widget-options-select ">
                     <div class="read-only"><label>Goal: </label>
                         <span><?php print (isset($o->field_gpa['und'][0]['value']) ? $o->field_gpa['und'][0]['value'] : ''); ?></span>
 
@@ -221,7 +221,7 @@ if(isset($b->item_id)): ?>
                         <div class="description">Target GPA for the term</div>
                     </div>
                 </div>
-                <div class="field-type-text-long field-name-field-reward field-widget-text-textarea form-wrapper">
+                <div class="field-type-text-long field-name-field-reward field-widget-text-textarea ">
                     <div class="read-only">
                         <label>Reward: </label>
                         <span><?php print (isset($o->field_reward['und'][0]['value']) ? $o->field_reward['und'][0]['value'] : ''); ?></span>

@@ -2,19 +2,36 @@
 jQuery(document).ready(function($) {
 
     var deadlines = $('#deadlines');
+
+    deadlines.find('.sort-by label:last-child').tooltip({position:{my: 'center top+15', at:'center bottom'}, open: function (evt, ui) {
+        if(jQuery(ui.tooltip).offset().left + jQuery(ui.tooltip).width() < jQuery(this).offset().left)
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'left');
+            ui.tooltip.addClass('left');
+        }
+        else if(jQuery(ui.tooltip).offset().left > jQuery(this).offset().left + jQuery(this).width())
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'right');
+            ui.tooltip.addClass('right');
+        }
+        else if(jQuery(ui.tooltip).offset().top + jQuery(ui.tooltip).height() < jQuery(this).offset().top)
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'top');
+            ui.tooltip.addClass('top');
+        }
+        else if(jQuery(ui.tooltip).offset().top > jQuery(this).offset().top + jQuery(this).height())
+        {
+            jQuery(this).tooltip('option', 'tooltipClass', 'bottom');
+            ui.tooltip.addClass('bottom');
+        }
+    }});
+
     deadlines.on('click', '.row:not(.edit) > div:not(.field-name-field-reminder,.field-name-field.completed)', function (evt) {
         jQuery(this).parents('.row').toggleClass('selected');
     });
 
     deadlines.on('change', '.field-name-field-class-name select, .field-name-field-reminder input, .field-name-field-due-date input', function () {
         jQuery(this).parents('.row').datesFunc();
-    });
-
-    deadlines.on('click', 'a[href="#cancel-dates"]', function (evt) {
-        evt.preventDefault();
-        deadlines.removeClass('edit-date-only').scrollintoview();
-        deadlines.find('.field-add-more-submit').show();
-        jQuery(this).parents('.row').removeClass('edit');
     });
 
     deadlines.on('keyup', '.field-name-field-assignment input', function () {
@@ -36,8 +53,9 @@ jQuery(document).ready(function($) {
             newDeadline.find('label[for="' + oldId + '"]').attr('for', oldId + count);
         });
         deadlines.find('.highlighted-link').detach().insertAfter(newDeadline);
-        newDeadline.scrollintoview().datesFunc();
         deadlines.addClass('edit-date-only');
+        deadlines.find('.field-name-field-due-date input').removeClass('hasDatepicker');
+        newDeadline.scrollintoview().datesFunc();
         jQuery(window).trigger('scroll');
     });
 
@@ -52,8 +70,8 @@ jQuery(document).ready(function($) {
                        remove: row.attr('id').substr(0, 4) == 'eid-' ? row.attr('id').substring(4) : null
                    },
                    success: function (data) {
-                       deadlines.find('.row, .head, a[href="#add-deadline"]')
-                           .replaceWith(jQuery(data.reminders).find('.row, .head, a[href="#add-deadline"]'));
+                       deadlines.find('.sort-by').nextAll('.row,.head').remove();
+                       jQuery(data.reminders).find('.sort-by').nextAll('.row,.head').insertAfter(deadlines.find('.sort-by'));
 
                        // update calendar events
                        jQuery('#calendar').updatePlan(data.events);
@@ -131,39 +149,21 @@ jQuery(document).ready(function($) {
                 rows = jQuery.merge(rows, jQuery.merge(jQuery('<div class="head ' + (hidden ? 'hide' : '') + '">' + d.getDate() + ' ' + monthNames[d.getMonth()] + ' <span>' + d.getFullYear() + '</span></div>'), headings[h].detach()));
             }
         }
-        deadlines.find('.head, .row').not('#new-dates-row').not(deadlines.find('#new-dates-row').prevUntil(':not(.row)')).replaceWith(rows);
+        jQuery('.sort-by').nextAll('.head').remove();
+        jQuery(rows).insertAfter(deadlines.find('.sort-by'));
         // reassign first row
         deadlines.find('.first').removeClass('first');
         deadlines.find('.row:not(.hide,#new-dates-row)').first().addClass('first');
         deadlines.find('.row.hide').first().addClass('first');
     });
 
-    /*
-    // move the save button to the current row if the window is smaller that the content length
-    jQuery(window).scroll(function () {
-        if(jQuery(window).height() < deadlines.height())
-        {
-            // get edit row closest to the center of the window
-            var closest = {};
-            var keys = [];
-            deadlines.find('.row.edit').add(deadlines.find('.row').last()).each(function () {
-                var center = Math.abs(jQuery(window).height() - 180 - (jQuery(this).offset().top - jQuery(window).scrollTop()));
-                closest[center] = jQuery(this);
-                keys[keys.length] = center;
-            });
-            keys.sort(function(a, b){return a-b});
-            deadlines.find('.highlighted-link').detach().insertAfter(closest[keys[0]]);
-        }
-        else if(deadlines.find('.row').last().next()[0] != deadlines.find('.highlighted-link')[0])
-            deadlines.find('.highlighted-link').detach().insertAfter(deadlines.find('.row').last());
-    });
-    jQuery(window).resize(function () {
-        jQuery(window).trigger('scroll');
-    });
-    */
-
     deadlines.on('click', 'a[href="#save-dates"]', function (evt) {
         evt.preventDefault();
+
+        if(deadlines.is('.invalid'))
+            return;
+        deadlines.removeClass('valid').addClass('invalid');
+
         var dates = [];
         deadlines.find('.row.edit.valid, .row.valid.edit').each(function () {
             var row = $(this),
@@ -188,19 +188,14 @@ jQuery(document).ready(function($) {
                        },
                        success: function (data) {
                            // clear input form
-                           if(deadlines.find('#new-dates-row.edit.valid'))
-                           {
-                               deadlines.find('#new-dates-row').find('.field-name-field-class-name select').val('_none');
-                               deadlines.find('#new-dates-row').find('.field-name-field-assignment input').val('');
-                               deadlines.find('#new-dates-row').find('input[name*="dates-reminder-"]').prop('checked', false);
-                               deadlines.find('#new-dates-row').find('.field-name-field-due-date input').val('');
-                               deadlines.find('#new-dates-row').find('.field-name-field-percent input').val(0);
-                           }
+                           var invalids = deadlines.find('#new-dates-row').prevAll('.row.invalid').detach();
 
                            // update key dates list
-                           var invalids = deadlines.find('#new-dates-row').prevAll('.row.invalid').detach();
-                           deadlines.find('.row, .head, a[href="#add-deadline"]')
-                               .replaceWith(jQuery(data.reminders).find('.row, .head, a[href="#add-deadline"]'));
+                           deadlines.find('.sort-by').nextAll('.row,.head').remove();
+                           jQuery(data.reminders).find('.sort-by').nextAll('.row,.head').insertAfter(deadlines.find('.sort-by'));
+
+                           // remove valid rows after adding them to list
+                           deadlines.find('#new-dates-row').prevAll('.row.valid').remove();
                            invalids.insertBefore(deadlines.find('#new-dates-row'));
                            if(invalids.length > 0)
                            {
@@ -220,7 +215,7 @@ jQuery(document).ready(function($) {
                            var plan = jQuery('#plan');
                            plan.find('.row, .head').remove();
                            jQuery(data.plan).find('.row, .head')
-                               .insertBefore(plan.find('.pane-content p').last());
+                               .appendTo(plan.find('.pane-content'));
 
                            // update deadline view state
                            deadlines.removeClass('edit-date-only');
@@ -286,16 +281,6 @@ jQuery(document).ready(function($) {
             deadlines.removeClass('valid').addClass('invalid');
         else
             deadlines.removeClass('invalid').addClass('valid');
-        // don't need to limit submit because it goes back to edit mode if invalid
-        /*jQuery('#deadlines input[value="Save"]').each(function () {
-         var that = jQuery(this),
-         id = that.attr('id');
-         that.unbind(Drupal.ajax[id].event);
-         that.bind(Drupal.ajax[id].event, function (event) {
-         if(!that.parents('form').is('.invalid'))
-         return Drupal.ajax[id].eventResponse(this, event);
-         });
-         });*/
     };
 
     if(deadlines.find('.row').not('#new-dates-row').length == 0)

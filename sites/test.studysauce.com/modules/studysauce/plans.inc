@@ -54,8 +54,8 @@ function studysauce_save_strategies()
             if (isset($events[$strategy['eid']])) {
                 // check if the strategy is already saved
                 $field = 'field_' . $strategy['type'] . '_strategies';
-                $strategies = $node->$field;
-                if (isset($strategies['und']) && is_array($strategies['und'])) {
+                if (isset($node->$field) && ($strategies = $node->$field) !== null &&
+                    isset($strategies['und']) && is_array($strategies['und'])) {
                     $saved = db_select('field_data_field_class_name', 'ti')
                         ->fields('ti', array('entity_id'))
                         ->condition('bundle', $field, '=')
@@ -108,10 +108,8 @@ function studysauce_save_strategies()
                         $existing->field_title['und'][0]['value'] = $strategy['title'];
                     if (isset($strategy['notes']))
                         $existing->field_notes['und'][0]['value'] = $strategy['notes'];
-                    if (isset($strategy['uploads'][0]['thumbnail']))
-                        $existing->field_teaching['und'][0]['thumbnail'] = $strategy['uploads'][0]['thumbnail'];
                     if (isset($strategy['uploads'][0]['fid']))
-                        $existing->field_teaching['und'][0]['fid'] = $strategy['uploads'][0]['fid'];
+                        $existing->field_teaching['und'][0]['value'] = $strategy['uploads'][0]['fid'];
                     if (isset($strategy['review'])) {
                         if (!empty($strategy['review']))
                             $existing->field_review['und'] = array_map(function ($x) {
@@ -134,6 +132,8 @@ function studysauce_save_strategies()
 
                     $existing->save();
 
+                    // TODO: remove this because AWS handles everything
+                    /*
                     if (isset($strategy['uploads'][0]['fid'])) {
                         $file = file_load($strategy['uploads'][0]['fid']);
                         $fileName = isset($strategy['uploads'][0]['rename']) ? $strategy['uploads'][0]['rename'] : $file->filename;
@@ -159,6 +159,7 @@ function studysauce_save_strategies()
                         $video->dimensions = '320x180';
                         video_jobs::update($video);
                     }
+                    */
 
                 }
             }
@@ -231,40 +232,9 @@ function studysauce_get_strategies($account = null)
                     $result[$eid][$strategy]['notes'] = isset($entity->field_notes['und'][0]['value'])
                         ? $entity->field_notes['und'][0]['value']
                         : '';
-                    if (isset($entity->field_teaching['und'][0]['fid'])) {
-                        $result[$eid][$strategy]['uploads'][0]['fid'] = $entity->field_teaching['und'][0]['fid'];
-                        $result[$eid][$strategy]['uploads'][0]['thumbnail'] = $entity->field_teaching['und'][0]['thumbnail'];
-                        $result[$eid][$strategy]['uploads'][0]['uri'] = image_style_url('achievement', $entity->field_teaching['und'][0]['thumbnailfile']->uri);
-
-                        // Load the derived files
-                        $file = file_load($entity->field_teaching['und'][0]['fid']);
-                        $outputs = db_select('video_output', 'vo')
-                            ->fields('vo')
-                            ->condition('vo.original_fid', array($entity->field_teaching['und'][0]['fid']), 'IN')
-                            ->execute()->fetchAllAssoc('output_fid');
-                        foreach ($outputs as $outputfid => $output) {
-                            $trans = file_load($output->output_fid);
-                            if ($trans->filesize > 0)
-                                $result[$eid][$strategy]['uploads'][0]['play'] = check_plain(file_create_url($trans->uri));
-                        }
-                        if (empty($outputs)) {
-                            $result[$eid][$strategy]['uploads'][0]['play'] = check_plain(file_create_url($file->uri));
-                            $video = video_jobs::load($entity->field_teaching['und'][0]['fid']);
-                            if (!$video) {
-                                list($entity_id, $entity_vid, $bundle) = entity_extract_ids('field_collection_item', $entity);
-                                // @todo get the default dimension when not available in $item
-                                if (!video_jobs::create($file->fid, '320x180', $entity_id, 'field_collection_item', 'field_teaching', 'und', 0)) {
-                                    drupal_set_message(t('Something went wrong with your video job creation. Please check your recent log entries for further debugging.'), 'error');
-
-                                }
-                                // Load a fresh copy of the job
-                                $video = video_jobs::load($file->fid);
-                            }
-                            $video->video_status = VIDEO_RENDERING_PENDING;
-                            $video->statusupdated = time();
-                            $video->dimensions = '320x180';
-                            video_jobs::update($video);
-                        }
+                    if (isset($entity->field_teaching['und'][0]['value'])) {
+                        $result[$eid][$strategy]['uploads'][0]['value'] = $entity->field_teaching['und'][0]['value'];
+                        //$result[$eid][$strategy]['uploads'][0]['thumbnail'] = $entity->field_teaching['und'][0]['thumbnail'];
                     }
                 } elseif ($strategy == 'spaced') {
                     $result[$eid][$strategy]['notes'] = isset($entity->field_notes['und'][0]['value'])
@@ -330,14 +300,26 @@ function studysauce_save_completed()
         }
     } else {
         // find matching event
-        list($events) = studysauce_get_events();
-        if (isset($events[$_POST['cid']])) {
+        $query = new EntityFieldQuery();
+        $nodes = $query->entityCondition('entity_type', 'node')
+            ->propertyCondition('type', 'schedule')
+            ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
+            ->propertyCondition('status', 1)
+            ->range(0, 1)
+            ->execute();
+        if (!empty($nodes['node'])) {
+            $nodes = array_keys($nodes['node']);
+            $nid = array_shift($nodes);
+            $node = node_load($nid);
             db_update('studysauce_events')
                 ->fields(array('completed' => 1))
                 ->condition('eid', $_POST['cid'], '=')
+                ->condition('nid', $node->nid, '=')
+                ->condition('event_type', $_POST['type'])
                 ->execute();
         }
     }
+    drupal_json_output(true);
 }
 
 function studysauce_get_strategies_titles()
@@ -1954,10 +1936,10 @@ function studysauce_rebuild_schedule($node, $entities, $added = array(), $rename
     if (count($insertIds))
         $query->execute();
 
-    global $unresolved, $user;
+    global $unresolved;
     if(isset($unresolved) && !empty($unresolved))
     {
-        $unresolvedEmail = array('student' => $user->mail);
+        $unresolvedEmail = array('student' => $node->title);
         foreach($unresolved as $i => $e)
         {
             $unresolvedEmail[$e->field_time['und'][0]['value'] . ' ' . $e->field_class_name['und'][0]['value']] = $e->field_event_type['und'][0]['value'];
@@ -2142,6 +2124,32 @@ function studysauce_move_calendar()
         'events' => $studysauceExportEvents,
     ));
     drupal_exit();
+}
+
+function studysauce_regenerate_user_schedule($account)
+{
+    set_time_limit(0);
+    $query = new EntityFieldQuery();
+    $nodes = $query->entityCondition('entity_type', 'node')
+        ->propertyCondition('type', 'schedule')
+        ->propertyCondition('title', isset($account->mail) ? $account->mail : '')
+        ->propertyCondition('status', 1)
+        ->range(0, 1)
+        ->execute();
+    if (!empty($nodes['node'])) {
+        $nodes = array_keys($nodes['node']);
+        $nid = array_shift($nodes);
+        $node = node_load($nid);
+        $node->revision = 0;
+
+
+        $entities = entity_load('field_collection_item', array_map(function ($x) {
+            return $x['value'];
+        }, $node->field_classes[LANGUAGE_NONE]));
+
+
+        studysauce_rebuild_schedule($node, $entities);
+    }
 }
 
 function studysauce_save_calendar()
@@ -2361,6 +2369,7 @@ function studysauce_get_events($account = null, $lastOrderTime = null)
                 'value' => $r->time_start,
                 'value2' => $r->time_end
             );
+            $entity->field_completed[LANGUAGE_NONE][0]['value'] = $r->completed;
             $entity->field_user_moved[LANGUAGE_NONE][0]['value'] = $r->moved;
             $entity->field_deleted[LANGUAGE_NONE][0]['value'] = $r->deleted;
             $events[$eid] = $entity;

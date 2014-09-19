@@ -384,7 +384,7 @@
         </select>
     </div>
 </div>
-<div class="strategy-teach saved">
+<div class="strategy-teach invalid">
     <h3>Teach - Upload a 1 min video explaining your assignment</h3>
     <div class="plupload" id="plan-{eid}-plupload">
         <div class="plup-list-wrapper">
@@ -421,7 +421,7 @@
     </div>
     <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
-<div class="strategy-active saved">
+<div class="strategy-active invalid">
     <h3>Active reading - Follow the guide below to better retain what you are reading.</h3>
     <h4>Before reading:</h4>
     <label>Take no more than 2 minutes to skim the reading. What is the topic?</label>
@@ -438,7 +438,7 @@
     <textarea name="strategy-exam"></textarea>
     <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
-<div class="strategy-spaced saved">
+<div class="strategy-spaced invalid">
     <h3>Spaced repetition - Commit information to your long term memory by revisiting past work.</h3>
     <h4>Instructions - We highly recommend flashcards.  Online flashcard maker Quizlet is our favorite.  Read more about spaced repetition here.</h4>
     <div class="strategy-review">
@@ -450,12 +450,12 @@
     </div>
     <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
-<div class="strategy-other saved">
+<div class="strategy-other invalid">
     <h3>Notes:</h3>
     <textarea name="strategy-notes" placeholder="Write any notes here."></textarea>
     <div class="highlighted-link"><a href="#expand">Expand</a><a class="more" href="#save-strategy">Save</a></div>
 </div>
-<div class="strategy-prework saved">
+<div class="strategy-prework invalid">
     <h3>Prework - Get prepared for your class tomorrow.</h3>
     <div style="margin-left:30px; text-align: left;">
         <input type="checkbox" name="strategy-topics" id="strategy-topics" value="topics">

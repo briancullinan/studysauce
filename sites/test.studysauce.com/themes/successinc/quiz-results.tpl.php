@@ -28,7 +28,7 @@ $s = db_select('studysauce_quiz', 'q')
     ->fetchAssoc();
 ?>
 
-<div class="webform-confirmation">
+<div class="webform-confirmation dialog">
     <div>
         <div class="grid_5 even full-only">
             <h2>What you answered...</h2>
@@ -85,22 +85,8 @@ $s = db_select('studysauce_quiz', 'q')
     </div>
     <p style="clear: both; margin-bottom:0px;">&nbsp;</p>
     <hr />
-    <div class="grid_6 retry-link">
-        <?php if($s['place'] || $s['underlining'] || $s['same_subject'] || $s['laying_down'] || $s['longer_sessions']): ?>
-        <a href="#retry">Retry</a>
-        <?php /* elseif(in_array('beginner-brain', $awards)): ?>
-            &nbsp;
-            <script type="text/javascript">
-                jQuery(document).ready(function () {
-                    jQuery('#badges #beginner-brain').removeClass('not-awarded').addClass('awarded');
-                    jQuery('#badges').relocateAward('beginner-brain', '#tips > .pane-content')
-                });
-            </script>
-        <?php */ endif; ?>
-    </div>
     <p class="highlighted-link">
-        <a href="#" class="more" onclick="jQuery('#home').removeClass('study-quiz-only').scrollintoview(); return false;">Close</a>
+        <a href="#close" class="more">Close</a>
     </p>
-    <a href="#" onclick="jQuery('#home').removeClass('study-quiz-only').scrollintoview(); return false;" class="fancy-close">&nbsp;</a>
-    <p style="margin-bottom:0;line-height: 1px; clear:both;">&nbsp;</p>
+    <a href="#close">&nbsp;</a>
 </div>

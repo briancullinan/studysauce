@@ -134,6 +134,7 @@ function studysauce_invite_billing_send()
         $entity->save();
     }
 
+    drupal_json_output(true);
 }
 
 function studysauce_invite_parent_student_send()
@@ -175,6 +176,8 @@ function studysauce_invite_parent_student_send()
         field_attach_update('user', $account);
     }
 
+
+    drupal_json_output(true);
 }
 
 function studysauce_prepay_send($order, $account, $invite_email)

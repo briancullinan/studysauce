@@ -181,19 +181,22 @@ jQuery(document).ready(function() {
 
     goals.on('click', 'a[href="#claim"]', function (evt) {
         evt.preventDefault();
-        jQuery('#goals').addClass('achievement-only');
-        jQuery('#goals').scrollintoview();
+        goals.find('#claim').dialog();
         var row = jQuery(this).parents('.row'),
             gid = (/gid([0-9]+)(\s|$)/ig).exec(row.attr('class'))[1];
-        jQuery('#goals-brag').addClass('gid' + gid);
+        jQuery('#claim').addClass('gid' + gid);
     });
 
     goals.on('click', 'a[href="#brag-done"]', function (evt) {
         evt.preventDefault();
-        var brag = jQuery('#goals-brag'),
+        var brag = jQuery('#claim'),
             gid = (/gid([0-9]+)(\s|$)/ig).exec(brag.attr('class'))[1],
             inputs = brag.find('input[name^="goals-plupload"]'),
             uploads = [];
+
+        if(brag.is('.invalid'))
+            return;
+        brag.addClass('invalid');
 
         jQuery.each(inputs, function () {
             var matches = (/\[([0-9]+)\]\[([a-z]+)\]/ig).exec(jQuery(this).attr('name'));
@@ -211,8 +214,9 @@ jQuery(document).ready(function() {
                        message: brag.find('textarea').val()
                    },
                    success: function (data) {
+                       brag.removeClass('invalid');
                        brag.removeClass('gid' + gid);
-                       $('#goals').removeClass('achievement-only').scrollintoview();
+                       goals.find('#claim').dialog('hide');
 
                        // clear uploads
                        $.each(uploader.files, function (i, file) {

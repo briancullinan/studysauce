@@ -19,6 +19,7 @@ function studysauce_save_partner()
             // check if new email address matches old email address
             $old[$account->field_partners['und'][0]['value']]->field_email['und'][0]['value'] == $_POST['email'] &&
             // check if invite was sent within the last day
+            isset($old[$account->field_partners['und'][0]['value']]->field_sent['und'][0]['value']) &&
             date_timezone_set(new DateTime($old[$account->field_partners['und'][0]['value']]->field_sent['und'][0]['value'], new DateTimeZone('UTC')), new DateTimeZone(date_default_timezone_get()))->getTimestamp() > time() - 86400)
         {
             // copy old code because email is the same
@@ -36,25 +37,6 @@ function studysauce_save_partner()
 
         if(isset($_POST['permissions']))
             $entity->field_permissions['und'] = array_map(function ($x) { return array('value' => $x); }, explode(',', $_POST['permissions']));
-
-        if(isset($_POST['uploads']))
-        {
-            $entity->field_partner_photo['und'][0]['fid'] = $_POST['uploads'][0]['fid'];
-            $file = file_load($_POST['uploads'][0]['fid']);
-            $fileName = isset($_POST['uploads'][0]['rename']) ? $_POST['uploads'][0]['rename'] : $file->filename;
-            $location = 'public:///';
-            $filePath = $location . $fileName;
-            if ($file->uri !== $filePath) {
-                file_prepare_directory($location, FILE_CREATE_DIRECTORY);
-                file_move($file, $filePath);
-            }
-        }
-
-        if(isset($entity->field_partner_photo['und'][0]['fid']))
-        {
-            $file = file_load($entity->field_partner_photo['und'][0]['fid']);
-            $result['uri'] = image_style_url('achievement', $file->uri);
-        }
 
         if($shouldEmail)
         {
@@ -100,6 +82,31 @@ function studysauce_save_partner()
         $edit['field_partners']['und'] = array(array('value' => $entity->item_id, 'entity' => $entity));
 
         user_save($account, $edit);
+    }
+
+    if(isset($_POST['uploads']))
+    {
+        $entity = entity_load('field_collection_item', array($account->field_partners['und'][0]['value']));
+        if(isset($entity[$account->field_partners['und'][0]['value']]))
+        {
+            $entity = $entity[$account->field_partners['und'][0]['value']];
+            $entity->field_partner_photo['und'][0]['fid'] = $_POST['uploads'][0]['fid'];
+            $file = file_load($_POST['uploads'][0]['fid']);
+            $fileName = isset($_POST['uploads'][0]['rename']) ? $_POST['uploads'][0]['rename'] : $file->filename;
+            $location = 'public:///';
+            $filePath = $location . $fileName;
+            if ($file->uri !== $filePath) {
+                file_prepare_directory($location, FILE_CREATE_DIRECTORY);
+                file_move($file, $filePath);
+            }
+            $entity->save(true);
+        }
+    }
+
+    if(isset($entity->field_partner_photo['und'][0]['fid']))
+    {
+        $file = file_load($entity->field_partner_photo['und'][0]['fid']);
+        $result['uri'] = image_style_url('achievement', $file->uri);
     }
 
     print json_encode($result);

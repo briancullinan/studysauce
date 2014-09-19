@@ -31,23 +31,22 @@ if ($lastOrder || !empty($groups['node'])):
         print theme('studysauce-funnel');
     ?>
 
-    <div class="building-schedule">
-        <div class="middle-wrapper">
-            <h2>Just a moment while we build your plan.
-                <div class="timer"></div></h2>
+    <div class="fixed-centered modal">
+        <div id="profile-building" class="dialog">
+            <h2>Just a moment while we build your plan.</h2>
+            <div class="timer"></div>
         </div>
     </div>
 
-
     <div class="study-preferences">
         <h2>Please tell us more about your study preferences</h2>
-        <?php /*    <div class="field-type-text field-name-field-university field-widget-text-textfield form-wrapper">
+        <?php /*    <div class="field-type-text field-name-field-university field-widget-text-textfield ">
         <label for="schedule-university">School name</label>
         <input class="text-full form-text required" type="text" id="schedule-university" name="schedule-university"
                size="60" maxlength="255" value="<?php print (isset($node->field_university['und'][0]['value']) ? $node->field_university['und'][0]['value'] : ''); ?>">
     </div> */
         ?>
-        <div class="field-type-list-text field-name-field-grades field-widget-options-buttons form-wrapper">
+        <div class="field-type-list-text field-name-field-grades field-widget-options-buttons ">
             <h2>What kind of grades do you want? <span>Q: 1/3</span></h2>
             <input type="radio" id="schedule-grades-as-only" name="field_grades" value="as_only" class="form-radio"
                 <?php print (isset($node->field_grades['und'][0]['value']) && $node->field_grades['und'][0]['value'] == 'as_only' ? 'checked="checked"' : ''); ?>>
@@ -57,7 +56,7 @@ if ($lastOrder || !empty($groups['node'])):
             <label class="option" for="schedule-grades-has-life">I want to do well, but don't want to live in the
                 library </label>
         </div>
-        <div class="field-type-list-text field-name-field-weekends field-widget-options-buttons form-wrapper">
+        <div class="field-type-list-text field-name-field-weekends field-widget-options-buttons ">
             <h2>How do your manage your weekends? <span>Q: 2/3</span></h2>
             <input type="radio" id="schedule-weekends-hit-hard" name="field_weekends" value="hit_hard"
                    class="form-radio"
@@ -72,7 +71,7 @@ if ($lastOrder || !empty($groups['node'])):
             <h2>On a scale of 0-5 (5 being the best), rate how mentally sharp you feel during the following time
                 periods: <span>Q: 3/3</span></h2>
 
-            <div class="field-type-list-integer field-name-field-6-am-11-am field-widget-options-buttons form-wrapper">
+            <div class="field-type-list-integer field-name-field-6-am-11-am field-widget-options-buttons ">
                 <label>6 AM - 11 AM</label>
 
                 <div class="form-radios">
@@ -96,7 +95,7 @@ if ($lastOrder || !empty($groups['node'])):
                     <label class="option" for="schedule-6-am-11-am-5">5 </label>
                 </div>
             </div>
-            <div class="field-type-list-integer field-name-field-11-am-4-pm field-widget-options-buttons form-wrapper">
+            <div class="field-type-list-integer field-name-field-11-am-4-pm field-widget-options-buttons ">
                 <label for="schedule-11-am-4-pm">11 AM - 4 PM</label>
 
                 <div class="form-radios">
@@ -120,7 +119,7 @@ if ($lastOrder || !empty($groups['node'])):
                     <label class="option" for="schedule-11-am-4-pm-5">5 </label>
                 </div>
             </div>
-            <div class="field-type-list-integer field-name-field-4-pm-9-pm field-widget-options-buttons form-wrapper">
+            <div class="field-type-list-integer field-name-field-4-pm-9-pm field-widget-options-buttons ">
                 <label for="schedule-4-pm-9-pm">4 PM - 9 PM</label>
 
                 <div class="form-radios">
@@ -144,7 +143,7 @@ if ($lastOrder || !empty($groups['node'])):
                     <label class="option" for="schedule-4-pm-9-pm-5">5 </label>
                 </div>
             </div>
-            <div class="field-type-list-integer field-name-field-9-pm-2-am field-widget-options-buttons form-wrapper">
+            <div class="field-type-list-integer field-name-field-9-pm-2-am field-widget-options-buttons ">
                 <label for="schedule-9-pm-2-am">9 PM - 2 AM</label>
 
                 <div class="form-radios">
@@ -177,9 +176,9 @@ if ($lastOrder || !empty($groups['node'])):
 
         <div class="field-name-type-of-studying">
             <h2>What is the primary type of studying you expect to do in this class? <span>Q: 1/2</span></h2>
-            <label>Memorization</label>
-            <label>Reading/writing</label>
-            <label>Conceptual application</label>
+            <label title="Class will primarily test your ability to remember definitions or terms">Memorization</label>
+            <label title="Class work focuses on heavy reading and writing">Reading/writing</label>
+            <label title="Class will focus on deeper understanding of materials">Conceptual application</label>
             <?php
             $classes = _studysauce_get_schedule_classes();
             foreach ($classes as $eid => $c) {
@@ -188,7 +187,7 @@ if ($lastOrder || !empty($groups['node'])):
 
                 ?>
                 <div class="row cid-<?php print $eid; ?>">
-                    <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+                    <div class="field-type-text field-name-field-class-name field-widget-text-textfield ">
                         <div class="read-only">
                             <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?>
                         </div>
@@ -197,17 +196,18 @@ if ($lastOrder || !empty($groups['node'])):
                         <input type="radio" id="study-type-class-<?php print $eid; ?>-memorization"
                                name="study-type-class-<?php print $eid; ?>" value="memorization" class="form-radio"
                             <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'memorization' ? 'checked' : ''); ?> />
-                        <label class="option"
+                        <label class="option" title="Class will primarily test your ability to remember definitions or terms"
                                for="study-type-class-<?php print $eid; ?>-memorization">Memorization</label>
                         <input type="radio" id="study-type-class-<?php print $eid; ?>-reading"
                                name="study-type-class-<?php print $eid; ?>" value="reading" class="form-radio"
                             <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'reading' ? 'checked' : ''); ?> />
-                        <label class="option"
+                        <label class="option" title="Class work focuses on heavy reading and writing"
                                for="study-type-class-<?php print $eid; ?>-reading">Reading/writing</label>
                         <input type="radio" id="study-type-class-<?php print $eid; ?>-conceptual"
                                name="study-type-class-<?php print $eid; ?>" value="conceptual" class="form-radio"
                             <?php print (isset($entity[$eid]->field_study_type['und'][0]['value']) && $entity[$eid]->field_study_type['und'][0]['value'] == 'conceptual' ? 'checked' : ''); ?> />
-                        <label class="option" for="study-type-class-<?php print $eid; ?>-conceptual">Conceptual
+                        <label class="option" title="Class will focus on deeper understanding of materials"
+                               for="study-type-class-<?php print $eid; ?>-conceptual">Conceptual
                             application</label>
                     </div>
                 </div>
@@ -216,9 +216,9 @@ if ($lastOrder || !empty($groups['node'])):
         </div>
         <div class="field-name-difficulty-level">
             <h2>How difficult will this class be? <span>Q: 2/2</span></h2>
-            <label>Easy</label>
-            <label>Average</label>
-            <label>Tough</label>
+            <label title="Class should require less homework and/or be less difficult than most classes.  Will require less than 2 hours of studying for every hour of class">Easy</label>
+            <label title="Class will be a pretty standard amount of homework/difficulty.  Will require ~2 hours studying for every hour of class">Average</label>
+            <label title="Class will require much more homework and focus than others.  ~3 hours studying for every hour of class">Tough</label>
             <?php
             $classes = _studysauce_get_schedule_classes();
             foreach ($classes as $eid => $c) {
@@ -227,7 +227,7 @@ if ($lastOrder || !empty($groups['node'])):
 
                 ?>
                 <div class="row cid-<?php print $eid; ?>">
-                    <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+                    <div class="field-type-text field-name-field-class-name field-widget-text-textfield ">
                         <div class="read-only">
                             <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c; ?>
                         </div>
@@ -236,15 +236,18 @@ if ($lastOrder || !empty($groups['node'])):
                         <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-easy"
                                name="study-difficulty-class-<?php print $eid; ?>" value="easy" class="form-radio"
                             <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'easy' ? 'checked' : ''); ?> />
-                        <label class="option" for="study-difficulty-class-<?php print $eid; ?>-easy">Easy</label>
+                        <label class="option" title="Class should require less homework and/or be less difficult than most classes.  Will require less than 2 hours of studying for every hour of class"
+                               for="study-difficulty-class-<?php print $eid; ?>-easy">Easy</label>
                         <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-average"
                                name="study-difficulty-class-<?php print $eid; ?>" value="average" class="form-radio"
                             <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'average' ? 'checked' : ''); ?> />
-                        <label class="option" for="study-difficulty-class-<?php print $eid; ?>-average">Average</label>
+                        <label class="option" title="Class will be a pretty standard amount of homework/difficulty.  Will require ~2 hours studying for every hour of class"
+                               for="study-difficulty-class-<?php print $eid; ?>-average">Average</label>
                         <input type="radio" id="study-difficulty-class-<?php print $eid; ?>-tough"
                                name="study-difficulty-class-<?php print $eid; ?>" value="tough" class="form-radio"
                             <?php print (isset($entity[$eid]->field_study_difficulty['und'][0]['value']) && $entity[$eid]->field_study_difficulty['und'][0]['value'] == 'tough' ? 'checked' : ''); ?> />
-                        <label class="option" for="study-difficulty-class-<?php print $eid; ?>-tough">Tough</label>
+                        <label class="option" title="Class will require much more homework and focus than others.  ~3 hours studying for every hour of class"
+                               for="study-difficulty-class-<?php print $eid; ?>-tough">Tough</label>
                     </div>
                 </div>
             <?php } ?>
@@ -270,6 +273,14 @@ if ($lastOrder || !empty($groups['node'])):
     }
 
     ?>
+    <div class="fixed-centered modal">
+        <div id="profile-intro" class="dialog">
+            <h2>Welcome to Study Sauce</h2>
+            <p>Answer a few quick questions about your classes and study preferences to get started.</p>
+            <div class="highlighted-link"><a href="#close" class="more">Get started</a></div>
+            <a href="#close">&nbsp;</a>
+        </div>
+    </div>
     <div class="field-name-field-profile-question-mindset">
         <h2>Which do you agree with more? <span>Q: 1/5</span></h2>
         <input type="radio" name="profile-question-mindset" id="profile-question-mindset-answer-1" value="born"
@@ -371,55 +382,53 @@ if ($lastOrder || !empty($groups['node'])):
 
 <?php endif; ?>
 <?php if (!$lastOrder && empty($groups['node'])): ?>
-    <div class="buy-plan">
-        <div class="middle-wrapper">
-            <div class="highlighted-link">
-                <a href="#premium"><h2>Upgrade to premium to discover your unique study profile.</h2></a>
-                <a class="more-parents" href="#parents"
-                   onclick="jQuery('#profile').addClass('bill-my-parents-only'); return false;">Bill my parents</a>
-                <a href="#premium" class="more">Go Premium</a>
-
-                <div class="bill-my-parents">
-                    <h3>Send an email to have someone prepay for Study Sauce. We will then alert you when your account
-                        has been activated.</h3>
-
-                    <div
-                        class="form-item webform-component webform-component-textfield webform-component--student-first-name">
-                        <label>Parent's first name</label>
-                        <input type="text" name="invite-first" size="60" maxlength="128" class="form-text required"
-                               value="">
-                    </div>
-                    <div
-                        class="form-item webform-component webform-component-textfield webform-component--student-last-name">
-                        <label>Parent's last name</label>
-                        <input type="text" name="invite-last" size="60" maxlength="128" class="form-text required"
-                               value="">
-                    </div>
-                    <div class="form-item webform-component webform-component-email">
-                        <label>Parent's email</label>
-                        <input class="email form-text form-email required" type="email" name="invite-email" size="60"
-                               value="">
-                    </div>
-                    <div style="text-align: right;">
-                        <a href="#bill-send" class="more">Send</a></div>
-                    <a href="#"
-                       onclick="jQuery('#profile').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;"
-                       class="fancy-close">&nbsp;</a>
-                </div>
-                <div class="bill_step_2">
-                    <h2>Thanks!</h2>
-
-                    <h3>We will let you know when your account has been activated.</h3>
-
-                    <div style="text-align: right;">
-                        <a href="#"
-                           onclick="jQuery('#profile').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;"
-                           class="more">Close</a></div>
-                    <a href="#"
-                       onclick="jQuery('#profile').removeClass('bill-my-parents-only bill_step_2_only').scrollintoview(); return false;"
-                       class="fancy-close">&nbsp;</a>
-                </div>
+    <div class="fixed-centered modal">
+        <div id="profile-bill-parents" class="dialog">
+            <h2>Send an email to have someone prepay for Study Sauce. We will then alert you when your account
+                has been activated.</h2>
+            <div
+                class="form-item webform-component webform-component-textfield webform-component--student-first-name">
+                <label>Parent's first name</label>
+                <input type="text" name="invite-first" size="60" maxlength="128" class="form-text required"
+                       value="">
             </div>
+            <div
+                class="form-item webform-component webform-component-textfield webform-component--student-last-name">
+                <label>Parent's last name</label>
+                <input type="text" name="invite-last" size="60" maxlength="128" class="form-text required"
+                       value="">
+            </div>
+            <div class="form-item webform-component webform-component-email">
+                <label>Parent's email</label>
+                <input class="email form-text form-email required" type="email" name="invite-email" size="60"
+                       value="">
+            </div>
+            <div class="highlighted-link">
+                <a href="#bill-send" class="more">Send</a></div>
+            <a href="#close">&nbsp;</a>
+        </div>
+        <div id="profile-bill-2" class="dialog">
+            <h2>Thanks!</h2>
+            <h3>We will let you know when your account has been activated.</h3>
+            <div class="highlighted-link">
+                <a href="#close" class="more">Close</a></div>
+            <a href="#close">&nbsp;</a>
         </div>
     </div>
+
+    <div class="fixed-centered">
+        <div id="profile-upgrade" class="dialog highlighted-link">
+            <a href="#premium"><h2>Upgrade to premium to discover your unique study profile.</h2></a>
+            <a class="more-parents" href="#profile-bill-parents">Bill my parents</a>
+            <a href="#premium" class="more">Go Premium</a>
+        </div>
+    </div>
+
+    <div id="profile-buy-plan">&nbsp;</div>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('#profile-upgrade').dialog();
+        });
+    </script>
 <?php endif; ?>

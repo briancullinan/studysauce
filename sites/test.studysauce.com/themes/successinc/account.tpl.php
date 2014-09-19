@@ -6,14 +6,14 @@ global $user;
 
 ?>
 <h2>User settings</h2>
-<div class="field-type-text field-name-field-first-name field-widget-text-textfield form-wrapper">
+<div class="field-type-text field-name-field-first-name field-widget-text-textfield">
     <div class="form-item form-type-textfield">
         <label>First name:</label>
         <input class="text-full form-text required" type="text" name="account-first-name"
                value="<?php print (isset($user->field_first_name['und'][0]['value']) ? $user->field_first_name['und'][0]['value'] : ''); ?>" size="60" maxlength="255">
     </div>
 </div>
-<div class="field-type-text field-name-field-last-name field-widget-text-textfield form-wrapper">
+<div class="field-type-text field-name-field-last-name field-widget-text-textfield">
     <div class="form-item form-type-textfield">
         <label>Last name:</label>
         <input class="text-full form-text required" type="text" name="account-last-name"
@@ -39,7 +39,7 @@ global $user;
     <input type="password" name="pass" size="25" maxlength="128" class="form-text">
 </div>
 <br />
-<div class="highlighted-link form-actions form-wrapper">
+<div class="highlighted-link">
     <!--<a href="#cancel-account">Delete your account</a> --><a class="more form-submit ajax-processed" href="#save-account">Save</a>
 </div>
 <?php
@@ -76,7 +76,7 @@ $advised = (in_array('adviser', $user->roles) || in_array('master adviser', $use
 <br />
 <?php
 if(!isset($groups['node']) && !$lastOrder): ?>
-<div class="highlighted-link form-actions form-wrapper"><a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout" class="more">Upgrade</a></div>
+<div class="highlighted-link neverinvalid"><a href="/cart/add/e-p13_q1_a4o14_s?destination=cart/checkout" class="more">Upgrade</a></div>
 <?php endif; ?>
 
 

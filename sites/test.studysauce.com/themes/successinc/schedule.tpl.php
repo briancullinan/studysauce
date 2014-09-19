@@ -1,7 +1,8 @@
 <?php
+drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.plugin.js');
+drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.timeentry.js');
 drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/schedule.js');
 drupal_add_css(drupal_get_path('theme', 'successinc') .'/schedule.css');
-drupal_add_js(drupal_get_path('module', 'date') .'/date_popup/jquery.timeentry.pack.js');
 drupal_add_library('system', 'ui.datepicker');
 drupal_add_js(drupal_get_path('theme', 'successinc') .'/js/jquery.scrollintoview.js');
 drupal_add_js(drupal_get_path('theme', 'successinc') . '/js/jquery.pietimer.js');
@@ -27,15 +28,15 @@ if (!empty($nodes['node'])) {
 list($events, $classes, $others) = studysauce_get_events();
 ?>
 
-<div class="building-schedule">
-    <div class="middle-wrapper">
-        <h2>Just a moment while we build your plan.
-            <div class="timer"></div></h2>
+<div class="fixed-centered modal">
+    <div id="schedule-building" class="dialog">
+        <h2>Just a moment while we build your plan.</h2>
+        <div class="timer"></div>
     </div>
 </div>
 
 <h2>Enter your class below</h2>
-<div class="field-type-text field-name-field-university field-widget-text-textfield form-wrapper">
+<div class="field-type-text field-name-field-university field-widget-text-textfield ">
     <label for="schedule-university">School name</label>
     <input class="text-full form-text required" type="text" id="schedule-university" name="schedule-university"
            size="60" maxlength="255" value="<?php print (isset($node->field_university['und'][0]['value']) ? $node->field_university['und'][0]['value'] : ''); ?>">
@@ -77,7 +78,7 @@ list($events, $classes, $others) = studysauce_get_events();
 
         ?>
         <div class="row <?php print ($c->field_class_name['und'][0]['value'] == '' ? 'edit' : ''); ?>" id="eid-<?php print $eid; ?>">
-            <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+            <div class="field-type-text field-name-field-class-name field-widget-text-textfield ">
                 <div class="read-only">
                     <label>&nbsp;</label>
                     <span class="class<?php print $classI; ?>">&nbsp;</span><?php print $c->field_class_name['und'][0]['value']; ?></div>
@@ -88,7 +89,7 @@ list($events, $classes, $others) = studysauce_get_events();
                            type="text" size="60" maxlength="255" placeholder="<?php print $examples[array_rand($examples, 1)]; ?>" value="" autocomplete="off">
                 </div>
             </div>
-            <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
+            <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons ">
                 <div class="read-only">
                     <label>M</label><label>Tu</label><label>W</label><label>Th</label><label>F</label><label>Sa</label><label>Su</label>
                     <span class="<?php print (in_array('M', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">M</span>
@@ -153,39 +154,49 @@ list($events, $classes, $others) = studysauce_get_events();
                     </div>
                 </div>
             </div>
-            <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
+            <div class="field-type-datetime field-name-field-time field-widget-date-popup ">
                 <div class="form-item form-type-textfield">
-                    <label>Time</label>
-                    <input name="schedule-value-time"
-                           class="date-clear form-text jquery_placeholder-processed"
-                           value="<?php print ($startDate == null ? '' : date('h:ia', $startDate)); ?>"
-                           type="text" size="15" maxlength="10" placeholder="Start" value="">
+                    <label class="full-only">Time</label>
+                    <label class="mobile-only">Start time</label>
+                    <input name="schedule-value-time" title="What time does your class begin?"
+                           class="date-clear form-text jquery_placeholder-processed full-only"
+                           value="<?php print ($startDate == null ? '' : date('H:i:s', $startDate)); ?>"
+                           type="text" size="15" maxlength="10" placeholder="Start">
+                    <input name="schedule-value-time" title="What time does your class begin?"
+                           class="date-clear form-text jquery_placeholder-processed mobile-only"
+                           value="<?php print ($startDate == null ? '' : date('H:i:s', $startDate)); ?>"
+                           type="time" size="15" maxlength="10" placeholder="Start">
                 </div>
                 <div class="form-item form-type-textfield">
-                    <label>&nbsp;</label>
-                    <input name="schedule-value2-time"
-                           class="date-clear form-text jquery_placeholder-processed"
-                           value="<?php print ($endDate == null ? '' : date('h:ia', $endDate)); ?>"
-                           type="text" size="15" maxlength="10" placeholder="End" value="">
+                    <label class="full-only">&nbsp;</label>
+                    <label class="mobile-only">End time</label>
+                    <input name="schedule-value2-time" title="What time does your class end?"
+                           class="date-clear form-text jquery_placeholder-processed full-only"
+                           value="<?php print ($endDate == null ? '' : date('H:i:s', $endDate)); ?>"
+                           type="text" size="15" maxlength="10" placeholder="End">
+                    <input name="schedule-value2-time" title="What time does your class end?"
+                           class="date-clear form-text jquery_placeholder-processed mobile-only"
+                           value="<?php print ($endDate == null ? '' : date('H:i:s', $endDate)); ?>"
+                           type="time" size="15" maxlength="10" placeholder="End">
                 </div>
                 <div class="form-item form-type-textfield">
                     <label>Date</label>
-                    <input name="schedule-value-date"
+                    <input name="schedule-value-date" title="What day does your academic term begin?"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($startDate == null ? '' : date('m/d/Y', $startDate)); ?>"
-                           type="text" size="20" maxlength="30" placeholder="First class" value="">
+                           type="text" size="20" maxlength="30" placeholder="First class">
                 </div>
                 <div class="form-item form-type-textfield">
                     <label>&nbsp;</label>
-                    <input name="schedule-value2-date"
+                    <input name="schedule-value2-date" title="What day does your academic term end?"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($endDate == null ? '' : date('m/d/Y', $endDate)); ?>"
-                           type="text" size="20" maxlength="30" placeholder="Last class" value="">
+                           type="text" size="20" maxlength="30" placeholder="Last class">
                 </div>
-                <div class="read-only"><label>Time</label><?php print ($startDate == null ? '' : date('h:i A', $startDate)) . ' - ' . ($endDate == null ? '' : date('h:i A', $endDate)); ?></div>
+                <div class="read-only"><label>Time</label><?php print ($startDate == null ? '' : date('H:i A', $startDate)) . ' - ' . ($endDate == null ? '' : date('H:i A', $endDate)); ?></div>
                 <div class="read-only"><label>Date</label><?php print ($startDate == null ? '' : date('m/d/y', $startDate)) . ' - ' . ($endDate == null ? '' : date('m/d/y', $endDate)); ?></div>
             </div>
-            <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="c" />
+            <input type="hidden" class="field-type-hidden field-name-field-event-type " name="schedule-type" value="c" />
             <div class="read-only">
                 <label>&nbsp;</label>
                 <a href="#edit-class">&nbsp;</a>
@@ -197,8 +208,8 @@ list($events, $classes, $others) = studysauce_get_events();
     }
     ?>
 
-    <div id="add-class-dialog" class="row invalid">
-        <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+    <div id="add-class-dialog" class="row invalid" style="display:none;">
+        <div class="field-type-text field-name-field-class-name field-widget-text-textfield ">
             <div class="form-item form-type-textfield">
                 <label>Class name</label>
                 <input name="schedule-class-name"
@@ -206,7 +217,7 @@ list($events, $classes, $others) = studysauce_get_events();
                        type="text" size="60" maxlength="255" placeholder="Hist 101" value="" autocomplete="off">
             </div>
         </div>
-        <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
+        <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons ">
             <div class="form-item form-type-checkboxes">
                 <label>M</label><label>Tu</label><label>W</label><label>Th</label><label>F</label><label>Sa</label><label>Su</label>
                 <div class="form-checkboxes">
@@ -255,33 +266,41 @@ list($events, $classes, $others) = studysauce_get_events();
                 </div>
             </div>
         </div>
-        <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
+        <div class="field-type-datetime field-name-field-time field-widget-date-popup ">
             <div class="form-item form-type-textfield">
-                <label for="schedule-value-time">Time</label>
-                <input name="schedule-value-time"
-                       class="date-clear form-text jquery_placeholder-processed"
+                <label for="schedule-value-time" class="full-only">Time</label>
+                <label for="schedule-value-time" class="mobile-only">Start time</label>
+                <input name="schedule-value-time" title="What time does your class start?"
+                       class="date-clear form-text jquery_placeholder-processed full-only"
                        type="text" size="15" maxlength="10" placeholder="Start" value="">
+                <input name="schedule-value-time" title="What time does your class start?"
+                       class="date-clear form-text jquery_placeholder-processed mobile-only"
+                       type="time" size="15" maxlength="10" placeholder="Start" value="">
             </div>
             <div class="form-item form-type-textfield">
-                <label>&nbsp;</label>
-                <input name="schedule-value2-time"
-                       class="date-clear form-text jquery_placeholder-processed"
+                <label class="full-only">&nbsp;</label>
+                <label class="mobile-only">End time</label>
+                <input name="schedule-value2-time" title="What time does your class end?"
+                       class="date-clear form-text jquery_placeholder-processed full-only"
                        type="text" size="15" maxlength="10" placeholder="End" value="">
+                <input name="schedule-value2-time" title="What time does your class end?"
+                       class="date-clear form-text jquery_placeholder-processed mobile-only"
+                       type="time" size="15" maxlength="10" placeholder="Emd" value="">
             </div>
             <div class="form-item form-type-textfield">
                 <label for="schedule-value-date">Date</label>
-                <input name="schedule-value-date"
+                <input name="schedule-value-date" title="What day does your academic term begin?"
                        class="date-clear form-text jquery_placeholder-processed"
                        type="text" size="20" maxlength="30" placeholder="First class" value="">
             </div>
             <div class="form-item form-type-textfield">
                 <label>&nbsp;</label>
-                <input name="schedule-value2-date"
+                <input name="schedule-value2-date" title="What day does your academic term end?"
                        class="date-clear form-text jquery_placeholder-processed"
                        type="text" size="20" maxlength="30" placeholder="Last class" value="">
             </div>
         </div>
-        <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="c" />
+        <input type="hidden" class="field-type-hidden field-name-field-event-type " name="schedule-type" value="c" />
     </div>
 </div>
 
@@ -332,7 +351,7 @@ list($events, $classes, $others) = studysauce_get_events();
 
         ?>
         <div  class="row" id="eid-<?php print $eid; ?>">
-            <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+            <div class="field-type-text field-name-field-class-name field-widget-text-textfield ">
                 <div class="read-only">
                     <label>&nbsp;</label>
                     <span>&nbsp;</span><?php print $c; ?></div>
@@ -343,7 +362,7 @@ list($events, $classes, $others) = studysauce_get_events();
                            type="text" size="60" maxlength="255" placeholder="Work" value="" autocomplete="off">
                 </div>
             </div>
-            <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
+            <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons ">
                 <div class="read-only">
                     <label>M</label><label>Tu</label><label>W</label><label>Th</label><label>F</label><label>Sa</label><label>Su</label>
                     <span class="<?php print (in_array('M', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">M</span>
@@ -407,7 +426,7 @@ list($events, $classes, $others) = studysauce_get_events();
                         </div>
                     </div>
                 </div>
-                <div class="field-type-list-text field-name-field-recurring field-widget-options-buttons form-wrapper">
+                <div class="field-type-list-text field-name-field-recurring field-widget-options-buttons ">
                     <label>Recurring</label>
                     <div class="read-only">
                         <span class="<?php print (in_array('weekly', $daysOfTheWeek) ? 'checked' : 'unchecked'); ?>">Weekly</span>
@@ -423,20 +442,30 @@ list($events, $classes, $others) = studysauce_get_events();
                     </div>
                 </div>
             </div>
-            <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
+            <div class="field-type-datetime field-name-field-time field-widget-date-popup ">
                 <div class="form-item form-type-textfield">
-                    <label for="schedule-value-time">Time</label>
+                    <label class="full-only">Time</label>
+                    <label class="mobile-only">Start time</label>
                     <input name="schedule-value-time"
-                           class="date-clear form-text jquery_placeholder-processed"
-                           value="<?php print ($startDate == null ? '' : date('h:ia', $startDate)); ?>"
+                           class="date-clear form-text jquery_placeholder-processed full-only"
+                           value="<?php print ($startDate == null ? '' : date('H:i:s', $startDate)); ?>"
                            type="text" size="15" maxlength="10" placeholder="Start" value="">
+                    <input name="schedule-value-time"
+                           class="date-clear form-text jquery_placeholder-processed mobile-only"
+                           value="<?php print ($startDate == null ? '' : date('H:i:s', $startDate)); ?>"
+                           type="time" size="15" maxlength="10" placeholder="Start" value="">
                 </div>
                 <div class="form-item form-type-textfield">
-                    <label>&nbsp;</label>
+                    <label class="full-only">&nbsp;</label>
+                    <label class="mobile-only">End time</label>
                     <input name="schedule-value2-time"
-                           class="date-clear form-text jquery_placeholder-processed"
-                           value="<?php print ($endDate == null ? '' : date('h:ia', $endDate)); ?>"
+                           class="date-clear form-text jquery_placeholder-processed full-only"
+                           value="<?php print ($endDate == null ? '' : date('H:i:s', $endDate)); ?>"
                            type="text" size="15" maxlength="10" placeholder="End" value="">
+                    <input name="schedule-value2-time"
+                           class="date-clear form-text jquery_placeholder-processed mobile-only"
+                           value="<?php print ($endDate == null ? '' : date('H:i:s', $endDate)); ?>"
+                           type="time" size="15" maxlength="10" placeholder="End" value="">
                 </div>
                 <div class="form-item form-type-textfield">
                     <label
@@ -444,19 +473,19 @@ list($events, $classes, $others) = studysauce_get_events();
                     <input name="schedule-value-date"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($startDate == null ? '' : date('m/d/Y', $startDate)); ?>"
-                           type="text" size="20" maxlength="30" placeholder="First class" value="">
+                           type="text" size="20" maxlength="30" placeholder="Start" value="">
                 </div>
                 <div class="form-item form-type-textfield">
                     <label>&nbsp;</label>
                     <input name="schedule-value2-date"
                            class="date-clear form-text jquery_placeholder-processed"
                            value="<?php print ($endDate == null ? '' : date('m/d/Y', $endDate)); ?>"
-                           type="text" size="20" maxlength="30" placeholder="Last class" value="">
+                           type="text" size="20" maxlength="30" placeholder="End" value="">
                 </div>
-                <div class="read-only"><label>Time</label><?php print ($startDate == null ? '' : date('h:i A', $startDate)) . ' - ' . ($endDate == null ? '' : date('h:i A', $endDate)); ?></div>
+                <div class="read-only"><label>Time</label><?php print ($startDate == null ? '' : date('H:i A', $startDate)) . ' - ' . ($endDate == null ? '' : date('H:i A', $endDate)); ?></div>
                 <div class="read-only"><label>Date</label><?php print ($startDate == null ? '' : date('m/d/y', $startDate)) . ' - ' . ($endDate == null ? '' : date('m/d/y', $endDate)); ?></div>
             </div>
-            <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="o" />
+            <input type="hidden" class="field-type-hidden field-name-field-event-type " name="schedule-type" value="o" />
             <div class="read-only">
                 <label>&nbsp;</label>
                 <a href="#edit-class">&nbsp;</a>
@@ -467,8 +496,8 @@ list($events, $classes, $others) = studysauce_get_events();
     }
     ?>
 
-    <div id="add-other-dialog" class="row invalid">
-        <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+    <div id="add-other-dialog" class="row invalid" style="display:none;">
+        <div class="field-type-text field-name-field-class-name field-widget-text-textfield ">
             <div class="form-item form-type-textfield">
                 <label>Event title</label>
                 <input name="schedule-class-name"
@@ -476,7 +505,7 @@ list($events, $classes, $others) = studysauce_get_events();
                        type="text" size="60" maxlength="255" placeholder="Work" value="" autocomplete="off">
             </div>
         </div>
-        <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons form-wrapper">
+        <div class="field-type-list-text field-name-field-day-of-the-week field-widget-options-buttons ">
             <div class="form-item form-type-checkboxes">
                 <label>M</label><label>Tu</label><label>W</label><label>Th</label><label>F</label><label>Sa</label><label>Su</label>
                 <div class="form-checkboxes">
@@ -527,18 +556,28 @@ list($events, $classes, $others) = studysauce_get_events();
                 </div>
             </div>
         </div>
-        <div class="field-type-datetime field-name-field-time field-widget-date-popup form-wrapper">
+        <div class="field-type-datetime field-name-field-time field-widget-date-popup ">
             <div class="form-item form-type-textfield">
-                <label>Time</label>
+                <label class="full-only">Time</label>
+                <label class="mobile-only">Start time</label>
                 <input name="schedule-value-time"
-                       class="date-clear form-text jquery_placeholder-processed"
+                       class="date-clear form-text jquery_placeholder-processed full-only"
                        type="text" size="15" maxlength="10" placeholder="Start" value="">
+                <input name="schedule-value-time"
+                       class="date-clear form-text jquery_placeholder-processed mobile-only"
+                       value=""
+                       type="time" size="15" maxlength="10" placeholder="Start" value="">
             </div>
             <div class="form-item form-type-textfield">
-                <label>&nbsp;</label>
+                <label class="full-only">&nbsp;</label>
+                <label class="mobile-only">End time</label>
                 <input name="schedule-value2-time"
-                       class="date-clear form-text jquery_placeholder-processed"
+                       class="date-clear form-text jquery_placeholder-processed full-only"
                        type="text" size="15" maxlength="10" placeholder="End" value="">
+                <input name="schedule-value2-time"
+                       class="date-clear form-text jquery_placeholder-processed mobile-only"
+                       value=""
+                       type="time" size="15" maxlength="10" placeholder="End" value="">
             </div>
             <div class="form-item form-type-textfield">
                 <label>Date</label>
@@ -553,7 +592,7 @@ list($events, $classes, $others) = studysauce_get_events();
                        type="text" size="20" maxlength="30" placeholder="End" value="">
             </div>
         </div>
-        <input type="hidden" class="field-type-hidden field-name-field-event-type form-wrapper" name="schedule-type" value="o" />
+        <input type="hidden" class="field-type-hidden field-name-field-event-type " name="schedule-type" value="o" />
     </div>
 
 </div>

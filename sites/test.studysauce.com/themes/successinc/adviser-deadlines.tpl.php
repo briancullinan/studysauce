@@ -26,7 +26,7 @@ if (!empty($entities['node']))
         <label>Sort by: </label>
         <input type="radio" id="deadlines-by-date" name="deadlines-by" value="date" checked="checked"><label for="deadlines-by-date">Date</label>&nbsp;
         <input type="radio" id="deadlines-by-class" name="deadlines-by" value="class"><label for="deadlines-by-class">Class</label>
-        <input type="checkbox" id="deadlines-historic"><label for="deadlines-historic">View historical</label>
+        <input type="checkbox" id="deadlines-historic"><label for="deadlines-historic">Past deadlines</label>
     </div>
     <?php
     $nodes = array_keys($entities['node']);
@@ -69,7 +69,7 @@ if (!empty($entities['node']))
             print (($time < strtotime(date('Y/m/d')) - 86400 && $first && !($first = false)) ||
             ($time >= strtotime(date('Y/m/d')) - 86400 && $firstVisible && !($firstVisible = false)) ? 'first' : ''); ?> <?php
             print ($time < strtotime(date('Y/m/d')) - 86400 ? 'hide' : ''); ?>" id="eid-<?php print $eid; ?>">
-                <div class="field-type-text field-name-field-class-name field-widget-text-textfield form-wrapper">
+                <div class="field-type-text field-name-field-class-name field-widget-text-textfield ">
                     <div class="read-only"><span class="class<?php print $classI; ?>">&nbsp;</span><?php print htmlspecialchars($reminder->field_class_name['und'][0]['value'], ENT_QUOTES); ?></div>
                     <div class="form-item form-type-select">
                         <label>&nbsp;</label>
@@ -85,7 +85,7 @@ if (!empty($entities['node']))
                         </select>
                     </div>
                 </div>
-                <div class="field-type-text field-name-field-assignment field-widget-text-textfield form-wrapper">
+                <div class="field-type-text field-name-field-assignment field-widget-text-textfield ">
                     <div class="read-only"><label>Assignment</label><?php print htmlspecialchars($reminder->field_assignment['und'][0]['value'], ENT_QUOTES); ?></div>
                     <div class="form-item form-type-textfield">
                         <label for="edit-field-reminders-und-1-field-assignment-und-0-value">Assignment </label>
@@ -93,7 +93,7 @@ if (!empty($entities['node']))
                                type="text" name="dates-assignment" value="<?php print htmlspecialchars($reminder->field_assignment['und'][0]['value'], ENT_QUOTES); ?>" size="60" maxlength="255">
                     </div>
                 </div>
-                <div class="field-type-list-integer field-name-field-reminder field-widget-options-buttons form-wrapper">
+                <div class="field-type-list-integer field-name-field-reminder field-widget-options-buttons ">
                     <div class="read-only"><label>Reminders</label>
                         <span class="<?php print (in_array(1209600, $reminders) ? 'checked' : 'unchecked'); ?>">2 wk</span>
                         <span class="<?php print (in_array(604800, $reminders) ? 'checked' : 'unchecked'); ?>">1 wk</span>
@@ -136,7 +136,7 @@ if (!empty($entities['node']))
                         </div>
                     </div>
                 </div>
-                <div class="field-type-datetime field-name-field-due-date field-widget-date-popup form-wrapper">
+                <div class="field-type-datetime field-name-field-due-date field-widget-date-popup ">
                     <div class="form-item form-type-date-popup">
                         <div class="date-padding">
                             <div class="form-item form-type-textfield">
@@ -151,7 +151,7 @@ if (!empty($entities['node']))
                     </div>
                 </div>
                 <?php if($reminder->field_class_name['und'][0]['value'] != 'Nonacademic'): ?>
-                    <div class="field-type-number-integer field-name-field-percent field-widget-number form-wrapper">
+                    <div class="field-type-number-integer field-name-field-percent field-widget-number ">
                         <div class="read-only"><label>% of grade</label><?php print $reminder->field_percent['und'][0]['value']; ?>%</div>
                         <div class="form-item form-type-textfield">
                             <label for="dates-percent">% of grade </label>
@@ -159,7 +159,7 @@ if (!empty($entities['node']))
                         </div>
                     </div>
                 <?php endif; ?>
-                <div class="field-type-list-boolean field-name-field-completed field-widget-options-onoff form-wrapper">
+                <div class="field-type-list-boolean field-name-field-completed field-widget-options-onoff ">
                     <div class="form-item form-type-checkbox">
                         <input type="checkbox" name="dates-completed" value="1" class="form-checkbox">
                         <label class="option" for="dates-completed">Completed </label>

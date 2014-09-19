@@ -1,4 +1,34 @@
 
+.page-dashboard #deadlines.empty .pane-content:before
+{
+    height: 100%;
+    width: 100%;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.50);
+    z-index: 40;
+}
+
+.page-dashboard #deadlines .empty-only
+{
+    display: none;
+}
+
+.page-dashboard #deadlines.empty .empty-only
+{
+    display: block;
+}
+
+.page-dashboard.adviser-user #deadlines .pane-content:before,
+.page-dashboard.partner-user #deadlines .pane-content:before,
+.page-dashboard.paid-user #deadlines .pane-content:before
+{
+    display: none;
+}
+
 .page-dashboard #deadlines .head
 {
     background-color:#555555;
@@ -157,20 +187,6 @@
     background: url(images/trash.png) no-repeat 50% 50% transparent;
 }
 
-.page-dashboard #deadlines .field-name-field-class-name .form-type-select,
-.page-dashboard #deadlines .field-name-field-assignment .form-type-textfield,
-.page-dashboard #deadlines .field-name-field-percent .form-type-textfield,
-.page-dashboard #deadlines .field-name-field-due-date .form-type-date-popup,
-.page-dashboard #deadlines .row .highlighted-link,
-.page-dashboard #deadlines .field-name-field-reminder .form-type-checkboxes,
-.page-dashboard #deadlines .field-name-field-reminder-sent,
-.page-dashboard #deadlines .field-name-field-completed .form-type-checkbox,
-.page-dashboard #deadlines a[href="#cancel-dates"]
-
-{
-    display:none;
-}
-
 .page-dashboard #deadlines .field-name-field-class-name,
 .page-dashboard #deadlines .field-name-field-assignment,
 .page-dashboard #deadlines .field-name-field-due-date,
@@ -280,28 +296,19 @@
     padding:5px 0;
 }
 
-.page-dashboard #deadlines .edit .field-name-field-class-name .read-only,
-.page-dashboard #deadlines .edit .field-name-field-percent .read-only,
-.page-dashboard #deadlines .edit .field-name-field-assignment .read-only,
-.page-dashboard #deadlines .edit .field-name-field-reminder .read-only
+.page-dashboard #deadlines .row.edit > div > .read-only,
+.page-dashboard #deadlines .row > div > .form-item
 {
     display:none;
 }
 
-.page-dashboard #deadlines .edit .field-name-field-class-name .form-type-select,
-.page-dashboard #deadlines .edit .field-name-field-assignment .form-type-textfield,
-.page-dashboard #deadlines .edit .field-name-field-percent .form-type-textfield,
-.page-dashboard #deadlines .edit .field-name-field-due-date .form-type-date-popup,
-.page-dashboard #deadlines .edit .field-name-field-due-date .form-type-textfield,
-.page-dashboard #deadlines .edit .field-name-field-reminder .form-type-checkboxes,
-.page-dashboard #deadlines .edit .field-name-field-reminder .form-checkboxes
+.page-dashboard #deadlines .row.edit > div > .form-item
 {
     display:block;
     margin:0;
 }
 
-.page-dashboard #deadlines .row.edit .highlighted-link,
-.page-dashboard #deadlines .edit a[href="#cancel-dates"]
+.page-dashboard #deadlines .row.edit .highlighted-link
 {
     display:inline-block;
 }
@@ -452,13 +459,6 @@
     border-bottom-width:1px;
 }
 
-.page-dashboard #deadlines .node-key_dates-form .form-actions
-{
-    text-align: right;
-    float:right;
-    display:none;
-}
-
 .page-dashboard .field-name-field-reminder input
 {
     z-index: -1;
@@ -491,22 +491,6 @@
     background-position: 50% -2741px;
 }
 
-.page-dashboard #deadlines .clearfix:first-child
-{
-    text-align: left;
-    padding-top:15px;
-    padding-bottom:15px;
-}
-
-.page-dashboard #deadlines .invalid .highlighted-link .more
-{
-    background-color: #aaaaaa;
-    border-color: #888888;
-    margin-top: 0;
-    border-bottom-width: 3px;
-    box-shadow: none;
-}
-
 .page-dashboard .field-name-field-reminder input
 {
     visibility: hidden;
@@ -529,11 +513,6 @@
 {
     display:block;
     position:absolute;
-}
-
-.page-dashboard #deadlines .highlighted-link
-{
-    text-align: right;
 }
 
 .page-dashboard #deadlines .row {
@@ -581,17 +560,13 @@
         margin: 0 10px -10px 10px;
     }
 
-    .page-dashboard #deadlines .form-wrapper > label
-    {
-        display:none !important;
-    }
-
-    .page-dashboard #deadlines .edit .form-wrapper > label
-    {
-        display:block !important;
-    }
-
     .page-dashboard #deadlines label:not(.option)
+    {
+        display:none;
+    }
+
+    .page-dashboard #deadlines .row.first.edit label:not(.option),
+    .page-dashboard #deadlines .row.edit label:not(.option)
     {
         display:block;
     }
@@ -660,24 +635,17 @@
         margin-top: 0;
     }
 
-    .page-dashboard #deadlines .row.first label:not(.option)
+    .page-dashboard #deadlines .row.first label:not(.option),
+    .page-dashboard #deadlines .row label:not(.option)
     {
         position: static;
         margin-top:0;
         top: 0;
-    }
-
-    .page-dashboard #deadlines .clearfix:first-child
-    {
-        text-align: center;
-    }
-
-    .page-dashboard #deadlines .highlighted-link
-    {
-        text-align: center;
+        display:none;
     }
 
     .page-dashboard #deadlines .row.edit .field-name-field-due-date,
+    .page-dashboard #deadlines .row.edit .field-name-field-reminder .form-checkboxes,
     .page-dashboard #deadlines .row.edit .field-name-field-reminder,
     .page-dashboard #deadlines .row.edit .field-name-field-percent,
     .page-dashboard #deadlines .field-name-field-due-date,
@@ -692,7 +660,6 @@
 
     .page-dashboard #deadlines .field-name-field-reminder .form-checkboxes,
     .page-dashboard #deadlines .field-name-field-reminder .read-only,
-    .page-dashboard #deadlines .field-name-field-completed .form-type-checkbox,
     .page-dashboard #deadlines .field-name-field-completed .read-only
     {
         display:none;
@@ -717,6 +684,11 @@
         width: auto;
     }
 
+    .page-dashboard #deadlines .row.first.edit .field-name-field-class-name label:not(.option),
+    .page-dashboard #deadlines .row.edit .field-name-field-class-name label:not(.option)
+    {
+        display: none;
+    }
 }
 
 @media all and (max-width:759px)
@@ -731,6 +703,11 @@
         float: none !important;
         clear: both;
         display: block;
+    }
+
+    .page-dashboard #deadlines .highlighted-link a[href="#schedule"]
+    {
+        padding:10px;
     }
 }
 

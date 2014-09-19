@@ -1,53 +1,63 @@
 
+.page-dashboard #plan.empty #calendar .fc-view-container:before,
+.page-dashboard #plan .pane-content:before
+{
+    height: 100%;
+    width: 100%;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.50);
+    z-index: 40;
+}
+
+.page-dashboard #plan .empty-only
+{
+    display: none;
+}
+
+.page-dashboard #plan.empty .empty-only
+{
+    display: block;
+}
+
+.page-dashboard #plan #calendar .fixed-centered
+{
+    position:absolute !important;
+}
+
+.page-dashboard.adviser-user #plan .pane-content:before,
+.page-dashboard.partner-user #plan .pane-content:before,
+.page-dashboard.paid-user #plan .pane-content:before
+{
+    display: none;
+}
+
 .page-dashboard #plan .pane-content > h2
 {
     margin-bottom:-28px;
 }
 
-.page-dashboard #plan.bill_step_2_only .buy-plan .highlighted-link > a,
-.page-dashboard #plan.bill-my-parents-only .buy-plan .highlighted-link > a
+.page-dashboard #plan .pane-content
 {
-    display:none;
-}
-
-.page-dashboard #plan .bill_step_2
-{
-    display:none;
-}
-
-.page-dashboard #plan.bill_step_2_only .bill_step_2
-{
-    display: block;
-}
-
-.page-dashboard #plan .buy-plan .bill-my-parents
-{
-    display:none;
-}
-
-.page-dashboard #plan.bill-my-parents-only .buy-plan .bill-my-parents
-{
-    display:block;
-}
-
-.page-dashboard #plan .buy-plan
-{
-    position: absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    bottom:0;
-    right:0;
+    max-height: 500px;
     overflow: hidden;
-    padding: 20px;
-    box-sizing: border-box;
+}
+
+.page-dashboard.partner-user #plan .pane-content,
+.page-dashboard.adviser-user #plan .pane-content,
+.page-dashboard.paid-user #plan .pane-content
+{
+    max-height: none;
+    overflow: visible;
 }
 
 .page-dashboard #plan #calendar
 {
-    /*max-height:500px;*/
     margin-bottom:20px;
+    position: relative;
 }
 
 .page-dashboard #plan .fc-event
@@ -160,6 +170,8 @@
     vertical-align: top;
     position: relative;
     white-space: nowrap;
+    border-top:1px solid transparent;
+    border-bottom:1px solid transparent;
 }
 
 .page-dashboard #plan .row > *
@@ -246,7 +258,7 @@
 
 .page-dashboard #plan .return-to-top
 {
-    display: block;
+    display: none;
     position: fixed;
     left: 100%;
     margin-left: -250px;
@@ -255,9 +267,16 @@
     bottom: 50px;
     text-align: center;
     padding-top: 14px;
-    z-index: 9999;
+    z-index: 96;
     padding-bottom: 6px;
     color: #ffffff;
+}
+
+.page-dashboard.adviser-user #plan .return-to-top,
+.page-dashboard.partner-user #plan .return-to-top,
+.page-dashboard.paid-user #plan .return-to-top
+{
+    display: block;
 }
 
 .page-dashboard #plan .flip-clock-wrapper ul li a div div.inn
@@ -318,12 +337,6 @@
     margin-top:30px;
 }
 
-.page-dashboard #plan .row.selected .highlighted-link
-{
-    display:block;
-    text-align: right;
-}
-
 .page-dashboard #plan .strategy-teach iframe,
 .page-dashboard #plan .plupload
 {
@@ -352,8 +365,10 @@
 
 .page-dashboard #plan .sort-by a[href="#expand"]
 {
-    float:right;
+    position:absolute;
     margin:0;
+    right:0;
+    top:0;
 }
 
 .page-dashboard #plan .row.expanded a[href="#expand"]
@@ -635,6 +650,7 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
 .page-dashboard #plan .field-select-strategy select
 {
     float:right;
+    width:auto;
 }
 
 .page-dashboard #plan .fc-agenda-slots tr.fc-minor th,
@@ -745,6 +761,14 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
     color: #FFF;
 }
 
+.page-dashboard #plan .fc-event[href]:hover,
+.page-dashboard #plan .fc-event.fc-draggable:hover,
+.page-dashboard #plan .fc-event[href]:hover .fc-title h4,
+.page-dashboard #plan .fc-event.fc-draggable:hover .fc-title h4
+{
+    color:#02cee8;
+}
+
 .page-dashboard #plan .class0.fc-event,
 .page-dashboard #plan .class0 .class
 {
@@ -842,9 +866,26 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
     cursor: pointer;
 }
 
+.page-dashboard #plan .row:hover:not(.selected)
+{
+    box-shadow: 0 1px 4px rgba(255,255,255,.25);
+    border-top:1px solid #DDDDDD;
+    border-bottom:1px solid #DDDDDD;
+    background-color:rgba(255,255,255,.50);
+}
+
+.page-dashboard #plan .row:hover .field-name-field-assignment,
+.page-dashboard #plan .row:hover .field-name-field-class-name,
+.page-dashboard #plan .row:hover .field-name-field-percent,
+.page-dashboard #plan .row:hover .field-name-field-completed
+{
+    color: #02cee8;
+}
+
 .page-dashboard #plan .sort-by
 {
     vertical-align: top;
+    position: relative;
 }
 
 .page-dashboard #plan .sort-by input
@@ -881,7 +922,8 @@ body.page-dashboard.file-drag  #plan .plupload .plup-filelist
 
 .page-dashboard #plan .sort-by label:last-child
 {
-    float:right !important;
+    position:absolute;
+    right:100px;
     padding-left: 25px;
     background: url('images/menu_icons_128.png') no-repeat -54px -2848px transparent;
     padding-top: 5px;

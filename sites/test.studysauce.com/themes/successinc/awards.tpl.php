@@ -3,16 +3,14 @@ global $user;
 $user = user_load($user->uid);
 list($awards, $lastAward) = studysauce_get_awards();
 ?>
-<div id="new-award">
-    <div>
-        <div>
-            <span class="badge">&nbsp;</span>
-            <div class="description">
-                <h3>You have been awarded the <strong>{badge_name}</strong> badge.</h3>
-                <p><a href="#badges">Read about your accomplishment <span>here</span>.</a></p>
-            </div>
+<div class="fixed-centered modal">
+    <div id="new-award" class="dialog">
+        <span class="badge">&nbsp;</span>
+        <div class="description">
+            <h3>You have been awarded the <strong>{badge_name}</strong> badge.</h3>
+            <p><a href="#badges">Read about your accomplishment <span>here</span>.</a></p>
         </div>
-        <a href="#" class="fancy-close">&nbsp;</a>
+        <a href="#close">&nbsp;</a>
     </div>
 </div>
 <h2>Your Study Badges <small>(click on badges for detail)</small></h2>

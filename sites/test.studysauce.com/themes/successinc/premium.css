@@ -1,6 +1,8 @@
 
 .page-dashboard #premium h1,
-.page-dashboard #premium h2
+.page-dashboard #premium > div > h2,
+.page-dashboard #premium #headline-inner > h2,
+.page-dashboard #premium .plans-chart h2
 {
     font-size: 32px;
     vertical-align: middle;
@@ -8,29 +10,6 @@
     border-radius: 10px;
     padding: 10px;
     font-weight: bold;
-}
-
-.page-dashboard #premium.bill_step_2_only .buy-plan .highlighted-link > a,
-.page-dashboard #premium.bill-my-parents-only .buy-plan .highlighted-link > a
-{
-    display:none;
-}
-
-.page-dashboard #premium.bill_step_2_only .buy-plan .bill-my-parents,
-.page-dashboard #premium.bill-my-parents-only .buy-plan .bill_step_2
-{
-    display:none;
-}
-
-.page-dashboard #premium.bill_step_2_only .bill_step_2
-{
-    display: block;
-}
-
-.page-dashboard #premium.bill_step_2_only .buy-plan,
-.page-dashboard #premium.bill-my-parents-only .buy-plan
-{
-    display:block;
 }
 
 .page-dashboard #premium .did-you-know h1
@@ -49,6 +28,11 @@
 .page-dashboard #premium table.plans th.highlight h2
 {
     color: #FFF;
+}
+
+.page-dashboard #premium table.plans .highlighted-link
+{
+    text-align: center;
 }
 
 .page-dashboard #premium table.plans th p
@@ -71,11 +55,6 @@
     border-bottom: #555555 solid 1px;
     background: #ffffff;
     color:inherit;
-}
-
-.page-dashboard #premium div.plans .highlighted-link
-{
-    text-align: center;
 }
 
 .page-dashboard #premium .plans .price
@@ -236,8 +215,8 @@
     font-size: 56px;
 }
 
-.page-dashboard #premium li,
-.page-dashboard #premium ol
+.page-dashboard #premium .three-step-process li,
+.page-dashboard #premium .three-step-process ol
 {
     list-style: none;
     padding:0;
@@ -245,12 +224,12 @@
     vertical-align: top;
 }
 
-.page-dashboard #premium ol
+.page-dashboard #premium .three-step-process ol
 {
     margin: 0 auto;
 }
 
-.page-dashboard #premium li
+.page-dashboard #premium .three-step-process li
 {
     width:33%;
     display: inline-block;
@@ -261,26 +240,21 @@
     min-height: 300px;
 }
 
-.page-dashboard #premium li h3
+.page-dashboard #premium .three-step-process li h3
 {
     margin-top: 0px;
     text-align: center;
     font-size: 24px;
 }
 
-.page-dashboard #premium li p
+.page-dashboard #premium .three-step-process li p
 {
     font-size: 20px;
 }
 
-.page-dashboard #premium li p:last-child
+.page-dashboard #premium .three-step-process li p:last-child
 {
     margin-bottom: 0;
-}
-
-.page-dashboard #premium li .highlighted-link
-{
-    text-align: right;
 }
 
 .page-dashboard #premium .pane-content
@@ -288,7 +262,7 @@
     overflow: hidden;
 }
 
-.page-dashboard #premium li:before
+.page-dashboard #premium .three-step-process li:before
 {
     content: "";
     display:block;
@@ -303,18 +277,18 @@
     opacity: .75;
 }
 
-.page-dashboard #premium li > *
+.page-dashboard #premium .three-step-process li > *
 {
     z-index: 1;
     position:relative;
 }
 
-.page-dashboard #premium li:nth-child(2):before
+.page-dashboard #premium .three-step-process li:nth-child(2):before
 {
     background: url(images/noise_white.png) repeat 0 0 #FFFFFF;
 }
 
-.page-dashboard #premium li strong
+.page-dashboard #premium .three-step-process li strong
 {
     font-size: 40px;
     text-align: center;
@@ -414,7 +388,7 @@
         font-size:24px;
     }
 
-    .page-dashboard #premium li
+    .page-dashboard #premium .three-step-process li
     {
         padding:5px;
         display:block;
@@ -423,7 +397,7 @@
         margin:40px 0;
     }
 
-    .page-dashboard #premium li:before
+    .page-dashboard #premium .three-step-process li:before
     {
         top: 0;
         left: 0;
@@ -431,7 +405,7 @@
         right: 0;
     }
 
-    .page-dashboard #premium ol
+    .page-dashboard #premium .plans-chart ol
     {
         margin-top:100px;
     }

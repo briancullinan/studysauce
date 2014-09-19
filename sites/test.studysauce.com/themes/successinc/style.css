@@ -1,3 +1,24 @@
+.ui-progressbar
+{
+    height:20px;
+    background:#555555;
+    font-size: 12px;
+    color:#ffffff;
+    text-align: center;
+    position:relative;
+}
+
+.ui-progressbar .progress-text
+{
+    position: absolute;
+    width:100%;
+    z-index: 2;
+}
+
+.ui-progressbar .ui-progressbar-value
+{
+    background:#0099BB;
+}
 
 .testimonial-inner, .node-mt-testimonial .field-name-body {
     /*font-family: 'PT Serif', Helvetica Neue, Helvetica, Arial, Sans-serif;*/
@@ -176,7 +197,15 @@ code {
     padding: 15px;
 }
 
-img {
+svg
+{
+    border: none;
+    outline: none;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+img, video, canvas {
     border: none;
     outline: none;
     max-width: 100%;
@@ -345,22 +374,16 @@ iframe[name="google_conversion_frame"]
     margin: 0 auto;
 }
 
-/*
-.page-dashboard [about]
-{
-    display:none;
-}
-.page-dashboard.terms-only #main-menu li.terms-only
-{
-    display:list-item;
-}
-*/
-
 .page-dashboard .page .panel-pane
 {
     margin-left:220px;
     padding-top:76px;
     display:none;
+}
+
+.page-dashboard .page .panel-pane:first-of-type
+{
+    display: block;
 }
 
 .page-dashboard.admin-menu .page .panel-pane
@@ -432,13 +455,6 @@ iframe[name="google_conversion_frame"]
 .page-home #scr .grid_6 img
 {
     width: 100%;
-}
-
-.page-home .footer .highlighted-link,
-.page-home #scr .highlighted-link
-{
-    text-align:right;
-    clear:both;
 }
 
 .page-dashboard #home .big-arrow
@@ -552,35 +568,6 @@ iframe[name="google_conversion_frame"]
 
 @media all and (max-width: 980px)
 {
-    .page-dashboard #sds-messages > div > div.icon
-    {
-        display:none !important;
-    }
-
-    .page-dashboard #sds-messages > div h2.full-only
-    {
-        display:none !important;
-    }
-
-    .page-dashboard #sds-messages > div h2.mobile-only
-    {
-        display:block !important;
-    }
-
-    .page-dashboard #sds-messages > div h2,
-    .page-dashboard #sds-messages > div > div
-    {
-        padding-left:0px !important;
-    }
-
-    .page-dashboard #sds-messages > div,
-    .page-dashboard #checklist > div,
-    .page-dashboard #study-quiz > div,
-    .page-dashboard #study-quiz .webform-confirmation
-    {
-        margin:5% auto !important;
-    }
-
     .page-dashboard #home .big-arrow
     {
         padding-right:0;
@@ -629,7 +616,6 @@ iframe[name="google_conversion_frame"]
 
 .page-dashboard .header-wrapper a[href="#invite"],
 .page-dashboard .header-wrapper a[href="/user/logout"],
-.page-dashboard a.user-account,
 .page-dashboard a[href="#mail"],
 .page-dashboard .header-wrapper a[href="#badges"]
 {
@@ -661,14 +647,15 @@ iframe[name="google_conversion_frame"]
     background-position: left -1056px;
 }
 
-.page-dashboard a.user-account
-{
-    background-position: left -224px;
-}
-
 .page-dashboard .header-wrapper a[href="/user/logout"]
 {
     background-position: left -257px;
+}
+
+.page-dashboard.partner-user .header-wrapper a[href="/user/logout"],
+.page-dashboard.adviser-user .header-wrapper a[href="/user/logout"]
+{
+    background-position: left -1666px;
 }
 
 .maintenance-page #header, .maintenance-page #page {
@@ -679,33 +666,6 @@ iframe[name="google_conversion_frame"]
 .landing-home #banner {
     padding-bottom: 10px;
     min-height: 145px;
-}
-
-.parent-student-selection .page-top,
-.parent-student-selection .footer
-{
-    display:none;
-}
-
-.parent-student-selection .form-actions
-{
-    float:right;
-}
-
-.parent-student-selection .page
-{
-    padding:50px 0;
-}
-
-.parent-student-selection .page label
-{
-    text-align: center;
-}
-
-.parent-student-selection .page .container_12,
-.parent-student-selection .page .grid_12
-{
-    max-width: 600px;
 }
 
 .no-banner #page-top {
@@ -1913,53 +1873,7 @@ ul.company-info li.last {
     white-space: nowrap;
 }
 
-#timer-expire .more
-{
-    margin-bottom:10px;
-}
-
-.page-dashboard #checklist .highlighted-link
-{
-    text-align: right;
-}
-
-.landing-home .buy-plan .bill_step_2,
-.landing-home .buy-plan .bill-my-parents,
-.page-dashboard #premium .buy-plan .bill_step_2,
-.page-dashboard #premium .buy-plan .bill-my-parents,
-.page-dashboard #plan .buy-plan .highlighted-link,
-.page-dashboard #profile .buy-plan .highlighted-link,
-.page-dashboard .group-achievement > div,
-.page-dashboard #invite-sent > h2,
-.page-dashboard #sds-messages > div,
-.page-dashboard #new-award > div,
-.page-dashboard #welcome > div,
-.page-dashboard #checklist > div,
-.page-dashboard #study-quiz > div,
-.page-dashboard #study-quiz .webform-confirmation,
-.page-dashboard #mozart-effect > div,
-.page-dashboard #empty-schedule a,
-.page-dashboard #schedule .building-schedule h2,
-.page-dashboard #profile .building-schedule h2,
-.page-path-customization2 .building-schedule h2,
-.browser-not-supported > div > div,
-.page-dashboard .first-time-message,
-.page-dashboard #empty-dates a,
-.page-dashboard #metrics-empty a,
-.page-dashboard #timer-expire > div,
-.page-dashboard #deadlines .field-name-field-class-names > div
-{
-    max-width: 600px;
-    margin:5% auto;
-    padding:20px;
-    background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
-    box-shadow: 0 0 20px rgba(0,0,0,.75);
-    border-radius: 10px;
-    position:relative;
-    text-align:left;
-}
-
-.browser-not-supported a
+#browser-not-supported a
 {
     display:inline-block;
     height: 128px;
@@ -1968,23 +1882,23 @@ ul.company-info li.last {
     vertical-align: bottom;
 }
 
-.browser-not-supported a[href*="chrome"]
+#browser-not-supported a[href*="chrome"]
 {
     background-position: left -6144px;
 }
 
-.browser-not-supported a[href*="safari"]
+#browser-not-supported a[href*="safari"]
 {
     background-position: left -6272px;
 }
 
-.browser-not-supported a[href*="microsoft"]
+#browser-not-supported a[href*="microsoft"]
 {
     background-position: left -6400px;
     position:relative;
 }
 
-.browser-not-supported a[href*="microsoft"]:after
+#browser-not-supported a[href*="microsoft"]:after
 {
     content: "Click to upgrade";
     padding-top: 70px;
@@ -2007,71 +1921,6 @@ ul.company-info li.last {
     width:100%;
 }
 
-.landing-home .buy-plan .middle-wrapper
-{
-    position:fixed;
-    z-index: 50;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-}
-
-.page-dashboard #metrics #metrics-empty .middle-wrapper,
-.page-dashboard #premium .buy-plan .middle-wrapper,
-.page-dashboard #schedule .building-schedule .middle-wrapper,
-.page-dashboard #profile .building-schedule .middle-wrapper
-{
-    position:fixed;
-    padding-left:220px;
-    z-index: 50;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-}
-
-@media all and (max-width: 759px)
-{
-    .page-dashboard #metrics #metrics-empty .middle-wrapper,
-    .landing-home .buy-plan .middle-wrapper,
-    .page-dashboard #premium .buy-plan .middle-wrapper,
-    .page-dashboard #schedule .building-schedule .middle-wrapper,
-    .page-dashboard #profile .building-schedule .middle-wrapper
-    {
-        padding-left: 0;
-    }
-}
-
-.landing-home .buy-plan .bill_step_2,
-.landing-home .buy-plan .bill-my-parents,
-.page-dashboard #premium .buy-plan .bill_step_2,
-.page-dashboard #premium .buy-plan .bill-my-parents,
-.page-dashboard #plan .buy-plan .highlighted-link,
-.page-dashboard #profile .buy-plan .highlighted-link,
-.browser-not-supported > div,
-.page-dashboard #schedule .building-schedule h2,
-.page-dashboard #profile .building-schedule h2,
-.page-path-customization2 .building-schedule h2,
-.page-dashboard #metrics-empty a,
-.page-dashboard #empty-dates a,
-.page-dashboard #empty-schedule a
-{
-    display: block;
-    text-align: center;
-    margin-top: -78px;
-    z-index: 50;
-}
-
-.page-path-customization2 .building-schedule h2,
-.page-dashboard #profile .building-schedule h2,
-.page-dashboard #schedule .building-schedule h2,
-.landing-home.bill-my-parents-only .buy-plan .bill_step_2,
-.landing-home.bill-my-parents-only .buy-plan .bill-my-parents,
-.page-dashboard #premium.bill-my-parents-only .buy-plan .bill_step_2,
-.page-dashboard #premium.bill-my-parents-only .buy-plan .bill-my-parents,
-.page-dashboard #plan.bill-my-parents-only .buy-plan .highlighted-link,
-.page-dashboard #profile.bill-my-parents-only .buy-plan .highlighted-link
-{
-    margin-top: -140px;
-}
-
 @media all and (max-width: 759px)
 {
 
@@ -2081,63 +1930,15 @@ ul.company-info li.last {
     }
 }
 
-.page-dashboard #plan .middle-wrapper h2,
-.landing-home .buy-plan h2,
-.page-dashboard #premium .buy-plan h2,
-.page-dashboard #profile .buy-plan h2,
-.page-dashboard #metrics-empty h2,
-.page-dashboard #empty-dates h2,
-.page-dashboard #empty-schedule h2,
-.browser-not-supported h2,
-.page-dashboard #schedule .building-schedule h2,
-.page-dashboard #profile .building-schedule h2,
-.page-path-customization2 .building-schedule h2
-{
-    text-align: center;
-}
-
-.page-dashboard #timer-expire > div
-{
-    max-width: 500px;
-}
-
-.page-dashboard #sds-messages > div,
-.page-dashboard #checklist > div,
-.page-dashboard #study-quiz > div
-{
-    max-width: 550px;
-}
-
 .page-dashboard #study-quiz .webform-confirmation
 {
     max-width: 900px;
-}
-
-#timer-expire a[href="#badges"]
-{
-    color: #666666;
-}
-
-#timer-expire a[href="#badges"] span
-{
-    color: #FF9900;
-}
-
-.page-dashboard #sds-messages > div h2.mobile-only
-{
-    display:none;
 }
 
 .page-dashboard #schedule .field-name-field-first-name,
 .page-dashboard #schedule .field-name-field-last-name
 {
     display:none;
-}
-
-.page-dashboard .group-achievement h3
-{
-    margin-top:0;
-    margin-bottom:0;
 }
 
 .page-dashboard #deadlines .field-name-field-class-names h3
@@ -2209,40 +2010,10 @@ input[type="button"]:hover {
     text-shadow: 0px 1px 2px rgba(255,255,255,.5);
 }
 
-#account.invalid .highlighted-link .more,
-#account.invalid .highlighted-link .more:hover,
-#import.invalid .highlighted-link .more,
-#import.invalid .highlighted-link .more:hover,
-#plan .saved .highlighted-link .more,
-#plan .saved .highlighted-link .more:hover,
-#deadlines.invalid .highlighted-link .more,
-#deadlines.invalid .highlighted-link .more:hover,
-#schedule.invalid .class-actions .more,
-#schedule.invalid .class-actions .more:hover,
-#schedule.invalid .other-actions .more,
-#schedule.invalid .other-actions .more:hover,
-.page-path-schedule2.invalid .class-actions .more,
-.page-path-schedule2.invalid .class-actions .more:hover,
-.page-path-schedule2.invalid .other-actions .more,
-.page-path-schedule2.invalid .other-actions .more:hover,
-.page-path-schedule.invalid .class-actions .more,
-.page-path-schedule.invalid .class-actions .more:hover,
-.page-path-schedule.invalid .other-actions .more,
-.page-path-schedule.invalid .other-actions .more:hover,
-#partner.invalid .highlighted-link .more,
-#partner.invalid .highlighted-link .more:hover,
-#invite.invalid .highlighted-link .more,
-#invite.invalid .highlighted-link .more:hover,
-.page-path-customization2.invalid .highlighted-link .more,
-.page-path-customization2.invalid .highlighted-link .more:hover,
-.page-path-customization.invalid .highlighted-link .more,
-.page-path-customization.invalid .highlighted-link .more:hover,
-.page-path-profile.invalid .highlighted-link .more,
-.page-path-profile.invalid .highlighted-link .more:hover,
-.edit.invalid .highlighted-link .more,
-.edit.invalid .highlighted-link .more:hover,
-form.invalid .edit .highlighted-link .more:hover,
-form.invalid .edit .highlighted-link .more
+.invalid .highlighted-link:not(.neverinvalid) .more:not([href="#close"]),
+.invalid .highlighted-link:not(.neverinvalid) .more:not([href="#close"]):hover,
+.invalid .more.highlighted-link:not(.neverinvalid):not([href="#close"]),
+.invalid .more.highlighted-link:not(.neverinvalid):not([href="#close"]):hover
 {
     background-color: #aaaaaa;
     border-color: #888888;
@@ -2251,7 +2022,6 @@ form.invalid .edit .highlighted-link .more
     box-shadow: none;
     cursor: default;
 }
-
 
 .page-welcome .page-title li:nth-child(1) > span > span
 {
@@ -2420,11 +2190,11 @@ label {
     display: inline-block;
 }
 
-.chatboxtextarea, input.form-text, textarea {
+select, .chatboxtextarea, input.form-text, textarea {
     color: #838383;
     font-size: 16px;
     font-style: normal;
-    line-height: 25px;
+    line-height: 22px;
     padding: 5px;
     width: 100%;
     outline: none;
@@ -2432,17 +2202,13 @@ label {
     border: 1px solid #666666;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
+    margin: 0;
 }
 
-.chatboxtextarea[readonly], input.form-text[readonly], textarea[readonly]
+select[readonly], .chatboxtextarea[readonly], input.form-text[readonly], textarea[readonly]
 {
     opacity: .75;
     background-color: #EEE;
-}
-
-input.form-text {
-    height: 35px;
-    -moz-box-sizing: border-box;
 }
 
 textarea, .form-textarea-wrapper textarea {
@@ -2451,13 +2217,22 @@ textarea, .form-textarea-wrapper textarea {
 }
 
 .form-item {
-    margin: 5px 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
+.row .form-item {
+    margin: 0;
+}
 
 .ajax-progress
 {
     display:none;
+}
+
+:focus
+{
+    outline:none;
 }
 
 .view-promoted-posts .more-link a,
@@ -2474,6 +2249,62 @@ textarea, .form-textarea-wrapper textarea {
     font-weight: bold;
     font-style: normal;
     box-shadow: none;
+}
+.ui-tooltip {
+    background: #666;
+    color: white;
+    border: none;
+    padding: 0;
+    opacity: 1;
+}
+
+@media all and (max-width:759px)
+{
+    .ui-tooltip
+    {
+        display:none !important;
+    }
+}
+
+.ui-tooltip-content {
+    position: relative;
+    padding: 10px;
+}
+
+.ui-tooltip-content::after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    display: block;
+    width: 0;
+}
+.right .ui-tooltip-content::after {
+    top: 50%;
+    left: -10px;
+    border-color: transparent #666;
+    border-width: 10px 10px 10px 0;
+    margin-top:-10px;
+}
+.left .ui-tooltip-content::after {
+    top: 50%;
+    right: -10px;
+    border-color: transparent #666;
+    border-width: 10px 0 10px 10px;
+    margin-top:-10px;
+}
+.top .ui-tooltip-content::after {
+    bottom: -10px;
+    left: 50%;
+    border-color: #666 transparent;
+    border-width: 10px 10px 0;
+    margin-left:-10px;
+}
+.bottom .ui-tooltip-content::after {
+    top: -10px;
+    left: 50%;
+    border-color: #666 transparent;
+    border-width: 0 10px 10px;
+    margin-left:-10px;
 }
 
 /* Footer - Contact form */
@@ -3055,161 +2886,6 @@ table tr.even, table tr.odd {
     border-bottom: none;
     background-color: transparent;
     background:none;
-}
-
-/* Yoxview */
-.yoxview {
-    clear: both;
-    display: block;
-    padding: 0 0 30px 0;
-}
-
-.yoxview #yoxview-title {
-    color: #1d1d1d;
-    font-weight: bold;
-    font-size: 12px;
-    border-bottom: 1px solid #e4e1d9;
-    margin: 0 0 10px;
-    padding-bottom: 3px;
-}
-
-.yoxview-image-item {
-    float: left;
-    margin: 0 10px 10px 0;
-    padding: 0;
-    border: 1px solid #dedfe1;
-    box-shadow: 0 1px 1px #dcdcdc;
-    box-sizing: border-box;
-}
-
-.yoxview-image-item:hover {
-    border-color: #cacaca;
-    border-radius: 2px;
-    box-shadow: 0 0 0 3px #cacaca;
-}
-
-.yoxview-image-item a img {
-    display: block;
-    overflow: hidden;
-}
-
-.yoxview-image-item img {
-    max-width: 100%;
-}
-
-.yoxview-image-item {
-    max-width: 114px;
-}
-
-.no-sidebars .yoxview-image-item {
-    max-width: 124px;
-}
-
-.one-sidebar .yoxview-image-item:nth-child(5n), .no-sidebars .yoxview-image-item:nth-child(7n) {
-    margin-right: 0;
-}
-
-/* Showcase */
-.node-mt-showcase .yoxview-image-item {
-    max-width: 298px;
-}
-
-.no-sidebars .node-mt-showcase .yoxview-image-item {
-    max-width: 460px;
-}
-
-.node-mt-showcase .yoxview-image-item:nth-child(2n), .no-sidebars .node-mt-showcase .yoxview-image-item:nth-child(2n) {
-    margin-right: 0;
-}
-
-@media all and (min-width: 760px) and (max-width: 980px) {
-    .yoxview-image-item {
-        max-width: 108px;
-    }
-
-    .yoxview-image-item, .one-sidebar .yoxview-image-item:nth-child(5n), .no-sidebars .yoxview-image-item:nth-child(7n) {
-        margin: 0 6px 6px 0;
-    }
-
-    .one-sidebar .yoxview-image-item:nth-child(4n) {
-        margin-right: 0;
-    }
-
-    .no-sidebars .yoxview-image-item:nth-child(5n) {
-        margin-right: 0;
-    }
-
-    .no-sidebars .yoxview-image-item {
-        max-width: 133px;
-    }
-
-    /* Showcase */
-    .node-mt-showcase .yoxview-image-item {
-        max-width: 220px;
-    }
-
-    .no-sidebars .node-mt-showcase .yoxview-image-item {
-        max-width: 342px;
-    }
-}
-
-@media all and (max-width: 759px) {
-    .yoxview-image-item, .no-sidebars .yoxview-image-item,
-    .one-sidebar .yoxview-image-item:nth-child(5n),
-    .no-sidebars .yoxview-image-item:nth-child(7n) {
-        margin: 0 2% 2% 0;
-        max-width: 32%;
-    }
-
-    .yoxview-image-item:nth-child(3n) {
-        margin-right: 0;
-    }
-
-    /* Showcase */
-    .node-mt-showcase .yoxview-image-item, .no-sidebars .node-mt-showcase .yoxview-image-item {
-        margin: 0 2% 2% 0;
-        max-width: 49%;
-    }
-}
-
-@media all and (max-width: 480px) {
-    /* Showcase */
-    .node-mt-showcase .yoxview-image-item, .no-sidebars .node-mt-showcase .yoxview-image-item {
-        max-width: 100%;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .yoxview {
-        padding: 0 0 20px 0;
-    }
-}
-
-.showcase-content {
-    display: block;
-    position: relative;
-    padding: 15px;
-    width: 100%;
-    background: #E7E6E5;
-    border-top: 1px solid #ffffff;
-    box-sizing: border-box;
-}
-
-.showcase-title {
-    font-size: 16px;
-    padding: 0 0 5px 0;
-    margin: 0;
-    color: #454545;
-}
-
-.showcase-body {
-    font-size: 10px;
-    color: #838383;
-    line-height: 140%;
-}
-
-/* Drupal status messages */
-#messages-console {
 }
 
 div.messages {
@@ -4177,12 +3853,6 @@ hr
     color:#ffffff;
 }
 
-.page-node-landing #user-register-form .form-actions input
-{
-    width:100%;
-    text-align: center;
-}
-
 .with-arrow span
 {
     border-bottom:1px solid #CCCCCC;
@@ -4236,12 +3906,6 @@ hr
 .page-node-14 #page-top
 {
     display:none;
-}
-
-.page-home .footer
-{
-    position:relative;
-    z-index:0;
 }
 
 .page-node-landing .page,
@@ -4837,45 +4501,6 @@ tbody
     display:inline-block;
 }
 
-.page-dashboard #user_profile
-{
-    min-height: 400px;
-}
-
-.page-dashboard #user_profile .money-back
-{
-    margin-top:100px;
-}
-
-/*.page-dashboard #goals input.form-checkbox[checked] + label,
-.page-dashboard #goals input.form-radio[checked] + label,*/
-#checklist ol.checkboxes
-{
-    list-style: none;
-}
-
-#checklist label
-{
-    cursor: pointer;
-    margin-left:-50px;
-    padding-left:50px;
-    font-weight:normal;
-    background:url(images/menu_icons_128.png) no-repeat -40px -2854px transparent;
-    font-size:20px;
-}
-
-#checklist .no-checkboxes li
-{
-    font-weight:normal;
-    font-size:20px;
-    margin-top:1em;
-}
-
-#checklist input:checked + label
-{
-    background-position:-40px -2741px;
-}
-
 .page-dashboard.student .parents_only,
 .page-dashboard.parent .students_only,
 .page-dashboard.parent .header-wrapper a[href="#badges"].students_only
@@ -4889,97 +4514,26 @@ tbody
     clear:both;
 }
 
-.page-dashboard #deadlines .field-name-field-class-names .highlighted-link,
-.page-dashboard #checkin .highlighted-link,
-.page-dashboard #user-profile .form-actions
+.highlighted-link
 {
     text-align:right;
 }
 
-.landing-home .buy-plan,
-.page-dashboard #premium .buy-plan,
-.page-dashboard #home #connections,
-.page-dashboard #home #user_profile,
-.page-dashboard #home #welcome,
-.page-dashboard #goals #goals-saved,
-.page-dashboard #checkin #checklist,
-.page-dashboard #plan #checklist,
-.page-dashboard #schedule,
-.building-schedule,
-.page-dashboard #empty-schedule,
-.page-dashboard #empty-dates,
-.page-dashboard #mozart-effect,
-.page-dashboard #metrics-empty,
-.page-dashboard #checkin #timer-expire,
-.page-dashboard #plan #timer-expire,
-.page-dashboard #plan #sds-messages,
-.page-dashboard #new-award,
-.page-dashboard #checkin #sds-messages,
-.page-dashboard #goals #invite-sent,
-.page-dashboard #study-quiz,
-.page-dashboard .group-achievement,
-.page-dashboard #deadlines .field-name-field-class-names
+.landing-home .page-top .highlighted-link,
+.landing-home .page .highlighted-link,
+.landing-home .footer .highlighted-link
 {
-    display:none;
-}
-.page-path-customization2.building .building-schedule
-{
-    display:block;
-}
-.landing-home .buy-plan:before,
-.page-dashboard #premium .buy-plan:before,
-.page-dashboard #profile .buy-plan:before,
-.page-dashboard.parent #metrics .parents_only:before,
-.page-dashboard.parent #checkin .parents_only:before,
-.page-dashboard #study-quiz:before,
-.page-dashboard #schedule:before,
-.page-dashboard #plan .buy-plan:before,
-.browser-not-supported:before,
-.page-dashboard #schedule .building-schedule:before,
-.page-dashboard #profile .building-schedule:before,
-.page-path-customization2 .building-schedule:before,
-.page-dashboard #metrics-empty:before,
-.page-dashboard #empty-schedule:before,
-.page-dashboard #empty-dates:before,
-.page-dashboard #mozart-effect:before,
-.page-dashboard #checklist:before,
-.page-dashboard #deadlines .field-name-field-class-names:before,
-.page-dashboard #new-award:before,
-.page-dashboard #sds-messages:before,
-.page-dashboard #invite-sent:before,
-.page-dashboard #welcome:before,
-.page-dashboard .group-achievement:before,
-.page-dashboard #timer-expire:before,
-.page-dashboard #first-time-messages:before
-{
-    height: 100%;
-    width: 100%;
-    content: "";
-    display:block;
-    position:absolute;
-    top:0;
-    left:0;
-    background-color:rgba(255,255,255,.75);
-    z-index:-1;
+    clear:both;
 }
 
-.page-dashboard #plan .buy-plan:before
+@media all and (max-width: 980px)
 {
-    background-color:rgba(255,255,255,.25);
-    z-index: 40;
+    .highlighted-link
+    {
+        text-align:center;
+    }
 }
 
-.landing-home .buy-plan:before
-{
-    position:fixed;
-}
-
-.landing-home .buy-plan:before,
-.page-dashboard #premium .buy-plan:before,
-.page-dashboard #profile .buy-plan:before
-{
-    z-index: 40;
-}
 
 .page-dashboard.parent #metrics .parents_only h2,
 .page-dashboard.parent #metrics .parents_only a
@@ -4987,77 +4541,7 @@ tbody
     display:block;
 }
 
-.page-parentinvite #node-11,
-.page-prepaid #node-11,
-.page-billmyparents #node-11,
-.page-partners #node-11,
-.page-students2 #node-11,
-.page-parents2 #node-11,
-.page-students #node-11,
-.page-parents #node-11,
-.not-logged-in.page-home #node-11
-{
-    max-width: 600px;
-    margin: 30px auto;
-    display:none;
-}
-
-.page-parentinvite #node-11 h2,
-.page-prepaid #node-11 h2,
-.page-billmyparents #node-11 h2,
-.page-partners #node-11 h2,
-.page-students2 #node-11 h2,
-.page-parents2 #node-11 h2,
-.page-students #node-11 h2,
-.page-parents #node-11 h2,
-.not-logged-in.page-home #node-11 h2
-{
-    display:none;
-}
-
-.page-dashboard.parent #metrics .parents_only h2,
-.page-dashboard.parent #metrics .parents_only a,
-.page-dashboard.parent #metrics .parents_only,
-.page-dashboard.parent #checkin .parents_only h2,
-.page-dashboard.parent #checkin .parents_only a,
-.page-dashboard.parent #checkin .parents_only,
-.browser-not-supported,
-.page-dashboard #schedule .building-schedule,
-.page-dashboard #profile .building-schedule,
-.page-path-customization2 .building-schedule,
-.page-dashboard #empty-schedule,
-.page-dashboard #empty-dates,
-.page-dashboard #mozart-effect,
-.page-dashboard #metrics-empty,
-.page-dashboard #checklist,
-.page-dashboard #welcome,
-.page-dashboard #new-award,
-.page-dashboard #study-quiz,
-.page-dashboard #sds-messages,
-.page-dashboard #invite-sent,
-.page-dashboard .group-achievement,
-.page-dashboard #timer-expire,
-.page-dashboard #first-time-messages,
-.page-dashboard #deadlines .field-name-field-class-names
-{
-    position:absolute;
-    left:0;
-    top:0;
-    width:100%;
-    height:100%;
-    z-index:10;
-    text-align: center;
-    margin:0;
-}
-
-.browser-not-supported,
-.browser-not-supported .middle-wrapper
-{
-    position:fixed;
-    text-align: center;
-}
-
-.browser-not-supported
+#browser-not-supported
 {
     z-index: 1000;
 }
@@ -5071,94 +4555,6 @@ tbody
     width:75%;
     left:12.5%;
 }
-
-#fancybox-outer
-{
-    background: url("images/noise_gray.png") repeat scroll 0 0 #DDDDDD;
-    border-radius:10px;
-    box-shadow: 0px 0px 20px rgba(0,0,0,.5);
-}
-
-#fancybox-overlay
-{
-    position:fixed !important;
-}
-
-/*
-.page-dashboard.fancybox-active .page
-{
-    position:fixed;
-    overflow:hidden;
-    height: 100%;
-    width:100%;
-}
-
-.page-dashboard.fancybox-active
-{
-    height:auto !important;
-}
-
-.page-dashboard.fancybox-active .footer,
-.page-dashboard.fancybox-active .subfooter
-{
-    display:none;
-}
-*/
-
-#fancybox-content
-{
-    background:url("images/bg_logo.png") no-repeat fixed 50% 50% rgba(0, 0, 0, 0);
-    background-size:40% auto;
-}
-
-#fancybox-content:before
-{
-    content:"Copyright 2013 Study Sauce";
-    color:#ffffff;
-    position:absolute;
-    bottom:0;
-    left:0;
-    z-index: -1;
-    font-weight: bold;
-}
-
-.fancy-close
-{
-    top:-10px;
-    right:-10px;
-    width:30px;
-    height:30px;
-    background:url("images/menu_icons_48.png") no-repeat scroll 0 -576px rgba(0, 0, 0, 0);
-    background-position: -10px -730px;
-    cursor: pointer;
-    z-index: 1103;
-    display: block;
-    position:absolute;
-}
-
-#fancybox-close
-{
-    top:-10px;
-    right:-10px;
-    width:30px;
-    height:30px;
-    background:url("images/menu_icons_48.png") no-repeat scroll 0 -576px rgba(0, 0, 0, 0);
-    background-position: -10px -730px;
-}
-
-.fancybox-bg
-{
-    display:none;
-}
-
-/*
-.form-actions .form-submit.progress-disabled
-{
-    background-image:url(images/throbber.gif);
-    background-repeat: no-repeat;
-    background-position: right -15px;
-}
-*/
 
 .subfooter #block-webform-client-block-11
 {
@@ -5174,29 +4570,6 @@ tbody
 .form-item .description
 {
     font-size:1em;
-}
-
-.page-node-4 #page-top,
-.page-node-3 #page-top,
-.page-node-5 #page-top,
-.page-node-11 #page-top,
-.page-node-20 #page-top
-{
-    display:none;
-}
-
-.page-node-4 #page-top .highlighted-link,
-.page-node-3 #page-top .highlighted-link,
-.page-node-5 #page-top .highlighted-link,
-.page-node-11 #page-top .highlighted-link,
-.page-node-20 #page-top .highlighted-link,
-.page-dashboard .page #terms .highlighted-link,
-.page-dashboard .page #about-us .highlighted-link,
-.page-dashboard .page #contact .highlighted-link,
-.page-dashboard .page #privacy .highlighted-link,
-.page-dashboard .page #refund .highlighted-link
-{
-    text-align: right;
 }
 
 #subfooter #copyright,
@@ -5232,9 +4605,17 @@ tbody
 }
 
 
-.facebook-like {
+.facebook-like
+{
     display: inline-block;
     width: 80px;
+    height: 20px;
+}
+
+.twitter-follow-button
+{
+    display: inline-block;
+    width: 59px;
     height: 20px;
 }
 

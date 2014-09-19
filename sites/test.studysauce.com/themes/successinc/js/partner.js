@@ -129,7 +129,30 @@ jQuery(document).ready(function($) {
 
         // trigger save
         partnerFunc();
-        partner.find('a[href="#partner-save"]').first().trigger('click');
+        var inputs = partner.find('input[name^="partner-plupload"]'),
+            uploads = [];
+
+        jQuery.each(inputs, function () {
+            var matches = (/\[([0-9]+)\]\[([a-z]+)\]/ig).exec(jQuery(this).attr('name'));
+            if(typeof uploads[parseInt(matches[1])] == 'undefined')
+                uploads[parseInt(matches[1])] = {};
+            uploads[parseInt(matches[1])][matches[2]] = jQuery(this).val();
+        });
+        jQuery.ajax({
+            url: 'partner/save',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                uploads: uploads
+            },
+            success: function (fileSaved) {
+                jQuery('#partner-plupload .plup-thumb-wrapper img').attr('src', (typeof fileSaved.uri != 'undefined' ? fileSaved.uri : (pathToTheme + '/images/empty-photo.png')));
+                // update masthead
+                jQuery('#partner-message a[href="#partner"], #partner-message span').replaceWith('<span>' + partner.find('input[name="partner-first"]').val() + ' ' + partner.find('input[name="partner-last"]').val() + '</span>');
+                // update masthead picture
+                jQuery('#partner-message img').replaceWith('<img src="'+ (typeof fileSaved.uri != 'undefined' ? fileSaved.uri : (pathToTheme + '/images/empty-photo.png')) + '" height="48" width="48" alt="Partner" />')
+            }
+        });
     });
 
     // All fiels from queue has been uploaded
@@ -141,6 +164,7 @@ jQuery(document).ready(function($) {
         evt.preventDefault();
         if(partner.is('.invalid'))
             return;
+        partner.removeClass('valid').addClass('invalid');
 
         var inputs = partner.find('input[name^="partner-plupload"]'),
             uploads = [],
@@ -169,11 +193,11 @@ jQuery(document).ready(function($) {
                        uploads: uploads
                    },
                    success: function (fileSaved) {
-                       partner.removeClass('valid').addClass('invalid');
+                       partner.find('#partner-sent').dialog();
                        jQuery('#home-partner').attr('checked', 'checked');
                        if(jQuery('#home').find('input[type="checkbox"]:checked').length == jQuery('#home').find('input[type="checkbox"]').length - 1)
                            jQuery('#home-tasks-checklist').attr('checked', 'checked');
-
+                       jQuery('#partner-plupload .plup-thumb-wrapper img').attr('src', (typeof fileSaved.uri != 'undefined' ? fileSaved.uri : (pathToTheme + '/images/empty-photo.png')));
                        // update masthead
                        jQuery('#partner-message a[href="#partner"], #partner-message span').replaceWith('<span>' + partner.find('input[name="partner-first"]').val() + ' ' + partner.find('input[name="partner-last"]').val() + '</span>');
                        // update masthead picture
@@ -186,15 +210,15 @@ jQuery(document).ready(function($) {
     partner.on('click', 'a[href^="#uid-"]', function (evt) {
         evt.preventDefault();
         var uid = jQuery(this).attr('href').substring(5);
+        jQuery('body .page .panel-pane').hide();
         jQuery('.user-pane').remove();
         var pane = jQuery('#uid-' + uid + '.panel-pane');
         if(pane.length == 0)
         {
             pane = jQuery('<div id="uid-' + uid + '" class="panel-pane user-pane"><div class="pane-content" /></div>')
-                .appendTo(jQuery('.page .grid_12 > div'));
+                .appendTo(jQuery('.page .grid_12 > div')).show();
         }
 
-        jQuery('body').removeClass(footerOnly).removeClass(menuOnly).removeClass('menu-open').addClass('uid-only');
         window.location.hash = '#uid-' + uid;
 
         pane.find('.pane-content').addClass('loading');

@@ -227,7 +227,7 @@ function studysauce_save_dates()
             $entity->field_reminder['und'] = array_map(function ($x) { return array('value' => $x); }, explode(',', $date['reminders']));
             $entity->field_due_date['und'][0] = array(
                 'value' => gmdate('Y-m-d H:i:s', strtotime($date['due'])));
-            $entity->field_percent['und'][0]['value'] = $date['percent'];
+            $entity->field_percent['und'][0]['value'] = intval($date['percent']);
 
             // reset the sent reminders if the date changes
             if($dateChanged)
